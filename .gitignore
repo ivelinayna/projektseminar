@@ -1,0 +1,40 @@
+# Data files - never commit company data
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/README.md
+
+# Outputs (generated, large, or contain sensitive viz)
+outputs/*
+!outputs/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Jupyter notebook outputs (keep notebooks clean)
+notebooks/.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Environment
+.env
+.env.local
+
+# MkDocs / Read the Docs build
+site/
+_build/
