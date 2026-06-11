@@ -1,8 +1,6 @@
 # `data/raw/` — source files (gitignored)
 
-This directory holds the raw data feeds from **ÜZ Mainfranken**. None of
-these files are committed to the repo (`.gitignore` keeps the directory
-empty in git). To run the pipeline, copy the following files here:
+This directory holds the raw data feeds from **ÜZ Mainfranken**. To run the pipeline, copy the following files here:
 
 | File | From |
 |---|---|
@@ -14,5 +12,3 @@ empty in git). To run the pipeline, copy the following files here:
 | (later) `2024.zip`, `2025.zip`, `2026.zip` | meter time series, one CSV per Zählernummer |
 | (later) `Zuordnung.xlsx` | meter-number ↔ Verbrauchsstelle mapping per year |
 
-For development and onboarding, dummy data with the same schema can be
-generated — see `docs/dummy_data.md` (TODO).
