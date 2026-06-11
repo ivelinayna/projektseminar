@@ -23,7 +23,7 @@ Julius-Maximilians-Universität Würzburg, SS 2026 / WS 2026.
 | `src/geocode_stub.py` | Offline-Koordinaten-Stubs — nur für Sandbox-Tests, niemals lokal ausführen |
 | `src/dashboard_map.py` | Kombinierte Karte: Leitungen + geokodierte HAST + Inspektionsbefunde + vorhergesagte Fehler |
 | `src/main.py` | End-to-End-Pipeline mit einem Befehl |
-| `data/raw/` | Quelldateien von ÜZ — **gitignored**, niemals committen |
+| `data/raw/` | Quelldateien von ÜZ — **gitignored**, nicht committen |
 | `data/processed/` | Abgeleitete CSV-Dateien — **gitignored** |
 | `outputs/` | Generierte Visualisierungen — **gitignored** |
 | `docs/` | Ausführliche Dokumentation, Ziel: Read the Docs / GitHub Pages |
@@ -34,23 +34,16 @@ Julius-Maximilians-Universität Würzburg, SS 2026 / WS 2026.
 git clone <repo-url>
 cd heating-network
 pip install -r requirements.txt
-# ÜZ-Datendateien in data/raw/ ablegen  (NICHT committen - siehe .gitignore)
-python -m src.main                                          # Graphen + Karten + Inspektionsübersicht
-python -m src.main --synth --detect --plot                  # zusätzlich synthetische Daten + Fehlererkennung
-python -m src.main --geocode --dashboard                    # Geokodierung der HAST + Dashboard-Karte
+#ÜZ-Datendateien in data/raw/ ablegen
+python -m src.main                                          #Graphen + Karten + Inspektionsübersicht
+python -m src.main --synth --detect --plot                  #zusätzlich synthetische Daten + Fehlererkennung
+python -m src.main --geocode --dashboard                    #Geokodierung der HAST + Dashboard-Karte
 python -m src.main --synth --detect --plot --geocode --dashboard  # alles ausführen
 ```
 
-**Hinweis zur Geokodierung.** Beim ersten lokalen Ausführen mit `--geocode`
-wird Nominatim einmal pro eindeutiger Adresse abgefragt, also ca. 99 Anfragen.
-Die Abfragen sind auf 1 Anfrage pro Sekunde begrenzt und dauern dadurch
-ungefähr 100 Sekunden. Die Ergebnisse werden in
-`data/processed/geocode_cache.json` zwischengespeichert, sodass spätere
-Ausführungen sofort verfügbar sind.
-
 ## Datenquellen
 
-Drei Datenquellen von ÜZ, roh und **niemals zu committen**:
+Drei Datenquellen von ÜZ
 
 1. **Shapefiles `Leitungsverlauf_*`** — physischer Leitungsverlauf für das
    gesamte Versorgungsgebiet von ÜZ Mainfranken. CRS: ETRS89 / UTM 32N
