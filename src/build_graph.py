@@ -178,7 +178,7 @@ def graph_summary(g: nx.Graph, name: str = "graph") -> str:
 
 if __name__ == "__main__":
     log = build_logical_graph()
-    print(graph_summary(log, "Logical graph (Prichsenstadt HAST)"))
+    print(graph_summary(log, "Logical graph (Wiesentheid HAST)"))
     print()
     spa = build_spatial_graph()
     print(graph_summary(spa, "Spatial graph (full Mainfranken)"))

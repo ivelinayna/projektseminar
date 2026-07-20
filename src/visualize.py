@@ -60,7 +60,7 @@ def plot_logical_topology(g: nx.Graph, out_path: Path, seed: int = 7) -> Path:
     )
 
     ax.set_title(
-        f"Prichsenstadt heating network - logical topology\n"
+        f"Wiesentheid heating network - logical topology\n"
         f"{g.number_of_nodes()} nodes, {g.number_of_edges()} edges, "
         f"{len(hast)} HAST, {len(inspected)} inspected",
         fontsize=13,
@@ -92,7 +92,7 @@ def make_folium_map(pipes_gdf, points_gdf, out_path: Path,
     """Render the pipe network on an interactive OpenStreetMap layer.
 
     `bounds` is an optional (minx, miny, maxx, maxy) UTM-32N rectangle
-    used to crop to the relevant cluster (e.g. just Prichsenstadt rather
+    used to crop to the relevant cluster (e.g. just Wiesentheid rather
     than the whole Mainfranken extent).
     """
     pipes = pipes_gdf.copy()
@@ -171,7 +171,7 @@ def find_main_cluster(pipes_gdf, eps: float = 500.0,
                       min_samples: int = 20, sample: int = 8000):
     """Find the largest spatial cluster of pipe coords -> bounding box.
 
-    Used to crop the full Mainfranken shapefile to just the Prichsenstadt
+    Used to crop the full Mainfranken shapefile to just the Wiesentheid
     network. Returns (minx, miny, maxx, maxy) in UTM-32N metres.
     """
     from sklearn.cluster import DBSCAN

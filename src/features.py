@@ -83,10 +83,14 @@ def features_for_meter(df: pd.DataFrame,
     f["summer_idle_flow_median"] = df.loc[summer_lowload, "flow"].median()
 
     # --- filter fouling: descending flow ceiling --------------------------
-    monthly_p95_flow = df["flow"].resample("ME").quantile(0.95)
+    # Months without any data are dropped, not treated as flow 0 - real
+    # exports have multi-week gaps that would otherwise fake a collapse.
+    # x is the calendar month index so gaps keep their true spacing.
+    monthly_p95_flow = df["flow"].resample("ME").quantile(0.95).dropna()
     if monthly_p95_flow.size >= 6:
-        x = np.arange(monthly_p95_flow.size)
-        slope = np.polyfit(x, monthly_p95_flow.fillna(0).values, 1)[0]
+        idx = monthly_p95_flow.index
+        x = idx.year * 12 + idx.month
+        slope = np.polyfit(x - x[0], monthly_p95_flow.values, 1)[0]
         f["flow_ceiling_slope_per_month"] = slope
     else:
         f["flow_ceiling_slope_per_month"] = np.nan

@@ -1,10 +1,11 @@
 """
-Data loading for the Prichsenstadt heating network.
+Data loading for the Wiesentheid heating network.
 
 Sources from ÜZ Mainfranken:
 - Leitungsverlauf shapefiles: physical pipe network (ETRS89 / UTM 32N)
-- Nodes_Edges.ods: logical topology (99 HAST, 110 edges) by street address
-- Optimierung xlsx: 67 on-site HAST inspection records
+- Nodes_Edges.ods: logical topology (99 meter rows / 94 unique HAST
+  addresses, 110 edges) by street address
+- Optimierung xlsx: 66 on-site HAST inspection records
 
 Place data files into data/raw/ - they are gitignored.
 """
