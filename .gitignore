@@ -22,27 +22,28 @@ env/
 .ipynb_checkpoints/
 .pytest_cache/
 
-# Jupyter notebook outputs (keep notebooks clean)
+#Jupyter notebook outputs (keep notebooks clean)
 notebooks/.ipynb_checkpoints/
 
-# IDE
+#IDE
 .vscode/
 .idea/
 *.swp
 .DS_Store
 
-# Environment
+#Environment
 .env
 .env.local
 
-# MkDocs / Read the Docs build
+#MkDocs / Read the Docs build
 site/
 _build/
 
-# KI-Assistenten: lokale Anweisungen, Settings und Skill-Symlinks
+#KI-Assistenten: lokale Anweisungen, Settings und Skill-Symlinks
 CLAUDE.md
 .claude/
 .agents/
+.skills/
 
 # Review-Snapshots (koennen vertrauliche Daten enthalten)
 *-review.zip
