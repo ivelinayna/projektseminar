@@ -38,3 +38,11 @@ notebooks/.ipynb_checkpoints/
 # MkDocs / Read the Docs build
 site/
 _build/
+
+# KI-Assistenten: lokale Anweisungen, Settings und Skill-Symlinks
+CLAUDE.md
+.claude/
+.agents/
+
+# Review-Snapshots (koennen vertrauliche Daten enthalten)
+*-review.zip
