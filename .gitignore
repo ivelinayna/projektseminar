@@ -24,6 +24,10 @@ env/
 
 #Jupyter notebook outputs (keep notebooks clean)
 notebooks/.ipynb_checkpoints/
+notebooks/artifacts/
+notebooks/models/
+notebooks/outputs/
+notebooks/*_EXECUTED.ipynb
 
 #IDE
 .vscode/
