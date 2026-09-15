@@ -48,6 +48,7 @@ alles zusammen ─────────────────► dashboard_
 | `build_graph.py` | Logischer Graph (Adressen) und räumlicher Graph (Rohrgeometrie, Endpunkt-Snapping 5 cm) |
 | `visualize.py` | Statische Topologie-PNG, Folium-Karten, DBSCAN-Cropping auf das Wiesentheid-Cluster |
 | `inspections.py` | Begehungs-Excel → tidy Tabelle + Fehlerhäufigkeiten |
+| `load_begehungen.py` | Begehungs-Excel mit Änderungs-Kategorie, Begehungszeiten, Heiz-/TWW-Zeiten und Sollwerten alt/neu; Adresse → Zählernummer aus `Zuordnung.xlsx` inkl. Zählerwechsel. Grundlage von `notebooks/03_wirkungsanalyse_begehungen.ipynb` |
 | `synth_data.py` | Synthetische Stundendaten, 5 injizierte Fehlerbilder, `faults_truth.csv` als Label-Manifest |
 | `load_timeseries.py` | Echte CSV-Exporte: Discovery, Merge der Export-Generationen, Dedupe, Materialisierung pro Zähler |
 | `profile_timeseries.py` | Read-only-Datenprofiling der echten Exporte, generiert `docs/datensichtung.md` |
