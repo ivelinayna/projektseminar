@@ -18,6 +18,7 @@ Julius-Maximilians-Universitaet Wuerzburg, SS 2026 / WS 2026.
 | `src/build_graph.py` | Logischer Graph mit NetworkX aus der Adresstopologie + raeumlicher Graph aus der Leitungsgeometrie |
 | `src/visualize.py` | Statische PNG-Topologie + interaktive Folium-Karte des Leitungsnetzes |
 | `src/inspections.py` | Aufbereitete Ansicht der Vor-Ort-Inspektions- und Optimierungsdaten |
+| `src/load_begehungen.py` | Begehungs-Excel mit Aenderungs-Kategorie, Begehungszeiten, Heiz-/TWW-Zeiten und Sollwerten alt/neu; Adresse -> Zaehlernummer aus `Zuordnung.xlsx` inkl. Zaehlerwechsel |
 | `src/synth_data.py` | Synthetische stuendliche Zaehlerdaten mit eingebetteten Fehlern, 5 Fehlertypen, 1 Jahr |
 | `src/load_timeseries.py` | Loader fuer reale UEZ-Zaehler-CSVs: Exportgenerationen zusammenfuehren, deduplizieren, Schema wie synthetische Daten |
 | `src/features.py` | Feature Engineering fuer Zeitreihen, ca. 25 numerische Merkmale pro HAST |
