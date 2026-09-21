@@ -6,6 +6,13 @@ von KI-Assistenten allein entschieden.
 
 ## Kurzfristig
 
+0. ~~`full_load_hours`-Bug in `src/features.py`~~ **erledigt
+   2026-09-21** (Branch `analyse/unsupervised-learning`): Energie- und
+   Volumenaggregate werden jetzt auf 8760 h/Jahr normiert statt über die
+   gesamte Historie summiert; Regressionstest in
+   `tests/test_features.py`. Nächster Schritt daraus:
+   `hast_features.csv` neu erzeugen und K-Means-Notebook 01 mit den
+   korrigierten Features erneut laufen lassen.
 1. ~~Echte Zeitreihen anschließen~~ **erledigt 2026-07-09** via
    `meter_quality.py` + `detect_real.py` (Fenster: letzte 365 Tage je
    Zähler, Mindestabdeckung 60 %, Rohwerte unverändert). Ergebnis:

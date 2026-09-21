@@ -66,14 +66,17 @@ der Begehungen über Clusterverschiebungen.
   Heizzeit-Änderungen in 4/5 Fällen messbar. Kritischster Einzelbefund:
   Zähler 68956351 — Ventil 3 Jahre offen, Reparatur steht **nicht** in der
   Begehungstabelle → Label-Qualität ist der Flaschenhals.
-- **Bekannter Bug (blockiert Feature-Arbeit):** `full_load_hours` in
-  `src/features.py:130` teilt Energie durch die gesamte Historie
-  (0,88–4,72 Jahre) statt auf ein Jahr zu normieren →
-  `energy_year / (n_hours / 8760)`.
+- **`full_load_hours`-Bug: behoben 2026-09-21** (Branch
+  `analyse/unsupervised-learning`, Regressionstest
+  `tests/test_features.py`). Energie-/Volumenaggregate werden auf
+  8760 h/Jahr normiert. **Konsequenz:** `data/processed/hast_features.csv`
+  und die Ergebnisse von Notebook 01 basieren auf dem alten Stand und
+  müssen mit korrigierten Features neu gerechnet werden.
 
 ## Roadmap (aus Team-Meetings und docs/naechste-schritte.md)
 
-1. `full_load_hours`-Bug fixen (blockiert alles Weitere).
+1. ~~`full_load_hours`-Bug fixen~~ erledigt 2026-09-21; danach
+   `hast_features.csv` neu erzeugen und Notebook 01 erneut laufen lassen.
 2. **Clustering-Benchmark:** K-Means vs. Ward/agglomerativ vs. GMM vs.
    DBSCAN/HDBSCAN auf denselben Features; Metriken Silhouette, Elbow,
    Bootstrap-ARI-Stabilität; k fest setzen statt automatisch; `coverage`
