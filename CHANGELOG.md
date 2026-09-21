@@ -16,12 +16,15 @@ versioniert wird nicht — Einträge sind datumsbasiert.
   `projektkonventionen`.
 - `src/window_features.py` — zeitlich aufgelöste Zustandsfeatures
   (14-Tage-Fenster, Coverage- und Zählerwechsel-Flags), Grundlage für
-  Cluster-Wanderung um Begehungen. *(in Arbeit)*
+  Cluster-Wanderung um Begehungen. Dazu `tests/test_window_features.py`
+  (9 Tests, synthetische Stundendaten).
 - `tests/test_features.py` — Regressionstest für die
   Jahresnormierung der Energieaggregate.
 
 ### Behoben
 
+- `requirements.txt`: `pandas>=2.2` statt `>=2.0` — `features.py`
+  nutzt `resample("ME")`, den Alias gibt es erst ab pandas 2.2.
 - `src/features.py`: `energy_kwh_year`, `volume_m3_year` und
   `full_load_hours` wurden über die gesamte Historie (0,88–4,72 Jahre)
   summiert statt auf ein Jahr normiert. Jetzt Normierung auf 8760 h/Jahr
