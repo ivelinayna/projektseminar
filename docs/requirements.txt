@@ -1,0 +1,4 @@
+# Nur fuer den Docs-Build (Read the Docs / lokaler mkdocs-Lauf).
+# Projekt-Dependencies stehen in ../requirements.txt.
+mkdocs>=1.6
+mkdocs-material>=9.5

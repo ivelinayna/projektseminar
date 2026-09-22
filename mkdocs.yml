@@ -1,0 +1,32 @@
+site_name: Fernwärme Fault Detection — ÜZ Mainfranken
+site_description: >-
+  Projektseminar JMU Würzburg: datengestützte Fehlererkennung und
+  Leistungsoptimierung im Fernwärmenetz Wiesentheid.
+docs_dir: docs
+theme:
+  name: material
+  language: de
+  palette:
+    primary: blue grey
+  features:
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+plugins:
+  - search:
+      lang: de
+markdown_extensions:
+  - tables
+  - admonition
+  - toc:
+      permalink: true
+nav:
+  - Übersicht: README.md
+  - Datenquellen: datenquellen.md
+  - Datensichtung: datensichtung.md
+  - Echte Datenintegration: echte-daten-integration.md
+  - Pipeline: pipeline.md
+  - Dashboard: dashboard.md
+  - ML-Klassifikator: ml-klassifikator.md
+  - Annahmen & Limitationen: annahmen-limitationen.md
+  - Nächste Schritte: naechste-schritte.md

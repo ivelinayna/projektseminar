@@ -125,8 +125,20 @@ def features_for_meter(df: pd.DataFrame,
     f["standby_dt"] = df.loc[idle, "dt"].mean()
 
     # --- annual aggregates ------------------------------------------------
-    f["energy_kwh_year"] = df["energy"].iloc[-1] - df["energy"].iloc[0]
-    f["volume_m3_year"] = df["volume"].iloc[-1] - df["volume"].iloc[0]
+    # Histories span 0.88-4.72 years, so raw first-to-last deltas are not
+    # annual values. Normalise by the actual calendar span (gaps keep their
+    # true length) before deriving per-year figures.
+    span_hours = (df.index[-1] - df.index[0]).total_seconds() / 3600
+    if span_hours > 0:
+        year_factor = 8760.0 / span_hours
+    else:
+        year_factor = np.nan
+    f["energy_kwh_year"] = (
+        (df["energy"].iloc[-1] - df["energy"].iloc[0]) * year_factor
+    )
+    f["volume_m3_year"] = (
+        (df["volume"].iloc[-1] - df["volume"].iloc[0]) * year_factor
+    )
     f["full_load_hours"] = f["energy_kwh_year"] / max(peak, 0.1)
 
     return f
