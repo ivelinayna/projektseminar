@@ -6,6 +6,15 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Hinzugefügt (Docs-Hosting 2026-09-22)
+
+- Read-the-Docs-Setup: `mkdocs.yml` (Material-Theme, deutsch, Nav über
+  alle acht Docs-Seiten), `.readthedocs.yaml` (v2-Config, Ubuntu 22.04 /
+  Python 3.11) und `docs/requirements.txt` (mkdocs + mkdocs-material,
+  getrennt von den Projekt-Dependencies). Lokaler Build getestet
+  (`mkdocs build` ohne Warnungen). Fehlt nur noch der Import auf
+  readthedocs.org (erfordert Repo-Owner-Zugang).
+
 ### Hinzugefügt (Benchmark 2026-09-22)
 
 - `notebooks/04_clustering_benchmark.ipynb` — Verfahrensvergleich

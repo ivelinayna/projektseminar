@@ -36,7 +36,7 @@ Julius-Maximilians-Universitaet Wuerzburg, SS 2026 / WS 2026.
 | `data/raw/` | Quelldateien von UEZ - **gitignored**, nicht committen |
 | `data/processed/` | Abgeleitete CSV-Dateien - **gitignored** |
 | `outputs/` | Generierte Visualisierungen - **gitignored** |
-| `docs/` | Ausfuehrliche Dokumentation, Ziel: Read the Docs / GitHub Pages |
+| `docs/` | Ausfuehrliche Dokumentation, MkDocs-Setup fuer Read the Docs (`mkdocs.yml`, `.readthedocs.yaml`); lokal: `mkdocs serve` |
 
 ## Schnellstart
 
