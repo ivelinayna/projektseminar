@@ -18,6 +18,16 @@ von KI-Assistenten allein entschieden.
    in keiner Begehungsakte → Rückfrage an ÜZ **[extern]**. Nächster
    Schritt: Clustering-Benchmark (Skill `clustering-benchmark`) mit
    Stabilitätsprüfung der neuen Aufteilung.
+0b. ~~Clustering-Benchmark~~ **erledigt 2026-09-22** (Notebook
+   `04_clustering_benchmark.ipynb`): K-Means k=3 stabilstes Verfahren,
+   aber keine belastbare Typenbildung jenseits des Ausreißer-Trios;
+   HDBSCAN degeneriert; Ground Truth trennt nichts. Konsequenz:
+   **zeitliche Auflösung** als nächster Hebel — Cluster-Wanderung mit
+   `src/window_features.py` (14-Tage-Fenster) um die Begehungen
+   (Skill `begehungs-wirkungsanalyse`). Offen bleibt: BHKW-Ausschluss
+   **[Entscheidung]** (Benchmark zeigt: ändert Ausreißer-Trennung,
+   nicht die Gesamtaussage) und fachliche Prüfung der drei
+   Ausreißer-Zähler **[extern]**.
 1. ~~Echte Zeitreihen anschließen~~ **erledigt 2026-07-09** via
    `meter_quality.py` + `detect_real.py` (Fenster: letzte 365 Tage je
    Zähler, Mindestabdeckung 60 %, Rohwerte unverändert). Ergebnis:

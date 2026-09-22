@@ -6,6 +6,30 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Hinzugefügt (Benchmark 2026-09-22)
+
+- `notebooks/04_clustering_benchmark.ipynb` — Verfahrensvergleich
+  K-Means / Ward / GMM / HDBSCAN auf den korrigierten Features, jeweils
+  mit und ohne BHKW-Ausschluss (parametrisiert über
+  `EXCLUDE_STATION_TYPES`, Team-Entscheidung offen). Ergebnisse:
+  - **k = 3 fest gesetzt** (k = 2 isoliert nur Ausreißer — Ward-Falle;
+    k ≥ 4 fragmentiert ohne Silhouette-Gewinn).
+  - **Konsistenz-Anker bestätigt:** alle Verfahren separieren das
+    Ausreißer-Trio {58202380, 66761022, 86792512} bei k = 3 als
+    Kleinst-Cluster; paarweiser ARI der Gesamtaufteilung nur
+    0,15–0,58 (Einigkeit nur über die Ausreißer, nicht über die Masse).
+  - **K-Means k = 3 stabilstes Verfahren** (Bootstrap-ARI 0,71/0,60),
+    aber unter altem Referenzwert 0,90.
+  - **Negativbefund HDBSCAN:** ab `min_cluster_size` = 5 komplett
+    Rauschen; mcs = 3 lässt ~20 % unzugeordnet.
+  - **Ground Truth trennt nichts** (Fisher p ≥ 0,47, MWU p ≥ 0,19,
+    Basisrate 80 %); Ausreißer-Cluster in Begehungsdaten nicht
+    vertreten.
+  - Konsequenz: statische Stationsprofile tragen keine Typenbildung →
+    zeitliche Auflösung via `src/window_features.py` ist der nächste
+    Hebel. Referenz-Zuordnungen in `data/processed/cluster_benchmark.csv`
+    (+ `.json` Lauf-Kontext, beide gitignored).
+
 ### Geändert
 
 - Notebook `00_eda_hast_stationsprofile.ipynb`: Inline-Feature-Funktion

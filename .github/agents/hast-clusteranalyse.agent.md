@@ -77,10 +77,15 @@ der Begehungen über Clusterverschiebungen.
 
 1. ~~`full_load_hours`-Bug fixen~~ erledigt 2026-09-21; danach
    `hast_features.csv` neu erzeugen und Notebook 01 erneut laufen lassen.
-2. **Clustering-Benchmark:** K-Means vs. Ward/agglomerativ vs. GMM vs.
-   DBSCAN/HDBSCAN auf denselben Features; Metriken Silhouette, Elbow,
-   Bootstrap-ARI-Stabilität; k fest setzen statt automatisch; `coverage`
-   als Qualitätsdimension nutzen. → Skill `clustering-benchmark`.
+2. ~~**Clustering-Benchmark**~~ **erledigt 2026-09-22** (Notebook
+   `04_clustering_benchmark.ipynb`, Skill `clustering-benchmark`):
+   K-Means k=3 stabilstes Verfahren (Bootstrap-ARI 0,71/0,60), aber
+   keine belastbare Struktur jenseits des Ausreißer-Trios
+   {58202380, 66761022, 86792512} (alle Silhouetten ab k=3 < 0,25;
+   Verfahren einig nur über die Ausreißer, paarweiser ARI 0,15–0,58).
+   HDBSCAN degeneriert (Negativbefund dokumentiert). Ground Truth
+   trennt nichts (Basisrate 80 %). Referenz-Zuordnungen:
+   `data/processed/cluster_benchmark.csv`.
 3. **Zeitliche Aggregation:** statt ein Profil über zwei Jahre →
    Zustandsfenster (z. B. 14-Tage-Fenster aus Notebook 02) in der
    Stundendimension hochaggregieren; Anomalien zählen nur, wenn sie
