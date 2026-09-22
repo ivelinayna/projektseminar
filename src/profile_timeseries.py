@@ -311,8 +311,7 @@ liegt unter `data/processed/timeseries_profile.csv`.
 - **{n_topo} von {n} Zählern** stehen mit ihrer Zählernummer in
   `Nodes_Edges.ods` (Sheet `Nodes`).
 - {n - n_topo} Zähler fehlen dort - mutmaßlich Zählertausch; Kandidat
-  für die Auflösung ist `Zuordnung.xlsx` (siehe
-  [naechste-schritte.md](naechste-schritte.md)).
+  für die Auflösung ist `Zuordnung.xlsx`.
 
 ### CSV-Zähler ohne Topologie-Eintrag
 

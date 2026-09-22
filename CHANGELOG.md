@@ -6,6 +6,14 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Entfernt (2026-09-22)
+
+- `docs/naechste-schritte.md` aus der Git-Versionierung genommen
+  (gitignored, bleibt lokal erhalten) — interne Arbeitsdatei, nicht für
+  die öffentliche Doku. Verweise in `mkdocs.yml`, `docs/README.md`,
+  `docs/datensichtung.md` und `src/profile_timeseries.py` entfernt.
+  Hinweis: ältere Commits enthalten die Datei weiterhin (Historie).
+
 ### Hinzugefügt (Docs-Hosting 2026-09-22)
 
 - Read-the-Docs-Setup: `mkdocs.yml` (Material-Theme, deutsch, Nav über

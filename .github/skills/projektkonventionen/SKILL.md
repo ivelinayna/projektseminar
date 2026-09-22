@@ -40,7 +40,8 @@ Diese Regeln gelten für jede Änderung im Repo.
 - **[Entscheidung]-Punkte** (Baseline-Rekalibrierung,
   Fehlertyp→Maßnahme-Mapping, Zählertausch-Stitching, Geocoding,
   Waisen-HAST) nicht eigenmächtig festlegen — als offene Frage in
-  `docs/naechste-schritte.md` dokumentieren.
+  `docs/naechste-schritte.md` dokumentieren — die Datei ist gitignored
+  (nur lokal, niemals committen/pushen).
 - Nicht zu viel wegfiltern; Ausschlüsse immer mit Grund tabellieren.
 
 ## Code & Struktur

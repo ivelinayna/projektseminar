@@ -26,8 +26,9 @@ der Begehungen über Clusterverschiebungen.
    vor dem Commit leeren oder nur Aggregate zeigen).
 3. **Fehlgeschlagene Ansätze dokumentieren, nicht löschen.** Sie gehören in
    die Abgabe (Referenz: ML-Negativergebnis in `docs/ml-klassifikator.md`).
-   Neue Befunde in `docs/` festhalten und in `README.md` /
-   `docs/naechste-schritte.md` verlinken.
+   Neue Befunde in `docs/` festhalten und in `README.md` verlinken;
+   offene Entscheidungen in `docs/naechste-schritte.md` — die Datei ist
+   gitignored (nur lokal, niemals committen/pushen).
 4. **Nicht zu viel wegfiltern.** Qualitätsfilter (Coverage, Fensterlänge)
    transparent machen und als Parameter belassen, keine stillen Dropouts.
 5. **[Entscheidung]-Punkte nicht allein festlegen.** Baseline-Schwellen-

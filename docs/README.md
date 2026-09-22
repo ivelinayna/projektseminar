@@ -16,7 +16,9 @@ skalierbar auf weitere ÜZ-Teilnetze.
 | [ml-klassifikator.md](ml-klassifikator.md) | Generiert: ML-Zustandsklassifikation vs. Baseline, Leakage-Analyse, ehrliches Negativergebnis (`src/ml_classifier.py`) |
 | [pipeline.md](pipeline.md) | Module, Datenfluss, CLI-Kommandos, erzeugte Artefakte |
 | [annahmen-limitationen.md](annahmen-limitationen.md) | Annahmen, Grenzen der aktuellen Ergebnisse, gescheiterte/verworfene Ansätze |
-| [naechste-schritte.md](naechste-schritte.md) | Priorisierte To-dos und offene Entscheidungen |
+
+> `naechste-schritte.md` (priorisierte To-dos und offene Entscheidungen)
+> ist bewusst **nicht versioniert** (gitignored) und liegt nur lokal vor.
 
 ## Begriffe (bewusst getrennt halten)
 

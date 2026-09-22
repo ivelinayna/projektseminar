@@ -166,8 +166,7 @@ liegt unter `data/processed/timeseries_profile.csv`.
 - **85 von 100 Zählern** stehen mit ihrer Zählernummer in
   `Nodes_Edges.ods` (Sheet `Nodes`).
 - 15 Zähler fehlen dort - mutmaßlich Zählertausch; Kandidat
-  für die Auflösung ist `Zuordnung.xlsx` (siehe
-  [naechste-schritte.md](naechste-schritte.md)).
+  für die Auflösung ist `Zuordnung.xlsx`.
 
 ### CSV-Zähler ohne Topologie-Eintrag
 
