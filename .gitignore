@@ -5,6 +5,9 @@ data/processed/*
 !data/processed/.gitkeep
 !data/README.md
 
+# Externe, oeffentliche Daten (z. B. DWD-Wetter) - gross, nicht versionieren
+external/
+
 # Outputs (generated, large, or contain sensitive viz)
 outputs/*
 !outputs/.gitkeep
