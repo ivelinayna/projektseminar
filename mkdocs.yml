@@ -22,11 +22,4 @@ markdown_extensions:
       permalink: true
 nav:
   - Übersicht: README.md
-  - Datenquellen: datenquellen.md
-  - Datensichtung: datensichtung.md
-  - Echte Datenintegration: echte-daten-integration.md
   - Pipeline: pipeline.md
-  - Dashboard: dashboard.md
-  - ML-Klassifikator: ml-klassifikator.md
-  - Annahmen & Limitationen: annahmen-limitationen.md
-  - Nächste Schritte: naechste-schritte.md
