@@ -9,14 +9,7 @@ skalierbar auf weitere ÜZ-Teilnetze.
 
 | Dokument | Inhalt |
 |---|---|
-| [datenquellen.md](datenquellen.md) | Alle Rohdatenquellen, verifizierte Kennzahlen, bekannte Datenprobleme |
-| [datensichtung.md](datensichtung.md) | Generiertes Daten-Profiling der echten Zeitreihen (`src/profile_timeseries.py`) |
-| [echte-daten-integration.md](echte-daten-integration.md) | Generiert: Qualitätsklassen, Auswahltrichter, Baseline-Ergebnis auf echten Daten (`src/detect_real.py`) |
-| [dashboard.md](dashboard.md) | Streamlit-Dashboard: Start, Ampellogik (Winter-Rücklauf), Datenquellen, bewusste Auslassungen |
-| [ml-klassifikator.md](ml-klassifikator.md) | Generiert: ML-Zustandsklassifikation vs. Baseline, Leakage-Analyse, ehrliches Negativergebnis (`src/ml_classifier.py`) |
 | [pipeline.md](pipeline.md) | Module, Datenfluss, CLI-Kommandos, erzeugte Artefakte |
-| [annahmen-limitationen.md](annahmen-limitationen.md) | Annahmen, Grenzen der aktuellen Ergebnisse, gescheiterte/verworfene Ansätze |
-| [naechste-schritte.md](naechste-schritte.md) | Priorisierte To-dos und offene Entscheidungen |
 
 ## Begriffe (bewusst getrennt halten)
 

@@ -6,6 +6,20 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Hinzugefügt (Unsupervised-Strang: Ternär, Stationsbilder, Monitor, Befunde, 2026-10-09)
+
+- Neue Module `src/weather.py`, `src/season.py`, `src/performance.py`,
+  `src/ternaer.py`, `src/stationsbilder.py`, `src/kennlinien_monitor.py` und
+  `src/befundcodes.py` samt Tests, dazu die Notebooks 08 und 12 bis 15.
+- `src/load_timeseries.py`: ODS-Nachlieferung als dritte Exportgeneration
+  (`mit_ods=True`), Gegenprobe CSV gegen ODS (`vergleiche_ueberlappung`),
+  Rekonstruktion der kumulativen Kanäle. Die Ableitung der fehlenden
+  Spreizungsspalte bleibt erhalten und greift jetzt auch in der
+  Gegenprobe.
+- `src/load_begehungen.py`: `meter_to_address()`,
+  `begehung_dates_by_meter()`, Begehungstabelle wird per Glob gefunden
+  (Klammerstil `(45)` / `[45]`); ohne Rohdaten bleibt der Import möglich.
+
 ### Hinzugefügt (Docs-Hosting 2026-09-22)
 
 - Read-the-Docs-Setup: `mkdocs.yml` (Material-Theme, deutsch, Nav über

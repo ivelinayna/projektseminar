@@ -21,6 +21,13 @@ Julius-Maximilians-Universitaet Wuerzburg, SS 2026 / WS 2026.
 | `src/load_begehungen.py` | Begehungs-Excel mit Aenderungs-Kategorie, Begehungszeiten, Heiz-/TWW-Zeiten und Sollwerten alt/neu; Adresse -> Zaehlernummer aus `Zuordnung.xlsx` inkl. Zaehlerwechsel |
 | `src/synth_data.py` | Synthetische stuendliche Zaehlerdaten mit eingebetteten Fehlern, 5 Fehlertypen, 1 Jahr |
 | `src/load_timeseries.py` | Loader fuer reale UEZ-Zaehler-CSVs: Exportgenerationen zusammenfuehren, deduplizieren, Schema wie synthetische Daten |
+| `src/weather.py` | DWD Open Data Aussentemperatur (Station 2600 Kitzingen) cachen, Lueckenflagging, Heizgradstunden |
+| `src/season.py` | Saisonsegmente am Stundenraster (Kernwinter, Uebergang, Sommer) und Kaeltewochen-Bestimmung |
+| `src/performance.py` | Spezifische Performance (kWh/m3) gegen Aussentemperatur, Regression vor/nach Begehung |
+| `src/ternaer.py` | Ternaerdiagramme je Station (Leistung, Volumenstrom, Spreizung) ueber sechs Zeitabschnitte |
+| `src/stationsbilder.py` | Kennlinie, Carpet-Plot und Dauerlinie je Station als Gegenprobe zum Ternaerdiagramm |
+| `src/kennlinien_monitor.py` | Kennlinie als stationseigenes Modell: rollierender Fit, Residuen, Alarme |
+| `src/befundcodes.py` | Regelbasierte Kodierung der Begehungs-Freitexte in Mehrfachlabels, Fehlerrangliste |
 | `src/features.py` | Feature Engineering fuer Zeitreihen, ca. 25 numerische Merkmale pro HAST |
 | `src/fault_detection.py` | Regelbasierter Fehlerklassifikator - Baseline fuer das spaetere ML-Modell |
 | `src/detect_real.py` | Defensive Auswertung echter Zeitreihen inkl. Qualitaetsklassen, 365-Tage-Fenster und Ground-Truth-Join |
@@ -184,7 +191,7 @@ hin:
 - [x] Loader fuer reale Zaehler-CSVs: Exportgenerationen zusammenfuehren, deduplizieren, pro Zaehler materialisieren (`load_timeseries.py`)
 - [x] Echte Zeitreihen defensiv in Features + Fault Detection fuehren: Qualitaetsklassen, 365-Tage-Fenster, mindestens 60 % Abdeckung, Ground-Truth-Join (`detect_real.py`)
 - [x] Geokodierte HAST an naechstgelegene Knoten des raeumlichen Graphen snappen, mit Distanz als Unsicherheitsmass (`snap_hast.py`)
-- [x] ML-State-Classifier gegen Baseline evaluieren (`ml_classifier.py`) - ehrliches negatives Ergebnis, siehe `docs/ml-klassifikator.md`
+- [x] ML-State-Classifier gegen Baseline evaluieren (`ml_classifier.py`) - ehrliches negatives Ergebnis
 - [x] Streamlit-Dashboard mit gemessener Ruecklauf-Ampel, klickbarer Karte, Stationsdetail und Wartungsprioritaet (`dashboard_app.py`)
 - [x] Transparenter Wartungsprioritaets-Score (`priority.py`) - noch keine echte Fehlerprognose
 - [ ] Regel-Schwellenwerte auf echten Daten neu kalibrieren
