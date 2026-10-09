@@ -23,3 +23,4 @@ markdown_extensions:
 nav:
   - Übersicht: README.md
   - Pipeline: pipeline.md
+  - Ergebnisse Notebooks 12–15: output_NB12-15.md
