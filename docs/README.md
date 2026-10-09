@@ -10,6 +10,7 @@ skalierbar auf weitere ÜZ-Teilnetze.
 | Dokument | Inhalt |
 |---|---|
 | [pipeline.md](pipeline.md) | Module, Datenfluss, CLI-Kommandos, erzeugte Artefakte |
+| [output_NB12-15.md](output_NB12-15.md) | Ergebnisse der Notebooks 12 bis 15 mit Grafiken: Ternärdiagramme, Stationsbilder, Kennlinienmonitor, Begehungsnotizen |
 
 ## Begriffe (bewusst getrennt halten)
 
