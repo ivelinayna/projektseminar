@@ -1,6 +1,6 @@
 geopandas>=0.14
 networkx>=3.2
-pandas>=2.0
+pandas>=2.2
 numpy>=1.24
 shapely>=2.0
 pyproj>=3.6

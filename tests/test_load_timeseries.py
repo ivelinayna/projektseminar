@@ -119,6 +119,21 @@ def test_bad_schema_raises():
             raise AssertionError("expected ValueError for missing column")
 
 
+def test_missing_spread_is_derived():
+    """81050517's export omits the spread column - derive it, don't fail."""
+    with tempfile.TemporaryDirectory() as tmp:
+        d = Path(tmp)
+        _dummy_frame("2024-01-01", 5, 0).drop(
+            columns=["Temperature difference (\u00b0C)"]).to_csv(
+                d / "44444444__n.csv", index=False)
+        df = load_meter_timeseries(44444444, d)
+        assert list(df.columns) == SCHEMA
+        spread = df["Temperature difference (\u00b0C)"]
+        expected = (df["Flow temperature (\u00b0C)"]
+                    - df["Return temperature (\u00b0C)"])
+        assert (spread == expected).all()
+
+
 def test_materialize_layout_matches_features_input():
     with tempfile.TemporaryDirectory() as tmp:
         d = Path(tmp)

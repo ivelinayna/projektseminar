@@ -11,7 +11,13 @@ in data/raw and is exercised by running the module itself. Runs standalone
 
 import pandas as pd
 
-from src.load_begehungen import _key, address_to_meter, meter_changes, visit_hours
+from src.load_begehungen import (
+    _key,
+    address_to_meter,
+    meter_changes,
+    meter_to_address,
+    visit_hours,
+)
 
 
 def _zuordnung() -> pd.DataFrame:
@@ -20,6 +26,16 @@ def _zuordnung() -> pd.DataFrame:
         "key": ["musterweg 1", "musterweg 2", "musterweg 2", "musterweg 3"],
         "meter": [11111111, 22222222, 33333333, 44444444],
         "year": ["2024", "2024", "2025", "2025"],
+    })
+
+
+def _zuordnung_with_address() -> pd.DataFrame:
+    """Same meter moved address between years - most recent year should win."""
+    return pd.DataFrame({
+        "address": ["Musterweg 1", "Musterweg 1", "Musterweg 2"],
+        "key": ["musterweg 1", "musterweg 1", "musterweg 2"],
+        "meter": [11111111, 22222222, 22222222],
+        "year": ["2024", "2024", "2025"],
     })
 
 
@@ -53,6 +69,14 @@ def test_visit_hours():
     # end time missing -> single-hour window
     assert visit_hours(pd.Series({"von": "10:20:00", "bis": float("nan")})) == (10, 10)
     assert visit_hours(pd.Series({"von": float("nan"), "bis": float("nan")})) is None
+
+
+def test_meter_to_address_picks_most_recent_year():
+    lookup = meter_to_address(_zuordnung_with_address())
+    # meter 11111111 only appears in 2024 -> keeps its only address
+    assert lookup[11111111] == "Musterweg 1"
+    # meter 22222222 moved from Musterweg 1 (2024) to Musterweg 2 (2025)
+    assert lookup[22222222] == "Musterweg 2"
 
 
 if __name__ == "__main__":

@@ -7,11 +7,13 @@ Two source files, both in ``data/raw``:
   (used by ``load_data.load_logical_nodes``) is missing 16 of the addresses
   that appear in the walkthrough records, so joins built on it silently lose
   a quarter of the data.
-* ``20252810_Ergebnis_Optimierung_FW(45).xlsx`` - the walkthrough records.
-  133 columns behind a two-row header. ``inspections.py`` extracts a tidy
-  subset of 21; this module keeps the columns that describe *what was
-  changed*: the graded change category, the visit times, heating and DHW
-  schedules before/after, and the setpoints before/after.
+* ``20252810_Ergebnis_Optimierung_FW[45].xlsx`` (bracket style in the file
+  name has changed between data drops, hence the glob lookup below) - the
+  walkthrough records. 133 columns behind a two-row header.
+  ``inspections.py`` extracts a tidy subset of 21; this module keeps the
+  columns that describe *what was changed*: the graded change category, the
+  visit times, heating and DHW schedules before/after, and the setpoints
+  before/after.
 
 Why both live here and not in a notebook: resolving an address to its meter
 number is data access, not analysis, and every downstream evaluation needs
@@ -29,7 +31,23 @@ import pandas as pd
 from .load_data import DATA_DIR, _normalize_address
 
 ZUORDNUNG_XLSX = DATA_DIR / "Zuordnung.xlsx"
-BEGEHUNGEN_XLSX = DATA_DIR / "20252810_Ergebnis_Optimierung_FW(45).xlsx"
+
+
+def _begehungen_xlsx_path() -> Path:
+    """Locate the walkthrough Excel, tolerating the file name's varying
+    bracket style (seen as both ``(45)`` and ``[45]`` across data drops).
+
+    Falls back to the ``(45)`` name when nothing matches, so importing this
+    module works without raw data (tests, docs build); reading the file
+    then fails with the usual FileNotFoundError.
+    """
+    matches = sorted(DATA_DIR.glob("*Ergebnis_Optimierung_FW*.xlsx"))
+    if not matches:
+        return DATA_DIR / "20252810_Ergebnis_Optimierung_FW(45).xlsx"
+    return matches[0]
+
+
+BEGEHUNGEN_XLSX = _begehungen_xlsx_path()
 
 #: Typos found in the walkthrough sheet that block the address join.
 #: "Fleiderstraße" for "Fliederstraße" costs four meters on its own.
@@ -110,6 +128,21 @@ def address_to_meter(
         with_data = [m for m in candidates if available and m in available]
         picked[key] = with_data[0] if with_data else candidates[0]
     return picked
+
+
+def meter_to_address(zuordnung: Optional[pd.DataFrame] = None) -> Dict[int, str]:
+    """Map meter number -> its most recent raw address string.
+
+    The inverse of ``address_to_meter``: one entry per meter, not per
+    address. Feeds the ``address`` column in ``features.py`` /
+    ``features_for_directory`` - ``Zuordnung.xlsx`` covers meters that
+    ``Nodes_Edges.ods`` (``load_data.load_logical_nodes``) is missing.
+    When a meter's address changed across years, the most recent
+    (highest-year sheet) entry wins.
+    """
+    z = load_zuordnung() if zuordnung is None else zuordnung
+    z = z.sort_values("year")
+    return z.drop_duplicates(subset="meter", keep="last").set_index("meter")["address"].to_dict()
 
 
 # --------------------------------------------------------------------------
@@ -218,6 +251,24 @@ def visit_hours(row: pd.Series) -> Optional[tuple]:
     return start, (hour(row.get("bis")) or start)
 
 
+def begehung_dates_by_meter(available: Optional[set] = None) -> Dict[int, List[pd.Timestamp]]:
+    """Meter -> sorted list of its walkthrough dates.
+
+    Feeds ``window_features.windowed_features_for_meter(begehungen=...)`` -
+    marks windows straddling a documented intervention so clustering never
+    silently mixes the state before and after it. Rows without a resolved
+    meter or a parseable date are dropped (the same rows `begehungen_mit_zaehler`
+    already leaves with NaN).
+    """
+    beg = begehungen_mit_zaehler(available=available)
+    beg = beg.dropna(subset=["meter", "datum"])
+    beg["meter"] = beg["meter"].astype("int64")
+    return {
+        int(meter): sorted(pd.to_datetime(group["datum"]).tolist())
+        for meter, group in beg.groupby("meter")
+    }
+
+
 if __name__ == "__main__":
     z = load_zuordnung()
     beg = begehungen_mit_zaehler()
@@ -228,3 +279,7 @@ if __name__ == "__main__":
     print(f"Kategorien: {beg['kategorie'].value_counts().to_dict()}")
     print(f"Heizzeit geaendert bei {int(beg['heizzeit_geaendert'].sum())} Stationen")
     print(f"Adressen mit Zaehlerwechsel: {meter_changes(z)}")
+    dates_by_meter = begehung_dates_by_meter()
+    n_multi = sum(len(v) > 1 for v in dates_by_meter.values())
+    print(f"Begehungstermine je Zaehler: {len(dates_by_meter)} Zaehler, "
+          f"{n_multi} davon mit mehr als einer Begehung")
