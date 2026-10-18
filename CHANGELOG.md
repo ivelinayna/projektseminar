@@ -6,6 +6,27 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Hinzugefügt (Modell-Strang: K-Means-Einstufung, LSTM, Prognose, XGBoost, 2026-10-18)
+
+- Notebooks 18 bis 22 auf der Datenbasis von Notebook 00, ohne neue Module
+  in `src/`; genutzt werden `weather`, `inspections`, `befundcodes` und
+  `load_begehungen`:
+  - `18_modelldaten_labels`: Stundenwerte mit Außentemperatur, Kennzahlen
+    nur aus Daten vor der ersten Begehung, Labels je Zähler.
+  - `19_kmeans_einstufung_folie5`: Einstufung Optimum / schlechter nach Folie 5.
+  - `20_lstm_fehlererkennung`: LSTM-Embedding und verschachtelt geprüfte
+    Fehlererkennung (Ventil, Dämmung).
+  - `21_prognose_lstm_waechter`: Prognose-LSTM als Überwacher, Prüfung mit
+    eingerechneten Fehlern und an den Begehungen.
+  - `22_xgboost_fehlerklassen`: Modellvergleich mit Wechselwirkungen und
+    SHAP, drei Klassen der Folie 5 für alle Zähler. Negativbefunde
+    (Baum-Modelle, Wechselwirkungen, Klassengewichtung) sind dokumentiert.
+- `requirements.txt`: `torch` und `xgboost`.
+- Zwischenergebnisse in `data/processed/` (gitignored): `modell_stunden.parquet`,
+  `modell_kennzahlen.csv`, `modell_labels.csv`, `kmeans_einstufung.csv`,
+  `lstm_embedding.csv`, `lstm_scores.csv`, `prognose_tage.csv`,
+  `fehlerklassen_je_hast.csv`; Modellgewichte in `notebooks/models/` (gitignored).
+
 ### Hinzugefügt (Unsupervised-Strang: Ternär, Stationsbilder, Monitor, Befunde, 2026-10-09)
 
 - Neue Module `src/weather.py`, `src/season.py`, `src/performance.py`,
