@@ -97,6 +97,22 @@ egal ob synthetische oder echte Daten anliegen.
 | `14_monitor.ipynb` | Kennlinie als Modell je Station, Alarme, Gegenprobe gegen 53 Begehungsfälle | Bekannter Defekt (68956351) wird klar gefunden; über alle Begehungen nur ca. 30 % über Zufall |
 | `15_befunde.ipynb` | Kodierung der 57 Begehungs-Freitexte, Fehlerrangliste, Monitor neu ausgewertet | Mit den Freitext-Labels trifft der Residuenkanal 10 von 19 mechanischen Eingriffen (p = 0,024) |
 
+## Notebooks des Modell-Strangs
+
+Aufbauend auf `00_eda` (`real_meters/`, `hast_features.csv`). Jedes Notebook
+schreibt seine Zwischenergebnisse nach `data/processed/`, das nächste liest sie.
+Modellgewichte liegen in `notebooks/models/` (gitignored) und werden beim
+nächsten Lauf geladen statt neu trainiert. Benötigt zusätzlich `torch` und
+`xgboost` (siehe `requirements.txt`); ohne Grafikkarte läuft alles auf der CPU.
+
+| Notebook | Ansatz | Kernbefund |
+|---|---|---|
+| `18_modelldaten_labels.ipynb` | Stundenwerte mit DWD-Außentemperatur, 13 Kennzahlen je Zähler nur aus Daten vor der ersten Begehung, 6 Labels aus Kästchen (`inspections`) und Freitext (`befundcodes`) | 56 begangene Zähler mit Zeitreihe; Ventil 11, Dämmung 23; bei Filter, Durchfluss und Dämmung kaum ausdrückliche „nein“ (4–8), die Gegenbeispiele sind meist leere Kästchen |
+| `19_kmeans_einstufung_folie5.ipynb` | K-Means auf drei Regelungs-Kennzahlen (Winter 23/24): Optimum oder schlechter (Folie 5) | k = 2, Silhouette 0,45; Gruppe „schlechter“ (18 Zähler) hat 56 % Ventilbefunde gegen 13 % im Optimum (p = 0,012) |
+| `20_lstm_fehlererkennung.ipynb` | LSTM (PyTorch) sagt aus einem Tag den nächsten vorher, 8-Zahlen-Embedding je Station, logistische Regression verschachtelt geprüft | Ventil nur aus Winterdaten: AUC 0,86 mit LSTM gegen 0,68 mit Kennzahlen (belegt); Wiedererkennung über zwei Winter 88 % |
+| `21_prognose_lstm_waechter.ipynb` | Encoder–Decoder-LSTM sagt jeden Tag Rücklauf und Durchfluss vorher; Warnung bei Abweichung an zwei Tagen | Bypass 150 l/h zu 90 % erkannt bei 5 % Fehlalarmen im Sommer; im Winter und nach Begehungen zu empfindlich |
+| `22_xgboost_fehlerklassen.ipynb` | Logistische Regression, Random Forest, XGBoost mit/ohne Wechselwirkungen, SHAP; drei Klassen der Folie 5 für alle 96 Zähler | Ventil AUC 0,89, Dämmung 0,77 (LR auf Kennzahlen + LSTM); Bäume und Wechselwirkungen nicht besser; Filter, Durchfluss, Temperatur, Vertrag nicht erkennbar |
+
 ## Smoke-Tests (zuletzt grün am 2026-07-08)
 
 - `python -m src.main` — Graphen, Karten, Begehungs-Summary
