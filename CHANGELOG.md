@@ -6,6 +6,37 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Geändert (Modell-Strang: LSTM auf den begangenen HAST, Wächtervergleich, 2026-10-19)
+
+- `20_lstm_fehlererkennung` und `21_prognose_lstm_waechter`: Die LSTM lernen
+  nach Vorgabe der Betreuung nur auf den HAST mit Begehungsdaten; ein Netz
+  auf allen HAST läuft zum Vergleich mit. In 20 zusätzlich ein Autoencoder
+  als dritte Variante und die Wirkung des fraglichen Ventil-Labels, in 21
+  ein Faktor je Jahreszeit und Alarme gezählt wie im Normalverhaltensmodell.
+- `18` bis `22`: Jedes Notebook beginnt mit dem, was vorher versucht wurde und
+  warum es nicht gereicht hat, und sieht sich die geladenen Tabellen an,
+  bevor gerechnet wird.
+- `18_modelldaten_labels`: Auslastung zusätzlich auf den Vertrag vor der
+  Begehung bezogen (`auslastung_vertrag`). Der Anschlusswert in
+  `Nodes_Edges.ods` ist bei 7 von 9 verkleinerten Verträgen schon der neue
+  Wert.
+- `22_xgboost_fehlerklassen`: Die Überdimensionierung wird mit
+  `auslastung_vertrag` gelernt und geprüft; für nie begangene Zähler bleibt
+  der Anschlusswert. Damit ist sie erkennbar (Regel AUC 0,78 statt 0,66),
+  `fehlerklassen_je_hast.csv` enthält jetzt Hinweise auf Überdimensionierung.
+- `21_prognose_lstm_waechter`: Der erste Blick auf die Begehungen
+  (24–29 % gegen 8 %) ist als nicht belegt eingeordnet, siehe `23`.
+
+### Hinzugefügt (Wächtervergleich, 2026-10-19)
+
+- `23_vergleich_waechter`: Sebs Begehungsprüfung aus `17` als Funktion,
+  Fall für Fall gegen seine Ergebnisse geprüft, dann auf Normalverhaltensmodell
+  und Prognose-LSTM unter gleichen Bedingungen angewendet (gleiche Stationen,
+  Heiztage, Fälle, Kontrollgruppe und gleiches Alarmbudget). Liest die
+  Ausgaben von `06`, `17` und `21`.
+- `prognose_tage.csv` enthält zusätzlich die z-Werte des Vergleichsnetzes auf
+  allen HAST (`z_rl_alle`, `z_fluss_alle`).
+
 ### Hinzugefügt (Modell-Strang: K-Means-Einstufung, LSTM, Prognose, XGBoost, 2026-10-18)
 
 - Notebooks 18 bis 22 auf der Datenbasis von Notebook 00, ohne neue Module
