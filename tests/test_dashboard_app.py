@@ -15,6 +15,9 @@ re-initialisation inside Streamlit's test runtime, not an app bug).
 
 from pathlib import Path
 
+import pytest
+pytest.importorskip("streamlit")
+
 from streamlit.testing.v1 import AppTest
 
 ROOT = Path(__file__).resolve().parents[1]

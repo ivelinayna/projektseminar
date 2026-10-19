@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from typing import Dict
 
 import numpy as np
 import pandas as pd
@@ -162,6 +163,54 @@ def _klartext(r: pd.Series) -> str:
         teile.append(f"letzte Begehung liegt "
                      f"{r['tage_seit_begehung'] / 30:.0f} Monate zurück")
     return f"{stufe} Priorität: " + "; ".join(teile) + "."
+
+
+def mit_empfehlung(scores: pd.DataFrame,
+                   treffer: pd.DataFrame) -> pd.DataFrame:
+    """Priorisierung um Muster, Schweregrad und Massnahme ergaenzen.
+
+    Die beiden Listen beantworten verschiedene Fragen und werden
+    deshalb nicht verrechnet, sondern nebeneinandergestellt. Der
+    Prioritaets-Score hier gewichtet den Winter-Ruecklauf, den
+    Anschlusswert und das Alter der letzten Begehung; er sagt, wo eine
+    Begehung ueberfaellig ist. Die Trefferliste aus `src.empfehlung`
+    kommt aus den beiden begehungsvalidierten Detektoren auf dem
+    Tagespanel und sagt, wo der Betrieb heute auffaellig ist und wie
+    das Muster aussieht.
+
+    Stationen ohne Eintrag in der Trefferliste sind nach den Detektoren
+    nicht persistent auffaellig; ihre Musterspalte bleibt leer. Das ist
+    keine Unbedenklichkeitsbescheinigung, sondern heisst nur, dass die
+    Abweichung die Persistenzschwelle nicht erreicht.
+    """
+    spalten = [s for s in ("meter", "muster", "stufe", "punkte",
+                           "persistenz", "massnahme", "begruendung_kurz")
+               if s in treffer.columns]
+    t = treffer[spalten].copy()
+    t["meter"] = pd.to_numeric(t["meter"], errors="coerce").astype("Int64")
+    t = t.rename(columns={"meter": "Zählernummer",
+                          "stufe": "schweregrad",
+                          "punkte": "anomalie_punkte",
+                          "begruendung_kurz": "begruendung_anomalie"})
+    out = scores.copy()
+    out["Zählernummer"] = pd.to_numeric(out["Zählernummer"],
+                                        errors="coerce").astype("Int64")
+    return out.merge(t, on="Zählernummer", how="left")
+
+
+def rangvergleich(kombiniert: pd.DataFrame) -> Dict[str, float]:
+    """Wie stark stimmen Prioritaets-Score und Anomaliepunkte ueberein.
+
+    Ein hoher Zusammenhang hiesse, dass die neue Trefferliste wenig
+    Zusaetzliches liefert; ein niedriger, dass beide Listen
+    unterschiedliche Stationen nach vorne bringen und die Entscheidung
+    zwischen ihnen fachlich getroffen werden muss.
+    """
+    teil = kombiniert.dropna(subset=["prio_score", "anomalie_punkte"])
+    if len(teil) < 3:
+        return {"n": float(len(teil)), "spearman": float("nan")}
+    rho = teil["prio_score"].corr(teil["anomalie_punkte"], method="spearman")
+    return {"n": float(len(teil)), "spearman": float(rho)}
 
 
 if __name__ == "__main__":

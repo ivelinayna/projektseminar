@@ -52,6 +52,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
+from . import load_begehungen
 from . import load_data as ld
 from .detect_real import MEASURE_COLS, join_ground_truth
 from .fault_detection import classify_dataframe
@@ -91,11 +92,12 @@ def build_labelled() -> pd.DataFrame:
     """
     feats = pd.read_csv(PROCESSED / "features_real.csv")
     nodes = ld.load_logical_nodes()
+    address_map = load_begehungen.meter_to_address(load_begehungen.load_zuordnung())
 
     # Regel-Baseline-Vorhersage je Station (predicted_fault) - wird als
     # Vergleichsmaßstab (b) gebraucht; classify_dataframe unverändert.
     preds = classify_dataframe(feats)
-    merged = join_ground_truth(preds, nodes)
+    merged = join_ground_truth(preds, nodes, address_map=address_map)
 
     # nur inspizierte Stationen (Label bekannt) mit vollständiger Feature-Zeile
     df = merged[merged["inspected"]].copy()

@@ -1,46 +1,72 @@
 """
 Ternärdiagramme je Station.
 
-Vorlage ist die ÜZ-Folie „Analyse der Betriebsdaten ausgewählter HAST":
-Punktwolke im Dreieck aus Leistung, Volumenstrom und Spreizung,
-eingefärbt nach Performance.
+Vorlage ist die ÜZ-Folie „Analyse der Betriebsdaten ausgewählter HAST".
+Dort stehen drei Stationen nebeneinander, jede als Punktwolke im
+Dreieck aus Leistung, Volumenstrom und Spreizung, eingefärbt nach der
+Performance. Die Folie liest daraus ab, worüber eine Station ihre
+Leistung moduliert: über die Spreizung (effizient) oder über den
+Volumenstrom (ineffizient), und wie breit die Betriebszustände streuen.
+Unsere Daten zeigen die umgekehrte Richtung: der Spreizungsanteil der
+Modulation hängt negativ mit der Performance zusammen (docs/ternaer.md,
+Abschnitt 5). Wer bei Teillast den Durchfluss nicht drosselt, fährt
+kleine Spreizung und warmen Rücklauf.
 
-Dieses Modul baut die Darstellung für jede Station, in zwei Schnitten:
+Die Stundenreihen kommen aus Notebook 00 (`lade_serien`, siehe
+`nb00_daten`).
 
-    Begehung   vorher, Umbauphase (Fenster um den Begehungstag), nachher
+Dieses Modul baut dieselbe Darstellung für jede Station des Teilnetzes
+und schneidet sie zusätzlich in Zeitabschnitte, damit die Muster
+überhaupt vergleichbar werden:
+
+    Begehung   vorher, Umbauphase (symmetrisches Fenster um den
+               Begehungstag), nachher
     Saison     Winter (Dez–Feb), Übergang (Sep–Nov, Mär–Apr), Sommer
 
-Jeweils auf Stunden- und auf Tagesebene. Die Stunde behält den Tagesgang
-(Regelbewegung), der Tag zeigt den Betriebspunkt.
+Beides gibt es auf Stunden- und auf Tagesebene, weil vorher nicht
+feststeht, welche Auflösung mehr zeigt. Die Stunde behält den Tagesgang
+und damit die Regelbewegung, der Tag mittelt ihn heraus und zeigt den
+Betriebspunkt.
 
 Normierung
 ----------
-- jeder Kanal wird auf das 95. Perzentil derselben Station normiert und
-  auf [0, 1] gekappt, danach auf Summe 1 gebracht
-- normiert wird über die ganze Historie, damit die Panels einer Station
-  vergleichbar bleiben
-- das Diagramm sagt dadurch nichts über die Größe der Station, nur über
-  das Regelverhalten
+Die drei Kanäle haben verschiedene Einheiten und lassen sich nicht
+direkt zu eins addieren. Jeder Kanal wird deshalb erst auf das eigene
+95. Perzentil **derselben Station** normiert und auf [0, 1] gekappt,
+danach werden die drei Werte auf die Summe 1 gebracht. Die Normierung
+läuft über die gesamte Historie der Station und nicht je Zeitabschnitt,
+sonst wären die drei Panels einer Station nicht mehr vergleichbar.
+
+Der Preis ist, dass das Diagramm nichts über die absolute Größe der
+Station sagt - zwei Stationen mit identischem Bild können sich um den
+Faktor 100 im Durchsatz unterscheiden. Genau das ist hier gewollt: die
+Frage ist das Regelverhalten, nicht die Objektgröße.
 
 Modulationszerlegung
 --------------------
+Die Aussage der Folie („Leistungsmodulation überwiegend durch
+Temperaturspreizung") lässt sich exakt ausrechnen statt nur ablesen.
 Aus P = c · V · ΔT folgt log P = log V + log ΔT + const und damit
 
     cov(log P, log V) / var(log P) + cov(log P, log ΔT) / var(log P) = 1
 
-- die Summanden sind `anteil_mod_flow` und `anteil_mod_dt`
-- `anteil_mod_dt` nahe 1: Volumenstrom fast konstant, geregelt wird über
-  die Spreizung
-- `anteil_mod_flow` nahe 1: geregelt wird über den Volumenstrom
-- Werte außerhalb von [0, 1]: die Kanäle laufen gegenläufig
+Die beiden Summanden sind `anteil_mod_flow` und `anteil_mod_dt`. Ein
+Wert nahe 1 bei `anteil_mod_dt` heißt: die Station fährt einen fast
+konstanten Volumenstrom und regelt über die Spreizung. Ein Wert nahe 1
+bei `anteil_mod_flow` heißt das Gegenteil, und das ist der Fall, den
+die Folie als defektes Regelventil liest. Werte außerhalb von [0, 1]
+sind möglich, wenn die beiden Kanäle gegenläufig sind.
 
-Performance (Farbe)
--------------------
-- Tagesebene: aus `performance.tagesperformance`, also aus den
-  Zählerständen
-- Stundenebene: momentane Spreizung mal 1,163 kWh/(m³·K), weil der
-  Energiezähler stündlich zu grob auflöst. Die Farbe ist dort fast
-  dasselbe wie die ΔT-Achse.
+Performance
+-----------
+Auf Tagesebene kommt die Einfärbung aus `performance.tagesperformance`,
+also aus den kumulativen Zählerständen. Auf Stundenebene geht das
+nicht: der Energiezähler löst je nach Gerät nur in ganzen kWh auf, bei
+einer kleinen Station sind das zweistellige Prozentfehler je Stunde.
+Die Stundenfarbe ist deshalb die momentane Spreizung, umgerechnet über
+1,163 kWh/(m³·K). Sie ist per Konstruktion kollinear zur ΔT-Achse und
+damit eher Lesehilfe als eigene Information; die Tagesgrafik ist die,
+in der die Farbe etwas Eigenes trägt.
 """
 
 from __future__ import annotations
@@ -51,21 +77,14 @@ from typing import Dict, Iterable, Mapping, Optional, Sequence
 import numpy as np
 import pandas as pd
 
+from . import nb00_daten as nb00
 from . import performance as pf
 from . import season as sn
 
 KWH_PRO_M3_K = pf.KWH_PRO_M3_K
 
-#Spaltennamen der materialisierten Exporte aus load_timeseries
-SPALTEN_MAP = {
-    "Energy (kWh)": "energy",
-    "Volume flow (l/h)": "flow",
-    "Power (kW)": "power",
-    "Temperature difference (°C)": "dt",
-    "Flow temperature (°C)": "vl",
-    "Return temperature (°C)": "rt",
-    "Volume (m³)": "volume",
-}
+#Spaltennamen der NB-00-Ausgabe, eine Quelle fuer alle Module
+SPALTEN_MAP = nb00.SPALTEN_MAP
 
 #Ecken des Dreiecks: Volumenstrom links unten, Spreizung rechts unten,
 #Leistung oben - dieselbe Anordnung wie auf der ÜZ-Folie
@@ -119,29 +138,15 @@ WERTSPALTEN = ["power_kw", "flow_lh", "dt_k", "performance"]
 def lade_serien(meter_dir: Path,
                 zaehler: Optional[Iterable[int]] = None
                 ) -> Dict[int, pd.DataFrame]:
-    """Materialisierte Zählerexporte als Dict Zählernummer → Stundenreihe.
+    """Stundenreihen aus Notebook 00 als Dict Zählernummer → Stundenreihe.
 
-    Erwartet den Ordner, den ``python -m src.load_timeseries --materialize``
-    schreibt. Rückgabe trägt das Schema von `features.features_for_meter`
-    auf einem DatetimeIndex, Duplikate je Stunde fallen bis auf den
-    letzten Eintrag weg.
+    Erwartet den Ordner ``data/processed/real_meters``, den
+    ``notebooks/00_eda_hast_stationsprofile.ipynb`` schreibt, und reicht
+    an `nb00_daten.lade_serien` durch. Rückgabe trägt das Schema von
+    `features.features_for_meter` auf einem DatetimeIndex; Stunden, die
+    NB 00 nur als leere Rasterzeile führt, fallen heraus.
     """
-    meter_dir = Path(meter_dir)
-    auswahl = None if zaehler is None else {int(z) for z in zaehler}
-    serien: Dict[int, pd.DataFrame] = {}
-    for csv in sorted(meter_dir.glob("*.csv")):
-        try:
-            zid = int(csv.stem)
-        except ValueError:
-            continue
-        if auswahl is not None and zid not in auswahl:
-            continue
-        df = pd.read_csv(csv, parse_dates=["Timestamp"]).rename(
-            columns=SPALTEN_MAP)
-        df = df.set_index("Timestamp").sort_index()
-        df.index = pd.DatetimeIndex(df.index).floor("h")
-        serien[zid] = df[~df.index.duplicated(keep="last")]
-    return serien
+    return nb00.lade_serien(meter_dir, zaehler)
 
 
 def stundenwerte(df: pd.DataFrame,

@@ -50,37 +50,37 @@ def main() -> None:
     PROCESSED.mkdir(parents=True, exist_ok=True)
 
     # 1. Logical graph from address topology -----------------------------
-    print("→ building logical graph from Nodes_Edges.ods")
+    print("-> building logical graph from Nodes_Edges.ods")
     nodes = ld.load_logical_nodes()
     edges = ld.load_logical_edges()
     insp = ld.load_inspections()
     g_log = build_logical_graph(nodes, edges, insp)
     print(graph_summary(g_log, "Logical graph"))
     plot_logical_topology(g_log, OUTPUTS / "logical_topology.png")
-    print(f"  → {OUTPUTS / 'logical_topology.png'}")
+    print(f"  -> {OUTPUTS / 'logical_topology.png'}")
 
     # 2. Spatial graph from shapefile ------------------------------------
-    print("\n→ building spatial graph from shapefiles")
+    print("\n-> building spatial graph from shapefiles")
     pipes = ld.load_pipes()
     points = ld.load_gis_points()
     g_spa = build_spatial_graph(pipes)
     print(graph_summary(g_spa, "Spatial graph (full Mainfranken)"))
 
-    print("\n→ rendering interactive folium maps")
+    print("\n-> rendering interactive folium maps")
     bounds = find_main_cluster(pipes)
     make_folium_map(pipes, points, OUTPUTS / "network_map_main.html", bounds=bounds)
     make_folium_map(pipes, points, OUTPUTS / "network_map_full.html", bounds=None)
-    print(f"  → {OUTPUTS / 'network_map_main.html'}")
-    print(f"  → {OUTPUTS / 'network_map_full.html'}")
+    print(f"  -> {OUTPUTS / 'network_map_main.html'}")
+    print(f"  -> {OUTPUTS / 'network_map_full.html'}")
 
     # 3. Inspection / fault summary --------------------------------------
-    print("\n→ tidying inspection records")
+    print("\n-> tidying inspection records")
     tidy = tidy_inspections(insp)
     summary = fault_summary(tidy)
     tidy.to_csv(PROCESSED / "inspections_tidy.csv", index=False)
     summary.to_csv(PROCESSED / "fault_summary.csv", index=False)
-    print(f"  → {PROCESSED / 'inspections_tidy.csv'}")
-    print(f"  → {PROCESSED / 'fault_summary.csv'}")
+    print(f"  -> {PROCESSED / 'inspections_tidy.csv'}")
+    print(f"  -> {PROCESSED / 'fault_summary.csv'}")
     print()
     print(summary.to_string(index=False))
 
@@ -92,10 +92,10 @@ def main() -> None:
     # 4. Synthetic time series -------------------------------------------
     if args.synth:
         from .synth_data import generate_dataset
-        print("\n→ generating synthetic meter time series")
+        print("\n-> generating synthetic meter time series")
         truth = generate_dataset(nodes, SYNTH_DIR,
                                  fault_share=args.fault_share)
-        print(f"  wrote {len(truth)} CSVs → {SYNTH_DIR / 'meters'}")
+        print(f"  wrote {len(truth)} CSVs -> {SYNTH_DIR / 'meters'}")
         print(truth["fault"].value_counts().to_string())
 
     # 5. Fault detection on time series ----------------------------------
@@ -108,13 +108,13 @@ def main() -> None:
             raise SystemExit("no meter time series found - run with --synth "
                              "first or place real CSVs into "
                              f"{meters}")
-        print("\n→ extracting features and running rule-based detection")
+        print("\n-> extracting features and running rule-based detection")
         feats = features_for_directory(meters, nodes)
         feats.to_csv(PROCESSED / "features.csv", index=False)
         res = classify_dataframe(feats)
         res.to_csv(PROCESSED / "predictions.csv", index=False)
-        print(f"  → {PROCESSED / 'features.csv'}")
-        print(f"  → {PROCESSED / 'predictions.csv'}")
+        print(f"  -> {PROCESSED / 'features.csv'}")
+        print(f"  -> {PROCESSED / 'predictions.csv'}")
         print()
         print("predicted fault distribution:")
         print(res["predicted_fault"].value_counts().to_string())
@@ -125,7 +125,7 @@ def main() -> None:
             truth = pd.read_csv(truth_csv)
             merged = res.merge(truth[["Zählernummer", "fault"]], on="Zählernummer")
             print()
-            print("confusion (truth × pred):")
+            print("confusion (truth x pred):")
             print(confusion(merged["predicted_fault"], merged["fault"]).to_string())
             acc = (merged["predicted_fault"] == merged["fault"]).mean()
             print(f"\naccuracy: {acc*100:.0f} %")
@@ -141,25 +141,25 @@ def main() -> None:
             df = feats.merge(truth[["Zählernummer", "fault"]],
                              on="Zählernummer")
             _plot_feature_separation(df, OUTPUTS / "feature_separation.png")
-            print(f"  → {OUTPUTS / 'feature_separation.png'}")
+            print(f"  -> {OUTPUTS / 'feature_separation.png'}")
 
     # 7. Geocoding -------------------------------------------------------
     if args.geocode or args.dashboard:
         from .geocode import geocode_nodes, validate_results
-        print("\n→ geocoding HAST addresses (Nominatim or cache)")
+        print("\n-> geocoding HAST addresses (Nominatim or cache)")
         geo = validate_results(geocode_nodes(nodes))
         n_hit = geo["lat"].notna().sum()
         n_in = geo["in_expected_area"].sum()
         print(f"  {n_hit}/{len(geo)} matched, {n_in}/{n_hit} in expected area")
         geo.to_csv(PROCESSED / "hast_geocoded.csv", index=False)
-        print(f"  → {PROCESSED / 'hast_geocoded.csv'}")
+        print(f"  -> {PROCESSED / 'hast_geocoded.csv'}")
 
     # 8. Combined dashboard map ------------------------------------------
     if args.dashboard:
         from .dashboard_map import build_combined_map
-        print("\n→ rendering combined dashboard map")
+        print("\n-> rendering combined dashboard map")
         out = build_combined_map(OUTPUTS / "dashboard_map.html")
-        print(f"  → {out}")
+        print(f"  -> {out}")
 
 
 def _plot_feature_separation(df: pd.DataFrame, out_path: Path) -> None:

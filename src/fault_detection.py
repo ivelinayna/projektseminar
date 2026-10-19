@@ -12,15 +12,39 @@ having the rule-based baseline first lets us:
   * validate the feature pipeline (do the features distinguish faults?)
   * benchmark any ML model against (must beat the rules)
   * surface plain-language reasons in the dashboard
+
+Thresholds are a parameter, not a constant
+------------------------------------------
+Die urspruenglichen Schwellen stammen aus der Literatur und aus dem
+synthetischen Generator. Auf den echten Daten sind sie nachweislich
+falsch kalibriert: `control_hysteresis` feuert bei rund 95 Prozent der
+Stationen, `oversized_contract` bei keiner. Eine Regel, die fast alles
+oder nichts trifft, trennt nichts. `SCHWELLEN` haelt die alten Werte
+deshalb nur noch als Vorgabe; `src/regelkalibrierung.py` leitet aus den
+Verteilungen der echten Daten eine zweite Fassung ab, und beide lassen
+sich derselben Funktion uebergeben.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
+from typing import List, Mapping, Optional
 
 import numpy as np
 import pandas as pd
+
+#Schwellenwerte des Regelwerks. Keys werden von regelkalibrierung.py
+#benutzt, die Werte sind die bisherigen Literaturschwellen.
+SCHWELLEN = {
+    "rt_mean_winter": 48.0,
+    "rt_above_50_share_loaded": 0.30,
+    "summer_flow_baseline": 25.0,
+    "summer_idle_flow_median": 15.0,
+    "flow_ceiling_slope_per_month": -3.0,
+    "dt_mean_loaded": 15.0,
+    "peak_load_share": 0.40,
+    "flow_short_cycle_power": 0.07,
+}
 
 
 @dataclass
@@ -30,23 +54,32 @@ class FaultFlag:
     reason: str
 
 
-def detect_faults(features: pd.Series) -> List[FaultFlag]:
+def detect_faults(features: pd.Series,
+                  schwellen: Optional[Mapping[str, float]] = None
+                  ) -> List[FaultFlag]:
     """Return a list of fault flags raised by the rule book.
 
     Each rule encodes one of the ÜZ anomaly families plus the fault
     types observed in the optimisation Excel.
+
+    `schwellen` ueberschreibt einzelne Schwellen aus `SCHWELLEN`; ohne
+    Angabe bleibt es bei den Vorgabewerten, das Verhalten ist dann
+    unveraendert.
     """
     flags: List[FaultFlag] = []
     f = features
+    s = dict(SCHWELLEN)
+    if schwellen:
+        s.update({k: v for k, v in schwellen.items() if k in s})
 
     # --- excess return temperature (poor heat transfer secondary side) ---
-    if f.get("rt_mean_winter", 0) > 48:
+    if f.get("rt_mean_winter", 0) > s["rt_mean_winter"]:
         flags.append(FaultFlag(
             "excess_rt", "alarm",
             f"winter return temperature {f['rt_mean_winter']:.1f} °C "
-            f"(target ≤ 45 °C)",
+            f"(threshold {s['rt_mean_winter']:.1f} °C)",
         ))
-    elif f.get("rt_above_50_share_loaded", 0) > 0.30:
+    elif f.get("rt_above_50_share_loaded", 0) > s["rt_above_50_share_loaded"]:
         flags.append(FaultFlag(
             "excess_rt", "warn",
             f"return > 50 °C in {f['rt_above_50_share_loaded']*100:.0f} % "
@@ -56,13 +89,13 @@ def detect_faults(features: pd.Series) -> List[FaultFlag]:
     # --- continuous flow / leakage (no shutoff in summer) ----------------
     # Real DHW is bursty; if median flow in summer is > 0 the valve isn't
     # closing properly. Median is robust to genuine DHW draws.
-    if f.get("summer_flow_baseline", 0) > 25:
+    if f.get("summer_flow_baseline", 0) > s["summer_flow_baseline"]:
         flags.append(FaultFlag(
             "continuous_flow", "alarm",
             f"summer median flow {f['summer_flow_baseline']:.0f} l/h "
             f"(should be ~0 outside DHW draws)",
         ))
-    elif f.get("summer_idle_flow_median", 0) > 15:
+    elif f.get("summer_idle_flow_median", 0) > s["summer_idle_flow_median"]:
         # Even at low load, flow doesn't drop -> probably stuck valve
         flags.append(FaultFlag(
             "continuous_flow", "warn",
@@ -72,7 +105,7 @@ def detect_faults(features: pd.Series) -> List[FaultFlag]:
 
     # --- filter fouling: flow ceiling drifting downward through the year -
     slope = f.get("flow_ceiling_slope_per_month", 0)
-    if slope < -3:
+    if slope < s["flow_ceiling_slope_per_month"]:
         flags.append(FaultFlag(
             "fouled_filter", "alarm",
             f"95th-percentile flow drops {-slope:.1f} l/h per month "
@@ -80,22 +113,22 @@ def detect_faults(features: pd.Series) -> List[FaultFlag]:
         ))
 
     # --- low ΔT under load -> fouling or hydraulic issue -----------------
-    if f.get("dt_mean_loaded", 30) < 15:
+    if f.get("dt_mean_loaded", 30) < s["dt_mean_loaded"]:
         flags.append(FaultFlag(
             "low_spreading", "warn",
             f"mean ΔT under load only {f['dt_mean_loaded']:.1f} K "
-            f"(target > 20 K)",
+            f"(threshold {s['dt_mean_loaded']:.1f} K)",
         ))
 
     # --- chronic over-spec: peak nowhere near contracted load ------------
-    if f.get("peak_load_share", 1.0) < 0.40:
+    if f.get("peak_load_share", 1.0) < s["peak_load_share"]:
         flags.append(FaultFlag(
             "oversized_contract", "warn",
             f"peak power only {f['peak_load_share']*100:.0f} % of contracted",
         ))
 
     # --- control hysteresis: short-period flow oscillation ---------------
-    if f.get("flow_short_cycle_power", 0) > 0.07:
+    if f.get("flow_short_cycle_power", 0) > s["flow_short_cycle_power"]:
         flags.append(FaultFlag(
             "control_hysteresis", "alarm",
             f"4–12 h flow oscillation carries "
@@ -105,9 +138,10 @@ def detect_faults(features: pd.Series) -> List[FaultFlag]:
     return flags
 
 
-def classify_one(features: pd.Series) -> str:
+def classify_one(features: pd.Series,
+                 schwellen: Optional[Mapping[str, float]] = None) -> str:
     """Pick the single most-likely fault label (or 'healthy')."""
-    flags = detect_faults(features)
+    flags = detect_faults(features, schwellen)
     if not flags:
         return "healthy"
     # Prefer alarms over warnings; among same severity, first rule wins.
@@ -115,12 +149,14 @@ def classify_one(features: pd.Series) -> str:
     return flags[0].fault
 
 
-def classify_dataframe(features_df: pd.DataFrame) -> pd.DataFrame:
+def classify_dataframe(features_df: pd.DataFrame,
+                       schwellen: Optional[Mapping[str, float]] = None
+                       ) -> pd.DataFrame:
     """Apply the rules to every row; return predictions + reasons."""
     out = features_df.copy()
     preds, reasons = [], []
     for _, row in features_df.iterrows():
-        flags = detect_faults(row)
+        flags = detect_faults(row, schwellen)
         if not flags:
             preds.append("healthy")
             reasons.append("")
