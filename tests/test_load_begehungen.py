@@ -16,6 +16,7 @@ from src.load_begehungen import (
     address_to_meter,
     meter_changes,
     meter_to_address,
+    parallel_meters,
     visit_hours,
 )
 
@@ -51,6 +52,29 @@ def test_key_fixes_known_typo():
 
 def test_meter_changes_lists_only_swapped_addresses():
     assert meter_changes(_zuordnung()) == {"musterweg 2": [22222222, 33333333]}
+
+
+def _zuordnung_parallel() -> pd.DataFrame:
+    """Musterweg 5: zwei Stationen auf einem Grundstück, beide jedes Jahr.
+    Musterweg 6: 66666666 stand 2024 fälschlich mit dort und wird ab 2025
+    unter Musterweg 7 geführt. Musterweg 8 ist ein echter Tausch."""
+    return pd.DataFrame({
+        "key": ["musterweg 5", "musterweg 5", "musterweg 5", "musterweg 5",
+                "musterweg 6", "musterweg 6", "musterweg 6", "musterweg 7",
+                "musterweg 8", "musterweg 8"],
+        "meter": [51, 52, 51, 52, 61, 66, 61, 66, 81, 82],
+        "year": ["2024", "2024", "2025", "2025",
+                 "2024", "2024", "2025", "2025", "2024", "2025"],
+    })
+
+
+def test_meter_changes_ignores_meters_listed_in_the_same_year():
+    assert meter_changes(_zuordnung_parallel()) == {"musterweg 8": [81, 82]}
+
+
+def test_parallel_meters_lists_coexisting_meters():
+    assert parallel_meters(_zuordnung_parallel()) == {
+        "musterweg 5": [51, 52], "musterweg 6": [61, 66]}
 
 
 def test_address_to_meter_prefers_meter_with_data():

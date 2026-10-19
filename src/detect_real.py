@@ -44,6 +44,7 @@ from . import load_data as ld
 from .fault_detection import classify_dataframe
 from .features import features_for_directory
 from .inspections import tidy_inspections
+from .load_begehungen import load_zuordnung, meter_to_address
 from .load_timeseries import DATA_DIR, load_meter_timeseries
 from .meter_quality import (MIN_WINDOW_COVERAGE_PCT, WINDOW_DAYS,
                             classify_all)
@@ -101,8 +102,15 @@ def materialize_windows(quality: pd.DataFrame,
 
 
 def join_ground_truth(predictions: pd.DataFrame,
-                      nodes: pd.DataFrame) -> pd.DataFrame:
-    """Attach inspection findings per meter via Zählernummer -> address."""
+                      nodes: pd.DataFrame,
+                      address_map: dict | None = None) -> pd.DataFrame:
+    """Attach inspection findings per meter via Zählernummer -> address.
+
+    ``address_map`` (Zählernummer -> address, from
+    ``load_begehungen.meter_to_address()``) takes priority over `nodes`'
+    address_norm - Zuordnung.xlsx is the more complete directory, see
+    module docstring.
+    """
     tidy = tidy_inspections()
     tidy["datum"] = pd.to_datetime(tidy["datum"], errors="coerce")
     insp = tidy.groupby("address_norm").agg(
@@ -114,6 +122,14 @@ def join_ground_truth(predictions: pd.DataFrame,
 
     addr = nodes[["Zählernummer", "address_norm"]].copy()
     addr["Zählernummer"] = addr["Zählernummer"].astype(int)
+    if address_map:
+        from .load_data import _normalize_address
+        addr = addr.set_index("Zählernummer")["address_norm"].to_dict()
+        for zid, raw_address in address_map.items():
+            addr[int(zid)] = _normalize_address(raw_address)
+        addr = pd.DataFrame(
+            {"Zählernummer": list(addr.keys()), "address_norm": list(addr.values())}
+        )
     out = predictions.merge(addr, on="Zählernummer", how="left")
     out = out.merge(insp, on="address_norm", how="left")
     out["inspected"] = out["n_inspections"].notna()
@@ -352,12 +368,13 @@ if __name__ == "__main__":
 
     print("→ extracting features and running the rule-based baseline")
     nodes = ld.load_logical_nodes()
-    feats = features_for_directory(WINDOW_DIR, nodes)
+    address_map = meter_to_address(load_zuordnung())
+    feats = features_for_directory(WINDOW_DIR, nodes, address_map=address_map)
     feats.to_csv(PROCESSED / "features_real.csv", index=False)
     res = classify_dataframe(feats)
 
     print("→ joining inspection ground truth")
-    merged = join_ground_truth(res, nodes)
+    merged = join_ground_truth(res, nodes, address_map=address_map)
     merged.to_csv(PROCESSED / "predictions_real.csv", index=False)
     print(f"  → {PROCESSED / 'features_real.csv'}")
     print(f"  → {PROCESSED / 'predictions_real.csv'}")

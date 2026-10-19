@@ -280,3 +280,215 @@ def test_monitor_station_ohne_daten():
     assert len(e["alarme"]) == 0
     assert list(e["alarme"].columns)[0] == "meter"
     assert e["abdeckung"]["tage"].iloc[0] == 0
+
+
+def _winterstation(flow_vor, flow_nach, seed=0):
+    """Punkttabelle mit den Kernwintern 23/24 und 24/25."""
+    rng = np.random.default_rng(seed)
+    teile = []
+    for start, ende, fn in (("2023-12-01", "2024-02-29 23:00", flow_vor),
+                            ("2024-12-01", "2025-02-28 23:00", flow_nach)):
+        zeit = pd.date_range(start, ende, freq="h")
+        p = rng.uniform(2.0, 10.0, len(zeit))
+        flow = fn(p) * np.exp(rng.normal(0.0, 0.03, len(zeit)))
+        teile.append(pd.DataFrame({"zeit": zeit, "power_kw": p,
+                                   "flow_lh": flow,
+                                   "dt_k": p * 1000.0 / (1.163 * flow),
+                                   "rt_c": 45.0}))
+    return pd.concat(teile, ignore_index=True)
+
+
+def _ventil_offen(p):
+    return np.full(len(p), 400.0)
+
+
+def _geregelt(p):
+    return 50.0 * p
+
+
+def test_winterpaar_herbstbegehung():
+    tab = _winterstation(_geregelt, _geregelt)
+    w = km.winterpaar(tab, "2024-09-15")
+    assert w["status"] == "ok"
+    assert (w["winter_vor"], w["winter_nach"]) == ("23/24", "24/25")
+    assert not w["termin_im_winter"]
+    assert len(w["teil_vor"]) == 91 * 24
+
+
+def test_winterpaar_ende_november_kuerzt_nachwinter():
+    tab = _winterstation(_geregelt, _geregelt)
+    w = km.winterpaar(tab, "2024-11-28")
+    assert w["winter_nach"] == "24/25"
+    assert w["teil_nach"]["zeit"].min() == pd.Timestamp("2024-12-06")
+
+
+def test_winterpaar_termin_im_winter():
+    tab = _winterstation(_geregelt, _geregelt)
+    w = km.winterpaar(tab, "2025-01-15")
+    assert w["termin_im_winter"]
+    assert (w["winter_vor"], w["winter_nach"]) == ("24/25", "24/25")
+    assert w["teil_vor"]["zeit"].max() < pd.Timestamp("2025-01-08")
+    assert w["teil_nach"]["zeit"].min() >= pd.Timestamp("2025-01-23")
+
+
+def test_winterpaar_status():
+    tab = _winterstation(_geregelt, _geregelt)
+    assert km.winterpaar(tab, "2025-09-01")["status"] == "kein_nachwinter"
+    assert km.winterpaar(tab, "2025-02-20")["status"] == "zu_wenig_punkte"
+    assert km.winterpaar(tab, "2023-09-01")["status"] == "kein_vorwinter"
+    assert km.winterpaar(tab.iloc[0:0], "2024-09-01")["status"] == "keine_daten"
+
+
+def test_residuum_kreuz():
+    tab = _winterstation(_ventil_offen, _geregelt)
+    w = km.winterpaar(tab, "2024-09-15")
+    fit_vor = km.nv.kennzahlen_punkte(w["teil_vor"])
+    res, anteil = km.residuum_kreuz(w["teil_vor"], w["teil_nach"], fit_vor)
+    assert res < -0.1
+    assert anteil > 0.8
+    gleich, _ = km.residuum_kreuz(w["teil_vor"], w["teil_vor"], fit_vor)
+    assert gleich == pytest.approx(0.0, abs=0.01)
+
+
+def test_wintervergleich_ventilreparatur_68956351():
+    #Nachbau des Falls 68956351: Ventil drei Jahre offen, Reparatur im
+    #Herbst 2024. Vorher konstanter Durchfluss, nachher geregelt.
+    punkte = {68956351: _winterstation(_ventil_offen, _geregelt)}
+    v = km.wintervergleich(punkte, {"68956351": ["2024-09-10"]},
+                           anschlusswerte={68956351: 50.0})
+    z = v.iloc[0]
+    assert z["d_flow_spez_lh_kw"] < 0
+    assert z["status"] == "ok"
+    assert (z["winter_vor"], z["winter_nach"]) == ("23/24", "24/25")
+    assert z["d_steigung"] > 0.8
+    assert z["d_flow_median_lh"] < 0
+    assert z["flow_verhaeltnis"] < 1
+    assert z["flow_bei_pref_nach"] < z["flow_bei_pref_vor"]
+    assert z["residuum_kreuz"] < -0.1
+    assert not z["weitere_begehung"]
+
+
+def test_wintervergleich_rang_und_status():
+    punkte = {1: _winterstation(_geregelt, _geregelt)}
+    markiert = pd.DataFrame({"meter": [1, 1], "winter": ["23/24", "24/25"],
+                             "rang": [3.0, 10.0],
+                             "auffaellig": [True, False]})
+    hgs = pd.DataFrame({"winter": ["23/24", "24/25"],
+                        "heizgradstunden": [100.0, 120.0]})
+    v = km.wintervergleich(punkte, {1: ["2024-09-10", "2024-10-20",
+                                        "2025-09-01"]},
+                           markiert=markiert, heizgradstunden=hgs)
+    ok = v[v["status"] == "ok"]
+    assert len(ok) == 2
+    assert ok["weitere_begehung"].all()
+    assert (ok["d_rang"] == 7.0).all()
+    assert ok["auffaellig_vor"].all() and not ok["auffaellig_nach"].any()
+    assert (ok["heizgradstunden_nach"] == 120.0).all()
+    assert v.loc[v["status"] != "ok", "status"].iloc[0] == "kein_nachwinter"
+
+
+def test_kontrolle_und_gruppenvergleich():
+    punkte = {m: _winterstation(_geregelt, _geregelt, seed=m)
+              for m in (1, 2, 3)}
+    punkte[9] = _winterstation(_ventil_offen, _geregelt, seed=9)
+    beg = {9: ["2024-09-10"]}
+    tabelle, _ = km.nv.winterkennzahlen(punkte, begehungen=beg)
+    kontrolle = km.winterdifferenz_kontrolle(tabelle, beg)
+    assert sorted(kontrolle["meter"]) == [1, 2, 3]
+    assert kontrolle["d_steigung"].abs().max() < 0.1
+    v = km.wintervergleich(punkte, beg)
+    g = km.gruppenvergleich(v, kontrolle).set_index("spalte")
+    assert g.loc["d_steigung", "n_begehung"] == 1
+    assert g.loc["d_steigung", "n_kontrolle"] == 3
+    assert g.loc["d_steigung", "median_begehung"] > 0.8
+    assert np.isnan(g.loc["d_steigung", "p_mw"])
+
+
+def test_kontrolle_mit_punkten_hat_kreuzresiduum():
+    punkte = {m: _winterstation(_geregelt, _geregelt, seed=m)
+              for m in (1, 2, 3)}
+    punkte[9] = _winterstation(_ventil_offen, _geregelt, seed=9)
+    beg = {9: ["2024-09-10"]}
+    tabelle, _ = km.nv.winterkennzahlen(punkte, begehungen=beg)
+    kontrolle = km.winterdifferenz_kontrolle(tabelle, beg, punkte=punkte)
+    assert np.isfinite(kontrolle["residuum_kreuz"]).all()
+    assert kontrolle["residuum_kreuz"].abs().max() < 0.05
+    g = km.gruppenvergleich(km.wintervergleich(punkte, beg),
+                            kontrolle).set_index("spalte")
+    assert g.loc["residuum_kreuz", "n_begehung"] == 1
+    assert g.loc["residuum_kreuz", "n_kontrolle"] == 3
+    assert g.loc["residuum_kreuz", "median_begehung"] < -0.1
+
+
+def test_kontrolle_ohne_punkte_bleibt_nan_sicher():
+    punkte = {m: _winterstation(_geregelt, _geregelt, seed=m)
+              for m in (1, 2)}
+    tabelle, _ = km.nv.winterkennzahlen(punkte)
+    kontrolle = km.winterdifferenz_kontrolle(tabelle, {})
+    assert kontrolle["residuum_kreuz"].isna().all()
+    g = km.gruppenvergleich(km.wintervergleich(punkte, {1: ["2024-09-10"]}),
+                            kontrolle).set_index("spalte")
+    assert g.loc["residuum_kreuz", "n_kontrolle"] == 0
+    assert np.isnan(g.loc["residuum_kreuz", "p_mw"])
+
+
+def test_wintervergleich_ohne_begehungen_hat_spalten():
+    v = km.wintervergleich({1: _winterstation(_geregelt, _geregelt)}, {})
+    assert len(v) == 0
+    assert {"meter", "datum", "status", "winter_vor",
+            "winter_nach"} <= set(v.columns)
+    g = km.gruppenvergleich(v, pd.DataFrame())
+    assert (g["n_begehung"] == 0).all()
+
+
+def test_gruppenvergleich_filtert_kontrolle_aufs_winterpaar():
+    v = pd.DataFrame({"status": ["ok"] * 2, "winter_vor": ["23/24"] * 2,
+                      "winter_nach": ["24/25"] * 2,
+                      "d_steigung": [0.9, 1.0]})
+    kontrolle = pd.DataFrame({"winter_vor": ["23/24", "23/24", "22/23"],
+                              "winter_nach": ["24/25", "24/25", "23/24"],
+                              "d_steigung": [0.0, 0.1, 5.0]})
+    g = km.gruppenvergleich(v, kontrolle, spalten=["d_steigung"])
+    assert g.loc[0, "n_kontrolle"] == 2
+    assert g.loc[0, "median_kontrolle"] == pytest.approx(0.05)
+
+
+def test_kontrolle_ausschluss_nimmt_undatierte_begehungen_raus():
+    punkte = {m: _winterstation(_geregelt, _geregelt, seed=m)
+              for m in (1, 2, 3)}
+    tabelle, _ = km.nv.winterkennzahlen(punkte)
+    kontrolle = km.winterdifferenz_kontrolle(tabelle, {}, ausschluss=["2"])
+    assert sorted(kontrolle["meter"]) == [1, 3]
+    ohne = km.winterdifferenz_kontrolle(tabelle, {})
+    assert sorted(ohne["meter"]) == [1, 2, 3]
+
+
+def test_gruppenvergleich_zaehlt_station_je_winterpaar_einmal():
+    punkte = {m: _winterstation(_geregelt, _geregelt, seed=m)
+              for m in (1, 2, 3)}
+    punkte[9] = _winterstation(_ventil_offen, _geregelt, seed=9)
+    beg = {9: ["2024-09-18", "2024-11-08"]}
+    v = km.wintervergleich(punkte, beg)
+    #beide Termine bleiben im Wintervergleich stehen
+    assert (v["status"] == "ok").sum() == 2
+    tabelle, _ = km.nv.winterkennzahlen(punkte, begehungen=beg)
+    kontrolle = km.winterdifferenz_kontrolle(tabelle, beg)
+    g = km.gruppenvergleich(v, kontrolle).set_index("spalte")
+    assert g.loc["d_steigung", "n_begehung"] == 1
+
+
+def test_gruppenvergleich_behaelt_den_ersten_termin():
+    v = pd.DataFrame({"meter": [5, 5, 6],
+                      "datum": pd.to_datetime(["2024-11-08", "2024-09-18",
+                                               "2024-09-01"]),
+                      "status": ["ok"] * 3, "winter_vor": ["23/24"] * 3,
+                      "winter_nach": ["24/25"] * 3,
+                      "d_steigung": [9.0, 1.0, 3.0]})
+    g = km.gruppenvergleich(v, pd.DataFrame(), spalten=["d_steigung"])
+    assert g.loc[0, "n_begehung"] == 2
+    assert g.loc[0, "median_begehung"] == pytest.approx(2.0)
+
+
+def test_winterpaar_ohne_betriebsstunden_ist_keine_daten():
+    tab = _winterstation(_geregelt, _geregelt).assign(flow_lh=0.0)
+    assert km.winterpaar(tab, "2024-09-15")["status"] == "keine_daten"

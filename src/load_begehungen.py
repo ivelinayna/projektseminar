@@ -100,15 +100,42 @@ def load_zuordnung(path: Path = ZUORDNUNG_XLSX) -> pd.DataFrame:
     return out[out["key"].str.len() > 3].reset_index(drop=True)
 
 
+def _meters_per_address(z: pd.DataFrame) -> Dict[str, List[int]]:
+    per_address = z.groupby("key")["meter"].apply(lambda s: sorted(set(s)))
+    return {k: v for k, v in per_address.items() if len(v) > 1}
+
+
+def _listed_together(z: pd.DataFrame, key: str) -> bool:
+    """True when two meters of the address appear in the same year sheet."""
+    rows = z[z["key"] == key]
+    return bool((rows.groupby("year")["meter"].nunique() > 1).any())
+
+
 def meter_changes(zuordnung: Optional[pd.DataFrame] = None) -> Dict[str, List[int]]:
-    """Addresses served by more than one meter number over the years.
+    """Addresses whose meter number was swapped between years.
 
     A before/after comparison that straddles such a change compares two
     devices, not two states of one station - always check against this.
+
+    Only addresses whose meters never share a year sheet count as a swap.
+    Meters listed side by side in one year are either two stations on one
+    plot or a mapping error in that year's sheet (the supplier confirmed
+    both cases); see :func:`parallel_meters`.
     """
     z = load_zuordnung() if zuordnung is None else zuordnung
-    per_address = z.groupby("key")["meter"].apply(lambda s: sorted(set(s)))
-    return {k: v for k, v in per_address.items() if len(v) > 1}
+    return {k: v for k, v in _meters_per_address(z).items()
+            if not _listed_together(z, k)}
+
+
+def parallel_meters(zuordnung: Optional[pd.DataFrame] = None) -> Dict[str, List[int]]:
+    """Addresses with several meters listed in the same year sheet.
+
+    Not a meter swap: either two stations on one plot or a meter that a
+    single year's sheet placed at the wrong address.
+    """
+    z = load_zuordnung() if zuordnung is None else zuordnung
+    return {k: v for k, v in _meters_per_address(z).items()
+            if _listed_together(z, k)}
 
 
 def address_to_meter(
@@ -279,6 +306,7 @@ if __name__ == "__main__":
     print(f"Kategorien: {beg['kategorie'].value_counts().to_dict()}")
     print(f"Heizzeit geaendert bei {int(beg['heizzeit_geaendert'].sum())} Stationen")
     print(f"Adressen mit Zaehlerwechsel: {meter_changes(z)}")
+    print(f"Adressen mit mehreren Zaehlern im selben Jahr: {parallel_meters(z)}")
     dates_by_meter = begehung_dates_by_meter()
     n_multi = sum(len(v) > 1 for v in dates_by_meter.values())
     print(f"Begehungstermine je Zaehler: {len(dates_by_meter)} Zaehler, "

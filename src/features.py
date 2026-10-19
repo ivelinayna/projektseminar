@@ -28,7 +28,7 @@ handle that.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
+from typing import Dict, Optional
 
 import numpy as np
 import pandas as pd
@@ -145,29 +145,62 @@ def features_for_meter(df: pd.DataFrame,
 
 
 def features_for_directory(meter_dir: Path,
-                            nodes_df: Optional[pd.DataFrame] = None
+                            nodes_df: Optional[pd.DataFrame] = None,
+                            address_map: Optional[Dict[int, str]] = None,
                             ) -> pd.DataFrame:
     """Compute features for every CSV in `meter_dir`.
 
     `nodes_df` (Nodes_Edges Nodes sheet) is optional; if supplied, the
-    output table joins each Zählernummer to address + Anschlusswert.
+    output table joins each Zählernummer to Anschlusswert (the contracted
+    capacity in kW - not available anywhere else).
+
+    `address_map` (Zählernummer -> address, e.g. from
+    ``load_begehungen.meter_to_address()``) is the preferred address
+    source: ``Zuordnung.xlsx`` covers meters that ``Nodes_Edges.ods`` is
+    missing (16 of 101 in the 2026 snapshot). Without it, `address` falls
+    back to `nodes_df`'s `Straße` column, same as before.
     """
-    rows = []
+    frames = {}
     for csv in sorted(Path(meter_dir).glob("*.csv")):
         try:
             zid = int(csv.stem)
         except ValueError:
             continue
-        df = _load_meter_csv(csv)
+        frames[zid] = _load_meter_csv(csv)
+    return features_for_frames(frames, nodes_df=nodes_df,
+                               address_map=address_map)
+
+
+def features_for_frames(frames: Dict[int, pd.DataFrame],
+                        nodes_df: Optional[pd.DataFrame] = None,
+                        address_map: Optional[Dict[int, str]] = None,
+                        ) -> pd.DataFrame:
+    """Same as `features_for_directory`, for already loaded hourly frames.
+
+    `frames` maps Zählernummer -> DataFrame on a DatetimeIndex with the
+    columns of `_load_meter_csv` (energy, flow, power, dt, vl, rt,
+    volume). `month` and `hour` are added when missing.
+    """
+    rows = []
+    for zid in sorted(frames):
+        df = frames[zid]
+        if "month" not in df.columns or "hour" not in df.columns:
+            df = df.copy()
+            df["month"] = df.index.month
+            df["hour"] = df.index.hour
         kw = None
+        row = None
         if nodes_df is not None:
             row = nodes_df[nodes_df["Zählernummer"] == zid]
             if len(row):
                 kw = float(row["Anschlusswert"].iloc[0])
         feats = features_for_meter(df, anschluss_kw=kw)
         feats["Zählernummer"] = zid
-        if nodes_df is not None and len(row):
+        if address_map is not None and zid in address_map:
+            feats["address"] = address_map[zid]
+        elif row is not None and len(row):
             feats["address"] = row["Straße"].iloc[0]
+        if kw is not None:
             feats["anschlusswert_kw"] = kw
         rows.append(feats)
 

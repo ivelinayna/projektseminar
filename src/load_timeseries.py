@@ -54,6 +54,12 @@ into a target directory, which is exactly the layout that
 ``features.features_for_directory`` already consumes - the synthetic
 pipeline interface stays untouched.
 
+Verbindliche Aufbereitung für alle Auswertungen ab Notebook 06 ist
+Notebook 00 (`00_eda_hast_stationsprofile.ipynb`), es schreibt nach
+``data/processed/real_meters``. Gelesen wird diese Ausgabe über
+`src/nb00_daten.py`. ``--materialize`` deshalb nicht in dieses
+Verzeichnis schreiben lassen, sonst ist der NB-00-Stand überschrieben.
+
 Deliberately NOT decided here (needs a project decision before the real
 series feed fault detection): which analysis window to use (the feature
 set assumes ~1 year), and how to stitch meter swaps (see Zuordnung.xlsx:
@@ -62,7 +68,7 @@ some CSV meter numbers are replacements not present in Nodes_Edges.ods).
 CLI:
 
     python -m src.load_timeseries            # inventory summary
-    python -m src.load_timeseries --materialize data/processed/real_meters
+    python -m src.load_timeseries --materialize data/processed/lts_meters
 """
 
 from __future__ import annotations
@@ -436,7 +442,9 @@ def load_meter_timeseries(zaehlernummer: int,
     Auswertung ueber alle Stationen wuerde unbemerkt ungleiche Zeitraeume
     mischen. Ausserdem bleiben die publizierten Zahlen der Notebooks 01
     bis 08 so reproduzierbar. Wer die Nachlieferung braucht, schaltet sie
-    ausdruecklich zu.
+    ausdruecklich zu. Die Auswertungen ab Notebook 06 laden nicht hier,
+    sondern die NB-00-Ausgabe ueber `nb00_daten.lade_serien`; dort ist
+    die Nachlieferung enthalten.
 
     Zwischen den CSV-Generationen gewinnt die neuere. Gegenueber der
     ODS-Nachlieferung gewinnt dagegen die CSV, obwohl sie aelter ist:

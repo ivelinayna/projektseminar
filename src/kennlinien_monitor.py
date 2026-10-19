@@ -1,54 +1,78 @@
 """
 Kennlinienüberwachung als labelfreie Anomalieerkennung.
 
-Idee: nicht Stationen untereinander vergleichen (dafür sind sie zu
-verschieden), sondern jede Station mit sich selbst. Die Kennlinie aus
-`stationsbilder.kennlinienfit` ist das Modell je Station:
-log V = a + b · log P sagt, wie viel Wasser bei der aktuellen Leistung
-laufen sollte. Das braucht keine Labels.
+Clustering, Regelschwellen und das überwachte Modell sind im Projekt
+alle an derselben Stelle gescheitert: sie vergleichen Stationen
+untereinander. Die Stationen sind dafür zu verschieden. Ein Haus mit
+3 kW und ein Großabnehmer mit 150 kW teilen nur die Physik, deshalb
+feuert `fault_detection.control_hysteresis` bei 95 Prozent der
+Stationen und deshalb trennt kein k die Profile.
+
+Dieses Modul dreht den Vergleich um. Die Kennlinie aus
+`stationsbilder.kennlinienfit` ist ein Modell je Station:
+log V = a + b · log P sagt für jede Stunde vorher, wie viel Wasser bei
+der gerade gelieferten Leistung laufen sollte. Verglichen wird eine
+Station also mit sich selbst. Das macht Schwellen übertragbar, weil
+jede Station ihre eigene Streuung mitbringt, und es kommt ohne Labels
+aus - der Flaschenhals des Projekts.
 
 Zwei Kanäle
 -----------
-Parameterkanal:
-- Kennlinie rollierend über ein Fenster von Tagen
-- beobachtet Steigung, R², Residuenstreuung und Niveau über die Zeit
-- Sprung in der Steigung = Ereignis, langsames Abdriften = schleichender
-  Defekt
+Der Parameterkanal fittet die Kennlinie rollierend über ein Fenster von
+Tagen und beobachtet die Zeitreihe von Steigung, Bestimmtheitsmaß,
+Residuenstreuung und Niveau. Ein Sprung in der Steigung ist ein
+Ereignis, ein langsames Abdriften ein schleichender Defekt. Aus 24
+Rohkanälen werden damit vier Zahlen je Tag.
 
-Residuenkanal:
-- feste Kennlinie einer Referenzperiode, Abweichung je Stunde
-- reagiert schneller, braucht aber eine gesunde Referenzperiode
-- bei durchgehend auffälligen Stationen funktioniert das nicht, dort
-  bleibt nur der Quervergleich
+Der Residuenkanal hält die Kennlinie einer Referenzperiode fest und
+misst für jede Stunde die Abweichung davon. Er reagiert schneller, weil
+er kein Fenster füllen muss, hängt dafür aber daran, dass die
+Referenzperiode den gesunden Zustand beschreibt. Für die 26 Prozent
+Stationen, die laut Vierfeldertafel durchgehend auffällig sind, trifft
+das nicht zu; dort bleibt nur der Quervergleich über alle Stationen.
 
-Witterung
----------
+Warum das weitgehend witterungsunabhängig ist
+---------------------------------------------
 Die Leistung steht auf der x-Achse. Eine kalte Woche schiebt die Punkte
 die Kennlinie entlang, ändert aber weder Steigung noch Achsenabschnitt.
-Eine Witterungsbereinigung ist deshalb nicht nötig.
+An 69631918 liegt die Steigung über Winter, Übergang und Sommer
+zwischen 1,06 und 1,14. Eine Witterungsbereinigung ist deshalb nicht
+nötig, was ein Alarmsystem deutlich einfacher macht.
 
-Validierung
------------
-- der Monitor läuft blind über die Historie, gezählt wird, wie oft ein
-  Alarm in die Nähe eines Begehungstermins fällt
-- `zufallsbasis` rechnet aus, welche Trefferquote gleich viele zufällig
-  gesetzte Alarme erreichen würden
+Validierung ohne Labels
+-----------------------
+Für 56 Zähler ist ein Begehungsdatum bekannt. Läuft der Monitor blind
+über die Historie, lässt sich zählen, wie oft ein Alarm in die Nähe
+eines bekannten Termins fällt. `zufallsbasis` rechnet dazu aus, welche
+Trefferquote dieselbe Zahl zufällig gesetzter Alarme erreichen würde -
+ohne diesen Vergleich ist die Trefferquote wertlos, weil viele Alarme
+auf einer langen Historie irgendwann jeden Termin erwischen.
 
-Grenzen
--------
-Stillstand ist unsichtbar (kein Durchfluss, kein Punkt). Dafür braucht
-es den Stillstandsanteil aus `stationsbilder.carpetmatrix`.
+Was der Monitor nicht sieht
+---------------------------
+Ohne Durchfluss entsteht kein Punkt, Stillstand ist für die Kennlinie
+unsichtbar. Eine fälschlich abgeschaltete Station fällt hier nicht auf;
+dafür braucht es den Stillstandsanteil aus `stationsbilder.carpetmatrix`
+als zweiten Kanal.
+
+Wintervergleich: `wintervergleich` stellt für jede Begehung den
+Kernwinter davor neben den Kernwinter danach. Sommer und Herbst bleiben
+draußen, weil dort der Wärmebedarf zu gering ist, um die Kennlinie
+belastbar zu schätzen. Die Kennzahlen kommen aus `netzvergleich`, damit
+Netz- und Wintervergleich dieselben Größen messen.
 """
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Optional, Sequence
+from typing import Dict, Iterable, Mapping, Optional, Sequence
 
 import numpy as np
 import pandas as pd
+from scipy import stats
 
 from . import stationsbilder as sb
 from . import ternaer as tn
+from . import netzvergleich as nv
 
 #Fensterbreite fuer den rollierenden Fit. 14 Tage wie in
 #window_features.py, damit die Fenster zwischen den Modulen vergleichbar
@@ -613,3 +637,303 @@ def trefferquote(pruefung: pd.DataFrame) -> pd.DataFrame:
                                     if len(getroffen) else np.nan),
         })
     return pd.DataFrame(zeilen, columns=spalten)
+
+
+def _winterpunkte(tab: pd.DataFrame) -> tuple:
+    """Betriebsstunden und ihr Kernwinterlabel (``""`` außerhalb)."""
+    betrieb = nv.betriebsstunden(tab)
+    return betrieb, nv.heizperiode(betrieb["zeit"])
+
+
+def winterpaar(tab: pd.DataFrame,
+               datum,
+               min_stunden: int = nv.MIN_STUNDEN_WINTER,
+               puffer_tage: int = tn.PUFFER_TAGE) -> dict:
+    """Kernwinter vor und nach einer Begehung samt Stunden.
+
+    Vorwinter ist der jüngste Kernwinter, der vor D - puffer mindestens
+    ``min_stunden`` Betriebsstunden hat, Nachwinter der früheste, der sie
+    nach D + puffer hat. Genutzt werden nur die Stunden auf der jeweiligen
+    Seite. Liegt der Termin selbst im Winter, kann derselbe Winter auf
+    beiden Seiten stehen, dann ist ``termin_im_winter`` gesetzt.
+    """
+    d = pd.Timestamp(datum).normalize()
+    out = {"status": "ok", "winter_vor": "", "winter_nach": "",
+           "termin_im_winter": bool(nv.heizperiode([d])[0] != ""),
+           "teil_vor": None, "teil_nach": None}
+    if tab is None or len(tab) == 0:
+        out["status"] = "keine_daten"
+        return out
+
+    betrieb, w = _winterpunkte(tab)
+    if len(betrieb) == 0:
+        out["status"] = "keine_daten"
+        return out
+    zeit = pd.DatetimeIndex(pd.to_datetime(betrieb["zeit"]))
+    im_winter = w != ""
+    vor = np.asarray(zeit < d - pd.Timedelta(days=puffer_tage)) & im_winter
+    nach = np.asarray(zeit >= d + pd.Timedelta(days=puffer_tage + 1)) & im_winter
+
+    def waehle(maske, juengster):
+        if not maske.any():
+            return None, "leer"
+        n = pd.Series(w[maske]).value_counts()
+        n = n[n >= int(min_stunden)]
+        if len(n) == 0:
+            return None, "zu_wenig"
+        labels = sorted(n.index, key=nv.winter_ende_jahr)
+        return (labels[-1] if juengster else labels[0]), "ok"
+
+    wv, sv = waehle(vor, True)
+    wn, sn_ = waehle(nach, False)
+    if wv is None:
+        out["status"] = "kein_vorwinter" if sv == "leer" else "zu_wenig_punkte"
+        return out
+    if wn is None:
+        out["status"] = "kein_nachwinter" if sn_ == "leer" else "zu_wenig_punkte"
+        return out
+    out.update({"winter_vor": wv, "winter_nach": wn,
+                "teil_vor": betrieb[vor & (w == wv)],
+                "teil_nach": betrieb[nach & (w == wn)]})
+    return out
+
+
+def residuum_kreuz(teil_vor: pd.DataFrame,
+                   teil_nach: pd.DataFrame,
+                   fit_vor: Mapping,
+                   quantile: Sequence[float] = (0.05, 0.95)) -> tuple:
+    """Medianresiduum der Nachher-Stunden gegen die Vorher-Kennlinie.
+
+    Nur im gemeinsamen Leistungsbereich (Schnitt der 5-95-%-Bereiche von
+    log P), damit keine Extrapolation der Vorher-Geraden in einen Bereich
+    eingeht, den sie nie gesehen hat. Negativ heißt: nachher weniger
+    Durchfluss bei gleicher Leistung. Zweiter Rückgabewert ist der Anteil
+    der Nachher-Stunden im gemeinsamen Bereich.
+    """
+    lp_v = np.log(teil_vor["power_kw"].to_numpy(dtype=float))
+    lp_n = np.log(teil_nach["power_kw"].to_numpy(dtype=float))
+    lf_n = np.log(teil_nach["flow_lh"].to_numpy(dtype=float))
+    if len(lp_v) == 0 or len(lp_n) == 0:
+        return np.nan, 0.0
+    lo = max(np.quantile(lp_v, quantile[0]), np.quantile(lp_n, quantile[0]))
+    hi = min(np.quantile(lp_v, quantile[1]), np.quantile(lp_n, quantile[1]))
+    if not lo < hi:
+        return np.nan, 0.0
+    m = (lp_n >= lo) & (lp_n <= hi)
+    if not m.any():
+        return np.nan, 0.0
+    res = lf_n[m] - (fit_vor["achsenabschnitt"] + fit_vor["steigung"] * lp_n[m])
+    return float(np.median(res)), float(m.mean())
+
+
+VERGLEICH_KENNZAHLEN = tuple(nv.KENNZAHLEN) + tuple(nv.BESCHREIBEND)
+VERGLEICH_SPALTEN = ("d_steigung", "d_spreizung_ref_k", "d_residuum_sd",
+                     "d_rl_ueber_50_anteil", "d_flow_median_lh",
+                     "flow_verhaeltnis", "d_flow_spez_lh_kw", "residuum_kreuz")
+MIN_GRUPPE = 2
+#Spalten, die jede Zeile des Wintervergleichs hat, auch ohne Ergebnis
+GRUNDSPALTEN = ("meter", "datum", "status", "winter_vor", "winter_nach",
+                "termin_im_winter", "weitere_begehung")
+
+
+def _mit_spalten(df: pd.DataFrame, vorn: Sequence[str]) -> pd.DataFrame:
+    """Fehlende Spalten als NaN ergänzen, vorhandene Reihenfolge bleibt."""
+    return df.reindex(columns=list(dict.fromkeys(
+        [*vorn, *df.columns, *VERGLEICH_SPALTEN])))
+
+
+def _kreuzwerte(teil_vor: pd.DataFrame, teil_nach: pd.DataFrame,
+                fit_vor: Mapping) -> dict:
+    res, anteil = residuum_kreuz(teil_vor, teil_nach, fit_vor)
+    return {"residuum_kreuz": res, "anteil_gemeinsam": anteil}
+
+
+def _kreuz_ganze_winter(tab: Optional[pd.DataFrame], winter_vor: str,
+                        winter_nach: str, min_stunden: int) -> dict:
+    """Kreuzresiduum über zwei ganze Kernwinter, für die Kontrollgruppe.
+
+    Fit wie im Wintervergleich über `netzvergleich.kennzahlen_punkte` auf
+    den Betriebsstunden des Vorwinters.
+    """
+    leer = {"residuum_kreuz": np.nan, "anteil_gemeinsam": 0.0}
+    if tab is None or len(tab) == 0:
+        return leer
+    betrieb, w = _winterpunkte(tab)
+    tv, tn_ = betrieb[w == winter_vor], betrieb[w == winter_nach]
+    fit_vor = nv.kennzahlen_punkte(tv, min_stunden=min_stunden)
+    if fit_vor["status"] != "ok" or len(tn_) < int(min_stunden):
+        return leer
+    return _kreuzwerte(tv, tn_, fit_vor)
+
+
+def _paarwerte(kv: Mapping, kn: Mapping) -> dict:
+    z = {}
+    for k in VERGLEICH_KENNZAHLEN:
+        z[f"{k}_vor"], z[f"{k}_nach"] = kv[k], kn[k]
+        z[f"d_{k}"] = kn[k] - kv[k]
+    z["n_stunden_vor"], z["n_stunden_nach"] = kv["n_stunden"], kn["n_stunden"]
+    vor = kv["flow_median_lh"]
+    z["flow_verhaeltnis"] = kn["flow_median_lh"] / vor if vor > 0 else np.nan
+    return z
+
+
+def wintervergleich(punkte: Mapping[int, pd.DataFrame],
+                    begehungen: Mapping,
+                    anschlusswerte: Optional[Mapping] = None,
+                    markiert: Optional[pd.DataFrame] = None,
+                    heizgradstunden: Optional[pd.DataFrame] = None,
+                    min_stunden: int = nv.MIN_STUNDEN_WINTER,
+                    puffer_tage: int = tn.PUFFER_TAGE) -> pd.DataFrame:
+    """Eine Zeile je Begehung: Kernwinter davor gegen Kernwinter danach.
+
+    Volumenstrom steht als Hauptgröße in l/h vorn: Median vorher und
+    nachher, Differenz, Verhältnis und der Durchfluss, den beide
+    Kennlinien bei derselben Leistung (Median des Vorwinters) vorhersagen.
+    Mit ``markiert`` aus `netzvergleich.markiere` kommen Netzrang und
+    Auffälligkeit beider Winter dazu, mit ``heizgradstunden`` die
+    Witterung. Der Rang bezieht sich auf den ganzen Winter, die
+    Kennzahlen hier nur auf die Seite der Begehung.
+    """
+    aw = nv.int_schluessel(anschlusswerte)
+    pkt = nv.int_schluessel(punkte)
+    rang = None
+    if markiert is not None and len(markiert):
+        rang = markiert.assign(meter=markiert["meter"].astype(int)).set_index(
+            ["meter", "winter"])[["rang", "auffaellig"]]
+    hgs = {}
+    if heizgradstunden is not None:
+        hgs = dict(zip(heizgradstunden["winter"],
+                       heizgradstunden["heizgradstunden"]))
+
+    zeilen = []
+    for meter, daten in nv.int_schluessel(begehungen).items():
+        termine = sorted({pd.Timestamp(d).normalize() for d in daten})
+        tab = pkt.get(meter)
+        for d in termine:
+            paar = winterpaar(tab, d, min_stunden=min_stunden,
+                              puffer_tage=puffer_tage)
+            z = {"meter": meter, "datum": d, "status": paar["status"],
+                 "winter_vor": paar["winter_vor"],
+                 "winter_nach": paar["winter_nach"],
+                 "termin_im_winter": paar["termin_im_winter"],
+                 "weitere_begehung": False}
+            if paar["status"] != "ok":
+                zeilen.append(z)
+                continue
+            tv, tn_ = paar["teil_vor"], paar["teil_nach"]
+            start, ende = tv["zeit"].min(), tn_["zeit"].max()
+            z["weitere_begehung"] = any(o != d and start <= o <= ende
+                                        for o in termine)
+            kv = nv.kennzahlen_punkte(tv, aw.get(meter), min_stunden=min_stunden)
+            kn = nv.kennzahlen_punkte(tn_, aw.get(meter), min_stunden=min_stunden)
+            if kv["status"] != "ok" or kn["status"] != "ok":
+                z["status"] = kv["status"] if kv["status"] != "ok" else kn["status"]
+                zeilen.append(z)
+                continue
+            z.update(_paarwerte(kv, kn))
+            lp = np.log(kv["p_ref_kw"])
+            z["p_ref_kw"] = kv["p_ref_kw"]
+            z["flow_bei_pref_vor"] = float(np.exp(kv["achsenabschnitt"]
+                                                  + kv["steigung"] * lp))
+            z["flow_bei_pref_nach"] = float(np.exp(kn["achsenabschnitt"]
+                                                   + kn["steigung"] * lp))
+            z.update(_kreuzwerte(tv, tn_, kv))
+            if rang is not None:
+                for seite, w in (("vor", z["winter_vor"]),
+                                 ("nach", z["winter_nach"])):
+                    if (meter, w) in rang.index:
+                        z[f"rang_{seite}"] = float(rang.loc[(meter, w), "rang"])
+                        z[f"auffaellig_{seite}"] = bool(
+                            rang.loc[(meter, w), "auffaellig"])
+                    else:
+                        z[f"rang_{seite}"] = np.nan
+                        z[f"auffaellig_{seite}"] = np.nan
+                z["d_rang"] = z["rang_nach"] - z["rang_vor"]
+            z["heizgradstunden_vor"] = hgs.get(z["winter_vor"], np.nan)
+            z["heizgradstunden_nach"] = hgs.get(z["winter_nach"], np.nan)
+            zeilen.append(z)
+    return _mit_spalten(pd.DataFrame(zeilen), GRUNDSPALTEN)
+
+
+def winterdifferenz_kontrolle(tabelle: pd.DataFrame,
+                              begehungen: Mapping,
+                              winter_vor: str = "23/24",
+                              winter_nach: str = "24/25",
+                              *,
+                              punkte: Optional[Mapping[int, pd.DataFrame]] = None,
+                              min_stunden: int = nv.MIN_STUNDEN_WINTER,
+                              ausschluss: Optional[Iterable] = None,
+                              ) -> pd.DataFrame:
+    """Dieselben Differenzen für Stationen ohne Begehung.
+
+    ``tabelle`` ist die Ausgabe von `netzvergleich.winterkennzahlen`.
+    Ohne diese Kontrollgruppe ließe sich ein Winterunterschied (kälter,
+    anderes Nutzerverhalten) nicht von einer Wirkung der Begehung
+    trennen. Mit ``punkte`` kommt das Kreuzresiduum dazu, gerechnet über
+    die ganzen beiden Kernwinter; ohne bleibt es NaN. ``ausschluss`` nimmt
+    die Zähler auf, deren Begehung ohne Datum in der Tabelle steht. Sie
+    wurden begangen und gehören deshalb nicht in die Kontrollgruppe, wie
+    in `fallsammlung.kontrollgruppe`.
+    """
+    mit = set(nv.int_schluessel(begehungen)) | {int(m) for m in ausschluss or ()}
+    pkt = nv.int_schluessel(punkte)
+    t = tabelle[~tabelle["meter"].astype(int).isin(mit)]
+    a = t[t["winter"] == winter_vor].set_index("meter")
+    b = t[t["winter"] == winter_nach].set_index("meter")
+    zeilen = []
+    for meter in sorted(set(a.index) & set(b.index)):
+        z = {"meter": int(meter), "winter_vor": winter_vor,
+             "winter_nach": winter_nach}
+        z.update(_paarwerte(a.loc[meter], b.loc[meter]))
+        if punkte is not None:
+            z.update(_kreuz_ganze_winter(pkt.get(int(meter)), winter_vor,
+                                         winter_nach, min_stunden))
+        zeilen.append(z)
+    return _mit_spalten(pd.DataFrame(zeilen),
+                        ("meter", "winter_vor", "winter_nach"))
+
+
+def gruppenvergleich(vergleich: pd.DataFrame,
+                     kontrolle: pd.DataFrame,
+                     spalten: Sequence[str] = VERGLEICH_SPALTEN,
+                     paar: Optional[Sequence[str]] = ("23/24", "24/25"),
+                     ) -> pd.DataFrame:
+    """Begehungsfälle gegen Kontrollgruppe, Mann-Whitney zweiseitig.
+
+    Mit ``paar`` gehen nur Begehungsfälle und Kontrollzeilen mit genau
+    diesem Winterpaar ein, damit beide Gruppen dieselben zwei Winter
+    vergleichen. Ein kleiner p-Wert ist ein Hinweis darauf, dass sich die
+    Begehungsfälle anders entwickelt haben als der Rest des Netzes, kein
+    Wirkungsnachweis.
+
+    Hat eine Station mehrere Begehungen mit demselben Winterpaar, geht nur
+    der früheste Termin ein. Sonst stünde dieselbe Station mehrfach im
+    Test, und die Beobachtungen wären nicht unabhängig. ``n_begehung``
+    zählt deshalb Stationen je Winterpaar, nicht Begehungen.
+    """
+    v = vergleich[vergleich["status"] == "ok"]
+    k = kontrolle
+    if paar is not None:
+        v = v[(v["winter_vor"] == paar[0]) & (v["winter_nach"] == paar[1])]
+        if {"winter_vor", "winter_nach"} <= set(k.columns):
+            k = k[(k["winter_vor"] == paar[0]) & (k["winter_nach"] == paar[1])]
+    schluessel = ["meter", "winter_vor", "winter_nach"]
+    if set(schluessel) <= set(v.columns):
+        if "datum" in v.columns:
+            v = v.sort_values(["meter", "datum"], kind="stable")
+        v = v.drop_duplicates(subset=schluessel, keep="first")
+    zeilen = []
+    for s in spalten:
+        x = (pd.to_numeric(v[s], errors="coerce").dropna().to_numpy()
+             if s in v.columns else np.array([]))
+        y = (pd.to_numeric(k[s], errors="coerce").dropna().to_numpy()
+             if s in k.columns else np.array([]))
+        p = np.nan
+        if len(x) >= MIN_GRUPPE and len(y) >= MIN_GRUPPE:
+            p = float(stats.mannwhitneyu(x, y, alternative="two-sided")[1])
+        zeilen.append({"spalte": s, "n_begehung": len(x),
+                       "median_begehung": float(np.median(x)) if len(x) else np.nan,
+                       "n_kontrolle": len(y),
+                       "median_kontrolle": float(np.median(y)) if len(y) else np.nan,
+                       "p_mw": p})
+    return pd.DataFrame(zeilen)
