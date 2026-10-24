@@ -25,6 +25,15 @@ versioniert wird nicht — Einträge sind datumsbasiert.
   - **Dämmung:** Nur das Paket-Modell ist besser als Raten. Flottenmaße und die
     Nachtspreizung im Sommer zeigen die umgekehrte Richtung; die Deutung in
     `22`, Abschnitt 6, ist damit umgekehrt.
+  - **Monitoring-Modell gegen LSTM** (Abschnitt 4b): Beim Alarm gewinnt das
+    Monitoring-Modell des Kennlinien-Strangs belegt (Tagesmonitor 33 gegen
+    16 Begehungen, Fall für Fall 17 zu 0), beim Fehlererkennen die LSTM-Kette
+    (Ventil +0,16, Dämmung +0,37 AUC gegen den Netzvergleich). Die Priorität
+    des Monitorings trennt das Ventil kaum (32 % gegen 21 % Basisrate).
+  - **Haus oder Netz** (Abschnitt 3b): mit dem logischen Graphen aus
+    `Nodes_Edges.ods` geprüft. Nachbarn und Lage verbessern weder Alarm noch
+    Erkennung; den Netzmedian abzuziehen schadet belegt, weil die Begehungen
+    als Welle kamen.
 - `src/modellpaket.py`: Modellpakete unter `models/` (gitignored) mit Gewichten,
   Skalierung, Kalibrierung, Schwelle, Datenstand, Code-Stand und Prüfsummen.
   - `src/prognose_waechter.py` (LSTM aus `21`): z-Werte und alle 424 Alarme

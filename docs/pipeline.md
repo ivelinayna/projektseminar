@@ -130,11 +130,11 @@ und `17` (`normalmodell_*.csv`); diese beiden müssen vorher gelaufen sein.
 `32_modellvergleich.ipynb` stellt alle Modelle des Projekts auf denselben Prüfstand (`src/pruefstand.py`): 15 Wächter
 und 27 Erkenner, Regeln eingeschlossen, mit gleichen Fällen, Stationen, Tagen und gleicher Alarmmenge. Es liest die
 Ausgaben von 06, 17, 18, 20, 21 und 22 und die Modellpakete (baut sie, wenn sie fehlen) und schreibt
-`outputs/pruefstand/`. Laufzeit etwa 10 Minuten mit Grafikkarte. Einzelheiten in [modellvergleich.md](modellvergleich.md).
+`outputs/pruefstand/`. Laufzeit etwa 11 Minuten mit Grafikkarte. Einzelheiten in [modellvergleich.md](modellvergleich.md).
 
 | Notebook | Ansatz | Kernbefund |
 |---|---|---|
-| `32_modellvergleich.ipynb` | Gleiche Fälle, Stationen, Tage und Alarmmenge für alle; Erwartung und Alarmregel getrennt getauscht; Regeln als Kandidaten; GNN und Bayes nicht lauffähig ohne ihre Eingaben | Alarm: von 15 Wächtern bleibt nach Holm nur Kennlinie + CUSUM belegt (Tagesmonitor 33/43, p = 0,017); LSTM + Schwelle am besten bei plötzlichen Fehlern (Bypass 150 l/h 84 %, Fühler 43 % gegen 17 % ohne Lernen); Kennlinienmonitor (NB 14) und die Detektoren aus NB 10 taugen nicht als Alarm. Ventil: 15 von 27 Erkennern über Raten, LR Kennzahlen + LSTM 0,89 vorn, keiner belegt besser als die Sommernacht-Regel (0,85); Bäume nicht besser; nach dem Ventiltausch sinkt der Verdacht (p = 0,016). Dämmung: nur das Paket-Modell über Raten, Flottenmaße zeigen die umgekehrte Richtung |
+| `32_modellvergleich.ipynb` | Gleiche Fälle, Stationen, Tage und Alarmmenge für alle; Erwartung und Alarmregel getrennt getauscht; Regeln als Kandidaten; GNN und Bayes nicht lauffähig ohne ihre Eingaben | Alarm: von 15 Wächtern bleibt nach Holm nur Kennlinie + CUSUM belegt (Tagesmonitor 33/43, p = 0,017); LSTM + Schwelle am besten bei plötzlichen Fehlern (Bypass 150 l/h 84 %, Fühler 43 % gegen 17 % ohne Lernen); Kennlinienmonitor (NB 14) und die Detektoren aus NB 10 taugen nicht als Alarm. Ventil: 15 von 27 Erkennern über Raten, LR Kennzahlen + LSTM 0,89 vorn, keiner belegt besser als die Sommernacht-Regel (0,85); Bäume nicht besser; nach dem Ventiltausch sinkt der Verdacht (p = 0,016). Dämmung: nur das Paket-Modell über Raten, Flottenmaße zeigen die umgekehrte Richtung. Monitoring-Modell gegen LSTM: Monitoring gewinnt den Alarm (33 gegen 16, McNemar 17 zu 0), LSTM-Kette das Erkennen (+0,16 Ventil, +0,37 Dämmung). Netz (logischer Graph): Nachbarn und Lage verbessern nichts |
 
 Modellpakete bauen und gegen die Notebooks prüfen:
 

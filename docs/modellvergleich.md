@@ -230,10 +230,63 @@ Eine Verschlechterung hebt die Stufe nicht. Im Winter 24/25 hatte fast jede zwei
 Begehungen mit Befund gab es nicht mehr davon als bei Kontrollen (`alarme.ipynb`). Die Stufen sind
 gesetzt, nicht gelernt.
 
+## Das Monitoring-Modell gegen das LSTM
+
+Im Projekt gibt es zwei vollständige Systeme:
+
+| | Monitoring-Modell (Kennlinien-Strang) | LSTM-Kette (Modell-Strang) |
+|---|---|---|
+| Notebooks | 14, `tagesmonitor`, `netzvergleich`, `alarme`, 24, 25, 27; Stationsblatt | 18 bis 23 |
+| Alarm | Tagesmonitor: Kennlinie + CUSUM | Prognose-LSTM + Schwelle |
+| Fehler erkennen | Netzvergleich je Kernwinter | Kennzahlen + LSTM-Embedding → LR |
+| Unterteilen und Reihenfolge | Fehlerbild, Priorität hoch/mittel/niedrig | Klassen nach Folie 5 |
+
+Hier stehen sie Kopf an Kopf, jeweils gepaart auf denselben Fällen bzw. Stationen (Notebook 32, Abschnitt 4b):
+
+| Aufgabe | Monitoring | LSTM-Kette | gepaart | besser |
+|---|---|---|---|---|
+| Alarm: Begehungen (60 Tage) | **33/43** gegen 53 %, p = 0,001 | 16/43 (Schwelle), 24/43 (CUSUM) | 17 zu 0 Fälle, p < 0,001; gegen CUSUM 13 zu 4, p = 0,049 | **Monitoring** |
+| Alarm: erste 14 Tage | **18/39**, p = 0,003 | 7/39, kein Signal | – | **Monitoring** |
+| Alarm: plötzliche Fehler | nicht prüfbar | **Bypass 84 %**, Fühler 43 % | – | **LSTM** |
+| Ventilfall 68956351 | **2 Tage** | 7 bzw. 4 Tage | – | Monitoring |
+| Ventil erkennen (AUC) | Netzvergleich 0,73 | **0,89** | +0,16 [+0,02; +0,31] | **LSTM** |
+| Dämmung erkennen (AUC) | Netzvergleich 0,38 | **0,75** | +0,37 [+0,12; +0,61] | **LSTM** |
+| Entscheidung Ventil | Fehlerbild „ventil“: 4 von 4 richtig, findet 36 % | Klasse: 8 von 12 richtig, findet 73 % | – | ergänzen sich |
+| Priorität | „hoch“: 1 begangene Station; „hoch oder mittel“: 32 % mit Ventilbefund (Basisrate 21 %) | – | – | trennt kaum |
+
+**Was das heißt:**
+- **Beim Alarm gewinnt das Monitoring-Modell.** Es merkt kleine, bleibende Veränderungen.
+- **Beim Erkennen gewinnt die LSTM-Kette.** Der Netzvergleich misst „schlechter als die anderen“, das ist nur zur
+  Hälfte ein Ventil.
+- **Die beste Lösung kombiniert beide:**
+  - Alarm aus dem Tagesmonitor, dazu das LSTM für plötzliche Fehler,
+  - Klasse aus der LSTM-Kette,
+  - Netzvergleich als Bestätigung.
+
+## Haus oder Netz
+
+Sechs Notebooks haben das Netz untersucht: 17 (Abschnitt 15), `23_nachbarn`, 24, 28, 30 und die Vorarbeit zu 22.
+Notebook 32 (Abschnitt 3b) prüft das Netz zusätzlich als Kandidat, mit dem logischen Graphen aus `Nodes_Edges.ods`
+(Nachbarn bis zwei Kanten).
+
+| Kandidat | Ergebnis |
+|---|---|
+| Tagesmonitor ohne gemeinsame Nachbar-Alarme (NB 24) | 34/43 statt 33/43, Fall für Fall nicht unterscheidbar |
+| Tagesmonitor, Nachbarn abgezogen | 30/43, etwas schlechter |
+| Tagesmonitor, Netzmedian abgezogen | 25/43, **belegt schlechter** (die Begehungen kamen als Welle; der Abzug nimmt ihre Wirkung heraus) |
+| Nachbarn: Sommer-Durchfluss bzw. Ventilverdacht → eigenes Ventil | AUC 0,44 bzw. 0,42, belegt schlechter als die eigene Regel |
+| Paket-Modell + Nachbar-Merkmale | Ventil +0,004, Dämmung −0,02: keine Verbesserung |
+| Vorlauf unter dem Netz (Strangende) → Ventil | 0,20, also umgekehrt: Stationen mit offenem Ventil haben einen **wärmeren** Vorlauf, weil durchlaufendes Wasser die Zuleitung warm hält |
+
+**Was das heißt:**
+- **Die Fehler sitzen im einzelnen Haus.** Offene Ventile häufen sich nicht in Strängen.
+- **Das Netz zählt nur als Ganzes:** Wetter, Vorlauf, Begehungswellen. Das fangen Kennlinie und Tagesmonitor schon ab.
+
 ## Zusammenfassung
 
-Verglichen wurden 15 Wächter und 27 Erkenner, also jedes Modell des Projekts, das einen Tagesalarm oder einen
-Wert je Station liefert. Nur GNN und Bayes fehlen, weil ihre Eingaben hier nicht vorliegen.
+Verglichen wurden 15 Wächter, 27 Erkenner und die Netz-Varianten, also jedes Modell des Projekts, das einen
+Tagesalarm oder einen Wert je Station liefert. Nur GNN und Bayes fehlen, weil ihre Eingaben hier nicht vorliegen.
+Das Monitoring-Modell gewinnt beim Alarm, die LSTM-Kette beim Erkennen. Das Netz verbessert keins von beiden.
 
 | Aufgabe | Bestes Verfahren | Einfachere Alternative | Im Betrieb (Paket) |
 |---|---|---|---|
@@ -248,12 +301,12 @@ Wert je Station liefert. Nur GNN und Bayes fehlen, weil ihre Eingaben hier nicht
 
 | Notebook | Warum nicht | Was stattdessen gilt |
 |---|---|---|
-| `30_gnn_entwurf` | braucht die Kanten- und Positionsdateien aus Notebook 16 in `notebooks/` | eigenes Ergebnis: kleiner Gewinn, kein Strang-Effekt (auch NB 23, 24, 28) |
+| `30_gnn_entwurf` | braucht die Kanten- und Positionsdateien aus Notebook 16 in `notebooks/` | eigenes Ergebnis: kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft Abschnitt „Haus oder Netz“ mit Nachbar-Varianten |
 | `31_bayes_diagnose` | braucht die Handtabellen unter `data/manual/` | eigenes Ergebnis: Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
 | `02_gesamtpipeline_…` | eigene Aufbereitung im Notebook, Stundenscores ohne Modul | eigenes Ergebnis: AUC 0,51, höchstens 2 von 10 Ereignissen |
 | `01_kmeans`, `04_clustering_benchmark` | Profile über die ganze Historie, also auch nach der Begehung (Datenleck) | eigenes Ergebnis: kein Cluster trennt die Begehungen; verglichen wird K-Means aus NB 19 |
 | `05_label_findung` | Label-Vorschlag, kein Erkenner | dieselben Größen stecken in den README- und Kennzahl-Regeln |
-| `16_Netz`, `25_netzkarte`, `28_Netz_experimente` | Netz und Karte, kein Modell je Station | der Nachtfluss aus NB 28 ist die Sommer-Nachtdurchfluss-Regel |
+| `16_Netz`, `25_netzkarte` | Karte und Graphaufbau, kein Modell je Station | das Netz selbst ist als Kandidat geprüft (Abschnitt „Haus oder Netz“) mit dem logischen Graphen |
 | `03`, `07`, `08`, `luecken` | messen die Wirkung der Begehungen oder bereiten Daten auf | sie liefern den Prüfstein |
 
 ## Grenzen
