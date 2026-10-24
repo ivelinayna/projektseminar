@@ -6,6 +6,31 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Geändert (Modell-Strang auf der neuen Datenbasis aus Notebook 00, 2026-10-24)
+
+- `18` bis `23` neu gerechnet auf `00` mit 93 statt 96 Zählern (weggefallen:
+  41704231, 41704232, 721354800, alle nie begangen). Vorher liefen `06` und
+  `17` neu, weil `23` ihre Ausgaben liest. Die Daten der begangenen Zähler vor
+  dem Stichtag sind unverändert (bis auf eine Stunde bei 80912174).
+- `20` und `21`: alle LSTM neu trainiert. Die Validierungswochen werden aus
+  allen Wochen gezogen und haben sich mit den weggefallenen Zählern verschoben;
+  mit den alten Gewichten hatte `21` einen Teil der Validierungstage schon im
+  Training gesehen, die Schwankung zu klein geschätzt und die Schwelle auf
+  z ≥ 6 gesetzt. Neu trainiert bleibt es bei z ≥ 4.
+- `22`: Die Grenze für „Regelventil tauschen“ ist fest 0,5 statt Youden-Index.
+  Der Youden-Index sprang bei 11 Ventilfällen von 0,54 auf 0,17, die Klasse
+  wäre von 21 auf 57 Zähler gewachsen, bei gleicher AUC.
+- Texte in `18` bis `23` und `docs/pipeline.md` an die neuen Ausgaben
+  angepasst. Inhaltlich verschoben hat sich: In `20` ist der Wintervorsprung
+  des LSTM beim Ventil jetzt knapp belegt (+0,15 [0,02; 0,32]), vorher nicht;
+  in `19` ist die Ventil-Gegenprobe nach Holm-Korrektur nicht mehr abgesichert;
+  in `21` zeigt schon der erste Blick auf die Begehungen keinen Vorsprung, und
+  vier neu überwachte nie begangene Zähler mit nur 14 Validierungstagen
+  erzeugen einen großen Teil der Winterwarnungen; in `23` liegt Sebs
+  Normalverhaltensmodell deutlicher vorne (30 von 43, McNemar p = 0,001).
+- `docs/pipeline.md`: Hinweis, dass die LSTM-Gewichte nach einer Änderung der
+  Datenbasis gelöscht werden müssen.
+
 ### Geändert (Modell-Strang: LSTM auf den begangenen HAST, Wächtervergleich, 2026-10-19)
 
 - `20_lstm_fehlererkennung` und `21_prognose_lstm_waechter`: Die LSTM lernen
