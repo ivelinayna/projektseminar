@@ -9,6 +9,7 @@ skalierbar auf weitere ÜZ-Teilnetze.
 
 | Dokument | Inhalt |
 |---|---|
+| [modellvergleich.md](modellvergleich.md) | Welches Modell für welche Aufgabe: Spielregeln eines fairen Vergleichs, Prüfstand, alle Wächter und Erkenner des Projekts (Notebook 32) |
 | [pipeline.md](pipeline.md) | Module, Datenfluss, CLI-Kommandos, erzeugte Artefakte |
 | [output_NB12-15.md](output_NB12-15.md) | Ergebnisse der Notebooks 12 bis 15 mit Grafiken: Ternärdiagramme, Stationsbilder, Kennlinienmonitor, Begehungsnotizen |
 

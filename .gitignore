@@ -13,6 +13,10 @@ external/
 outputs/*
 !outputs/.gitkeep
 
+# Modellpakete (aus Firmendaten gelernt, enthalten Zaehlernummern)
+models/*
+!models/README.md
+
 # Python
 __pycache__/
 *.py[cod]

@@ -6,6 +6,101 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Hinzugefügt (Modellvergleich aller Modelle und Modellpakete, 2026-10-24)
+
+- `notebooks/32_modellvergleich.ipynb` mit `src/pruefstand.py`: alle Modelle des
+  Projekts auf demselben Prüfstand, Regeln eingeschlossen, mit gleichen Fällen,
+  Stationen, Tagen und gleicher Alarmmenge bzw. Fehlalarmquote. 15 Wächter und
+  27 Erkenner; nur GNN (`30`) und Bayes (`31`) fehlen, weil ihre Eingaben lokal
+  nicht vorliegen.
+  - **Alarm:** Nach Holm bleibt nur Kennlinie + CUSUM belegt (Tagesmonitor 33
+    von 43 Begehungen, p = 0,017). Bei eingerechneten plötzlichen Fehlern liegt
+    das Prognose-LSTM mit Schwellenregel vorn (Bypass 150 l/h 84 %, Fühler 43 %
+    gegen 17 % beim Wochenmittel ohne Lernen). Kennlinienmonitor (`14`) und die
+    Detektoren aus `10` taugen nicht als Alarm.
+  - **Ventil:** 15 von 27 Erkennern über Raten, LR Kennzahlen + LSTM 0,89 vorn,
+    keiner belegt besser als die Sommernacht-Regel und die README-Regel
+    `continuous_flow` (je 0,85); Random Forest und XGBoost nicht besser. Nach dem
+    Ventiltausch sinkt der Verdacht im Winter 24/25 messbar (p = 0,016).
+  - **Dämmung:** Nur das Paket-Modell ist besser als Raten. Flottenmaße und die
+    Nachtspreizung im Sommer zeigen die umgekehrte Richtung; die Deutung in
+    `22`, Abschnitt 6, ist damit umgekehrt.
+  - **Monitoring-Modell gegen LSTM** (Abschnitt 4b): Beim Alarm gewinnt das
+    Monitoring-Modell des Kennlinien-Strangs belegt (Tagesmonitor 33 gegen
+    16 Begehungen, Fall für Fall 17 zu 0), beim Fehlererkennen die LSTM-Kette
+    (Ventil +0,16, Dämmung +0,37 AUC gegen den Netzvergleich). Die Priorität
+    des Monitorings trennt das Ventil kaum (32 % gegen 21 % Basisrate).
+  - **Haus oder Netz** (Abschnitt 3b): mit dem logischen Graphen aus
+    `Nodes_Edges.ods` geprüft. Nachbarn und Lage verbessern weder Alarm noch
+    Erkennung; den Netzmedian abzuziehen schadet belegt, weil die Begehungen
+    als Welle kamen.
+- `src/modellpaket.py`: Modellpakete unter `models/` (gitignored) mit Gewichten,
+  Skalierung, Kalibrierung, Schwelle, Datenstand, Code-Stand und Prüfsummen.
+  - `src/prognose_waechter.py` (LSTM aus `21`): z-Werte und alle 424 Alarme
+    gleich wie `prognose_tage.csv`.
+  - `src/normalmodell_waechter.py` (Tagesmonitor): Alarme und z-Werte identisch.
+  - `src/fehlerklassen.py` (`18` bis `22`): Klassen für alle 91 Zähler gleich
+    wie `fehlerklassen_je_hast.csv`; Kennzahlen und Embedding direkt aus den
+    Stundenwerten.
+- Doku `docs/modellvergleich.md`; Tests `test_pruefstand`, `test_modellpaket`,
+  `test_prognose_waechter`.
+
+### Geändert (Modell-Strang auf der neuen Datenbasis aus Notebook 00, 2026-10-24)
+
+- `18` bis `23` neu gerechnet auf `00` mit 93 statt 96 Zählern (weggefallen:
+  41704231, 41704232, 721354800, alle nie begangen). Vorher liefen `06` und
+  `17` neu, weil `23` ihre Ausgaben liest. Die Daten der begangenen Zähler vor
+  dem Stichtag sind unverändert (bis auf eine Stunde bei 80912174).
+- `20` und `21`: alle LSTM neu trainiert. Die Validierungswochen werden aus
+  allen Wochen gezogen und haben sich mit den weggefallenen Zählern verschoben;
+  mit den alten Gewichten hatte `21` einen Teil der Validierungstage schon im
+  Training gesehen, die Schwankung zu klein geschätzt und die Schwelle auf
+  z ≥ 6 gesetzt. Neu trainiert bleibt es bei z ≥ 4.
+- `22`: Die Grenze für „Regelventil tauschen“ ist fest 0,5 statt Youden-Index.
+  Der Youden-Index sprang bei 11 Ventilfällen von 0,54 auf 0,17, die Klasse
+  wäre von 21 auf 57 Zähler gewachsen, bei gleicher AUC.
+- Texte in `18` bis `23` und `docs/pipeline.md` an die neuen Ausgaben
+  angepasst. Inhaltlich verschoben hat sich: In `20` ist der Wintervorsprung
+  des LSTM beim Ventil jetzt knapp belegt (+0,15 [0,02; 0,32]), vorher nicht;
+  in `19` ist die Ventil-Gegenprobe nach Holm-Korrektur nicht mehr abgesichert;
+  in `21` zeigt schon der erste Blick auf die Begehungen keinen Vorsprung, und
+  vier neu überwachte nie begangene Zähler mit nur 14 Validierungstagen
+  erzeugen einen großen Teil der Winterwarnungen; in `23` liegt Sebs
+  Normalverhaltensmodell deutlicher vorne (30 von 43, McNemar p = 0,001).
+- `docs/pipeline.md`: Hinweis, dass die LSTM-Gewichte nach einer Änderung der
+  Datenbasis gelöscht werden müssen.
+
+### Geändert (Modell-Strang: LSTM auf den begangenen HAST, Wächtervergleich, 2026-10-19)
+
+- `20_lstm_fehlererkennung` und `21_prognose_lstm_waechter`: Die LSTM lernen
+  nach Vorgabe der Betreuung nur auf den HAST mit Begehungsdaten; ein Netz
+  auf allen HAST läuft zum Vergleich mit. In 20 zusätzlich ein Autoencoder
+  als dritte Variante und die Wirkung des fraglichen Ventil-Labels, in 21
+  ein Faktor je Jahreszeit und Alarme gezählt wie im Normalverhaltensmodell.
+- `18` bis `22`: Jedes Notebook beginnt mit dem, was vorher versucht wurde und
+  warum es nicht gereicht hat, und sieht sich die geladenen Tabellen an,
+  bevor gerechnet wird.
+- `18_modelldaten_labels`: Auslastung zusätzlich auf den Vertrag vor der
+  Begehung bezogen (`auslastung_vertrag`). Der Anschlusswert in
+  `Nodes_Edges.ods` ist bei 7 von 9 verkleinerten Verträgen schon der neue
+  Wert.
+- `22_xgboost_fehlerklassen`: Die Überdimensionierung wird mit
+  `auslastung_vertrag` gelernt und geprüft; für nie begangene Zähler bleibt
+  der Anschlusswert. Damit ist sie erkennbar (Regel AUC 0,78 statt 0,66),
+  `fehlerklassen_je_hast.csv` enthält jetzt Hinweise auf Überdimensionierung.
+- `21_prognose_lstm_waechter`: Der erste Blick auf die Begehungen
+  (24–29 % gegen 8 %) ist als nicht belegt eingeordnet, siehe `23`.
+
+### Hinzugefügt (Wächtervergleich, 2026-10-19)
+
+- `23_vergleich_waechter`: Sebs Begehungsprüfung aus `17` als Funktion,
+  Fall für Fall gegen seine Ergebnisse geprüft, dann auf Normalverhaltensmodell
+  und Prognose-LSTM unter gleichen Bedingungen angewendet (gleiche Stationen,
+  Heiztage, Fälle, Kontrollgruppe und gleiches Alarmbudget). Liest die
+  Ausgaben von `06`, `17` und `21`.
+- `prognose_tage.csv` enthält zusätzlich die z-Werte des Vergleichsnetzes auf
+  allen HAST (`z_rl_alle`, `z_fluss_alle`).
+
 ### Hinzugefügt (Kennlinienmonitor als Modell, 2026-10-19)
 
 - Neue Module u. a. `tagesmonitor`, `alarmbewertung`, `netzvergleich`,
