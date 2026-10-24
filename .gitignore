@@ -4,6 +4,7 @@ data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/README.md
+data/manual/*
 
 # Externe, oeffentliche Daten (z. B. DWD-Wetter) - gross, nicht versionieren
 external/

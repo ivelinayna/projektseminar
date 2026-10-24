@@ -259,25 +259,41 @@ def make_plot_coordinates(df_hits: pd.DataFrame, pipes_in) -> pd.DataFrame:
     return out
 
 def _classify_severity(row) -> tuple[str, str]:
-    """Pick a severity level + label for a HAST row.
+    """Pick a severity level + label for a HAST row."""
+    # 1. Empfehlungsschicht (unueberwachte Anomalie) hat Vorrang
+    stufe = row.get("stufe")
+    muster = row.get("muster")
+    if pd.notna(stufe) and str(stufe).strip():
+        s = str(stufe).lower()
+        if s == "hoch":
+            return "alarm", f"Prioritaet hoch: {muster}"
+        if s == "mittel":
+            return "warn", f"Prioritaet mittel: {muster}"
+        return "minor", f"Prioritaet niedrig: {muster}"
 
-    Combines (a) inspection action count, (b) predicted-fault flag.
-    """
+    # 2. Gemessene Ruecklauftemperatur im Winter
+    rt = row.get("rt_mean_winter")
+    if pd.notna(rt):
+        rt_val = float(rt)
+        if rt_val < 45.0:
+            return "healthy", f"Normal (< 45 C: {rt_val:.1f} C)"
+        if rt_val < 50.0:
+            return "minor", f"Leicht erhoeht (45-50 C: {rt_val:.1f} C)"
+        if rt_val < 55.0:
+            return "warn", f"Erhoeht (50-55 C: {rt_val:.1f} C)"
+        return "alarm", f"Kritisch (> 55 C: {rt_val:.1f} C)"
+
+    # 3. Begehungshistorie als Fallback
     n_actions = row.get("n_actions", 0)
-    predicted = row.get("predicted_fault", "healthy")
     inspected = row.get("inspected", False)
-
-    if predicted not in ("healthy", "", None) and n_actions >= 2:
-        return "alarm", f"Predicted: {predicted}; {n_actions} inspection actions"
-    if predicted not in ("healthy", "", None):
-        return "warn", f"Predicted: {predicted}"
-    if n_actions >= 2:
-        return "warn", f"{n_actions} inspection actions"
-    if n_actions == 1:
-        return "minor", "1 inspection action"
     if inspected:
-        return "healthy", "Inspected, no issues found"
-    return "unknown", "Not inspected, no time-series prediction"
+        if n_actions >= 2:
+            return "warn", f"{n_actions} Massnahmen bei Begehung"
+        if n_actions == 1:
+            return "minor", "1 Massnahme bei Begehung"
+        return "healthy", "Begangen, keine Maengel"
+
+    return "unknown", "Keine Zaehlerdaten / nicht begangen"
 
 
 def build_combined_map(out_path: Path,
@@ -312,9 +328,13 @@ def build_combined_map(out_path: Path,
     pipe_layer.add_to(m)
 
     # 2. HAST status ---------------------------------------------------
-    geo = geocode_nodes()
-    geo = apply_manual_overrides(geo)
-    geo = validate_results(geo)
+    geocoded_csv = Path("data/processed/hast_geocoded.csv")
+    if geocoded_csv.exists():
+        geo = pd.read_csv(geocoded_csv)
+    else:
+        geo = geocode_nodes()
+        geo = apply_manual_overrides(geo)
+        geo = validate_results(geo)
     insp = tidy_inspections()
 
     # Aggregate inspection rows per address (some addresses have 2 records)
@@ -334,6 +354,21 @@ def build_combined_map(out_path: Path,
     df["inspected"] = df["n_actions"].notna()
     df["n_actions"] = df["n_actions"].fillna(0).astype(int)
 
+    # Echte Features (Winter-Ruecklauf etc.) anbinden
+    feats_real_path = Path("data/processed/features_real.csv")
+    if feats_real_path.exists():
+        f_real = pd.read_csv(feats_real_path)
+        z_col = "Z\u00e4hlernummer" if "Z\u00e4hlernummer" in f_real.columns else "Zaehlernummer"
+        df = df.merge(f_real[[z_col, "rt_mean_winter", "dt_mean_loaded"]],
+                      left_on="Zählernummer", right_on=z_col, how="left")
+
+    # Empfehlungsliste (unueberwachte Anomalien + Massnahmen) anbinden
+    empf_path = Path("data/processed/empfehlungsliste.csv")
+    if empf_path.exists():
+        df_empf = pd.read_csv(empf_path)
+        df = df.merge(df_empf[["meter", "muster", "stufe", "massnahme", "begruendung_kurz", "punkte"]],
+                      left_on="Zählernummer", right_on="meter", how="left")
+
     # Optional: pull in time-series predictions if they exist
     pred_path = Path("data/processed/predictions.csv")
     if pred_path.exists():
@@ -350,8 +385,9 @@ def build_combined_map(out_path: Path,
     df["predicted_fault"] = df["predicted_fault"].fillna("healthy")
     df["reasons"] = df["reasons"].fillna("")
 
-    # Build the marker layer (only HAST that geocoded successfully)
-    hast_layer = folium.FeatureGroup(name="HAST mit Status", show=True)
+    # Build marker layers
+    hast_layer = folium.FeatureGroup(name="Alle HAST (Status-Ampel)", show=True)
+    focus_layer = folium.FeatureGroup(name="HAST mit Handlungsempfehlung", show=True)
     df_hits = df[df["lat"].notna() & df["in_expected_area"]].copy()
     df_hits = make_plot_coordinates(df_hits, pipes_in)
 
@@ -365,42 +401,69 @@ def build_combined_map(out_path: Path,
         if row.get("daemmung_neu"):        actions.append("Leitungen neu gedämmt")
         if row.get("vertrag_changed"):     actions.append("Vertragsleistung geändert")
 
-        tip = (
-            f"<b>{row['address']}</b><br/>"
-            f"Zählernr: {int(row['Zählernummer']) if pd.notna(row.get('Zählernummer')) else '?'}<br/>"
-            f"Anschlusswert: {row.get('Anschlusswert', '?')} kW<br/>"
-            f"<b>Status:</b> {sev_label}<br/>"
-            f"<b>Begehung-Befunde:</b> "
-            f"{', '.join(actions) if actions else 'keine'}<br/>"
-            f"<b>Predicted:</b> {row.get('predicted_fault', 'healthy')}"
-        )
+        rt = row.get("rt_mean_winter")
+        rt_str = f"{float(rt):.1f} °C" if pd.notna(rt) else "k. A."
+        dt = row.get("dt_mean_loaded")
+        dt_str = f"{float(dt):.1f} K" if pd.notna(dt) else "k. A."
+
+        tip_lines = [
+            f"<b>{row['address']}</b>",
+            f"Zählernummer: {int(row['Zählernummer']) if pd.notna(row.get('Zählernummer')) else '?'}",
+            f"Anschlusswert: {row.get('Anschlusswert', '?')} kW",
+            f"Winter-Rücklauf: {rt_str} (Spreizung: {dt_str})",
+            f"<b>Status:</b> {sev_label}",
+        ]
+        if pd.notna(row.get("stufe")):
+            tip_lines.extend([
+                f"<hr style='margin:4px 0;'/>",
+                f"<b>Muster:</b> {row.get('muster', '')}",
+                f"<b>Maßnahme:</b> {row.get('massnahme', '')}",
+                f"<b>Begründung:</b> {row.get('begruendung_kurz', '')}",
+            ])
+        elif actions:
+            tip_lines.append(f"<b>Begehungsbefunde:</b> {', '.join(actions)}")
+
+        tip = "<br/>".join(tip_lines)
 
         radius = 5 + 0.15 * float(row.get("Anschlusswert", 10) or 10)
         radius = min(radius, 18)
 
-        folium.CircleMarker(
+        marker = folium.CircleMarker(
             location=[row["plot_lat"], row["plot_lon"]],
             radius=radius,
             color="white", weight=1.5,
             fill=True, fill_color=colour, fill_opacity=0.85,
             tooltip=tip,
-        ).add_to(hast_layer)
+            popup=folium.Popup(tip, max_width=320),
+        )
+        marker.add_to(hast_layer)
+
+        if pd.notna(row.get("stufe")):
+            folium.CircleMarker(
+                location=[row["plot_lat"], row["plot_lon"]],
+                radius=radius + 3,
+                color=colour, weight=2.5,
+                fill=False,
+                tooltip=f"<b>Empfehlung ({row.get('stufe')}):</b> {row.get('muster')}",
+            ).add_to(focus_layer)
 
     hast_layer.add_to(m)
+    focus_layer.add_to(m)
 
     # 3. Legend --------------------------------------------------------
     legend_html = """
     <div style="position: fixed; bottom: 30px; left: 30px; z-index:9999;
                 background:white; padding:10px 14px; border:1px solid #888;
+                border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.15);
                 font-family:sans-serif; font-size:12px; line-height:1.5;
-                max-width: 240px;">
-    <b>HAST-Status</b><br/>
-    <span style="color:#2ca02c">●</span> gesund (begangen, ohne Befund)<br/>
-    <span style="color:#d4a017">●</span> 1 Befund<br/>
-    <span style="color:#ff7f0e">●</span> ≥ 2 Befunde<i>oder</i> Anomalie aus Zeitreihe<br/>
-    <span style="color:#d62728">●</span> 2+ Befunde <b>und</b> Anomalie<br/>
-    <span style="color:#888">●</span> noch keine Daten<br/>
-    <hr style="margin:4px 0"/>
+                max-width: 260px;">
+    <b>HAST Status & Priorität</b><br/>
+    <span style="color:#2ca02c">●</span> Normal (Winter-RL &lt; 45 °C)<br/>
+    <span style="color:#bcbd22">●</span> Leicht erhöht (45–50 °C)<br/>
+    <span style="color:#ff7f0e">●</span> Erhöht / Priorität mittel (50–55 °C)<br/>
+    <span style="color:#d62728">●</span> Kritisch / Priorität hoch (&gt; 55 °C)<br/>
+    <span style="color:#888">●</span> Keine Messdaten / unbegangen<br/>
+    <hr style="margin:6px 0"/>
     Markergröße ∝ Anschlusswert (kW)<br/>
     <span style="color:#666">━━</span> Wärmeleitung
     </div>

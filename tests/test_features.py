@@ -14,7 +14,7 @@ Runs standalone (no raw data needed):
 import numpy as np
 import pandas as pd
 
-from src.features import features_for_meter
+from src.features import features_for_directory, features_for_meter
 
 
 def _dummy_meter(start: str, hours: int) -> pd.DataFrame:
@@ -60,8 +60,48 @@ def test_volume_normalised_to_one_year():
     assert np.isclose(f["volume_m3_year"], 876.0, rtol=1e-3)
 
 
+def test_address_map_takes_priority_over_nodes_df(tmp_path):
+    # meter 1: only in nodes_df -> falls back to nodes' Straße.
+    # meter 2: in both -> address_map (Zuordnung.xlsx) wins.
+    # meter 3: only in address_map -> Nodes_Edges.ods would have missed it.
+    ts = pd.date_range("2022-01-01", periods=8760, freq="h")
+    raw = pd.DataFrame({
+        "Timestamp": ts,
+        "Energy (kWh)": np.arange(8760, dtype=float),
+        "Volume flow (l/h)": 100.0,
+        "Power (kW)": 10.0,
+        "Temperature difference (°C)": 25.0,
+        "Flow temperature (°C)": 70.0,
+        "Return temperature (°C)": 45.0,
+        "Volume (m³)": np.arange(8760, dtype=float) * 0.1,
+    })
+    for zid in (1, 2, 3):
+        raw.to_csv(tmp_path / f"{zid}.csv", index=False)
+
+    nodes_df = pd.DataFrame({
+        "Zählernummer": [1, 2],
+        "Anschlusswert": [20.0, 30.0],
+        "Straße": ["Nodes-Adresse 1", "Nodes-Adresse 2"],
+    })
+    address_map = {2: "Zuordnung-Adresse 2", 3: "Zuordnung-Adresse 3"}
+
+    feats = features_for_directory(tmp_path, nodes_df, address_map=address_map)
+    feats = feats.set_index("Zählernummer")
+
+    assert feats.loc[1, "address"] == "Nodes-Adresse 1"
+    assert feats.loc[2, "address"] == "Zuordnung-Adresse 2"
+    assert feats.loc[3, "address"] == "Zuordnung-Adresse 3"
+    # Anschlusswert has no other source - stays Nodes_Edges-only, missing for 3.
+    assert feats.loc[1, "anschlusswert_kw"] == 20.0
+    assert pd.isna(feats.loc[3, "anschlusswert_kw"])
+
+
 if __name__ == "__main__":
     test_energy_normalised_to_one_year()
     test_single_year_unchanged()
     test_volume_normalised_to_one_year()
+    import tempfile
+    from pathlib import Path
+    with tempfile.TemporaryDirectory() as d:
+        test_address_map_takes_priority_over_nodes_df(Path(d))
     print("all feature tests passed")

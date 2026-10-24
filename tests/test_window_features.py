@@ -109,6 +109,28 @@ def test_meter_change_flag():
     assert out["meter_change"].tolist() == [False, False, True, False, False]
 
 
+def test_begehung_flag_and_days_since():
+    df = _heating_meter(days=70)
+    # visit lands inside the 3rd window (Jan 29 - Feb 11, centre ~Feb 4 12:00)
+    out = windowed_features_for_meter(
+        df, begehungen=[pd.Timestamp("2023-02-01 09:00")])
+    assert out["begehung"].tolist() == [False, False, True, False, False]
+    # every window gets a signed distance to the nearest visit
+    assert out["days_since_begehung"].notna().all()
+    # window before the visit -> negative, window after -> positive
+    assert out.iloc[0]["days_since_begehung"] < 0
+    assert out.iloc[4]["days_since_begehung"] > 0
+    # the containing window's centre (Jan 29 + 7d = Feb 5 00:00) is
+    # 3.625 days after the visit (Feb 1, 09:00)
+    assert np.isclose(out.iloc[2]["days_since_begehung"], 3.625, atol=0.01)
+
+
+def test_no_begehungen_leaves_days_since_nan():
+    out = windowed_features_for_meter(_heating_meter(days=70))
+    assert not out["begehung"].any()
+    assert out["days_since_begehung"].isna().all()
+
+
 def test_full_load_hours_normalised_per_window():
     # 10 kWh/h, peak 10 kW -> 87600 kWh/year -> 8760 full load hours,
     # independent of how many windows the history is cut into.
@@ -167,8 +189,8 @@ def test_features_for_window_metadata_on_arbitrary_slice():
 def test_output_is_long_format_with_meta_columns_first():
     out = windowed_features_for_meter(_heating_meter(days=70))
     meta = ["window_start", "window_end", "n_hours", "coverage",
-            "low_coverage", "meter_change"]
-    assert list(out.columns[:6]) == meta
+            "low_coverage", "meter_change", "begehung", "days_since_begehung"]
+    assert list(out.columns[:8]) == meta
     assert "rt_mean_winter" in out.columns  # feature set passed through
 
 
@@ -177,6 +199,8 @@ if __name__ == "__main__":
     test_step_days_overlap()
     test_coverage_and_low_coverage_flag_with_gap()
     test_meter_change_flag()
+    test_begehung_flag_and_days_since()
+    test_no_begehungen_leaves_days_since_nan()
     test_full_load_hours_normalised_per_window()
     test_nan_sparse_window_does_not_crash()
     test_empty_window_kept_as_metadata_row()

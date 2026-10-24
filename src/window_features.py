@@ -14,6 +14,14 @@ Quality is flagged, not filtered (team policy: do not drop too much):
     low_coverage   window coverage below min_coverage
     meter_change   window contains a documented meter change - it
                    compares two devices and is fachlich problematisch
+    begehung       window contains a documented walkthrough (Begehung) -
+                   it mixes the state before and after an intervention
+                   and is a leakage risk for clustering across it
+
+`days_since_begehung` gives the signed distance (in days) from the
+window's centre to the *nearest* walkthrough (negative = before it,
+positive = after) - lets downstream analysis split "vorher"/"nachher"
+or drop an exclusion zone around the event without re-deriving it.
 
 energy_kwh_year / volume_m3_year / full_load_hours are normalised to
 8760 h/year inside features_for_meter using the actual calendar span
@@ -38,6 +46,8 @@ META_COLUMNS = [
     "coverage",
     "low_coverage",
     "meter_change",
+    "begehung",
+    "days_since_begehung",
 ]
 
 
@@ -82,6 +92,7 @@ def windowed_features_for_meter(df: pd.DataFrame,
                                 step_days: Optional[int] = None,
                                 min_coverage: float = 0.5,
                                 meter_changes: Optional[Sequence[Union[pd.Timestamp, str]]] = None,
+                                begehungen: Optional[Sequence[Union[pd.Timestamp, str]]] = None,
                                 anschluss_kw: Optional[float] = None
                                 ) -> pd.DataFrame:
     """Cut one hourly meter series into windows, compute features per window.
@@ -90,9 +101,15 @@ def windowed_features_for_meter(df: pd.DataFrame,
     first timestamp and cover [start, start + window_days) each; with
     step_days=None they do not overlap. Nothing is dropped: windows
     below min_coverage get low_coverage=True, windows containing a
-    meter change timestamp get meter_change=True, and windows without
-    any rows appear as metadata-only entries (features NaN) so a gap
-    shows up in the output instead of a silent dropout.
+    meter change timestamp get meter_change=True, windows containing a
+    walkthrough (Begehung) get begehung=True, and windows without any
+    rows appear as metadata-only entries (features NaN) so a gap shows
+    up in the output instead of a silent dropout.
+
+    `begehungen` (this meter's walkthrough dates, e.g. from
+    `load_begehungen`) drive `begehung` and `days_since_begehung` - pass
+    them whenever windows will feed a clustering run, so before/after
+    states around a documented intervention are never silently mixed.
 
     Expects the schema of features_for_meter() (columns energy, flow,
     power, dt, vl, rt, volume on an hourly DatetimeIndex); month/hour
@@ -110,6 +127,7 @@ def windowed_features_for_meter(df: pd.DataFrame,
         df["hour"] = df.index.hour
 
     changes: List[pd.Timestamp] = [pd.Timestamp(t) for t in (meter_changes or [])]
+    visits: List[pd.Timestamp] = [pd.Timestamp(t) for t in (begehungen or [])]
 
     rows = []
     if len(df) > 0:
@@ -138,6 +156,15 @@ def windowed_features_for_meter(df: pd.DataFrame,
                 np.isnan(row["coverage"]) or row["coverage"] < min_coverage
             )
             row["meter_change"] = any(wstart <= c < wend_excl for c in changes)
+            row["begehung"] = any(wstart <= v < wend_excl for v in visits)
+            if visits:
+                centre = wstart + (wend_excl - wstart) / 2
+                nearest = min(visits, key=lambda v: abs((v - centre).total_seconds()))
+                row["days_since_begehung"] = (
+                    (centre - nearest).total_seconds() / 86400
+                )
+            else:
+                row["days_since_begehung"] = np.nan
             rows.append(row)
             wstart += step
 
