@@ -77,6 +77,11 @@ alles zusammen ─────────────────► dashboard_
 | `befundcodes.py` | Regelbasierte Kodierung der Begehungs-Freitexte in Mehrfachlabels, Fehlerrangliste, Labels je Zähler |
 | `geocode.py` / `osm_addresses.py` | Nominatim/Overpass-Geocoding mit Cache und Overrides |
 | `dashboard_map.py` | Kombinierte Folium-Karte: Rohre + HAST + Begehungen + Vorhersagen |
+| `modellpaket.py` | Modellpakete unter `models/<name>/<version>/`: Dateien, Parameter, Datenstand, Code-Stand, SHA-256; Betriebsversion in `AKTUELL` |
+| `pruefstand.py` | Gemeinsame Prüfungen für alle Kandidaten: Begehungs-Treffertest mit Kontrollgruppe, gemeinsame Tage, gleiches Alarmbudget, eingerechnete Fehler, AUC mit Intervall (auch paarweise), Zufallstest, Holm, McNemar, Vierfeldertafel |
+| `prognose_waechter.py` | Prognose-LSTM aus NB 21 als Paket: Skalierung und Kalibrierung nachgerechnet, Anwenden ohne neues Lernen, Schwellen- und CUSUM-Regel, Wochenmittel als Vergleich, Gegenprobe gegen `prognose_tage.csv` |
+| `normalmodell_waechter.py` | Tagesmonitor (Normalverhaltensmodell) als Paket: Referenz und Kennlinien je Station, Anwenden auf neue Tage |
+| `fehlerklassen.py` | Folie 5 als Paket: Kennzahlen (NB 18), LSTM-Embedding (NB 20), Ventil- und Dämmungsmodell, Vertragsregel (NB 22), K-Means (NB 19); Klassen für jede Heizperiode |
 
 ## Schnittstellen-Vertrag
 
@@ -119,6 +124,26 @@ und `17` (`normalmodell_*.csv`); diese beiden müssen vorher gelaufen sein.
 | `21_prognose_lstm_waechter.ipynb` | Encoder–Decoder-LSTM sagt jeden Tag Rücklauf und Durchfluss vorher, gelernt nur auf den begangenen HAST; Warnung bei z ≥ 4 an zwei Tagen, ein Alarm je Veränderung | Bypass 150 l/h zu 84 % erkannt bei 8 % Fehlalarmen; 2,9 Alarme je Station und Jahr; Winterwarnungen kommen von Stationen, die sich nach der Begehung verändert haben, und von vier nie begangenen mit zu wenigen Validierungstagen |
 | `22_xgboost_fehlerklassen.ipynb` | Logistische Regression, Random Forest, XGBoost mit/ohne Wechselwirkungen, SHAP; drei Klassen der Folie 5 für alle 91 Zähler mit Kennzahlen, Ventil-Grenze fest 0,5 | Ventil AUC 0,89 (LR auf Kennzahlen + LSTM), Dämmung 0,75; Folie 5: 24 × Ventil tauschen, 5 × Regelparameter optimieren, 61 × kein Handlungsbedarf; Überdimensionierung 0,78 mit der Auslastung zum Vertrag vor der Begehung (mit dem Anschlusswert 0,66); Bäume und Wechselwirkungen nicht besser; Filter, Durchfluss, Temperatur nicht erkennbar |
 | `23_vergleich_waechter.ipynb` | Sebs Begehungsprüfung aus `17` nachgebaut (Fall für Fall identisch) und auf beide Wächter angewendet: gleiche Stationen, Heiztage, Fälle, Kontrollgruppe und gleiches Alarmbudget | Normalverhaltensmodell 30 von 43 Begehungen gegen 50 % Kontrolle (p = 0,008), schon in 14 Tagen; Prognose-LSTM 16 von 43 gegen 32 % (p = 0,26); Fall für Fall McNemar p = 0,001. Begehungen verschieben den Betrieb nur um etwa eine halbe Streuung: CUSUM sammelt das auf, eine Schwellenregel nicht |
+
+## Modellvergleich
+
+`32_modellvergleich.ipynb` stellt alle Modelle des Projekts auf denselben Prüfstand (`src/pruefstand.py`): 15 Wächter
+und 27 Erkenner, Regeln eingeschlossen, mit gleichen Fällen, Stationen, Tagen und gleicher Alarmmenge. Es liest die
+Ausgaben von 06, 17, 18, 20, 21 und 22 und die Modellpakete (baut sie, wenn sie fehlen) und schreibt
+`outputs/pruefstand/`. Laufzeit etwa 10 Minuten mit Grafikkarte. Einzelheiten in [modellvergleich.md](modellvergleich.md).
+
+| Notebook | Ansatz | Kernbefund |
+|---|---|---|
+| `32_modellvergleich.ipynb` | Gleiche Fälle, Stationen, Tage und Alarmmenge für alle; Erwartung und Alarmregel getrennt getauscht; Regeln als Kandidaten; GNN und Bayes nicht lauffähig ohne ihre Eingaben | Alarm: von 15 Wächtern bleibt nach Holm nur Kennlinie + CUSUM belegt (Tagesmonitor 33/43, p = 0,017); LSTM + Schwelle am besten bei plötzlichen Fehlern (Bypass 150 l/h 84 %, Fühler 43 % gegen 17 % ohne Lernen); Kennlinienmonitor (NB 14) und die Detektoren aus NB 10 taugen nicht als Alarm. Ventil: 15 von 27 Erkennern über Raten, LR Kennzahlen + LSTM 0,89 vorn, keiner belegt besser als die Sommernacht-Regel (0,85); Bäume nicht besser; nach dem Ventiltausch sinkt der Verdacht (p = 0,016). Dämmung: nur das Paket-Modell über Raten, Flottenmaße zeigen die umgekehrte Richtung |
+
+Modellpakete bauen und gegen die Notebooks prüfen:
+
+```bash
+python -m src.prognose_waechter --bauen --gegenprobe
+python -m src.normalmodell_waechter --bauen
+python -m src.fehlerklassen --bauen --gegenprobe
+python -m src.modellpaket                               # Übersicht der Versionen
+```
 
 ## Smoke-Tests (zuletzt grün am 2026-07-08)
 

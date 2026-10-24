@@ -6,6 +6,36 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Hinzugefügt (Modellvergleich aller Modelle und Modellpakete, 2026-10-24)
+
+- `notebooks/32_modellvergleich.ipynb` mit `src/pruefstand.py`: alle Modelle des
+  Projekts auf demselben Prüfstand, Regeln eingeschlossen, mit gleichen Fällen,
+  Stationen, Tagen und gleicher Alarmmenge bzw. Fehlalarmquote. 15 Wächter und
+  27 Erkenner; nur GNN (`30`) und Bayes (`31`) fehlen, weil ihre Eingaben lokal
+  nicht vorliegen.
+  - **Alarm:** Nach Holm bleibt nur Kennlinie + CUSUM belegt (Tagesmonitor 33
+    von 43 Begehungen, p = 0,017). Bei eingerechneten plötzlichen Fehlern liegt
+    das Prognose-LSTM mit Schwellenregel vorn (Bypass 150 l/h 84 %, Fühler 43 %
+    gegen 17 % beim Wochenmittel ohne Lernen). Kennlinienmonitor (`14`) und die
+    Detektoren aus `10` taugen nicht als Alarm.
+  - **Ventil:** 15 von 27 Erkennern über Raten, LR Kennzahlen + LSTM 0,89 vorn,
+    keiner belegt besser als die Sommernacht-Regel und die README-Regel
+    `continuous_flow` (je 0,85); Random Forest und XGBoost nicht besser. Nach dem
+    Ventiltausch sinkt der Verdacht im Winter 24/25 messbar (p = 0,016).
+  - **Dämmung:** Nur das Paket-Modell ist besser als Raten. Flottenmaße und die
+    Nachtspreizung im Sommer zeigen die umgekehrte Richtung; die Deutung in
+    `22`, Abschnitt 6, ist damit umgekehrt.
+- `src/modellpaket.py`: Modellpakete unter `models/` (gitignored) mit Gewichten,
+  Skalierung, Kalibrierung, Schwelle, Datenstand, Code-Stand und Prüfsummen.
+  - `src/prognose_waechter.py` (LSTM aus `21`): z-Werte und alle 424 Alarme
+    gleich wie `prognose_tage.csv`.
+  - `src/normalmodell_waechter.py` (Tagesmonitor): Alarme und z-Werte identisch.
+  - `src/fehlerklassen.py` (`18` bis `22`): Klassen für alle 91 Zähler gleich
+    wie `fehlerklassen_je_hast.csv`; Kennzahlen und Embedding direkt aus den
+    Stundenwerten.
+- Doku `docs/modellvergleich.md`; Tests `test_pruefstand`, `test_modellpaket`,
+  `test_prognose_waechter`.
+
 ### Geändert (Modell-Strang auf der neuen Datenbasis aus Notebook 00, 2026-10-24)
 
 - `18` bis `23` neu gerechnet auf `00` mit 93 statt 96 Zählern (weggefallen:
