@@ -22,5 +22,6 @@ markdown_extensions:
       permalink: true
 nav:
   - Übersicht: README.md
+  - Modellvergleich: modellvergleich.md
   - Pipeline: pipeline.md
   - Ergebnisse Notebooks 12–15: output_NB12-15.md

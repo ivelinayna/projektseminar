@@ -38,8 +38,12 @@ Julius-Maximilians-Universitaet Wuerzburg, SS 2026 / WS 2026.
 | `src/snap_hast.py` | Snapping geokodierter HAST auf den naechsten Knoten des raeumlichen Graphen |
 | `src/dashboard_map.py` | Kombinierte Karte: Leitungen + geokodierte HAST + Inspektionsbefunde + vorhergesagte Fehler |
 | `src/dashboard_app.py` | Interaktives Streamlit-Dashboard mit Ampel, Karte, Stationsdetail und Wartungsprioritaet |
+| `src/pruefstand.py` | Gemeinsamer Pruefstand fuer Modelle und Regeln (`notebooks/32_modellvergleich.ipynb`) |
+| `src/modellpaket.py` | Modellpakete speichern und laden (Gewichte, Skalierung, Kalibrierung, Schwelle, Metadaten, Pruefsummen) |
+| `src/prognose_waechter.py`, `src/normalmodell_waechter.py`, `src/fehlerklassen.py` | Prognose-LSTM, Tagesmonitor und Folie-5-Klassen als Pakete, gegen die Notebooks geprueft |
 | `src/priority.py` | Transparenter Wartungsprioritaets-Score, noch keine echte Fehlerprognose |
 | `src/main.py` | End-to-End-Pipeline mit einem Befehl |
+| `models/` | Modellpakete - **gitignored** |
 | `data/raw/` | Quelldateien von UEZ - **gitignored**, nicht committen |
 | `data/processed/` | Abgeleitete CSV-Dateien - **gitignored** |
 | `outputs/` | Generierte Visualisierungen - **gitignored** |
