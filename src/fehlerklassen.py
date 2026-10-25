@@ -352,7 +352,8 @@ def bewerten(teile: dict, kz: pd.DataFrame, emb: pd.DataFrame,
     """
     par = teile["parameter"]
     merkmale = kz.join(emb.reindex(columns=EMB_WINTER + EMB_SOMMER))
-    X = merkmale.reindex(columns=MERKMALE)
+    #die Merkmale stehen im Paket (Notebook 34 lernt ohne die Auslastung zum Anschlusswert)
+    X = merkmale.reindex(columns=par.get("merkmale", MERKMALE))
     k = pd.DataFrame(index=merkmale.index)
     k["p_ventil"] = teile["ventil_modell"].predict_proba(X)[:, 1]
     k["p_daemmung"] = teile["daemmung_modell"].predict_proba(X)[:, 1]
