@@ -509,7 +509,9 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
               Referenz Modell LSTM (Prognose-LSTM mit CUSUM).</td>
             <td>Der Tagesmonitor bemerkt echte Begehungen am deutlichsten (18 von 43 gegen 24 % an Vergleichsstationen) und
               findet im Winter eingebaute Fehler am besten (Rücklauf +5 K: 47 % gegen 33 %). An warmen Tagen rechnet er nicht.
-              Dort findet das LSTM 78 % eines eingebauten Dauerdurchflusses bei 5 % Fehlalarmen, das Wochenmittel nur 45 %.</td>
+              Dort findet das LSTM 78 % eines eingebauten Dauerdurchflusses bei 5 % Fehlalarmen, das Wochenmittel nur 45 %.
+              Im Winter ergänzt das LSTM die Kennlinie: Es findet plötzliche Sprünge, die sie übersieht (eingebaute Fehler
+              51 → 60 %, ohne zusätzliche Fehlalarme). Deshalb stehen seine Meldungen an Heiztagen als Hinweis im Hausfenster.</td>
             <td>Pilot mit Einschränkungen. Eine pendelnde Regelung (Hysterese) findet kein Wächter.</td></tr>
           <tr><td><b>Ist das Regelventil offen?</b><br><span class="muted">Klassifizierung → Reparatur</span></td>
             <td>Färbung „Maßnahme“, Hausfenster „Verdacht“</td>
@@ -522,9 +524,11 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
           <tr><td><b>Sind Leitungen ungedämmt?</b><br><span class="muted">Klassifizierung → Dämmung</span></td>
             <td>Färbung „Maßnahme“, Hausfenster „Verdacht“</td>
             <td>Modell LSTM: eigenes Dämmungsmodell, Hinweis ab Score <span class="g-daemmung"></span></td>
-            <td>AUC 0,80. Mit Kennzahlen allein 0,74, der Zusatznutzen des LSTM ist nicht gesichert.</td>
-            <td>Nur Hinweis, braucht weitere Prüfung. Dämmung ist bei 41 % der begangenen Stationen eingetragen, entsprechend oft
-              erscheint der Hinweis.</td></tr>
+            <td>Keine einzelne Regel kommt über AUC 0,61, auch wenn man sie an den Befunden einstellt. Die KI findet ein Muster
+              aus mehreren Kennzahlen: 0,73, mit den LSTM-Zahlen 0,80. Der Vorsprung (+0,20) ist knapp nicht gesichert
+              (Notebook 34, Abschnitt 15).</td>
+            <td>Nur Hinweis: Was das Muster physikalisch bedeutet, ist offen, gedämmt wurde eher an Stationen, die im Winter gut
+              laufen. Dämmung ist bei 41 % der begangenen Stationen eingetragen, entsprechend oft erscheint der Hinweis.</td></tr>
           <tr><td><b>Ist der Anschluss zu groß?</b><br><span class="muted">Klassifizierung → Kapazitätsanpassung</span></td>
             <td>Färbung „Maßnahme“, Hausfenster „Verdacht“</td>
             <td>Regel ohne Lernen: Spitzenlast im Winter höchstens <span class="g-vertrag"></span> des Anschlusswerts</td>

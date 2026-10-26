@@ -124,3 +124,34 @@ def test_folie5_klassen():
     assert list(fv.folie5_befund(lab)) == [fv.F5_REPARATUR, fv.F5_REGELUNG, fv.F5_KEINE]
     fb = pd.Series(["ventil", "unruhig", ""], index=[1, 2, 3])
     assert list(fv.folie5_ivelina(fb)) == [fv.F5_REPARATUR, fv.F5_REGELUNG, fv.F5_KEINE]
+
+
+def _oof_beispiel(n=40, folds=4, seed=0):
+    rng = np.random.default_rng(seed)
+    y = np.array([1, 0] * (n // 2))
+    z = np.arange(1000, 1000 + n)
+    oof = pd.DataFrame({"zaehler": z, "fold": np.arange(n) % folds, "ziel": "ventil",
+                        "kandidat": "LR Kennzahlen", "p": rng.random(n), "y": y, "parameter": ""})
+    return oof, y, z
+
+
+def test_regel_angepasst_findet_kennzahl_und_richtung():
+    oof, y, z = _oof_beispiel()
+    rng = np.random.default_rng(1)
+    kz = pd.DataFrame({"gut": -y + 0.01 * rng.random(len(y)), "rauschen": rng.random(len(y))}, index=z)
+    r = fv.regel_angepasst(kz, oof, ["ventil"], kennzahlen=["gut", "rauschen"])
+    assert len(r) == len(y) and set(r["parameter"]) == {"gut (klein = Befund)"}
+    from sklearn.metrics import roc_auc_score
+    assert roc_auc_score(r["y"], r["p"]) == 1.0
+
+
+def test_waechter_zusammen_zaehlt_oder():
+    zeilen = []
+    for art, a, b in [("ohne Fehler", False, False), ("ohne Fehler", True, True),
+                      ("Sprung", False, True), ("Sprung", True, False)]:
+        for key, alarm in (("ivelina", a), ("lstm_c", b)):
+            zeilen.append({"zaehler": len(zeilen) // 2, "saison": "Winter", "art": art, "key": key,
+                           "bewertbar": True, "alarm": alarm})
+    q = fv.waechter_zusammen(pd.DataFrame(zeilen), "ivelina", "lstm_c", "Winter")
+    assert q.loc["Sprung", "zusammen"] == 1.0 and q.loc["Sprung", "ivelina"] == 0.5
+    assert q.loc["ohne Fehler", "zusammen"] == 0.5 and q.loc["ohne Fehler", "Fälle"] == 2
