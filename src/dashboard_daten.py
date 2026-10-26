@@ -193,7 +193,7 @@ def empfehlungen(st: pd.DataFrame) -> pd.DataFrame:
     - hoch: Reparatur, bestätigt durch Ivelinas Fehlerbild „ventil“
       (Test C: 4 von 4 richtig)
     - mittel: Reparatur nur nach dem Ventil-Score des LSTM-Modells
-      (Test C: 8 von 11 gefunden bei 3 Fehlalarmen)
+      (Test C mit Modellwahl im Lernteil: 8 von 11 gefunden bei 5 Fehlalarmen)
     - niedrig: nur Kapazität, Dämmung (Hinweis) oder Daten prüfen
 
     Innerhalb der Stufe nach Ventil-Score (Test E: unter den ersten 10 nach
@@ -249,6 +249,58 @@ def empfehlungen(st: pd.DataFrame) -> pd.DataFrame:
                  .sort_values(["_s", "p_ventil"], ascending=[True, False], na_position="last", kind="stable")
                  .assign(rang=lambda d: np.arange(1, len(d) + 1))["rang"])
     return e
+
+
+#Stand vor den Begehungen: Winter 23/24 und Sommer 2024, nur Tage vor der ersten Begehung (Notebook 18).
+#Im Dashboard gilt er, solange der Zeitregler vor diesem Tag steht (fehlerklassen.STICHTAG).
+WECHSEL_VOR_BEGEHUNG = "2024-09-01"
+
+
+def sonderfall_gruende(klassen: pd.DataFrame, stunden: pd.DataFrame,
+                       winter: Tuple[str, str]) -> Tuple[pd.Series, pd.Series]:
+    """Warum der Score an einem Zähler nicht trägt, und sein Anteil am Netzvolumen im Winter.
+
+    Sonderfall: mindestens ``SONDERFALL_KENNZAHLEN`` Kennzahlen außerhalb des Lernbereichs
+    oder mehr als ``SONDERFALL_VOLUMENANTEIL`` des Netzvolumens (keine typische Hausstation).
+    """
+    w = stunden[(stunden["timestamp"] >= winter[0]) & (stunden["timestamp"] < winter[1])]
+    anteil = w.groupby("zaehler")["durchfluss"].sum()
+    anteil = (anteil / anteil.sum()).reindex(klassen.index).fillna(0)
+    grund = pd.Series("", index=klassen.index)
+    ausserhalb = klassen["kennzahlen_ausserhalb"] >= SONDERFALL_KENNZAHLEN
+    grund[ausserhalb] = klassen.loc[ausserhalb, "kennzahlen_ausserhalb"].map(
+        lambda n: f"{int(n)} Kennzahlen außerhalb des Lernbereichs")
+    gross = anteil > SONDERFALL_VOLUMENANTEIL
+    grund[gross] = [(g + "; " if g else "") + f"{a:.0%} des Netzvolumens im Winter"
+                    for g, a in zip(grund[gross], anteil[gross])]
+    return grund, anteil
+
+
+VOR_SPALTEN = {"handlung": "handlung_vor", "dringlichkeit": "dringlichkeit_vor",
+               "begruendung": "begruendung_vor", "rang": "rang_vor",
+               "p_daemmung": "p_daemmung_vor_begehung", "hinweis_daemmung": "hinweis_daemmung_vor",
+               "hinweis_vertrag": "hinweis_vertrag_vor", "auslastung": "auslastung_vor",
+               "netz_fehlerbild": "netz_fehlerbild_vor", "sommer_durchlauf_anteil": "sommer_durchlauf_anteil_vor",
+               "sonderfall_grund": "sonderfall_grund_vor"}
+
+
+def empfehlungen_vor_begehung(vorher: pd.DataFrame, kz_vor: pd.DataFrame, fehlerbild: pd.Series,
+                              grund: pd.Series) -> pd.DataFrame:
+    """Dieselbe Empfehlung wie `empfehlungen`, aber für den Stand vor den Begehungen.
+
+    ``vorher`` kommt aus `fehlerklassen.bewerten` mit den Werten aus der Kreuzvalidierung für
+    begangene Zähler (das Modell hat sie beim Lernen nicht gesehen), ``fehlerbild`` ist
+    Ivelinas Fehlerbild im Winter 23/24, ``grund`` der Sonderfall-Grund in diesem Winter.
+    Rückgabe mit den Spaltennamen aus ``VOR_SPALTEN``.
+    """
+    st = vorher[["klasse", "p_ventil", "p_daemmung", "auslastung", "hinweis_daemmung",
+                 "hinweis_vertrag"]].copy()
+    st["netz_fehlerbild"] = fehlerbild.reindex(st.index).fillna("")
+    st["sommer_durchlauf_anteil"] = kz_vor["sommer_durchlauf_anteil"].reindex(st.index)
+    st["sonderfall_grund"] = grund.reindex(st.index).fillna("")
+    st["sonderfall"] = st["sonderfall_grund"] != ""
+    aus = st.join(empfehlungen(st))
+    return aus[list(VOR_SPALTEN)].rename(columns=VOR_SPALTEN)
 
 
 #Maßnahmen aus den Begehungen (Notebook 18), so wie sie im Protokoll stehen
@@ -475,17 +527,16 @@ def rechne(ausgabe: Path = AUSGABE, stunden: Optional[pd.DataFrame] = None,
     status = sbl.statustabelle(netz).set_index("meter")
     #Sonderfall: Werte außerhalb des Lernbereichs (NB 22, Abschnitt 8) oder ein
     #Volumen, das für eine Hausstation nicht passt (NB 22: 81050517, 81062289)
-    w = stunden[(stunden["timestamp"] >= winter[0]) & (stunden["timestamp"] < winter[1])]
-    anteil = w.groupby("zaehler")["durchfluss"].sum()
-    anteil = (anteil / anteil.sum()).reindex(aktuell.index).fillna(0)
-    grund = pd.Series("", index=aktuell.index)
-    ausserhalb = aktuell["kennzahlen_ausserhalb"] >= SONDERFALL_KENNZAHLEN
-    grund[ausserhalb] = aktuell.loc[ausserhalb, "kennzahlen_ausserhalb"].map(
-        lambda n: f"{int(n)} Kennzahlen außerhalb des Lernbereichs")
-    gross = anteil > SONDERFALL_VOLUMENANTEIL
-    grund[gross] = [(g + "; " if g else "") + f"{a:.0%} des Netzvolumens im Winter"
-                    for g, a in zip(grund[gross], anteil[gross])]
+    grund, _ = sonderfall_gruende(aktuell, stunden, winter)
     sonderfall = grund != ""
+    #derselbe Stand vor den Begehungen, mit Ivelinas Fehlerbild aus Winter 23/24
+    vor_tab = None
+    if vorher is not None:
+        fb = ab.fehlerbild_je_winter(netz["markiert"], list(netz["kennzahlen"]))
+        fb = fb[fb["winter"] == winter_name(fk.WINTER)]
+        fb = fb.assign(meter=fb["meter"].astype(int)).set_index("meter")["fehlerbild"]
+        grund_vor, _ = sonderfall_gruende(vorher, stunden, fk.WINTER)
+        vor_tab = empfehlungen_vor_begehung(vorher, kz_vor, fb, grund_vor)
     pot_tab, pot = potenzial_netz(kz_akt, aktuell, stunden, winter, sonderfall)
 
     log("5/5 Empfehlungen, Netzeffizienz, Tabellen schreiben ...")
@@ -533,6 +584,8 @@ def rechne(ausgabe: Path = AUSGABE, stunden: Optional[pd.DataFrame] = None,
     st["letzter_alarm"] = alarme.groupby("zaehler")["datum"].max().reindex(st.index)
     st["datenende"] = stunden.groupby("zaehler")["timestamp"].max().reindex(st.index)
     st = st.join(empfehlungen(st))
+    if vor_tab is not None:
+        st = st.join(vor_tab)
     labels = (pd.read_csv(PROCESSED / "modell_labels.csv", index_col="zaehler")
               if (PROCESSED / "modell_labels.csv").exists() else None)
     st = st.join(wissensstand(st, labels, e["termine"]))
@@ -573,6 +626,12 @@ def rechne(ausgabe: Path = AUSGABE, stunden: Optional[pd.DataFrame] = None,
                         "vertrag": fk_paket["parameter"].get("vertrag_grenze")},
             "potenzial": pot,
             "stationen": int(len(st)),
+            "vorher": None if vor_tab is None else {
+                "name": "vor den Begehungen", "winter_name": winter_name(fk.WINTER),
+                "wechsel": WECHSEL_VOR_BEGEHUNG,
+                "grundlage": "Winter 23/24 und Sommer 2024, nur Tage vor der ersten Begehung; "
+                             "für begangene Zähler der Wert aus der Kreuzvalidierung",
+                "dringlichkeit": st["dringlichkeit_vor"].value_counts().to_dict()},
             "dringlichkeit": st["dringlichkeit"].value_counts().to_dict(),
             "klassen": st["klasse"].value_counts().to_dict()}
     (ausgabe / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False, default=str),

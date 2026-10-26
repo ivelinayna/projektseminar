@@ -130,3 +130,29 @@ def test_netz_wochenstatus():
     assert w1.loc[2, "status"] == "Verbesserung"
     assert w1.loc[3, "status"] == "überwacht, kein Alarm"
     assert (s[s["woche"] == "2025-02-03"]["status"] == "keine Daten").all()
+
+
+def test_sonderfall_gruende_kennzahlen_und_volumen():
+    klassen = pd.DataFrame({"kennzahlen_ausserhalb": [0, 3, 0]}, index=[1, 2, 3])
+    ts = pd.date_range("2023-12-01", periods=48, freq="h")
+    stunden = pd.concat([pd.DataFrame({"zaehler": z, "timestamp": ts, "durchfluss": f})
+                         for z, f in ((1, 10.0), (2, 10.0), (3, 200.0))])
+    grund, anteil = dd.sonderfall_gruende(klassen, stunden, ("2023-10-01", "2024-04-01"))
+    assert grund[1] == ""
+    assert grund[2] == "3 Kennzahlen außerhalb des Lernbereichs"
+    assert "des Netzvolumens im Winter" in grund[3] and anteil[3] > 0.9
+
+
+def test_empfehlungen_vor_begehung_gleiche_logik():
+    vorher = pd.DataFrame({"klasse": ["Regelventil tauschen", "Regelventil tauschen", "kein Handlungsbedarf"],
+                           "p_ventil": [0.9, 0.7, 0.1], "p_daemmung": [0.2, 0.6, 0.1], "auslastung": [0.9, 0.9, 0.5],
+                           "hinweis_daemmung": [False, True, False], "hinweis_vertrag": [False, False, True]},
+                          index=[11, 12, 13])
+    kz_vor = pd.DataFrame({"sommer_durchlauf_anteil": [1.0, 0.8, 0.0]}, index=[11, 12, 13])
+    fb = pd.Series({11: "ventil", 12: ""})
+    t = dd.empfehlungen_vor_begehung(vorher, kz_vor, fb, pd.Series("", index=[11, 12, 13]))
+    assert set(dd.VOR_SPALTEN.values()) <= set(t.columns)
+    assert t.loc[11, "dringlichkeit_vor"] == "hoch" and t.loc[12, "dringlichkeit_vor"] == "mittel"
+    assert t.loc[13, "dringlichkeit_vor"] == "niedrig"
+    assert list(t.sort_values("rang_vor").index) == [11, 12, 13]
+    assert "Durchfluss in 100% der Sommernächte" in t.loc[11, "begruendung_vor"]

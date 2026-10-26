@@ -111,3 +111,17 @@ def test_karten_daten_und_abgleich():
 def test_lade_meldet_fehlende_tabellen(tmp_path):
     with pytest.raises(FileNotFoundError, match="dashboard_daten"):
         dk.lade(tmp_path)
+
+
+def test_eintrag_mit_stand_vor_den_begehungen():
+    e = dk.eintrag(station())
+    assert e["vor"] is None, "ohne Spalten _vor kein Stand davor"
+    z = station(dringlichkeit_vor="mittel", handlung_vor="Reparatur: Regelventil tauschen", rang_vor=4,
+                begruendung_vor="Ventilverdacht (Score 0,82)", p_ventil_vor_begehung=0.82,
+                sommer_durchlauf_anteil_vor=0.9, hinweis_daemmung_vor=False, hinweis_vertrag_vor=np.nan,
+                netz_fehlerbild_vor="", sonderfall_grund_vor="", auslastung_vor=0.8, p_daemmung_vor_begehung=0.3)
+    e = dk.eintrag(z)
+    json.dumps(e)
+    assert e["vor"]["dr"] == 2 and e["vor"]["rang"] == 4 and e["vor"]["ma"] == ["reparatur"]
+    assert e["vor"]["ventil"] == "Verdacht" and e["vor"]["kapazitaet"] is False
+    assert dk.haus([e["vor"]]) == {"dr": 2, "ma": "reparatur", "po": 0}

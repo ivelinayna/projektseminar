@@ -155,3 +155,20 @@ def test_waechter_zusammen_zaehlt_oder():
     q = fv.waechter_zusammen(pd.DataFrame(zeilen), "ivelina", "lstm_c", "Winter")
     assert q.loc["Sprung", "zusammen"] == 1.0 and q.loc["Sprung", "ivelina"] == 0.5
     assert q.loc["ohne Fehler", "zusammen"] == 0.5 and q.loc["ohne Fehler", "Fälle"] == 2
+
+
+def test_waehle_kandidat_hoechste_auc_und_einfacher_bei_gleichstand():
+    assert fv.waehle_kandidat({"LR Kennzahlen": 0.7, "LR Kennzahlen + LSTM": 0.8}) == "LR Kennzahlen + LSTM"
+    assert fv.waehle_kandidat({"LR Kennzahlen + LSTM": 0.8, "LR Kennzahlen": 0.8}) == "LR Kennzahlen"
+    assert fv.waehle_kandidat({"LR Kennzahlen": np.nan, "XGBoost Kennzahlen": 0.6}) == "XGBoost Kennzahlen"
+
+
+def test_innen_auc_sieht_nur_den_lernteil():
+    rng = np.random.default_rng(0)
+    n = 60
+    y = np.r_[np.ones(15), np.zeros(45)].astype(int)
+    X = pd.DataFrame({"a": y * 2.0 + rng.normal(0, 0.5, n), "b": rng.normal(0, 1, n)})
+    g = np.arange(n)
+    assert fv.innen_auc("LR Kennzahlen", X, y, g) > 0.9
+    X_zufall = pd.DataFrame({"a": rng.normal(0, 1, n), "b": rng.normal(0, 1, n)})
+    assert fv.innen_auc("LR Kennzahlen", X_zufall, y, g) < 0.8

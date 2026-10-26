@@ -2033,3 +2033,115 @@ def merkmalssaetze_vergleich(X: pd.DataFrame, oof: pd.DataFrame, gruppen: pd.Ser
             zeilen.append({"Fehlerart": ziel, "Kennzahlen": name, "Anzahl": len(spalten),
                            "AUC": roc_auc_score(y, p), **vierfeld(y, p >= GRENZE)})
     return pd.DataFrame(zeilen)
+
+
+# --- Modellwahl im Lernteil (Notebook 34, Abschnitt 16) -------------------------
+
+#bei gleicher AUC im Lernteil gewinnt der einfachere Kandidat
+EINFACHHEIT = ["LR Kennzahlen", "LR nur LSTM-Embedding", "LR Kennzahlen + LSTM",
+               "XGBoost Kennzahlen", "XGBoost Kennzahlen + LSTM"]
+
+
+def waehle_kandidat(innen: Mapping[str, float], reihenfolge: Sequence[str] = EINFACHHEIT) -> str:
+    """Kandidat mit der höchsten AUC im Lernteil, bei Gleichstand der einfachere."""
+    gueltig = {k: float(v) for k, v in innen.items() if v is not None and np.isfinite(v)}
+    if not gueltig:
+        raise ValueError("kein Kandidat mit gültiger AUC im Lernteil")
+    beste = max(gueltig.values())
+    for k in list(reihenfolge) + sorted(gueltig):
+        if k in gueltig and gueltig[k] >= beste - 1e-9:
+            return k
+    raise AssertionError("nicht erreichbar")
+
+
+def innen_auc(name: str, X: pd.DataFrame, y, gruppen, n_innen: int = 4, seed: int = SEED) -> float:
+    """AUC eines Kandidaten nur auf den Lernstationen: innere Kreuzvalidierung über Stationsgruppen.
+
+    Jeder innere Durchgang sucht sein Raster wieder nur in seinem eigenen Lernteil (`innen_suchen`).
+    """
+    from sklearn.metrics import roc_auc_score
+    from sklearn.model_selection import StratifiedGroupKFold
+    y = np.asarray(y, dtype=int)
+    g = np.asarray(gruppen)
+    n_pos = int(y.sum())
+    k = max(2, min(n_innen, n_pos, len(y) - n_pos))
+    p = np.full(len(y), np.nan)
+    for tr, te in StratifiedGroupKFold(k, shuffle=True, random_state=seed).split(X, y, g):
+        if len(np.unique(y[tr])) < 2:
+            continue
+        p[te] = innen_suchen(name, X.iloc[tr], y[tr], g[tr]).predict_proba(X.iloc[te])[:, 1]
+    ok = np.isfinite(p)
+    return float(roc_auc_score(y[ok], p[ok])) if len(np.unique(y[ok])) == 2 else np.nan
+
+
+def modellwahl_verschachtelt(e: dict, oof: pd.DataFrame, ziele: Sequence[str] = ("ventil", "daemmung"),
+                             kandidaten: Optional[Sequence[str]] = None, seed: int = SEED, log=print) -> dict:
+    """Test C, aber auch die Wahl zwischen den Kandidaten passiert nur im Lernteil.
+
+    In Test C wurde jeder Kandidat sauber außerhalb des Folds bewertet, der beste für das Dashboard aber
+    anhand derselben Testwerte gewählt. Hier entscheidet in jedem Durchgang eine innere Kreuzvalidierung
+    auf den Lernstationen, welcher Kandidat genommen wird; erst dann wird auf den Teststationen gemessen.
+    Folds, Stationen und LSTM-Encoder (ohne Teststationen und ohne unbegangene Stationen, gleiche Startwerte)
+    wie Test C. Zum Abgleich wird die feste Wahl „LR Kennzahlen + LSTM“ im selben Durchgang nachgerechnet.
+    """
+    st, labels, gruppen = e["stunden"], e["labels"], e["gruppen"]
+    kz = kennzahlen_vor_begehung(st, labels)
+    feld = fk._tagesfeld(st)
+    aussen = [int(m) for m in st["zaehler"].unique() if int(m) not in set(labels.index)]
+    kandidaten = [k for k in (kandidaten or list(MERKMALSSAETZE))
+                  if not (k.startswith("XGBoost") and XGBAusgeglichen is None)]
+    folds = oof.groupby("zaehler")["fold"].first()
+    ids = folds.index
+    fest_name = "LR Kennzahlen + LSTM"
+    zeilen, wahl = [], []
+    for k in sorted(folds.unique()):
+        test_ids = [int(z) for z in ids[folds.to_numpy() == k]]
+        enc = embedding_lernen(st, labels, ohne=test_ids + aussen, seed=100 * seed + int(k), feld=feld, log=log)
+        X = kz.reindex(ids)[KENNZAHLEN].join(enc["embedding"].reindex(ids))
+        for ziel in ziele:
+            o = oof[oof["ziel"] == ziel]
+            fz = o.groupby("zaehler")["fold"].first()
+            yz = o.groupby("zaehler")["y"].first()
+            tr, te = fz.index[fz.to_numpy() != k], fz.index[fz.to_numpy() == k]
+            if len(te) == 0:
+                continue
+            y_tr = yz.reindex(tr).to_numpy().astype(int)
+            g_tr = gruppen.reindex(tr).to_numpy()
+            innen = {n: innen_auc(n, X.loc[tr, MERKMALSSAETZE[n]], y_tr, g_tr, seed=seed) for n in kandidaten}
+            gewaehlt = waehle_kandidat(innen)
+            p = innen_suchen(gewaehlt, X.loc[tr, MERKMALSSAETZE[gewaehlt]], y_tr, g_tr).predict_proba(
+                X.loc[te, MERKMALSSAETZE[gewaehlt]])[:, 1]
+            p_fest = innen_suchen(fest_name, X.loc[tr, MERKMALSSAETZE[fest_name]], y_tr, g_tr).predict_proba(
+                X.loc[te, MERKMALSSAETZE[fest_name]])[:, 1]
+            zeilen += [{"zaehler": int(z), "fold": int(k), "ziel": ziel, "gewaehlt": gewaehlt, "p": float(a),
+                        "p_fest_nachgerechnet": float(b), "y": int(yz[z])} for z, a, b in zip(te, p, p_fest)]
+            wahl.append({"fold": int(k), "ziel": ziel, "gewaehlt": gewaehlt,
+                         **{f"AUC im Lernteil: {n}": v for n, v in innen.items()}})
+        log(f"Durchgang {int(k) + 1} von {folds.nunique()} fertig")
+    return {"oof": pd.DataFrame(zeilen), "wahl": pd.DataFrame(wahl)}
+
+
+def modellwahl_auswerten(mw: dict, oof: pd.DataFrame, gruppen: pd.Series, n: int = 2000) -> pd.DataFrame:
+    """Verschachtelte Modellwahl gegen die feste Wahl aus Test C und (beim Ventil) die Sommernacht-Regel."""
+    zeilen = []
+    for ziel, t in mw["oof"].groupby("ziel", sort=False):
+        t = t.set_index("zaehler")
+        y = t["y"].to_numpy().astype(int)
+        g = gruppen.reindex(t.index).to_numpy()
+        o = oof[oof["ziel"] == ziel].pivot_table(index="zaehler", columns="kandidat", values="p").reindex(t.index)
+        varianten = [("Modellwahl im Lernteil (verschachtelt)", t["p"]),
+                     ("LR Kennzahlen + LSTM, fest gewählt (Test C)", o["LR Kennzahlen + LSTM"])]
+        if ziel == "ventil":
+            varianten.append(("Regel Sommernacht-Anteil (ohne Lernen)", o["Regel Sommernacht-Anteil"]))
+        for name, p in varianten:
+            p = p.to_numpy(dtype=float)
+            auc, lo, hi = bootstrap_auc(y, p, g, n=n)
+            v = vierfeld(y, p >= GRENZE)
+            zeile = {"Fehlerart": ziel, "Verfahren": name, "AUC": auc, "unten": lo, "oben": hi,
+                     "gefunden": v["gefunden"], "übersehen": v["übersehen"], "Fehlalarm": v["Fehlalarm"],
+                     "Befunde unter den ersten 10": int(y[np.argsort(-p, kind="stable")[:10]].sum())}
+            if name.startswith("Modellwahl"):
+                d, dlo, dhi = bootstrap_auc_differenz(y, p, o["LR Kennzahlen + LSTM"].to_numpy(dtype=float), g, n=n)
+                zeile.update({"gegen feste Wahl": d, "Diff. unten": dlo, "Diff. oben": dhi})
+            zeilen.append(zeile)
+    return pd.DataFrame(zeilen)
