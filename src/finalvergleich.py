@@ -965,9 +965,9 @@ def bootstrap_auc(y, score, gruppen=None, n: int = 2000, seed: int = SEED) -> Tu
             float(np.quantile(werte, 0.975)))
 
 
-def bootstrap_auc_differenz(y, a, b, gruppen=None, n: int = 2000, seed: int = SEED
-                            ) -> Tuple[float, float, float]:
-    """AUC(a) - AUC(b) auf denselben Stationen, gepaartes Intervall."""
+def bootstrap_auc_differenzen(y, a, b, gruppen=None, n: int = 2000, seed: int = SEED
+                              ) -> Tuple[float, np.ndarray]:
+    """AUC(a) - AUC(b) und alle gezogenen Differenzen, gezogen werden ganze Gruppen."""
     from sklearn.metrics import roc_auc_score
     y, a, b = (np.asarray(y, dtype=int), np.asarray(a, dtype=float), np.asarray(b, dtype=float))
     ok = np.isfinite(a) & np.isfinite(b)
@@ -980,8 +980,14 @@ def bootstrap_auc_differenz(y, a, b, gruppen=None, n: int = 2000, seed: int = SE
         i = np.concatenate([einheiten[j] for j in rng.integers(0, len(einheiten), len(einheiten))])
         if 0 < y[i].sum() < len(i):
             werte.append(roc_auc_score(y[i], a[i]) - roc_auc_score(y[i], b[i]))
-    d = roc_auc_score(y, a) - roc_auc_score(y, b)
-    return float(d), float(np.quantile(werte, 0.025)), float(np.quantile(werte, 0.975))
+    return float(roc_auc_score(y, a) - roc_auc_score(y, b)), np.asarray(werte)
+
+
+def bootstrap_auc_differenz(y, a, b, gruppen=None, n: int = 2000, seed: int = SEED
+                            ) -> Tuple[float, float, float]:
+    """AUC(a) - AUC(b) auf denselben Stationen, gepaartes Intervall."""
+    d, werte = bootstrap_auc_differenzen(y, a, b, gruppen, n, seed)
+    return d, float(np.quantile(werte, 0.025)), float(np.quantile(werte, 0.975))
 
 
 def bootstrap_anteil(werte, gruppen=None, n: int = 2000, seed: int = SEED
@@ -1902,3 +1908,128 @@ def sommer_lstm_pruefen(w: dict, e: dict, st: dict, log=print) -> dict:
                       "Fehlalarmquote": sauber.reindex(idx).mean(), "Fälle": len(g)})
     return {"kurve": pd.DataFrame(kurve), "lernkurve": gs["lernkurve"], "lern_ziele": gs["lern_ziele"],
             "pruef_ziele": gs["val_ziele"], "kalibriert": int(len(kal))}
+
+
+# --- Mehrwert der KI gegenüber Regeln (Abschnitt 15) ------------------------
+
+REGEL_ANGEPASST = "Regel angepasst (beste Kennzahl im Lernteil)"
+
+
+def regel_angepasst(kz: pd.DataFrame, oof: pd.DataFrame, ziele: Sequence[str],
+                    kennzahlen: Sequence[str] = KENNZAHLEN) -> pd.DataFrame:
+    """Die beste einzelne Kennzahl als Regel, genauso an die Befunde angepasst wie die KI.
+
+    Stationen und Folds kommen aus ``oof`` (Test C). In jedem Lernteil wird die Kennzahl samt
+    Richtung gewählt, die die Befunde dort am besten trennt (AUC). Im Testteil wird sie als Rang
+    unter den Lernwerten angewendet, damit Werte aus verschiedenen Folds vergleichbar sind.
+    Rückgabe im Format von ``oof``; ``parameter`` nennt die gewählte Kennzahl.
+    """
+    from sklearn.metrics import roc_auc_score
+    zeilen = []
+    for ziel in ziele:
+        o = oof[oof["ziel"] == ziel]
+        folds = o.groupby("zaehler")["fold"].first()
+        y = o.groupby("zaehler")["y"].first().reindex(folds.index).to_numpy().astype(int)
+        X = kz.reindex(folds.index)
+        f_arr = folds.to_numpy()
+        for k in sorted(folds.unique()):
+            tr, te = f_arr != k, f_arr == k
+            beste, wert = None, -1.0
+            for f in kennzahlen:
+                x = X[f].to_numpy(dtype=float)[tr]
+                ok = np.isfinite(x)
+                if ok.sum() < 10 or len(np.unique(y[tr][ok])) < 2:
+                    continue
+                a = roc_auc_score(y[tr][ok], x[ok])
+                for richtung, auc in ((1, a), (-1, 1 - a)):
+                    if auc > wert:
+                        beste, wert = (f, richtung), auc
+            if beste is None:
+                continue
+            f, richtung = beste
+            lern = richtung * X[f].to_numpy(dtype=float)[tr]
+            lern = np.sort(lern[np.isfinite(lern)])
+            t = richtung * X[f].to_numpy(dtype=float)[te]
+            t = np.where(np.isfinite(t), t, np.median(lern))
+            p = np.searchsorted(lern, t, side="right") / len(lern)
+            text = f"{f} ({'groß' if richtung > 0 else 'klein'} = Befund)"
+            zeilen += [{"zaehler": int(z), "fold": int(k), "ziel": ziel, "kandidat": REGEL_ANGEPASST,
+                        "p": float(pi), "y": int(yi), "parameter": text}
+                       for z, pi, yi in zip(folds.index[te], p, y[te])]
+    return pd.DataFrame(zeilen)
+
+
+def ki_gegen_regel(oof: pd.DataFrame, regel: pd.DataFrame, gruppen: pd.Series, ziele: Sequence[str],
+                   ki: str = "LR Kennzahlen + LSTM", n: int = 2000) -> pd.DataFrame:
+    """AUC der angepassten Regel, der Regression auf Kennzahlen und der KI je Fehlerart.
+
+    Die Differenz KI minus Regel hat ein gepaartes Intervall, gezogen werden ganze Stationsgruppen
+    wie in den übrigen Tests.
+    """
+    from sklearn.metrics import roc_auc_score
+    zeilen = []
+    for ziel in ziele:
+        b = pd.concat([oof[oof["ziel"] == ziel], regel[regel["ziel"] == ziel]])
+        breit = b.pivot_table(index="zaehler", columns="kandidat", values="p").join(
+            b.groupby("zaehler")["y"].first())
+        y = breit["y"].to_numpy(dtype=int)
+        g = gruppen.reindex(breit.index).to_numpy()
+        d, werte = bootstrap_auc_differenzen(y, breit[ki], breit[REGEL_ANGEPASST], g, n=n)
+        lo, hi = float(np.quantile(werte, 0.025)), float(np.quantile(werte, 0.975))
+        zeilen.append({"Fehlerart": ziel, "Befunde": int(y.sum()), "Stationen": len(y),
+                       "Regel angepasst": roc_auc_score(y, breit[REGEL_ANGEPASST]),
+                       "LR Kennzahlen": roc_auc_score(y, breit["LR Kennzahlen"]),
+                       "KI (LR Kennzahlen + LSTM)": roc_auc_score(y, breit[ki]),
+                       "KI − Regel": d, "unten": lo, "oben": hi, "KI vorn in": float(np.mean(werte > 0)),
+                       "gesichert": bool(lo > 0 or hi < 0),
+                       "Regel nutzt": ", ".join(sorted(set(regel.loc[regel["ziel"] == ziel, "parameter"])))})
+    return pd.DataFrame(zeilen)
+
+
+def waechter_zusammen(faelle: pd.DataFrame, a: str, b: str, saison: str) -> pd.DataFrame:
+    """Treffer- und Fehlalarmquote zweier Wächter einzeln und zusammen (Meldung, wenn einer meldet).
+
+    ``faelle`` wie in Test B: je Station, Saison, Fehlerart und Wächter eine Zeile mit ``alarm``.
+    Gezählt werden nur Fälle, die beide Wächter bewerten. Die Zeile „ohne Fehler“ ist die
+    Fehlalarmquote.
+    """
+    f = faelle[(faelle["saison"] == saison) & faelle["key"].isin([a, b]) & faelle["bewertbar"]]
+    t = (f.pivot_table(index=["zaehler", "art"], columns="key", values="alarm", aggfunc="first")
+         .dropna().astype(bool))
+    t["zusammen"] = t[a] | t[b]
+    quote = t.groupby(level="art")[[a, b, "zusammen"]].mean()
+    return quote.assign(Fälle=t.groupby(level="art").size())
+
+
+def ivelina_kennzahlen(netz: dict, winter: str) -> pd.DataFrame:
+    """Ivelinas 5 Kennzahlen je Station für einen Kernwinter (Rohwerte aus dem Netzvergleich)."""
+    t = netz["tabelle"]
+    t = t[t["winter"] == winter].assign(meter=lambda d: d["meter"].astype(int)).set_index("meter")
+    return t[list(nv.KENNZAHLEN)]
+
+
+def merkmalssaetze_vergleich(X: pd.DataFrame, oof: pd.DataFrame, gruppen: pd.Series,
+                             saetze: Mapping[str, Sequence[str]], ziele: Sequence[str]) -> pd.DataFrame:
+    """Dieselbe logistische Regression auf verschiedenen Kennzahlen, Folds und Stationen wie Test C.
+
+    Jeder Name in ``saetze`` muss mit „LR“ beginnen (Pipeline aus `kandidat`); das Raster wird nur
+    im inneren Lernteil gesucht.
+    """
+    from sklearn.metrics import roc_auc_score
+    zeilen = []
+    for ziel in ziele:
+        o = oof[oof["ziel"] == ziel]
+        folds = o.groupby("zaehler")["fold"].first()
+        y = o.groupby("zaehler")["y"].first().reindex(folds.index).to_numpy().astype(int)
+        g = gruppen.reindex(folds.index).to_numpy()
+        f_arr = folds.to_numpy()
+        for name, spalten in saetze.items():
+            Xs = X.reindex(folds.index)[list(spalten)]
+            p = np.full(len(y), np.nan)
+            for k in sorted(folds.unique()):
+                tr, te = np.flatnonzero(f_arr != k), np.flatnonzero(f_arr == k)
+                suche = innen_suchen(name, Xs.iloc[tr], y[tr], g[tr])
+                p[te] = suche.predict_proba(Xs.iloc[te])[:, 1]
+            zeilen.append({"Fehlerart": ziel, "Kennzahlen": name, "Anzahl": len(spalten),
+                           "AUC": roc_auc_score(y, p), **vierfeld(y, p >= GRENZE)})
+    return pd.DataFrame(zeilen)
