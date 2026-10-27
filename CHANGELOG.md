@@ -6,6 +6,18 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Geändert (Fehlerart mit LR nur auf dem LSTM-Embedding, 2026-10-27)
+
+- `src/finalvergleich.py`: neue Konstante `ENDMODELL = "LR nur LSTM-Embedding"`. Paket `fehlerklassen`,
+  `ki_gegen_regel` (Spalte jetzt „KI“) und die feste Wahl in der verschachtelten Modellwahl nutzen sie statt
+  „LR Kennzahlen + LSTM“. Folie und Dashboard zeigen damit dasselbe Modell. Zurück: Konstante ändern, Notebook 34
+  neu rechnen.
+- `src/fehlerklassen.bewerten`: Scores als float64 (nur mit Embedding kam float32 heraus, die Werte aus der
+  Kreuzvalidierung ließen sich dann nicht einsetzen).
+- Notebook 34 neu gerechnet, Pakete `nb34_2026-10-27_121626` aktiv (vorher `nb34_2026-10-25_121559`). Ventil
+  Test C: AUC 0,83, 8 von 11 bei 4 Fehlalarmen; Dämmung 0,79, 15 von 22 bei 7 Fehlalarmen; Test E 7 von 10.
+- Zahlen in `dashboard_daten.empfehlungen` und „So funktioniert's“ (`notebooks/dashboard_final.py`) angepasst.
+
 ### Hinzugefügt (Modellvergleich aller Modelle und Modellpakete, 2026-10-24)
 
 - `notebooks/32_modellvergleich.ipynb` mit `src/pruefstand.py`: alle Modelle des
