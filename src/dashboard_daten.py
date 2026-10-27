@@ -193,11 +193,11 @@ def empfehlungen(st: pd.DataFrame) -> pd.DataFrame:
     - hoch: Reparatur, bestätigt durch Ivelinas Fehlerbild „ventil“
       (Test C: 4 von 4 richtig)
     - mittel: Reparatur nur nach dem Ventil-Score des LSTM-Modells
-      (Test C mit Modellwahl im Lernteil: 8 von 11 gefunden bei 5 Fehlalarmen)
+      (LR nur auf dem LSTM-Embedding, Test C: 8 von 11 gefunden bei 4 Fehlalarmen)
     - niedrig: nur Kapazität, Dämmung (Hinweis) oder Daten prüfen
 
     Innerhalb der Stufe nach Ventil-Score (Test E: unter den ersten 10 nach
-    Score hatten 8 einen Ventilbefund, Zufall etwa 2).
+    Score hatten 7 einen Ventilbefund, Zufall etwa 2).
 
     Bewusst nicht dabei, weil die Prüfung es nicht trägt:
 

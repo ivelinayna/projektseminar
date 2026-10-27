@@ -522,19 +522,19 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
             <td>Pilot mit Einschränkungen. Eine pendelnde Regelung (Hysterese) findet kein Wächter.</td></tr>
           <tr><td><b>Ist das Regelventil offen?</b><br><span class="muted">Klassifizierung → Reparatur</span></td>
             <td>Färbung „Maßnahme“, Hausfenster „Verdacht“</td>
-            <td>Modell LSTM: Kennzahlen und LSTM-Zusammenfassung, logistische Regression, nur auf begangenen Stationen gelernt.
+            <td>Modell LSTM: logistische Regression nur auf der LSTM-Zusammenfassung (16 Zahlen), nur auf begangenen Stationen gelernt.
               Bestätigung durch Ivelinas Fehlerbild „ventil“.</td>
-            <td>Sauber gerechnet, also auch die Wahl des Modells ohne die Teststationen: AUC 0,84, findet 8 von 11 Ventilfällen
-              bei 5 Fehlalarmen (Notebook 34, Abschnitt 16). Die einfache Regel „nachts im Sommer fließt Wasser“ ist genauso gut
-              (0,85). Ivelinas Fehlerbild ist 4 von 4 richtig, findet aber nur 4. Gewählt wurde das Modell, weil es in der
-              Validierung vorn liegt. Weil die Regel genauso gut und leicht verständlich ist, steht der Sommernacht-Anteil als
-              Erklärung daneben.</td>
+            <td>Test C (Kreuzvalidierung über Stationsgruppen): AUC 0,83, findet 8 von 11 Ventilfällen bei 4 Fehlalarmen
+              (Notebook 34). Mit der Wahl des Modells ohne die Teststationen kommt dasselbe heraus (0,84, Abschnitt 16). Die
+              einfache Regel „nachts im Sommer fließt Wasser“ ist genauso gut (0,85). Ivelinas Fehlerbild ist 4 von 4 richtig,
+              findet aber nur 4. Es ist dasselbe Modell wie auf der Folie. Weil die Regel genauso gut und leicht verständlich
+              ist, steht der Sommernacht-Anteil als Erklärung daneben.</td>
             <td>Pilot. Der Score ist eine Rangfolge, keine Wahrscheinlichkeit.</td></tr>
           <tr><td><b>Sind Leitungen ungedämmt?</b><br><span class="muted">Klassifizierung → Dämmung</span></td>
             <td>Färbung „Maßnahme“, Hausfenster „Verdacht“</td>
             <td>Modell LSTM: eigenes Dämmungsmodell, Hinweis ab Score <span class="g-daemmung"></span></td>
             <td>Keine einzelne Regel kommt über AUC 0,61, auch wenn man sie an den Befunden einstellt. Die KI findet ein Muster
-              aus mehreren Kennzahlen, sauber gerechnet 0,78. Der Vorsprung (+0,17) ist knapp nicht gesichert
+              in der LSTM-Zusammenfassung, Test C 0,79 (findet 15 von 22 bei 7 Fehlalarmen). Der Vorsprung (+0,18) ist knapp nicht gesichert
               (Notebook 34, Abschnitt 16b).</td>
             <td>Nur Hinweis: Was das Muster physikalisch bedeutet, ist offen, gedämmt wurde eher an Stationen, die im Winter gut
               laufen. Dämmung ist bei 41 % der begangenen Stationen eingetragen, entsprechend oft erscheint der Hinweis.</td></tr>
@@ -553,9 +553,9 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
             <td>Färbung „Dringlichkeit“, Reiter „Handlungsliste“</td>
             <td>Feste Regel auf den geprüften Ergebnissen oben</td>
             <td><b>hoch:</b> Reparatur, bestätigt durch Ivelinas Fehlerbild „ventil“ (4 von 4 richtig).
-              <b>mittel:</b> Reparatur nur nach dem Ventil-Score (sauber gerechnet 8 von 11 gefunden bei 5 Fehlalarmen).
+              <b>mittel:</b> Reparatur nur nach dem Ventil-Score (Test C: 8 von 11 gefunden bei 4 Fehlalarmen).
               <b>niedrig:</b> nur Kapazität, Dämmung (Hinweis) oder Daten prüfen. Innerhalb einer Stufe nach Ventil-Score:
-              Unter den ersten 10 nach Score hatten 8 einen Ventilbefund, Zufall wären etwa 2 (Notebook 34, Test E).</td>
+              Unter den ersten 10 nach Score hatten 7 einen Ventilbefund, Zufall wären etwa 2 (Notebook 34, Test E).</td>
             <td>Die Stufen sind gesetzt, nicht gelernt. Ob die Reihenfolge im Betrieb trägt, zeigt erst eine Begehung nach der
               Liste.</td></tr>
         </tbody>
