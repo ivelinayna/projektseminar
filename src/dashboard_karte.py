@@ -223,7 +223,30 @@ def eintrag(z: pd.Series, grenzen: Optional[dict] = None) -> dict:
             "veraenderung": _text(z.get("veraenderung")),
             "ursache": _text(z.get("vermutete_ursache")),
             "befund": _text(z.get("befund")) or "nie begangen",
-            "sonderfall": _text(z.get("sonderfall_grund"))}
+            "sonderfall": _text(z.get("sonderfall_grund")),
+            "vor": eintrag_vor(z, g)}
+
+
+def eintrag_vor(z: pd.Series, grenzen: Optional[dict] = None) -> Optional[dict]:
+    """Stand vor den Begehungen (Spalten mit ``_vor``), ``None`` ohne diesen Stand."""
+    if not _text(z.get("dringlichkeit_vor")):
+        return None
+    g = {**GRENZEN, **(grenzen or {})}
+    rang = _zahl(z.get("rang_vor"), 0)
+    return {"rang": int(rang) if rang is not None else None,
+            "dr": DRINGLICHKEIT.get(_text(z.get("dringlichkeit_vor")), 0),
+            "ma": massnahmen(z.get("handlung_vor")),
+            "empfehlung": _text(z.get("handlung_vor")) or "keine",
+            "warum": _text(z.get("begruendung_vor")),
+            "ventil": ventil_stufe(z.get("p_ventil_vor_begehung"), g["ventil"]),
+            "p_ventil": _zahl(z.get("p_ventil_vor_begehung")),
+            "sommernacht": _zahl(z.get("sommer_durchlauf_anteil_vor")),
+            "daemmung": _ja(z.get("hinweis_daemmung_vor")),
+            "p_daemmung": _zahl(z.get("p_daemmung_vor_begehung")),
+            "kapazitaet": _ja(z.get("hinweis_vertrag_vor")),
+            "auslastung": _zahl(z.get("auslastung_vor")),
+            "fehlerbild": _text(z.get("netz_fehlerbild_vor")),
+            "sonderfall": _text(z.get("sonderfall_grund_vor"))}
 
 
 def haus(eintraege: Iterable[dict]) -> Optional[dict]:
@@ -237,7 +260,7 @@ def haus(eintraege: Iterable[dict]) -> Optional[dict]:
         return None
     codes = {c for x in e for c in x["ma"]}
     ma = next((c for c in MASSNAHMEN.values() if c in codes), "keine")
-    po = max((POTENZIAL.get(x["potenzial"], 0) for x in e), default=0)
+    po = max((POTENZIAL.get(x.get("potenzial", ""), 0) for x in e), default=0)
     return {"dr": max(x["dr"] for x in e), "ma": ma, "po": po}
 
 
@@ -270,7 +293,8 @@ def karten_daten(daten: dict, start, ende) -> dict:
                      "datenende": _text(meta.get("datenende"))[:10], "pakete": meta.get("pakete", {}),
                      "grenzen": {**GRENZEN, **{k: v for k, v in (meta.get("grenzen") or {}).items()
                                                if v is not None}},
-                     "stationen": int(len(st))}}
+                     "stationen": int(len(st)),
+                     "vor": meta.get("vorher")}}
 
 
 def abgleich(karte_zaehler: Iterable, stationen: dict) -> dict:

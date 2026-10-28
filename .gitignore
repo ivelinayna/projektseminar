@@ -13,7 +13,7 @@ external/
 outputs/*
 !outputs/.gitkeep
 
-# Modellpakete (aus Firmendaten gelernt, enthalten Zaehlernummern)
+# Modellpakete fuer den Betrieb (aus Firmendaten gelernt, enthalten Zaehlernummern)
 models/*
 !models/README.md
 
@@ -62,3 +62,14 @@ CLAUDE.md
 
 # Lokaler Ablageordner, wird nie committet
 to_ignore/
+
+# Dashboard-HTML aus Notebook 25/35 enthält Adressen, nie hochladen
+notebooks/fernwaerme_dashboard*.html
+
+# Arbeitsdateien von Notebook 16/28/35 (Adressen, Koordinaten, Cache)
+notebooks/*.csv
+notebooks/*.ods
+notebooks/*.png
+notebooks/*.html
+notebooks/daten_cache/
+notebooks/*.geojson

@@ -6,6 +6,41 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Behoben (Datum in den Stundenkurven des Dashboards, 2026-10-28)
+
+- `zeit_parse` in Notebook 16 und 25 las die Zeitstempel aus Notebook 00 (`2024-11-05 10:00:00`) mit
+  `dayfirst=True`. Bei allen Tagen bis zum 12. waren dadurch Tag und Monat vertauscht, im Dashboard lagen etwa
+  bei 68956372 Vorlauf und Rücklauf am 01. bis 10.11.2024 wieder aufeinander. Zeitstempel mit Jahr vorne
+  werden jetzt als ISO-Datum gelesen.
+- Betroffen waren nur die Stundenkurven, Leitungen und die Gesamtleistung der Karte. Bewertung, Handlungsliste
+  und Meldungen kommen aus `src.dashboard_daten` und waren richtig. Nach der Korrektur haben alle 83 Reihen
+  dieselben Werte wie vorher, nur mit richtigem Datum.
+- Wer das Dashboard baut: Notebook 16 neu ausführen (schreibt `daten_cache/paket.pkl`), danach Notebook 35.
+
+### Hinzugefügt (Stand vor den Begehungen im Dashboard, 2026-10-27)
+
+- `src/dashboard_daten.py`: `empfehlungen_vor_begehung` und `sonderfall_gruende`. Für jeden Zähler steht neben
+  der aktuellen Empfehlung derselbe Stand mit Winter 23/24 und Sommer 2024 (Spalten `*_vor`); begangene Zähler
+  bekommen dafür den Wert aus der Kreuzvalidierung. `meta.json` hat dazu den Eintrag `vorher`.
+- `src/dashboard_karte.py`: `eintrag_vor`, die Einträge haben den Schlüssel `vor`.
+- `notebooks/dashboard_final.py`: Auswahl „Bewertung“ auf der Karte und in der Handlungsliste mit „Saison wie
+  Zeitregler“, „vor den Begehungen“ und „Stand heute“. Mit „Saison wie Zeitregler“ gilt bis zum 01.09.2024 der
+  Stand vor den Begehungen.
+- Notebook 34, Abschnitt 16: Modellwahl nur im Lernteil (`finalvergleich.waehle_kandidat`, `innen_auc`), damit
+  die Teststationen die Wahl nicht beeinflussen.
+
+### Geändert (Fehlerart mit LR nur auf dem LSTM-Embedding, 2026-10-27)
+
+- `src/finalvergleich.py`: neue Konstante `ENDMODELL = "LR nur LSTM-Embedding"`. Paket `fehlerklassen`,
+  `ki_gegen_regel` (Spalte jetzt „KI“) und die feste Wahl in der verschachtelten Modellwahl nutzen sie statt
+  „LR Kennzahlen + LSTM“. Folie und Dashboard zeigen damit dasselbe Modell. Zurück: Konstante ändern, Notebook 34
+  neu rechnen.
+- `src/fehlerklassen.bewerten`: Scores als float64 (nur mit Embedding kam float32 heraus, die Werte aus der
+  Kreuzvalidierung ließen sich dann nicht einsetzen).
+- Notebook 34 neu gerechnet, Pakete `nb34_2026-10-27_121626` aktiv (vorher `nb34_2026-10-25_121559`). Ventil
+  Test C: AUC 0,83, 8 von 11 bei 4 Fehlalarmen; Dämmung 0,79, 15 von 22 bei 7 Fehlalarmen; Test E 7 von 10.
+- Zahlen in `dashboard_daten.empfehlungen` und „So funktioniert's“ (`notebooks/dashboard_final.py`) angepasst.
+
 ### Hinzugefügt (Modellvergleich aller Modelle und Modellpakete, 2026-10-24)
 
 - `notebooks/32_modellvergleich.ipynb` mit `src/pruefstand.py`: alle Modelle des
