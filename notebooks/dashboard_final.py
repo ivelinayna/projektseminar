@@ -160,9 +160,13 @@ for n, n_js in zip(nodes, nodes_js):
     mit = [z for z in (meter[n]["zs"] if n in meter else []) if z in mst]
     n_js["st"] = mit
     n_js["hs"] = dk.haus(mst[z] for z in mit)
+    n_js["hs_vor"] = dk.haus(mst[z]["vor"] for z in mit if mst[z].get("vor"))
 zu_knoten = {z: nid[n] for n in meter for z in meter[n]["zs"]}
 reihe = sorted(mst.values(), key=lambda e: (e["rang"] is None, e["rang"] or 0))
 modell["liste"] = [[e["z"], zu_knoten.get(e["z"], -1)] for e in reihe]
+reihe_vor = sorted((e for e in mst.values() if e.get("vor")),
+                   key=lambda e: (e["vor"]["rang"] is None, e["vor"]["rang"] or 0))
+modell["liste_vor"] = [[e["z"], zu_knoten.get(e["z"], -1)] for e in reihe_vor]
 abgleich = dk.abgleich(zu_knoten, mst)
 
 # Startzeitpunkt: Werktag 8 Uhr im Winter mit möglichst vielen Zählern
@@ -283,6 +287,8 @@ payload = {"t0": idx[0].strftime("%Y-%m-%dT%H:%M"), "H": H, "M": M, "scale": lis
            "basis": HINTERGRUND, "bg": bg, "punkte": PUNKTE_ZEIGEN, "mt": MELDUNG_TAGE, "modell": modell,
            "b64": base64.b64encode(raw).decode("ascii")}
 daten = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+#wissensstand schreibt "Modell LSTM" in die Ursache, im Dashboard heißt es LSTM-Modell
+daten = daten.replace("Modell LSTM", "LSTM-Modell").replace("Modell Ivelina", "Modell Monitoring")
 
 VORLAGE = r"""<!doctype html>
 <html lang="de">
@@ -409,6 +415,11 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
           <option value="leist">Leistung</option>
         </optgroup>
       </select>
+      <select id="kStand" title="Welcher Stand der Bewertung auf Karte, Hausfenster und Liste gilt" aria-label="Stand der Bewertung">
+        <option value="auto">Bewertung: Saison wie Zeitregler</option>
+        <option value="vor">Bewertung: vor den Begehungen</option>
+        <option value="heute">Bewertung: Stand heute</option>
+      </select>
     </div>
   </div>
 
@@ -443,9 +454,16 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
   <section class="panel" id="vListe" aria-label="Handlungsliste">
     <div class="inner">
       <h2>Handlungsliste</h2>
-      <p class="muted">Alle Zähler mit Modellergebnis, die dringendsten zuerst. Stand: Winter <span class="g-winter"></span> mit dem Sommer danach.
+      <p class="muted">Alle Zähler mit Modellergebnis, die dringendsten zuerst. Stand: <b id="lStand"></b>.
+        <span id="lWechsel">Mit „Saison wie Zeitregler“ zeigt sie vor dem 01.09.2024 den Stand vor den Begehungen, danach den heutigen.
+          Die Saison lässt sich hier oder auf der Karte im Feld „Bewertung“ fest wählen, beide Felder sind gekoppelt.</span>
         „Karte“ zeigt das Haus. Warum eine Station hier steht, steht in der Spalte „Warum“. Wie die Reihenfolge entsteht, erklärt der Reiter „So funktioniert's“.</p>
       <div class="filter">
+        <select id="fStand" aria-label="Saison der Empfehlung">
+          <option value="auto">Saison wie Zeitregler</option>
+          <option value="vor">vor den Begehungen</option>
+          <option value="heute">Stand heute</option>
+        </select>
         <select id="fMass" aria-label="Maßnahme">
           <option value="">alle Maßnahmen</option>
           <option value="reparatur">Reparatur (Regelventil)</option>
@@ -454,6 +472,8 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
           <option value="daten">Daten prüfen</option>
         </select>
         <label><input type="checkbox" id="fAlle"> auch Zähler ohne Handlungsbedarf</label>
+        <button type="button" id="bVor">Stand vor den Begehungen</button>
+        <button type="button" id="bHeute">Stand heute</button>
         <span class="muted" id="lZahl"></span>
       </div>
       <div class="tabwrap">
@@ -473,9 +493,9 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
         kommt von dem Modell, das im Vergleich in Notebook 34 dafür am besten abgeschnitten hat. Kein Modell kann alles,
         deshalb arbeiten zwei Ansätze zusammen:</p>
       <ul>
-        <li><b>Modell Ivelina:</b> Jede Station hat eine Kennlinie über der Außentemperatur. Ein Konto (CUSUM) zählt, ob sie über
+        <li><b>Modell Monitoring:</b> Jede Station hat eine Kennlinie über der Außentemperatur. Ein Konto (CUSUM) zählt, ob sie über
           mehrere Tage davon wegläuft. Dazu wird jede Station mit allen anderen im selben Winter verglichen.</li>
-        <li><b>Modell LSTM:</b> Ein neuronales Netz sagt aus der letzten Woche voraus, wie der heutige Tag aussehen müsste. Ein
+        <li><b>LSTM-Modell:</b> Ein neuronales Netz sagt aus der letzten Woche voraus, wie der heutige Tag aussehen müsste. Ein
           zweites fasst jede Station in wenigen Zahlen zusammen. Daraus schätzt eine Regression die Fehlerart.</li>
       </ul>
 
@@ -499,14 +519,14 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
             <td>Messwert. Monate, in denen nur wenige Stationen Daten haben, sind markiert.</td></tr>
           <tr><td><b>Wie gut läuft eine Station im Vergleich, wo liegt Potenzial?</b><br><span class="muted">Datenanalyse, Visualisierung</span></td>
             <td>Färbung „Potenzial“, Hausfenster „Leistung im Netz“</td>
-            <td>Modell Ivelina: Netzvergleich je Winter (Notebook 20) und Abstand zum besten Viertel (Notebook 27)</td>
+            <td>Modell Monitoring: Netzvergleich je Winter (Notebook 20) und Abstand zum besten Viertel (Notebook 27)</td>
             <td>Nur der Vergleich mit den anderen Stationen sieht eine Station, die schon immer schlecht läuft. Ein Wächter, der
               jede Station mit sich selbst vergleicht, hält das für normal (Notebook 34, Test D).</td>
             <td>Beschreibt, wo die Station steht. Sagt keine Einsparung voraus.</td></tr>
           <tr><td><b>Hat sich an einer Station etwas verändert?</b><br><span class="muted">Anomalieerkennung</span></td>
             <td>Färbung „Meldungen“, Hausfenster „Veränderung“</td>
-            <td>An Heiztagen Modell Ivelina (Tagesmonitor: Kennlinie und CUSUM-Konto). An warmen Tagen und bei Stationen ohne
-              Referenz Modell LSTM (Prognose-LSTM mit CUSUM).</td>
+            <td>An Heiztagen Modell Monitoring (Tagesmonitor: Kennlinie und CUSUM-Konto). An warmen Tagen und bei Stationen ohne
+              Referenz das LSTM-Modell (Prognose-LSTM mit CUSUM).</td>
             <td>Der Tagesmonitor bemerkt echte Begehungen am deutlichsten (18 von 43 gegen 24 % an Vergleichsstationen) und
               findet im Winter eingebaute Fehler am besten (Rücklauf +5 K: 47 % gegen 33 %). An warmen Tagen rechnet er nicht.
               Dort findet das LSTM 78 % eines eingebauten Dauerdurchflusses bei 5 % Fehlalarmen, das Wochenmittel nur 45 %.
@@ -515,18 +535,20 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
             <td>Pilot mit Einschränkungen. Eine pendelnde Regelung (Hysterese) findet kein Wächter.</td></tr>
           <tr><td><b>Ist das Regelventil offen?</b><br><span class="muted">Klassifizierung → Reparatur</span></td>
             <td>Färbung „Maßnahme“, Hausfenster „Verdacht“</td>
-            <td>Modell LSTM: Kennzahlen und LSTM-Zusammenfassung, logistische Regression, nur auf begangenen Stationen gelernt.
-              Bestätigung durch Ivelinas Fehlerbild „ventil“.</td>
-            <td>AUC 0,88, findet 8 von 11 Ventilfällen bei 3 Fehlalarmen. Ivelinas Fehlerbild ist 4 von 4 richtig, findet aber nur
-              4. Die einfache Regel „nachts im Sommer fließt Wasser“ liegt mit 0,85 knapp dahinter. Deshalb steht der
-              Sommernacht-Anteil als Erklärung daneben.</td>
+            <td>LSTM-Modell: logistische Regression nur auf der LSTM-Zusammenfassung (16 Zahlen), nur auf begangenen Stationen gelernt.
+              Bestätigung durch das Fehlerbild „ventil“ aus Modell Monitoring.</td>
+            <td>Test C (Kreuzvalidierung über Stationsgruppen): AUC 0,83, findet 8 von 11 Ventilfällen bei 4 Fehlalarmen
+              (Notebook 34). Mit der Wahl des Modells ohne die Teststationen kommt dasselbe heraus (0,84, Abschnitt 16). Die
+              einfache Regel „nachts im Sommer fließt Wasser“ ist genauso gut (0,85). Das Fehlerbild aus Modell Monitoring ist 4 von 4 richtig,
+              findet aber nur 4. Es ist dasselbe Modell wie auf der Folie. Weil die Regel genauso gut und leicht verständlich
+              ist, steht der Sommernacht-Anteil als Erklärung daneben.</td>
             <td>Pilot. Der Score ist eine Rangfolge, keine Wahrscheinlichkeit.</td></tr>
           <tr><td><b>Sind Leitungen ungedämmt?</b><br><span class="muted">Klassifizierung → Dämmung</span></td>
             <td>Färbung „Maßnahme“, Hausfenster „Verdacht“</td>
-            <td>Modell LSTM: eigenes Dämmungsmodell, Hinweis ab Score <span class="g-daemmung"></span></td>
+            <td>LSTM-Modell: eigenes Dämmungsmodell, Hinweis ab Score <span class="g-daemmung"></span></td>
             <td>Keine einzelne Regel kommt über AUC 0,61, auch wenn man sie an den Befunden einstellt. Die KI findet ein Muster
-              aus mehreren Kennzahlen: 0,73, mit den LSTM-Zahlen 0,80. Der Vorsprung (+0,20) ist knapp nicht gesichert
-              (Notebook 34, Abschnitt 15).</td>
+              in der LSTM-Zusammenfassung, Test C 0,79 (findet 15 von 22 bei 7 Fehlalarmen). Der Vorsprung (+0,18) ist knapp nicht gesichert
+              (Notebook 34, Abschnitt 16b).</td>
             <td>Nur Hinweis: Was das Muster physikalisch bedeutet, ist offen, gedämmt wurde eher an Stationen, die im Winter gut
               laufen. Dämmung ist bei 41 % der begangenen Stationen eingetragen, entsprechend oft erscheint der Hinweis.</td></tr>
           <tr><td><b>Ist der Anschluss zu groß?</b><br><span class="muted">Klassifizierung → Kapazitätsanpassung</span></td>
@@ -543,10 +565,10 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
           <tr><td><b>Was soll zuerst gemacht werden?</b><br><span class="muted">Empfehlungssystem</span></td>
             <td>Färbung „Dringlichkeit“, Reiter „Handlungsliste“</td>
             <td>Feste Regel auf den geprüften Ergebnissen oben</td>
-            <td><b>hoch:</b> Reparatur, bestätigt durch Ivelinas Fehlerbild „ventil“ (4 von 4 richtig).
-              <b>mittel:</b> Reparatur nur nach dem Ventil-Score (8 von 11 gefunden bei 3 Fehlalarmen).
+            <td><b>hoch:</b> Reparatur, bestätigt durch das Fehlerbild „ventil“ aus Modell Monitoring (4 von 4 richtig).
+              <b>mittel:</b> Reparatur nur nach dem Ventil-Score (Test C: 8 von 11 gefunden bei 4 Fehlalarmen).
               <b>niedrig:</b> nur Kapazität, Dämmung (Hinweis) oder Daten prüfen. Innerhalb einer Stufe nach Ventil-Score:
-              Unter den ersten 10 nach Score hatten 8 einen Ventilbefund, Zufall wären etwa 2 (Notebook 34, Test E).</td>
+              Unter den ersten 10 nach Score hatten 7 einen Ventilbefund, Zufall wären etwa 2 (Notebook 34, Test E).</td>
             <td>Die Stufen sind gesetzt, nicht gelernt. Ob die Reihenfolge im Betrieb trägt, zeigt erst eine Begehung nach der
               Liste.</td></tr>
         </tbody>
@@ -556,7 +578,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
       <h3>Warum zwei Ansätze und nicht ein Modell für alles?</h3>
       <ul>
         <li>Keins der beiden Modelle ist allein besser. Sie können Verschiedenes (Notebook 34).</li>
-        <li>Wir haben ein LSTM gebaut, das genauso arbeitet wie Ivelinas Tagesmonitor: feste Referenz statt Vergleich mit der
+        <li>Wir haben ein LSTM gebaut, das genauso arbeitet wie der Tagesmonitor aus Modell Monitoring: feste Referenz statt Vergleich mit der
           Vorwoche. Es ist gleich gut wie die Kennlinie. Den Unterschied macht also die Bauweise, nicht der Modelltyp. Bei
           Gleichstand bleibt das einfachere Modell.</li>
         <li>Das Prognose-LSTM vergleicht jeden Tag mit der Woche davor. Es merkt plötzliche Sprünge, gewöhnt sich aber an
@@ -586,7 +608,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
         <li><b>Reihenfolge nach Potenzial:</b> Das Potenzial sagt nicht vorher, wo eine Begehung am meisten bringt (rho = 0,16).
           Es bleibt als Beschreibung auf der Karte.</li>
         <li><b>Stufe „hoch“ allein ab einem Ventil-Score von 0,8:</b> Diese Grenze ist nirgends geprüft. „Hoch“ gibt es nur mit
-          Bestätigung durch Ivelinas Fehlerbild.</li>
+          Bestätigung durch das Fehlerbild aus Modell Monitoring.</li>
         <li><b>Reparatur bei Sonderfällen:</b> Bei Stationen mit Werten außerhalb dessen, woraus die Modelle gelernt haben, oder mit
           einem großen Teil des Netzvolumens ist kein Score geprüft. Sie bekommen nur „Daten prüfen“.</li>
         <li><b>Einspar-Schätzung für das Netz:</b> Sie hätte angenommen, dass jede Station mit Maßnahme den Rücklauf der besten
@@ -598,8 +620,12 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
         <li><b>Keine Meldung heißt nicht „in Ordnung“.</b> Es heißt nur: Der Wächter hat nichts Neues gesehen.</li>
         <li><b>„Keine Maßnahme erkannt“ heißt nicht „kein Handlungsbedarf“.</b> Regelungsfehler zum Beispiel erkennt kein
           Modell.</li>
-        <li>Empfehlung, Verdacht und Potenzial gelten für den Winter <span class="g-winter"></span> mit dem Sommer danach. Sie
-          ändern sich nicht mit dem Zeitregler. Messwerte und Meldungen schon.</li>
+        <li><b>Empfehlung und Verdacht gelten für eine ganze Saison,</b> weil ihre Kennzahlen einen Winter und den Sommer danach
+          zusammenfassen. Steht der Zeitregler vor dem 01.09.2024, zeigen Liste, Färbung und Hausfenster den Stand vor den
+          Begehungen (Winter 23/24 und Sommer 2024, nur Tage vor der ersten Begehung). Danach den heutigen Stand (Winter
+          <span class="g-winter"></span> mit dem Sommer danach). So sieht man, welche Stationen nach den Begehungen aus der Liste
+          gefallen sind. Auf der Karte im Feld „Bewertung“ neben der Färbung und in der Handlungsliste lässt sich die Saison auch fest wählen, beide Felder sind gekoppelt.
+          Das Potenzial bleibt beim heutigen Stand. Messwerte und Meldungen folgen dem Zeitregler stundengenau.</li>
         <li><b>„Dauerhaft anders als die Referenz“:</b> Das Konto des Tagesmonitors steht am Deckel und kann nichts Neues
           melden. Die Referenz sollte neu gelernt werden.</li>
         <li><b>Orange bei den Meldungen:</b> Viele Stationen wurden gleichzeitig schlechter. Das spricht eher für Wetter oder
@@ -658,6 +684,29 @@ function spr(m, h){
 // ---- Modellergebnisse
 const MD = D.modell, MST = MD.stationen, MEL = MD.meldungen, UEB = MD.ueberwacht, MT = D.mt, G_ = MD.meta.grenzen;
 const QN = ['Tagesmonitor', 'Prognose-LSTM'];
+// Stand der Empfehlung: vor dem Wechseltag der Stand vor den Begehungen, danach der heutige
+const VOR = MD.meta.vor || null;
+const WECHSEL_MS = VOR ? Date.UTC(+VOR.wechsel.slice(0,4), +VOR.wechsel.slice(5,7)-1, +VOR.wechsel.slice(8,10)) : null;
+const LEER_VOR = {dr:0, ma:[], rang:null, empfehlung:'keine', warum:'Für die Zeit vor den Begehungen gibt es zu wenige Daten.',
+                  ventil:'', p_ventil:null, sommernacht:null, daemmung:false, p_daemmung:null, kapazitaet:false,
+                  auslastung:null, fehlerbild:'', sonderfall:''};
+//Auswahl auf der Karte bzw. in der Handlungsliste (gekoppelt): wie Zeitregler oder fest auf eine Saison, gilt auch für Karte und Hausfenster
+const standWahl = () => $('fStand') ? $('fStand').value : 'auto';
+function stand(){
+  if (!VOR) return 'heute';
+  if (standWahl() !== 'auto') return standWahl();
+  return T0 + h*HMS < WECHSEL_MS ? 'vor' : 'heute';
+}
+function standText(){
+  return stand() === 'vor' ? 'vor den Begehungen (Winter ' + VOR.winter_name + ' und Sommer 2024)'
+                           : 'heute (Winter ' + MD.meta.winter + ' mit dem Sommer danach)';
+}
+function S(z){
+  const s = MST[z];
+  if (!s || stand() !== 'vor') return s;
+  return Object.assign({}, s, s.vor || LEER_VOR);
+}
+const HS = n => stand() === 'vor' ? n.hs_vor : n.hs;
 const DR_NAME = ['keine Maßnahme erkannt', 'niedrig', 'mittel', 'hoch'];
 const DR_FARBE = ['#1a9850', '#fee08b', '#fc8d59', '#d73027'];
 const MA = {reparatur:['Reparatur (Regelventil)', '#d73027'],
@@ -738,9 +787,9 @@ function meldKlasse(n){
 // Färbungen aus den Modellen: Klasse je Haus, null = keine Modellergebnisse
 const KAT = {
   dring:{name:'Dringlichkeit der Empfehlung', klassen:[3,2,1,0].map(i => [i, DR_NAME[i], DR_FARBE[i]]),
-         key:n => n.hs ? n.hs.dr : null, l2:() => 'Stand Winter ' + MD.meta.winter + '. Bleibt beim Zeitregler gleich.'},
+         key:n => HS(n) ? HS(n).dr : null, l2:() => 'Stand ' + standText() + '.' + (!VOR ? '' : (standWahl() === 'auto' ? ' Wechselt mit dem Zeitregler am 01.09.2024.' : ' Saison fest gewählt.'))},
   mass: {name:'Maßnahme und Verdacht', klassen:Object.keys(MA).map(k => [k, MA[k][0], MA[k][1]]),
-         key:n => n.hs ? n.hs.ma : null, l2:() => 'Bei mehreren Maßnahmen zählt die vorderste. Stand Winter ' + MD.meta.winter + '.'},
+         key:n => HS(n) ? HS(n).ma : null, l2:() => 'Bei mehreren Maßnahmen zählt die vorderste. Stand ' + standText() + '.'},
   meld: {name:'Meldungen der Wächter', klassen:Object.keys(ME).map(k => [k, ME[k][0], ME[k][1]]),
          key:n => meldKlasse(n), l2:() => 'Meldungen der letzten ' + MT + ' Tage bis ' + fmtDate(h) + '. Heiztage: Tagesmonitor, sonst Prognose-LSTM.'},
   pot:  {name:'Potenzial im Netzvergleich', klassen:[3,2,1].map(i => [i, PO[i][0], PO[i][1]]),
@@ -842,7 +891,8 @@ function nodeTip(n){
   if (n.m < 0) return '<b>' + esc(n.name) + '</b><br>Abzweig oder Punkt ohne Zähler';
   const m = n.m;
   let mod = '';
-  if (n.hs) mod = `<br><b>${esc(MA[n.hs.ma][0])}</b> · Dringlichkeit ${esc(DR_NAME[n.hs.dr])}`;
+  const hs = HS(n);
+  if (hs) mod = `<br><b>${esc(MA[hs.ma][0])}</b> · Dringlichkeit ${esc(DR_NAME[hs.dr])}`;
   if (metric === 'meld'){ const k = meldKlasse(n); if (k) mod += '<br>Meldungen: ' + esc(ME[k][0]); }
   return `<b>${esc(n.name)}</b>${mod}<br>Vorlauf ${f1(val(m,0,h))} °C · Rücklauf ${f1(val(m,1,h))} °C<br>Spreizung ${f1(spr(m,h))} K<br>Durchfluss ${f1(val(m,2,h),0)} l/h · Leistung ${f1(val(m,3,h))} kW`
     + (n.est ? '<br><i>Position geschätzt</i>' : '');
@@ -922,7 +972,7 @@ function updateStats(){
     `<h3>Meldungen der letzten ${MT} Tage</h3>` +
     row('Häuser mit Verschlechterung', ((cm.get('schl') || 0) + (cm.get('netz') || 0)) + (cm.get('netz') ? ` (davon ${cm.get('netz')} zugleich mit vielen)` : '')) +
     row('Häuser nur mit Verbesserung', cm.get('bess') || 0) +
-    `<h3>Handlungsbedarf, Winter ${esc(MD.meta.winter)}</h3>` +
+    `<h3>Handlungsbedarf, Winter ${esc(stand() === 'vor' ? VOR.winter_name : MD.meta.winter)}</h3>` +
     row('Dringlichkeit hoch / mittel / niedrig', (cd.get(3) || 0) + ' / ' + (cd.get(2) || 0) + ' / ' + (cd.get(1) || 0)) +
     row('Potenzial hoch', (cp.get(3) || 0) + ' Häuser');
   $('tlabel').textContent = fmt(h) + (n === 0 ? ' (keine Daten)' : '');
@@ -946,13 +996,14 @@ function letzteMeldungen(z){
     + (x[4] ? '' : ' · <i>nur Hinweis</i>') + (x[3] ? ' · viele Stationen zugleich' : '')).join('<br>');
 }
 function modellBlock(z){
-  const s = MST[z];
+  const s = S(z);
   if (!s) return `<div class="zaehler"><p class="muted">Zähler ${esc(z)}: keine Modellergebnisse.</p></div>`;
   const ma = s.ma.length ? s.ma[0] : 'keine';
   return `<div class="zaehler">`
     + `<div class="emp" style="border-color:${MA[ma][1]}"><div class="kopf"><span class="badge" style="background:${DR_FARBE[s.dr]}">`
     + (s.dr ? 'Dringlichkeit ' + DR_NAME[s.dr] : DR_NAME[0]) + '</span>'
-    + `<span class="muted klein">Zähler ${esc(z)}${s.rang ? ' · Platz ' + s.rang + ' von ' + MD.meta.stationen : ''}</span></div>`
+    + `<span class="muted klein">Zähler ${esc(z)}${s.rang ? ' · Platz ' + s.rang + ' von ' + (stand() === 'vor' ? MD.liste_vor.length : MD.meta.stationen) : ''}</span></div>`
+    + `<div class="muted klein">Stand ${esc(standText())}</div>`
     + `<b>${esc(s.empfehlung === 'keine' ? 'Keine Maßnahme empfohlen' : s.empfehlung)}</b>`
     + (s.warum ? `<div class="muted klein">${esc(s.warum)}</div>` : '') + '</div>'
     + blk('Leistung im Netz (Winter ' + esc(s.netz_winter || MD.meta.winter) + ')',
@@ -1037,8 +1088,9 @@ function drawCharts(){
 // ---- Handlungsliste
 function renderListe(){
   const fm = $('fMass').value, alle = $('fAlle').checked, zeilen = [];
-  for (const [z, k] of MD.liste){
-    const s = MST[z];
+  $('lStand').textContent = standText();
+  for (const [z, k] of (stand() === 'vor' ? MD.liste_vor : MD.liste)){
+    const s = S(z);
     if (!alle && s.dr === 0) continue;
     if (fm && !s.ma.includes(fm)) continue;
     zeilen.push(`<tr><td>${s.rang || ''}</td><td>${esc(z)}</td>`
@@ -1065,9 +1117,24 @@ $('lBody').addEventListener('click', e => {
 });
 $('fMass').addEventListener('change', renderListe);
 $('fAlle').addEventListener('change', renderListe);
+//Karte und Handlungsliste haben je ein Feld für den Stand, beide zeigen immer denselben Wert
+function setStand(v){ $('fStand').value = v; $('kStand').value = v; refresh(); }
+$('fStand').addEventListener('change', e => setStand(e.target.value));
+$('kStand').addEventListener('change', e => setStand(e.target.value));
+// Sprung in die Zeit vor bzw. nach den Begehungen; ohne Stand vor den Begehungen fallen die Knöpfe weg
+if (VOR){
+  $('bVor').addEventListener('click', () => { $('fStand').value = $('kStand').value = 'auto'; setH(Math.min(H-1, Math.max(0, (WECHSEL_MS - 14*DMS - T0)/HMS))); });
+  $('bHeute').addEventListener('click', () => { $('fStand').value = $('kStand').value = 'auto'; setH(H-1); });
+} else {
+  $('bVor').hidden = true; $('bHeute').hidden = true; $('lWechsel').hidden = true; $('fStand').hidden = true; $('kStand').hidden = true;
+}
 
 // ---- Steuerung
-function refresh(){ updateEdges(); updateNodes(); updateLegend(); updateStats(); updateNodeInfo(); drawCharts(); }
+let letzterStand = null;
+function refresh(){
+  updateEdges(); updateNodes(); updateLegend(); updateStats(); updateNodeInfo(); drawCharts();
+  if (stand() !== letzterStand){ letzterStand = stand(); renderListe(); }
+}
 function setH(v){
   h = Math.max(0, Math.min(H-1, Math.round(v)));
   $('slider').value = h; $('dt').value = toInput(h);
@@ -1134,7 +1201,7 @@ $('infoStand').textContent = 'Stand: Modellpakete ' + Object.keys(pk).map(k => k
   + '; angewendet am ' + String(MD.meta.erstellt).slice(0, 10) + '; Messdaten bis ' + MD.meta.datenende
   + '. Zahlen zur Güte aus Notebook 34.';
 
-renderListe();
+letzterStand = stand(); renderListe();
 setH(h);
 })();
 </script>

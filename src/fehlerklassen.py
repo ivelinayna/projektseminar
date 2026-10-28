@@ -355,8 +355,9 @@ def bewerten(teile: dict, kz: pd.DataFrame, emb: pd.DataFrame,
     #die Merkmale stehen im Paket (Notebook 34 lernt ohne die Auslastung zum Anschlusswert)
     X = merkmale.reindex(columns=par.get("merkmale", MERKMALE))
     k = pd.DataFrame(index=merkmale.index)
-    k["p_ventil"] = teile["ventil_modell"].predict_proba(X)[:, 1]
-    k["p_daemmung"] = teile["daemmung_modell"].predict_proba(X)[:, 1]
+    #float64: nur mit dem Embedding (float32) käme sonst float32 heraus und die Werte aus der Kreuzvalidierung passen nicht hinein
+    k["p_ventil"] = teile["ventil_modell"].predict_proba(X)[:, 1].astype(float)
+    k["p_daemmung"] = teile["daemmung_modell"].predict_proba(X)[:, 1].astype(float)
     bezug = (merkmale["auslastung_vertrag"].fillna(merkmale["auslastung"])
              if "auslastung_vertrag" in merkmale else merkmale["auslastung"])
     k["auslastung"] = bezug.fillna(par["vertrag_median"])
