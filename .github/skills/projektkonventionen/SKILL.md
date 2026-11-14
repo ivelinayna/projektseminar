@@ -30,6 +30,17 @@ Diese Regeln gelten für jede Änderung im Repo.
 - Notebook-Outputs vor dem Commit leeren, wenn sie Zeitreihen auf
   Stationsebene oder Adressen zeigen; aggregierte Tabellen sind ok.
 
+## Datenbasis
+
+- Notebook 00 ist die verbindliche Aufbereitung der Zählerdaten. Alle
+  Auswertungen lesen `data/processed/real_meters/` über
+  `src/nb00_daten.lade_serien()`, keine eigenen Lader auf `data/raw/`.
+  Stationsfeatures über `nb00.stationsfeatures()` (ergänzt die
+  Zählerstände der Nachlieferung).
+- Nach jeder Rohdaten-Nachlieferung NB 00 neu ausführen, danach die
+  abhängigen Notebooks. `load_timeseries --materialize` nie nach
+  `real_meters` schreiben lassen.
+
 ## Wissenschaftliche Praxis
 
 - **Fehlgeschlagene Ansätze dokumentieren, nicht löschen** — sie gehören
@@ -39,8 +50,9 @@ Diese Regeln gelten für jede Änderung im Repo.
   schwach, was blockiert. Signifikanzniveaus und Basisraten nennen.
 - **[Entscheidung]-Punkte** (Baseline-Rekalibrierung,
   Fehlertyp→Maßnahme-Mapping, Zählertausch-Stitching, Geocoding,
-  Waisen-HAST) nicht eigenmächtig festlegen — als offene Frage in
-  `docs/naechste-schritte.md` dokumentieren.
+  Waisen-HAST) nicht eigenmächtig festlegen — als offene Frage in einer
+  lokalen, nicht versionierten Notizdatei außerhalb von `docs/`
+  dokumentieren (niemals committen/pushen).
 - Nicht zu viel wegfiltern; Ausschlüsse immer mit Grund tabellieren.
 
 ## Code & Struktur

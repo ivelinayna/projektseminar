@@ -6,7 +6,7 @@ Fenster fester Laenge) und der Wintervergleich (Heizperiode vor der
 Begehung gegen Heizperiode danach). Der Wintervergleich ist der
 spaetere, inzwischen bevorzugte Weg; der Jahresvergleich bleibt
 vollstaendig erhalten, weil er die Vorstufe dokumentiert und von
-Notebook 07 weiterhin gerechnet wird. Der Modulname stammt aus dem
+Notebook 04 weiterhin gerechnet wird. Der Modulname stammt aus dem
 Jahresvergleich und passt seitdem nicht mehr sauber; umbenannt wird er
 nicht, weil Notebooks und Tests darauf importieren.
 
@@ -30,7 +30,7 @@ fuer jede Fensterlaenge L, nicht nur fuer L=365.
 ``symmetrisch`` legt [D-L, D-1] gegen [D+1, D+L]. Nur bei L=365 sind
 diese beiden Fenster kalendergleich; bei jedem kuerzeren L vergleichen
 sie unterschiedliche Jahreszeiten. Der Modus bleibt als Referenz drin,
-weil Notebook 03 so gerechnet hat (L=21) und die Ergebnisse
+weil Notebook 02 so gerechnet hat (L=21) und die Ergebnisse
 gegeneinander gestellt werden muessen.
 
 Fensterlaenge
@@ -65,7 +65,7 @@ heisst nicht gleiche Witterung.
 
 Wintervergleich
 ---------------
-Notebook 06 hat gezeigt, dass der Sommer rund ein Drittel der
+Das frühere Notebook 06_saison (archiviert) hat gezeigt, dass der Sommer rund ein Drittel der
 Kalenderstunden stellt, aber nur knapp fuenf Prozent der
 Heizgradstunden, und dass der Ruecklauf unter Last im Sommer rund 4 K
 ueber dem Kernwinterwert liegt. Ein Fenster ueber 270 oder 365 Tage
@@ -168,7 +168,7 @@ JAHR_TAGE = 365
 #Leistungsschwelle fuer "unter Last", identisch zu features.features_for_meter
 LAST_SCHWELLE_KW = 0.5
 
-#Rücklaufschwelle der Vierfeldertafel, identisch zu Notebook 03,
+#Rücklaufschwelle der Vierfeldertafel, identisch zu Notebook 02,
 #src/dashboard_app.py (RT_YELLOW_MAX) und features.rt_above_50_share_loaded
 RT_SCHWELLE = 50.0
 
@@ -287,7 +287,7 @@ def fensterkennzahlen(df: pd.DataFrame,
     Zeitstempeln; ohne sie bleiben die normierten Kennzahlen NaN.
 
     `rt_median` ist bewusst der Median ueber *alle* Stunden des Fensters,
-    also dieselbe Definition wie in Notebook 03 - nur so sind die
+    also dieselbe Definition wie in Notebook 02 - nur so sind die
     Vierfeldertafeln vergleichbar. `rt_mean_loaded` ist der fachlich
     sauberere Rücklauf unter Last und steht daneben.
     """

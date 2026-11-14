@@ -54,8 +54,8 @@ into a target directory, which is exactly the layout that
 ``features.features_for_directory`` already consumes - the synthetic
 pipeline interface stays untouched.
 
-Verbindliche Aufbereitung für alle Auswertungen ab Notebook 06 ist
-Notebook 00 (`00_eda_hast_stationsprofile.ipynb`), es schreibt nach
+Verbindliche Aufbereitung für alle neueren Auswertungen (in der früheren Zählung ab Notebook 06) ist
+Notebook 00 (`00_daten.ipynb`), es schreibt nach
 ``data/processed/real_meters``. Gelesen wird diese Ausgabe über
 `src/nb00_daten.py`. ``--materialize`` deshalb nicht in dieses
 Verzeichnis schreiben lassen, sonst ist der NB-00-Stand überschrieben.
@@ -440,9 +440,9 @@ def load_meter_timeseries(zaehlernummer: int,
     nur fuer fuenf Zaehler vor; waere sie Standard, haetten diese fuenf
     eine um ein Jahr laengere Historie als die uebrigen 96, und jede
     Auswertung ueber alle Stationen wuerde unbemerkt ungleiche Zeitraeume
-    mischen. Ausserdem bleiben die publizierten Zahlen der Notebooks 01
-    bis 08 so reproduzierbar. Wer die Nachlieferung braucht, schaltet sie
-    ausdruecklich zu. Die Auswertungen ab Notebook 06 laden nicht hier,
+    mischen. Ausserdem bleiben die publizierten Zahlen der früheren Notebooks 01
+    bis 08 (alte Zählung) so reproduzierbar. Wer die Nachlieferung braucht, schaltet sie
+    ausdruecklich zu. Die neueren Auswertungen (früher ab Notebook 06) laden nicht hier,
     sondern die NB-00-Ausgabe ueber `nb00_daten.lade_serien`; dort ist
     die Nachlieferung enthalten.
 

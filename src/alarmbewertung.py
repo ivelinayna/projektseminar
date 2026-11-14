@@ -116,7 +116,7 @@ def richtungstest(alarme: pd.DataFrame, faelle: pd.DataFrame,
                   abstand: int = VORLAUF_ABSTAND) -> pd.DataFrame:
     """Treffertest getrennt nach Alarmrichtung und Fenster.
 
-    "um die Begehung" ist das Fenster aus NB 21 (7 Tage vor bis 60 nach).
+    "um die Begehung" ist das Fenster aus NB 22 (7 Tage vor bis 60 nach).
     "davor" reicht von ``vorlauf`` bis ``abstand`` Tage vor der Begehung
     und fragt, ob der CUSUM vorwarnt.
     """

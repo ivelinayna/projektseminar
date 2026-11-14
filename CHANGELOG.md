@@ -6,6 +6,19 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Geändert (Abgabestand, 2026-11-13)
+
+- Finaler Stand aus `to_ignore/projektseminar-main-finalerstand` übernommen. Der alte Stand liegt in `archiv/`
+  (gitignored).
+- Notebooks neu nummeriert, 00 bis 40 in acht Teilen, kurze Dateinamen. Die Zuordnung alt zu neu steht in
+  `docs/notebooks.md`. Ältere Einträge in diesem Changelog nutzen noch die alten Nummern.
+- Markdown-Zellen aller Notebooks einheitlich auf Deutsch, in kurzen Sätzen und mit „Zusammenfassung & Bewertung“
+  am Ende. Code-Zellen und Ausgaben unverändert.
+- Verweise auf Notebook-Nummern in `src/`, `tests/` und den Hilfsskripten in `notebooks/` angepasst.
+- Doku für Read the Docs neu aufgebaut (`mkdocs.yml`, Seiten in `docs/`).
+- Docker eingerichtet: `Dockerfile`, `docker-compose.yml` mit den Diensten `jupyter`, `dashboard`, `docs` und `app`.
+- `README.md`, `data/README.md` und `.gitignore` neu geschrieben.
+
 ### Behoben (Datum in den Stundenkurven des Dashboards, 2026-10-28)
 
 - `zeit_parse` in Notebook 16 und 25 las die Zeitstempel aus Notebook 00 (`2024-11-05 10:00:00`) mit

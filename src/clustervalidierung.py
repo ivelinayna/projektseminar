@@ -1,7 +1,7 @@
 """
-Validierung der Clusterergebnisse aus den Notebooks 01, 04 und 05.
+Validierung der Clusterergebnisse aus den Notebooks 07, 08 und 09.
 
-Notebook 05 clustert jede einzelne Betriebsstunde statt eines
+Notebook 09 clustert jede einzelne Betriebsstunde statt eines
 Stationsprofils und findet fünf fachlich benennbare Zustände bei einer
 Silhouette von 0,40. Das ist der beste Clusterbefund des Projekts, er
 ist aber nie gegen die naheliegendste Alternativerklärung geprüft
@@ -14,7 +14,7 @@ Das Modul stellt die Bausteine dafür bereit:
 
 Stundenpanel
     `lade_stundenpanel` baut aus den Zähler-CSVs von Notebook 00
-    (``data/processed/real_meters``) die Matrix, auf der Notebook 05 clustert (Leistung und Volumenstrom je
+    (``data/processed/real_meters``) die Matrix, auf der Notebook 09 clustert (Leistung und Volumenstrom je
     Station auf das eigene 95. Perzentil normiert, dazu Spreizung,
     Vor- und Rücklauf). Ausgeschlossene Stationen kommen als Tabelle
     mit Grund zurück und verschwinden nicht still.
@@ -28,7 +28,7 @@ Saison- und Tageszeitkontrolle
     das häufigste Cluster), nicht gegen Null.
 
 Stabilität
-    `bootstrap_ari` rechnet dieselbe Kennzahl wie Notebook 04 (Refit auf
+    `bootstrap_ari` rechnet dieselbe Kennzahl wie Notebook 08 (Refit auf
     einer Bootstrap-Stichprobe, Rückübertragung über das nächste
     Zentroid, ARI gegen die Referenzpartition), damit die Zahlen der
     Stunden- und der Stationsebene vergleichbar sind.
@@ -72,7 +72,7 @@ from . import nb00_daten as nb00
 #Spaltennamen der NB-00-Ausgabe
 SPALTEN_MAP = nb00.SPALTEN_MAP
 
-#Merkmalsraum aus Notebook 05: Leistung und Durchfluss stationsnormiert,
+#Merkmalsraum aus Notebook 09: Leistung und Durchfluss stationsnormiert,
 #die drei Temperaturgroessen in Kelvin bzw. Grad Celsius
 BETRIEBS_FEATURES = ["power_norm", "flow_norm", "dt", "vl", "rt"]
 
@@ -216,7 +216,7 @@ def mit_kontext(panel: pd.DataFrame,
 def fit_minibatch_kmeans(X: np.ndarray, k: int, seed: int = SEED,
                          n_init: int = 10,
                          batch_size: int = 2048) -> np.ndarray:
-    """Labels eines MiniBatchKMeans-Laufs, wie in Notebook 05."""
+    """Labels eines MiniBatchKMeans-Laufs, wie in Notebook 09."""
     km = MiniBatchKMeans(n_clusters=k, n_init=n_init, random_state=seed,
                          batch_size=batch_size)
     return km.fit_predict(np.asarray(X))
@@ -230,7 +230,7 @@ def bootstrap_ari(fit_fn: Callable[[np.ndarray, int], np.ndarray],
                   stichprobe: Optional[int] = None) -> pd.Series:
     """Stabilität einer Partition als mittlerer ARI über Bootstrap-Refits.
 
-    Gleiches Verfahren wie in Notebook 04, damit Stunden- und
+    Gleiches Verfahren wie in Notebook 08, damit Stunden- und
     Stationsebene vergleichbar bleiben: auf jeder Bootstrap-Stichprobe
     wird neu gefittet, die Labels werden über das nächste Zentroid auf
     die Referenzpunkte übertragen und mit der Referenzpartition
@@ -473,7 +473,7 @@ def gewichtungsvarianten(df: pd.DataFrame,
     """Die Vorverarbeitungswege, die gegeneinander antreten.
 
     `alle gleich`      StandardScaler auf allen Features, der bisherige
-                       Weg aus Notebook 01, 04 und 05
+                       Weg aus Notebook 07, 08 und 09
     `auswahl`          StandardScaler auf der redundanzbereinigten
                        Teilmenge
     `pca`              StandardScaler, danach PCA auf `pca_varianz`

@@ -1,0 +1,24 @@
+#Nicht ins Image: Daten, Ergebnisse, Modelle, Archiv und lokale Umgebungen
+data/
+outputs/
+models/
+archiv/
+to_ignore/
+.venv/
+venv/
+env/
+site/
+.git
+.github/
+.ki-lokal/
+**/__pycache__/
+**/.ipynb_checkpoints/
+.pytest_cache/
+notebooks/daten_cache/
+notebooks/models/
+notebooks/*.html
+notebooks/*.csv
+notebooks/*.ods
+notebooks/*.png
+notebooks/*.geojson
+*.zip

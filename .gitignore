@@ -1,23 +1,23 @@
-# Data files - never commit company data
+#Firmendaten, nie committen
 data/raw/*
 data/processed/*
+data/manual/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/README.md
-data/manual/*
 
-# Externe, oeffentliche Daten (z. B. DWD-Wetter) - gross, nicht versionieren
+#Externe öffentliche Daten (z. B. DWD-Wetter), groß
 external/
 
-# Outputs (generated, large, or contain sensitive viz)
+#Ergebnisse, teils mit vertraulichen Bildern
 outputs/*
 !outputs/.gitkeep
 
-# Modellpakete fuer den Betrieb (aus Firmendaten gelernt, enthalten Zaehlernummern)
+#Modellpakete, aus Firmendaten gelernt, enthalten Zählernummern
 models/*
 !models/README.md
 
-# Python
+#Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -30,12 +30,23 @@ env/
 .ipynb_checkpoints/
 .pytest_cache/
 
-#Jupyter notebook outputs (keep notebooks clean)
+#Jupyter
 notebooks/.ipynb_checkpoints/
 notebooks/artifacts/
 notebooks/models/
 notebooks/outputs/
 notebooks/*_EXECUTED.ipynb
+
+#Dashboard-HTML aus Notebook 34, 36 und 40 enthält Adressen, nie hochladen
+notebooks/fernwaerme_dashboard*.html
+
+#Arbeitsdateien der Netz-Notebooks 34 bis 36 (Adressen, Koordinaten, Cache)
+notebooks/*.csv
+notebooks/*.ods
+notebooks/*.png
+notebooks/*.html
+notebooks/daten_cache/
+notebooks/*.geojson
 
 #IDE
 .vscode/
@@ -43,33 +54,24 @@ notebooks/*_EXECUTED.ipynb
 *.swp
 .DS_Store
 
-#Environment
+#Umgebung
 .env
 .env.local
 
-#MkDocs / Read the Docs build
+#MkDocs und Read the Docs
 site/
 _build/
 
-#KI-Assistenten: lokale Anweisungen, Settings und Skill-Symlinks
+#Lokale Assistenz-Einstellungen
 CLAUDE.md
 .claude/
 .agents/
 .skills/
+.ki-lokal/
 
-# Review-Snapshots (koennen vertrauliche Daten enthalten)
+#Review-Snapshots, können vertrauliche Daten enthalten
 *-review.zip
 
-# Lokaler Ablageordner, wird nie committet
+#Lokale Ablage und alter Stand, werden nie committet
 to_ignore/
-
-# Dashboard-HTML aus Notebook 25/35 enthält Adressen, nie hochladen
-notebooks/fernwaerme_dashboard*.html
-
-# Arbeitsdateien von Notebook 16/28/35 (Adressen, Koordinaten, Cache)
-notebooks/*.csv
-notebooks/*.ods
-notebooks/*.png
-notebooks/*.html
-notebooks/daten_cache/
-notebooks/*.geojson
+archiv/

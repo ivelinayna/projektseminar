@@ -1,0 +1,192 @@
+# Negativbefunde
+
+Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebnisse und gehören zur Abgabe: Sie zeigen, wo die Daten an Grenzen stoßen und welche Wege sich nicht lohnen. Notebooks sind mit ihrer Nummer im Abgabestand genannt, die Zahlen stammen aus den Notebooks oder aus dem [Modellvergleich](modellvergleich.md).
+
+## 1 Überwachtes Lernen auf Begehungslabels
+
+- Probiert: Klassifikator auf dem Label „Maßnahme ja/nein“ aus der Begehungstabelle, Code in `src/ml_classifier.py`. Läuft nur über die Befehlszeile (siehe [Pipeline](pipeline.md)), nicht in einem Notebook.
+- Ergebnis: Balanced Accuracy 0,33 bzw. 0,42 gegen 0,50 für die triviale Vorhersage (Notebook 18).
+- Das Label ist bei 40 von 49 Stationen wahr, es bleiben 9 Negative (Notebook 27 und 31). Notebook 33 nennt dazu Label-Leakage.
+- Das Label ist zu grob: „Maßnahme“ sagt nicht, welcher Fehler vorlag.
+- In Notebook 31 trägt erst ein Label je Fehlerart. Nötig wären mehr Begehungen mit ausdrücklichem „kein Befund“.
+
+## 2 Labelqualität der Begehungstabelle
+
+- Zähler 68956351: Ventil drei Jahre offen (500 bis 950 l/h), am 09.09.2024 geschlossen, danach Durchfluss von 499 auf 0 l/h. In der Begehungstabelle steht `n_actions = 0`, die Reparatur steht nur im Freitext (Notebook 02, 15).
+- Das Label `n_actions > 0` ist bei 76 % der Stationen wahr (Notebook 02). Es trennt kaum.
+- Notebook 03: Das Label taugt nur als Detektor für Dauerzustände, die Stichwortsuche im Freitext besteht die Prüfung nicht.
+- Notebook 16: 6 von 66 Begehungen mit Fehler ohne Sollwertänderung, 57 Notizen.
+- Notebook 27: „leer heißt nein“ ist eine Annahme, ausdrücklich „nein“ steht nur 4- bis 8-mal da.
+- Nötig wäre ein festes Protokollfeld für Befund und Reparatur, auch wenn nichts gefunden wurde.
+
+## 3 Regel-Baseline mit festen Schwellen
+
+- Probiert: feste Regeln aus `src/fault_detection.py`, kalibriert in Notebook 18 (Abschnitt 12 und 13).
+- Mit den alten Schwellen trifft `flow_short_cycle_power` 89 von 98 Stationen (91 %), `rt_above_50_share_loaded` 62 von 98. `peak_load_share` für `oversized_contract` trifft keine von 85.
+- Alte Labelverteilung: 47 von 100 Stationen `control_hysteresis`, nur 2 `healthy`. Nach der Kalibrierung auf rund 15 % je Regel: 42 `healthy` und sechs Fehlerbilder. Das Notebook nennt das „bewertbar, nicht richtig“.
+- Im Modellvergleich liegt `oversized_contract` bei AUC 0,51. Ein Grund: Der Anschlusswert ist oft schon der neue Vertrag.
+- Für `control_hysteresis` gibt es kein Befund-Label, die Regel ist nicht prüfbar.
+- Zum Vergleich tragen andere Regeln: `continuous_flow` 0,85 und `excess_rt` 0,84 beim Ventil (siehe [Modellvergleich](modellvergleich.md)).
+
+## 4 Stationsclustering
+
+- Probiert: K-Means, Ward, GMM und HDBSCAN auf Stationsmerkmalen (Notebook 07, 08).
+- Notebook 07: 96 Stationen, k=2 mit 66 und 30 Stationen, Silhouette 0,245. Mit BHKW 97 zu 3 bei 0,599, das ist ein Effekt des Stationstyps.
+- Notebook 08: Ab k=3 liegen alle Silhouetten unter 0,25. HDBSCAN liefert ab Mindestgröße 5 nur Rauschen, bei 3 bleiben rund 20 % ohne Cluster.
+- Die Verfahren stimmen kaum überein (paarweiser ARI 0,15 bis 0,58), einig sind sie nur beim Ausreißer-Trio 58202380, 66761022 und 86792512.
+- Gegen die Begehungen trennt kein Cluster: Fisher p ≥ 0,51, Mann-Whitney p ≥ 0,08, Basisrate 77 %. Die Daten sind konsistent mit einem Kontinuum statt mit Gruppen.
+- Notebook 07 und 08 bilden Profile über die ganze Historie und haben damit ein Datenleck. Das Cluster „schlechter“ aus Notebook 28 erreicht AUC 0,67 und ist belegt schlechter als die Sommernacht-Regel (siehe [Modellvergleich](modellvergleich.md)).
+
+## 5 Clustering je Leistungsklasse
+
+- Probiert in Notebook 10: Redundanz abbauen, BHKW ausschließen, getrennt nach Leistungsklasse clustern.
+- Der Redundanzabbau hebt die Silhouette bei k=3 nur von 0,281 auf 0,309.
+- Je Leistungsklasse sinkt die Silhouette auf 0,187 bis 0,290 gegen 0,308 gepoolt. Nutzbar sind nur zwei Klassen plus die Gruppe ohne Anschlusswert.
+- Auf Stundenebene ändern Klassen und BHKW-Ausschluss die fünf Zustände kaum. Die Stundenebene selbst trägt (k=5, Silhouette 0,404, ARI 0,853).
+- Ground-Truth-Join ohne p < 0,05, bei 13 Stationen ohne Maßnahme erwartbar.
+- Folge: Leistungsklasse nur als Kontext, nicht als Trennlinie.
+
+## 6 Begehungswirkung im Diff-in-Diff
+
+- Probiert in Notebook 02: 21-Tage-Fenster vor und nach der Begehung, 53 nie begangene Stationen als Kontrolle. Auswertbar sind 44 von 58 Begehungen.
+- Der DiD fällt mit der Zahl der Maßnahmen: +6,78, +3,00, −1,50 und −2,71 K je Kategorie. Die Reihenfolge passt, signifikant ist es nicht (Wilcoxon p = 0,21 bei „mittlere“ mit n = 25, p = 0,46 bei „viele“ mit n = 14).
+- Vierfeldertafel: 11 von 42 Stationen bleiben schlecht.
+- Andere Notebooks finden einen Effekt: Wintervergleich DiD −1,9 K, p ≈ 0,01 bei 42 Begehungen (Notebook 04), Abkühlung +2,2 kWh/m³ bei p = 0,046 mit 24 Fällen (Notebook 22).
+- Gegen 29 Kontrollstationen in Notebook 21 Teil B dagegen p 0,30 bis 0,92. Die Wirkung hängt damit an Fenster und Kontrollgruppe.
+- In Notebook 28 ist die Wirkung wegen Regression zur Mitte nicht nachweisbar. Nötig wären längere Fenster nach der Begehung und eine zufällig gezogene Kontrollgruppe.
+
+## 7 Vorjahresvergleich über ein langes Fenster
+
+- Probiert in Notebook 04: ein volles Jahr vor gegen nach der Begehung.
+- Ein volles Jahr danach gibt es nur für 2 von 58 Begehungen. Die meisten Zähler enden am 11.07.2025, die früheste Begehung war am 26.08.2024, also höchstens 319 Tage.
+- Mit 270 Tagen und Vorjahresversatz bleiben 24 auswertbare Begehungen, aber der halbe Sommer liegt im Fenster.
+- Ersetzt durch den Vergleich gleicher Kernwinter (Dezember bis Februar). Für ein Jahresfenster fehlen Daten nach Juli 2025.
+
+## 8 Flachere Kennlinie nach Optimierung
+
+- Probiert in Notebook 05: die ÜZ-Folie nachrechnen, Energie je m³ gegen Außentemperatur, optimiert gegen nicht optimiert.
+- Der Abstand lässt sich nachrechnen: +2,2 kWh/m³ (p ≈ 0,03) bzw. +2,0 kWh/m³ (p ≈ 0,06).
+- Die flachere Steigung nicht: Unterschied +0,03 (p ≈ 0,67) bzw. +0,10 (p ≈ 0,34) gegen 0,165 auf der Folie. Mit Gewichtung verschwindet sie.
+- „Optimiert“ ist im Mittel 3,1 K bzw. 2,7 K kälter. Das verzerrt die Steigungen.
+- Es gibt keine Kontrollgruppe, der Vergleich bleibt beschreibend.
+
+## 9 ARIMA als Zeitreihenmodell
+
+- Probiert in Notebook 06 mit `src/zeitreihenmodell.py`: Prognose des Tagesrücklaufs 14 Tage voraus, 87 Zähler, 1538 Fenster.
+- Reines ARIMA ist schlechter als naiv: ARIMA(1,1,0) 2,82 °C, 7-Tage-Mittel 2,69 °C mittlerer Fehler.
+- Am besten ist `arx_100` mit 2,12 °C. Der Gewinn kommt aus der Außentemperatur: Der AR-Term bringt gegenüber der reinen Kennlinie nur 0,02 °C, der Wochenterm nichts.
+- Als Wächter: 15 von 40 Begehungen außerhalb z = ±2 (38 % gegen 18 % Placebo, p = 0,002). Im typischen Fall kein Unterschied (Median −0,85 gegen −0,04 °C, p = 0,21). 13 Begehungen sind nicht auswertbar.
+- Im Wächtervergleich 22 von 43 bei p = 0,016, nach Holm 0,16 (siehe [Modellvergleich](modellvergleich.md)).
+
+## 10 Modulationsart und Kennlinienparameter als Erfolgsmaß
+
+- Probiert in Notebook 13 und 14: Ändert sich die Regelart oder die Kennlinie durch die Begehung?
+- Modulationsart unverändert: p = 0,52 (Stunde) und 0,50 (Tag), n = 43.
+- Steigung (p = 0,51) und Bestimmtheitsmaß (p = 0,71) der Kennlinie ändern sich ebenfalls nicht. Ausnahme ist 68956351 mit einem Sprung der Steigung von −0,058 auf 1,276.
+- Dauerlinien zeigen dagegen einen schwachen Effekt: Tagesperformance +1,09 kWh/m³ (n = 44, p = 0,008).
+- Ohne Kontrollgruppe nur konsistent mit einer Wirkung der Begehung. Mehr dazu in [Stationsbilder](stationsbilder.md).
+
+## 11 Anomaliedetektoren
+
+- Probiert in Notebook 18: Isolation Forest, Zustandsanteil, Dynamikscore, Netz- und Stationsresiduum. Prüfung an 42 Begehungen (Isolation Forest 41) gegen 49 Kontrollzähler.
+- Nicht bestanden: Isolation Forest (+0,002, p = 0,60), Zustandsanteil (Median 0, p = 0,70), Dynamikscore (+0,11, p = 0,23).
+- Der Dynamikscore ordnet sogar umgekehrt (0,17 gegen 0,28 kWh/Kh, p = 0,003). Die zweite Ableitung bei 0,1 K Auflösung ist wohl Quantisierungsrauschen.
+- Die Residuen bestehen (DiD −1,43, p = 0,013 bzw. −1,47, p = 0,036). Der Median des Rücklaufs allein liefert aber dasselbe (−1,47 K, p = 0,010). Das Netzmodell erklärt nur R² = 0,046.
+- Als Alarm treffen die Detektoren 6 bis 18 von 43 Begehungen, p ≥ 0,07, nach Holm ≥ 0,57 (siehe [Modellvergleich](modellvergleich.md)).
+
+## 12 Restkategorie in der Musterzuordnung
+
+- Probiert in Notebook 19: Muster je Station aus Median und MAD, danach Empfehlung.
+- Erste Fassung: 55 von 100 Stationen ohne eindeutiges Muster. Von 26 dauerhaft auffälligen blieben 21 ohne verwertbare Diagnose.
+- Ursache: Ein oberes Quintil trifft 20 von 100 Stationen, zwei unabhängige Bedingungen zusammen im Mittel nur 4. Der Volumenstrom (Median 38 l/h, Maximum rund 14.500 l/h) liefert mit MAD extreme z-Werte.
+- Mit Rängen statt MAD haben 25 von 26 ein Muster. Die Restkategorie war ein Konstruktionsfehler.
+- Offen bleibt: 68956351 wird als Kurzschluss statt Ventil eingeordnet.
+
+## 13 Kennlinienmonitor
+
+- Probiert in Notebook 15 mit `src/kennlinien_monitor.py`: Sprünge in der stationseigenen Kennlinie.
+- Gegen alle Begehungen nur 27 bis 39 % über Zufall: Parameterkanal 25 von 53 (p = 0,090), Residuenkanal 21 von 53 (p = 0,054).
+- Der stärkste Alarm je Station trifft schlechter als Zufall (Parameterkanal 3 von 53).
+- Bei mechanischen Eingriffen trifft der Residuenkanal 10 von 19 (0,526 gegen 0,285, p = 0,023, Notebook 16). Diese Teilung wurde aber erst nach dem Nullergebnis gewählt.
+- Im Wächtervergleich 27 von 43 gegen 53 % Kontrolle, p = 0,14, nach Holm 0,94.
+- Nötig wären hergeleitete Schwellen und dokumentierte Zählertausche.
+
+## 14 CUSUM als Frühwarnung
+
+- Probiert in Notebook 22 und 23: CUSUM auf Abkühlung und Wassermenge, Treffer um die Begehung und im halben Jahr davor.
+- Der Hebel von rund 2 kommt fast ganz aus Alarmen Richtung besser (25 von 43, Hebel 2,2, p < 0,001), also nach der Begehung.
+- Verschlechterungsalarme sind um die Begehung nicht häufiger als bei Kontrollen (16 von 43, Hebel 1,06, p = 0,44). In den 180 Tagen davor auch nicht (11 von 32, Hebel 0,94).
+- Der Ventilfall 68956351 wurde nie als Fehler gemeldet, weil das offene Ventil im Lernjahr als normal gilt. Der Alarm „besser“ kam 2 Tage nach der Reparatur.
+- Für die Priorität fehlen Labels: 49 Stationswinter mit Begehung danach, davon 3 im Netz auffällig.
+- Der CUSUM taugt zur Erfolgskontrolle, nicht zur Frühwarnung. Nötig wäre ein vorab geplanter Test mit zufällig gezogenen Stationen.
+
+## 15 Nachbarn und Netzereignisse
+
+- Probiert in Notebook 25 und 26: Häufen sich auffällige Stationen im Leitungsnetz? Alarmieren Nachbarn gemeinsam?
+- Keine Häufung: in keinem Winter und bei keiner Weite mehr auffällige Paare als zufällig (p 0,25 bis 1).
+- Nachbarn alarmieren nicht häufiger gemeinsam, nur 1 von 9 Tests unter 0,05.
+- Über Koordinaten: Bei 50 m hängen die Scores leicht zusammen (rho 0,37, 0,12 und 0,14), bei 100 m nicht mehr. Das passt eher zu ähnlichen Gebäuden.
+- Netzweite Wellen treten bei Kälteeinbrüchen auf. Das ist ein Hinweis auf die Kennlinie, nicht auf Hausfehler.
+- Der Graph ist logisch, nicht hydraulisch. 8 Stationen haben keine Nachbarn mit Zähler. Nötig wären das hydraulische Netzmodell der ÜZ oder Differenzdruckmessungen.
+
+## 16 Graphenmodell auf dem Netz
+
+- Probiert in Notebook 37: Entwurf eines GraphSAGE in numpy, Ablation gegen ein MLP ohne Netz.
+- Beitrag des Netzes an 59 Stationen: +0,010 (Abkühlung) und −0,009 (Wassermenge).
+- Je Station (58) nicht signifikant: Wilcoxon p = 0,172 bzw. 0,423 bei Schwelle 0,025.
+- Im Ventilfall ist das GNN schlechter (Fehler 0,77 gegen 0,53 bei der Abkühlung). Der eigene Vorlauf ist kein unabhängiges Signal.
+- Im Modellvergleich ist „Netzmedian abziehen“ mit 25 von 43 belegt schlechter, Nachbar-Merkmale bringen beim Ventil +0,004.
+- Nötig wären Rohrdaten (Durchmesser, Länge), Lage der Heizzentrale, Bedeutung der Pfeilrichtung und ein hydraulisches Modell.
+
+## 17 Geocoding und Netzgeometrie
+
+- Probiert: Positionen der Stationen über Nominatim. Es fand meist nur die Straße und ist nur noch optional (Notebook 26, 34).
+- Positionen kommen jetzt aus einer Handliste mit 101 Einträgen, die nicht im Repository liegt.
+- Notebook 34: 94 von 101 Positionen einem Rohrende zugeordnet (höchstens 40 m), 7 ohne. Im Netz verankert sind 93 von 110 Knoten.
+- Notebook 35: Anschlussabstand im Median 6 m, höchstens 21 m (109 Häuser).
+- Notebook 37: 35 von 110 Kanten ohne Rohrweg, 18 Einträge ohne Position, die Pfeilrichtung passt zu keiner Quelle.
+- Nötig wären Koordinaten der Hausanschlüsse aus dem GIS der ÜZ.
+
+## 18 Wächtervergleich
+
+- Probiert in Notebook 32 und 38: 15 Wächter am selben Maßstab, 43 Begehungen, Holm-Korrektur.
+- Nach Holm bleibt nur Kennlinie mit CUSUM belegt (Tagesmonitor 33 von 43, Holm 0,017). „Ohne Netzereignisse“ ist dieselbe Kennlinie.
+- Normalverhaltensmodell 30 von 43, Holm 0,08. LSTM mit CUSUM Holm 0,20.
+- Prognose-LSTM mit Schwelle: 16 von 43 gegen 32 %, p = 0,26. Gegen das Normalverhaltensmodell McNemar 15 zu 1, p = 0,001.
+- Notebook 30: Der erste Blick in der vorigen Fassung war zu optimistisch, der Vorsprung ist nicht belegt.
+- Details in [Modellvergleich](modellvergleich.md).
+
+## 19 Fehlerarten ohne Messspur
+
+- Probiert in Notebook 31 und 33: je Fehlerart ein Modell, dazu ein Bayes-Ansatz.
+- Filter, Durchfluss und Temperatur sind nicht erkennbar (AUC 0,24 bis 0,64).
+- Random Forest und XGBoost sind nicht besser als logistische Regression oder Regel. Wechselwirkungen bringen −0,03 bis +0,05, Klassengewichtung nichts.
+- Regler und Einstellung ohne Spur: AUC 0,57, Top-1 0,46 gegen 0,64 für „immer Regler“. Befund ja/nein AUC 0,55, p = 0,34.
+- Dämmung ist ein Artefakt der Matrix: 12-mal Hauptursache, 2 Treffer.
+- In Notebook 28 hält die Ventil-Gegenprobe nach Holm nicht (p = 0,021, Holm 0,13).
+
+## 20 Gesamtpipeline, Bestwert und Lückenfüllung
+
+- Gesamtpipeline aus Notebook 12: AUC 0,51, höchstens 2 von 10 Ereignissen (siehe [Modellvergleich](modellvergleich.md)).
+- Bestwert aus Notebook 24: sagt keine Befunde vorher und zeigt keine Verbesserung nach Begehungen.
+- Notebook 21: Streuung nur bedingt aussagekräftig, Regelhysterese nicht nachweisbar.
+- Notebook 01: Bei Lücken über einen Tag ist die Tagesform nicht besser als linear, der Rücklauffehler liegt bei 6 bis 7 K.
+
+## Nicht mehr im Abgabestand
+
+Diese Versuche liegen nur im lokalen Archiv, nicht im Abgabestand. Ihre Zahlen sind hier nicht wiederholt, weil sie sich nicht an den Abgabe-Notebooks prüfen lassen.
+
+- Entscheidungsbaum als Vorhersagemodell: schlägt die Mehrheitsklasse nicht.
+- Graph Neural Network auf dem Leitungsnetz: nicht besser als dasselbe Netz ohne Kanten oder eine logistische Regression.
+- Netzeffekt und gedämpfte Temperatur im Tagesmonitor: weniger Wellenalarme, aber mehr Alarme insgesamt und ein schwächerer Hebel.
+- Treffer je Fehlerart aus den Freitexten: zu wenige Fälle je Fehlerart, kein Unterschied belegbar.
+- Neue Stundenkennzahlen und Netzvergleich je Leistungsklasse: kein belastbarer Gewinn, Rangfolge fast gleich.
+- Warmwasser-Ausschluss, Auflösungssperre und PELT im Fenstermonitor: keiner der Schalter verbessert den Monitor.
+- Schwellen per zeitlicher Kreuzvalidierung: gewählte Schwellen nicht besser als die Voreinstellung.
+- LSTM-Embedding gegen den Netzvergleich: Vorsprung des LSTM nicht belegt.
+- Frühwarnung durch den Tagesmonitor: vor der Begehung keine Häufung von Alarmen.
+- Varianten der Kontrollgruppe: Richtung gleich, Größe und Signifikanz der Begehungswirkung nicht.
+- Neue Referenz nach der Begehung: der scheinbare Rückfall entsteht auch bei Scheinbegehungen, er kommt aus der kürzeren Referenz.
+- Priorität vor der Begehung und Dämmung als Restkategorie: Richtung stimmt, belegt ist es nicht; die Restkategorie-Vermutung trägt nicht.
+- Eingerechnete Fühlerfehler: der Tagesmonitor findet Fühlerfehler kaum.
+- Vortagstemperatur und Sprungpause gegen Kältewellen: die Wellen bleiben.

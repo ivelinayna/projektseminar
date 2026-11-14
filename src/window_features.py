@@ -4,7 +4,7 @@ Windowed features for HAST time series.
 Instead of collapsing a whole meter history into one profile
 (src.features.features_for_meter), this module cuts the hourly series
 into calendar windows (default 14 days, the Zustandsfenster from
-notebook 02) and computes the same feature set per window. The result
+notebook 12) and computes the same feature set per window. The result
 is a long table - one row per window - that feeds the clustering
 benchmark and the inspection impact analysis (cluster migration over
 time).

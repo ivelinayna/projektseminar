@@ -1,14 +1,14 @@
 """
 Gemeinsamer Zugang zu den Stundenreihen aus Notebook 00.
 
-Notebook `00_eda_hast_stationsprofile.ipynb` ist die verbindliche
+Notebook `00_daten.ipynb` ist die verbindliche
 Datenaufbereitung des Projekts. Es führt CSV- und ODS-Exporte je Zähler
 zusammen, rechnet die ODS-Werte um Faktor 1000 zurück, legt die
 Zeitstempel auf die volle Stunde, entfernt Dubletten, setzt
 physikalisch unmögliche Werte auf NaN und schreibt je Zähler eine Datei
 auf einem lückenlosen Stundenraster nach `data/processed/real_meters/`.
 
-Alle Auswertungen ab Notebook 06 lesen genau diese Dateien und nicht
+Alle neueren Auswertungen (in der früheren Zählung ab Notebook 06) lesen genau diese Dateien und nicht
 `data/raw/` direkt. Dieses Modul ist der eine Ladeweg dafür:
 
     lade_serien         Dict Zählernummer -> Stundenreihe
@@ -32,7 +32,7 @@ Zählerstände deshalb standardmäßig aus Leistung und Volumenstrom
 (`zaehlerstaende_integrieren`), aber nur in Stunden, in denen Leistung
 bzw. Durchfluss gemessen sind. Die Zahl der ergänzten Stunden steht in
 ``serie.attrs["zaehlerstand_integriert"]``. Die Integration trifft das
-Niveau, einzelne Tage weichen ab (Notebook 08, Abschnitt 9).
+Niveau, einzelne Tage weichen ab (Notebook 05, Abschnitt 9).
 
 Die Rasterzeilen, in denen NB 00 eine nicht gemessene Stunde markiert
 (alle Messkanäle leer), entfernt `lade_serien` standardmäßig. Sie tragen
@@ -52,7 +52,7 @@ import pandas as pd
 
 REPO = Path(__file__).resolve().parents[1]
 METER_DIR = REPO / "data" / "processed" / "real_meters"
-NB00 = "notebooks/00_eda_hast_stationsprofile.ipynb"
+NB00 = "notebooks/00_daten.ipynb"
 
 #Spaltennamen in der NB-00-Ausgabe auf das Schema von features.features_for_meter
 SPALTEN_MAP = {

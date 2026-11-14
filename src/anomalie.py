@@ -47,13 +47,13 @@ Auswertung.
 Validierung ohne Labels
 -----------------------
 Die Begehungen liefern ein Pruefsignal, das ohne Fehlerlabels
-auskommt. Nach Notebook 07 senken sie den Ruecklauf im Wintervergleich
+auskommt. Nach Notebook 04 senken sie den Ruecklauf im Wintervergleich
 gepaart um 1,60 K und im Diff-in-Diff gegen 49 Kontrollzaehler um
 1,90 K bei p gleich 0,010. Ein brauchbarer Anomaliescore muss nach
 einer Begehung sinken, und bei den Kontrollstationen im selben
 Zeitraum nicht. `begehungsvalidierung` und `diff_in_diff` rechnen genau
 das, mit demselben gepaarten Test und derselben Kontrollgruppenlogik
-wie Notebook 07. Ein Detektor, der diese Pruefung nicht besteht,
+wie Notebook 04. Ein Detektor, der diese Pruefung nicht besteht,
 gehoert nicht in die Abgabe.
 
 Kausalitaet
@@ -87,7 +87,7 @@ PRAEDIKTOREN = ("t_out_tag", "last_anteil", "power_mean")
 #Stunden eines Tages und nicht der Mittelwert ueber die Laststunden:
 #die Zahl der Laststunden schwankt im Winter von Tag zu Tag, der
 #Mittelwert steht dann je Tag auf verschieden vielen Stunden. Die
-#Gegenprobe in Notebook 10 zeigt den Unterschied deutlich - die
+#Gegenprobe in Notebook 18 zeigt den Unterschied deutlich - die
 #bekannte Ruecklaufsenkung nach einer Begehung ist auf `rt_median`
 #messbar und auf `rt_mean_loaded` nicht.
 ZIEL = "rt_median"
@@ -295,7 +295,7 @@ def score_zustand(panel: pd.DataFrame,
 
     `spalten` sind die Anteilsspalten aus `tagespanel.zustandsanteile`,
     die fachlich als auffaellig gelten - im Projekt der Zustand mit
-    hohem normiertem Durchfluss bei kleiner Spreizung, in Notebook 09
+    hohem normiertem Durchfluss bei kleiner Spreizung, in Notebook 10
     als Verdacht auf hydraulischen Kurzschluss benannt. Der Score ist
     die Summe dieser Anteile und liegt damit zwischen 0 und 1.
     """
@@ -752,7 +752,7 @@ def diff_in_diff(panel: pd.DataFrame,
 
     Die Kontrollgruppe wird ueber die Fenstergrenzen gecacht, weil sich
     alle Begehungen eines Herbstes dieselben Grenzen teilen - dieselbe
-    Konstruktion wie in Notebook 07.
+    Konstruktion wie in Notebook 04.
     """
     cache: Dict[tuple, pd.DataFrame] = {}
     zeilen = []

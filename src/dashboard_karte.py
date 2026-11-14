@@ -1,4 +1,4 @@
-"""Modellergebnisse für die Netzkarte (Notebook 35, ``notebooks/dashboard_final.py``).
+"""Modellergebnisse für die Netzkarte (Notebook 40, ``notebooks/dashboard_final.py``).
 
 Dieses Modul rechnet keine Modelle. Es liest die Tabellen, die
 ``python -m src.dashboard_daten`` nach ``outputs/dashboard/`` schreibt, und macht
@@ -13,7 +13,7 @@ Je Zähler:
 - **Stand im Netz** und **Potenzial** (Stationsleistung, Netzvergleich von Modell Ivelina)
 - **Meldungen** der Wächter, je Tag mit dem Hauptkanal
 
-Hauptkanal (Notebook 34, Abschnitt 13): An einem Tag, an dem Ivelinas
+Hauptkanal (Notebook 39, Abschnitt 13): An einem Tag, an dem Ivelinas
 Tagesmonitor rechnet (Heiztag, Referenz vorhanden), zählt seine Meldung. Sonst
 zählt das Prognose-LSTM (warme Tage, Stationen ohne Referenz). LSTM-Meldungen an
 Tagen des Tagesmonitors bleiben als Hinweis in der Liste, färben die Karte aber
@@ -36,7 +36,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ORDNER = ROOT / "outputs" / "dashboard"
 
 #Reihenfolge wie dashboard_daten.HANDLUNGEN; bei mehreren Maßnahmen färbt die erste die Karte.
-#Regelungsoptimierung fehlt bewusst: kein Modell erkennt sie (Notebook 34, Test C)
+#Regelungsoptimierung fehlt bewusst: kein Modell erkennt sie (Notebook 39, Test C)
 MASSNAHMEN = {"Reparatur: Regelventil tauschen": "reparatur",
               "Kapazitätsanpassung prüfen": "kapazitaet",
               "Dämmung prüfen": "daemmung",
@@ -56,7 +56,7 @@ KANAL_TEXT = {("kwh_pro_m3", -1): "weniger Abkühlung", ("kwh_pro_m3", 1): "mehr
 
 
 def zaehler_text(z) -> str:
-    """Zählernummer als Text ohne führende Nullen, wie ``norm_z`` in Notebook 16."""
+    """Zählernummer als Text ohne führende Nullen, wie ``norm_z`` in Notebook 34."""
     if isinstance(z, float) and z.is_integer():
         z = int(z)
     return re.sub(r"\D", "", str(z)).lstrip("0")
@@ -178,7 +178,7 @@ def ueberwacht(kanal: pd.DataFrame, tag0, n_tage: int) -> dict:
 # --- Stationen -----------------------------------------------------------------
 
 def ventil_stufe(p, grenze: float = GRENZEN["ventil"]) -> str:
-    """Ventilverdacht in Worten, nur an der geprüften Grenze (Notebook 34, Test C).
+    """Ventilverdacht in Worten, nur an der geprüften Grenze (Notebook 39, Test C).
 
     Der Score ist eine Rangfolge, keine Wahrscheinlichkeit. Stufen wie „hoch ab 0,8“
     sind nirgends geprüft und fehlen deshalb.

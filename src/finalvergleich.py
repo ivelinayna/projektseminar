@@ -1,4 +1,4 @@
-"""Modellvergleich und Umsetzung nach Aufgabenstellung: Modell Ivelina gegen Modell LSTM (Notebook 34).
+"""Modellvergleich und Umsetzung nach Aufgabenstellung: Modell Ivelina gegen Modell LSTM (Notebook 39).
 
 Beide Modelle werden hier aus denselben Notebook-00-Stundenreihen neu
 gebaut, mit einer gemeinsamen, vorher festgelegten Zeitachse, und auf
@@ -10,7 +10,7 @@ denselben Fällen geprüft. Neu erfunden wird kaum etwas:
   nur die Lernzeit auf das gemeinsame Ende gesetzt.
 - **Modell LSTM** (Modell-Strang): Prognose-LSTM als Wächter aus
   `prognose_waechter`, Embedding + logistische Regression und K-Means aus
-  `fehlerklassen`. Dazu XGBoost aus Notebook 22 als dritter Kandidat.
+  `fehlerklassen`. Dazu XGBoost aus Notebook 31 als dritter Kandidat.
 
 Die Spielregeln stehen als Konstanten oben und gelten, bevor ein
 Testergebnis angeschaut wird:
@@ -60,7 +60,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PROCESSED = ROOT / "data" / "processed"
 AUSGABE = ROOT / "outputs" / "finalvergleich"
 
-# --- Spielregeln (Notebook 34, Abschnitt 4) ---------------------------------
+# --- Spielregeln (Notebook 39, Abschnitt 4) ---------------------------------
 
 LERN_ENDE = pd.Timestamp("2024-02-01")     # erster Tag, der nicht mehr gelernt wird
 VAL_START = pd.Timestamp("2024-02-08")     # 7 Tage Abstand = Eingabefenster LSTM
@@ -77,7 +77,7 @@ MIN_VAL_TAGE = pw.MIN_VAL_TAGE
 RASTER_SCHWELLE = [1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 8.0]
 RASTER_CUSUM_H = [2.0, 2.5, 3.0, 3.5, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 15.0, 20.0, 30.0]
 
-#Klassifikation (Notebook 18 und 20)
+#Klassifikation (Notebook 27 und 29)
 WINTER = fk.WINTER
 SOMMER = fk.SOMMER
 STICHTAG = fk.STICHTAG
@@ -116,7 +116,7 @@ def lade_eingaben(root: Path = ROOT) -> dict:
     Stundenreihen nur aus Notebook 00 (`nb00_daten.lade_serien`), daraus
     auch die Stundentabelle des LSTM (`stunden_aus_serien`). Anschlusswert
     und BHKW wie im Stationsblatt (`stationsblatt.eingaben`), Labels aus
-    Notebook 18.
+    Notebook 27.
     """
     from . import load_data as ld
     root = Path(root)
@@ -184,7 +184,7 @@ def gleiche_daten_pruefen(serien: Mapping[int, pd.DataFrame], stunden: pd.DataFr
     """Prüft, dass beide Modelle dieselben Messwerte bekommen.
 
     Vergleicht die LSTM-Stundentabelle mit den NB-00-Reihen (Ivelina) und,
-    falls vorhanden, mit `modell_stunden.parquet` aus Notebook 18.
+    falls vorhanden, mit `modell_stunden.parquet` aus Notebook 27.
     """
     zeilen = [{"Prüfung": "Zähler in den NB-00-Reihen (Ivelina)", "Wert": len(serien)},
               {"Prüfung": "Zähler in der LSTM-Stundentabelle", "Wert": stunden["zaehler"].nunique()}]
@@ -200,12 +200,12 @@ def gleiche_daten_pruefen(serien: Mapping[int, pd.DataFrame], stunden: pd.DataFr
         neu = stunden.dropna(subset=["ruecklauf", "durchfluss"])
         m = alt.merge(neu, on=["zaehler", "timestamp"], suffixes=("_nb18", "_neu"))
         zeilen += [
-            {"Prüfung": "gemessene Stunden in NB 18", "Wert": len(alt)},
+            {"Prüfung": "gemessene Stunden in NB 27", "Wert": len(alt)},
             {"Prüfung": "gemessene Stunden hier", "Wert": len(neu)},
             {"Prüfung": "davon gleiche Zähler-Stunden", "Wert": len(m)},
-            {"Prüfung": "größte Abweichung Rücklauf zu NB 18 [K]",
+            {"Prüfung": "größte Abweichung Rücklauf zu NB 27 [K]",
              "Wert": float((m["ruecklauf_nb18"] - m["ruecklauf_neu"]).abs().max())},
-            {"Prüfung": "größte Abweichung Durchfluss zu NB 18 [l/h]",
+            {"Prüfung": "größte Abweichung Durchfluss zu NB 27 [l/h]",
              "Wert": float((m["durchfluss_nb18"] - m["durchfluss_neu"]).abs().max())}]
     return pd.DataFrame(zeilen)
 
@@ -706,7 +706,7 @@ def grenze_vor_begehung(labels: pd.DataFrame, zaehler: Iterable[int]) -> pd.Seri
 
 
 def kennzahlen_vor_begehung(stunden: pd.DataFrame, labels: pd.DataFrame) -> pd.DataFrame:
-    """Kennzahlen aus Winter 23/24 und Sommer 2024, nur vor der ersten Begehung (NB 18).
+    """Kennzahlen aus Winter 23/24 und Sommer 2024, nur vor der ersten Begehung (NB 27).
 
     Die Auslastung zum Vertrag vor der Begehung (``auslastung_vertrag``)
     wird nur für die Regel Überdimensionierung gebraucht.
@@ -717,7 +717,7 @@ def kennzahlen_vor_begehung(stunden: pd.DataFrame, labels: pd.DataFrame) -> pd.D
 
 
 def basis_stationen(kz: pd.DataFrame, labels: pd.DataFrame, emb_alle: pd.DataFrame) -> pd.DataFrame:
-    """Begangene Stationen mit Winter-Embedding und Sommerkennzahl (Notebook 22, 32 und Audit)."""
+    """Begangene Stationen mit Winter-Embedding und Sommerkennzahl (Notebook 31, 38 und Audit)."""
     return fk.trainingsdaten(kz, emb_alle, labels)
 
 
@@ -744,7 +744,7 @@ def _embedding_skalieren(werte: np.ndarray, tage: pd.DataFrame, lern_roh: np.nda
 def embedding_lernen(stunden: pd.DataFrame, labels: pd.DataFrame,
                      ohne: Iterable[int] = (), seed: int = SEED, log=print,
                      feld: Optional[tuple] = None) -> dict:
-    """LSTM-Encoder aus Notebook 20 ohne die Stationen ``ohne`` lernen.
+    """LSTM-Encoder aus Notebook 29 ohne die Stationen ``ohne`` lernen.
 
     Gelernt wird auf allen anderen Stationen (auch unbegangenen, das Netz
     sieht keine Labels), nur aus Tagen vor der ersten Begehung bzw. dem
@@ -799,7 +799,7 @@ try:
     from xgboost import XGBClassifier as _XGBClassifier
 
     class XGBAusgeglichen(_XGBClassifier):
-        """XGBoost, das die seltene Klasse in jedem Lernteil neu gewichtet (Notebook 22, Zelle 14)."""
+        """XGBoost, das die seltene Klasse in jedem Lernteil neu gewichtet (Notebook 31, Zelle 14)."""
 
         def fit(self, X, y, **kwargs):
             self.set_params(scale_pos_weight=(len(y) - np.sum(y)) / max(np.sum(y), 1))
@@ -1091,7 +1091,7 @@ def paket_normalmodell(ref: pd.DataFrame, mod: dict, modtab: pd.DataFrame, versi
         kennzahlen=kennzahlen, datenstand=datenstand, lernzeitraum=lernzeitraum,
         beschreibung=("Modell Ivelina: Kennlinie je Station und Kanal gegen die Tagesmitteltemperatur "
                       "(Abkühlung kWh/m³, Tagesvolumen), CUSUM h = 5 auf den Abweichungen"),
-        quelle="notebooks/34_modellvergleich_und_umsetzung_nach_aufgabenstellung.ipynb, src/tagesmonitor.py",
+        quelle="notebooks/39_endmodell.ipynb, src/tagesmonitor.py",
         version=version, aktuell=False)
 
 
@@ -1125,7 +1125,7 @@ def paket_prognose(gelernt: dict, kal: pd.DataFrame, faktor: pd.DataFrame, regel
         beschreibung=("Modell LSTM: Encoder–Decoder-LSTM sagt aus 7 Vortagen, Wetter und Vorlauf "
                       "Rücklauf und Durchfluss des Tages voraus; z-Werte je Station aus der Probezeit, "
                       f"Alarm nach Regel {regel}"),
-        quelle="notebooks/34_modellvergleich_und_umsetzung_nach_aufgabenstellung.ipynb, src/prognose_waechter.py",
+        quelle="notebooks/39_endmodell.ipynb, src/prognose_waechter.py",
         version=version, aktuell=False)
 
 
@@ -1153,7 +1153,7 @@ def paket_fehlerklassen(netz, x_skal: dict, ventil, daemmung, kmeans: dict, lern
         beschreibung=("Modell LSTM: LSTM-Embedding (ohne Kennzahlen) → "
                       "logistische Regression (Ventil, Dämmung), Auslastungsregel (Vertrag), "
                       "K-Means Optimum/schlechter → Klasse nach Folie 5"),
-        quelle="notebooks/34_modellvergleich_und_umsetzung_nach_aufgabenstellung.ipynb, src/fehlerklassen.py",
+        quelle="notebooks/39_endmodell.ipynb, src/fehlerklassen.py",
         version=version, aktuell=False)
 
 
@@ -1172,7 +1172,7 @@ def embedding_skalierung_paket(werte: np.ndarray, tage: pd.DataFrame, lern_roh: 
     return skal
 
 
-# --- Ablauf für Notebook 34 --------------------------------------------------------
+# --- Ablauf für Notebook 39 --------------------------------------------------------
 
 WAECHTER = {"ivelina": "Modell Ivelina (Kennlinie + CUSUM)",
             "nv": "LSTM mit fester Referenz (gebaut wie Ivelinas Wächter)",
@@ -1263,7 +1263,7 @@ def nv_hinzufuegen(w: dict, e: dict, log=print) -> dict:
 
 
 def nur_begangene_hinzufuegen(w: dict, e: dict, log=print) -> dict:
-    """Variante: Prognose-LSTM nur auf den begangenen Stationen lernen (wie Notebook 20/21).
+    """Variante: Prognose-LSTM nur auf den begangenen Stationen lernen (wie Notebook 29/30).
 
     Alles andere bleibt gleich: Zeitachse, Kalibrierung je Station (auch der
     nie begangenen, aus ihrer eigenen Probezeit), Regel CUSUM, gleiche Alarmlast.
@@ -1568,7 +1568,7 @@ def klassifikation(e: dict, log=print, ziele: Sequence[str] = ZIELE, seed: int =
     XGBoost-Beiträge und die endgültigen Modelle (auf allen 53 Stationen).
     ``seed`` ändert nur die Startgewichte der Encoder (Prüfung der
     Stabilität), die Folds bleiben gleich. ``nur_begangene`` lernt auch den
-    Encoder nur auf begangenen Stationen (wie Notebook 20).
+    Encoder nur auf begangenen Stationen (wie Notebook 29).
     """
     from sklearn.metrics import roc_curve
     st, labels, gruppen = e["stunden"], e["labels"], e["gruppen"]
@@ -2038,7 +2038,7 @@ def merkmalssaetze_vergleich(X: pd.DataFrame, oof: pd.DataFrame, gruppen: pd.Ser
     return pd.DataFrame(zeilen)
 
 
-# --- Modellwahl im Lernteil (Notebook 34, Abschnitt 16) -------------------------
+# --- Modellwahl im Lernteil (Notebook 39, Abschnitt 16) -------------------------
 
 #bei gleicher AUC im Lernteil gewinnt der einfachere Kandidat
 EINFACHHEIT = ["LR Kennzahlen", "LR nur LSTM-Embedding", "LR Kennzahlen + LSTM",
