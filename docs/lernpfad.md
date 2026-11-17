@@ -1112,8 +1112,14 @@ welcher Kandidat gewinnt, und erst danach wird getestet. So kommt die Fehlerart 
 und **Dämmung 0,78**. Die 0,88 war um etwa 0,05 zu optimistisch und wird nicht behauptet.
 
 In der inneren Prüfung lagen zwei Kandidaten gleichauf: die Regression nur auf den 16 LSTM-Zahlen und
-die auf Kennzahlen und LSTM-Zahlen. Ich habe den einfacheren genommen. Er läuft im Dashboard
-(`fv.ENDMODELL = "LR nur LSTM-Embedding"`), seine eigenen Werte aus Test C stehen oben.
+die auf Kennzahlen und LSTM-Zahlen. Genommen habe ich die Regression nur auf den LSTM-Zahlen, aus zwei
+Gründen. Sie ist einfacher. Und sie vermeidet ein Leck über das Vorwissen: Die 12 Kennzahlen sind zwar
+physikalisch begründet, festgelegt haben wir sie aber, als wir die Begehungsprotokolle und Fälle wie
+68956351 schon kannten. Wissen über die Befunde steckt also schon in den Merkmalen, auch wenn keine
+Kennzahl an Testzahlen eingestellt wurde. Die 16 LSTM-Zahlen hat das Netz dagegen ohne Befund-Labels
+gelernt. Das Modell läuft im Dashboard (`fv.ENDMODELL = "LR nur LSTM-Embedding"`), seine eigenen Werte
+aus Test C stehen oben. Die Kennzahlen bleiben trotzdem wichtig: Mit ihnen wird ein Verdacht im
+Hausfenster begründet.
 
 **Test E: Lohnt sich die Reihenfolge?** Angenommen, das Team kann nur 10 Stationen begehen. Unter
 den ersten 10 nach Ventil-Score hatten 7 einen Ventilbefund. Nach Ivelinas Priorität sind es 5,
