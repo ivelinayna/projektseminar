@@ -40,7 +40,7 @@ Mehr unter [Ergebnisse](ergebnisse.md), [Endmodell](endmodell.md) und [Negativbe
 | [Modellvergleich](modellvergleich.md) | alle Verfahren auf demselben Prüfstand |
 | [Endmodell](endmodell.md) | gewählte Modelle je Frage, Modellpakete |
 | [Negativbefunde](negativbefunde.md) | was nicht funktioniert hat und warum |
-| [Mein Strang: Lernpfad bis Endmodell](lernpfad.md) | die Modellarbeit als Geschichte mit Umwegen: Lernpfad A bis G, Prüfstand, Endmodell, Merkmale, Dashboard |
+| [Lernende Modelle](modelle/index.md) | LSTM-Fingerabdruck, Prognose-LSTM, Prüfung und Statistik: was gemacht wurde und warum |
 | [Pipeline und Module](pipeline.md) | Code in `src/`, Datenfluss, Befehle, Tests |
 | [Dashboard](dashboard.md) | Aufbau und Erzeugung des Dashboards |
 | [Grenzen und offene Fragen](grenzen.md) | Annahmen, Grenzen, Fragen an die ÜZ |

@@ -20,7 +20,7 @@ Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`
 
 | Ordner | Inhalt |
 |---|---|
-| `notebooks/` | 42 Notebooks (00 bis 41) in acht Teilen, siehe unten, dazu der Lernpfad in `notebooks/lernpfad/` |
+| `notebooks/` | 42 Notebooks (00 bis 41) in acht Teilen, siehe unten |
 | `src/` | wiederverwendbarer Code, eine Datei je Aufgabe |
 | `tests/` | Tests mit pytest |
 | `docs/` | Doku für Read the Docs |
