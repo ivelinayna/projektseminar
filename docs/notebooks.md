@@ -86,6 +86,13 @@ Alle Notebooks liegen in `notebooks/`. Sie sind in acht Teile gegliedert und lau
 | 38 | Modellvergleich: welches Modell für welche Aufgabe?<br>`38_modellvergleich.ipynb` | Fast jedes Notebook hat sein Modell selbst geprüft, mit eigenem Zeitraum, eigenen Stationen und eigener Alarmmenge. Die Ergebnisse sind so nicht vergleichbar. | Kein System ist allein das beste. Beste Kombination: Alarm aus dem Monitoring-Modell (Tagesmonitor), dazu das Prognose-LSTM für plötzliche Fehler; Fehlererkennung und Klasse aus der LSTM-Kette; Netzvergleich als Bestätigung, die die Dringlichkeit hebt. | 11, 20, 27 bis 31 |
 | 39 | Endmodell: Modell Ivelina gegen Modell LSTM<br>`39_endmodell.ipynb` | Im Projekt gibt es zwei fertige Ansätze: Modell Ivelina (Kennlinie und Netzvergleich) und Modell LSTM (neuronales Netz). | Keins der beiden Modelle ist allein besser. Modell Ivelina übernimmt Heizperiode, Erfolgskontrolle und Netzvergleich, Modell LSTM die warmen Tage und die Fehlerart Ventil (mit Ivelinas Fehlerbild als Bestätigung). | 27 bis 31 |
 | 40 | Dashboard: Handlungsempfehlungen auf dem Rohrbaum<br>`40_dashboard.ipynb` | Das fertige Dashboard: Es zeigt auf dem Rohrbaum aus Notebook 35 für jede Hausstation, was die Modelle aus Notebook 39 sagen. | Ein Dashboard mit drei Reitern auf dem Rohrbaum aus Notebook 35: Karte, Handlungsliste und „So funktioniert's“. Jede Anzeige kommt von dem Modell, das in Notebook 39 dafür am besten abgeschnitten hat. | 34, 39, `python -m src.dashboard_daten` |
+| 41 | Feature Engineering: Zeitstruktur und Erklärbarkeit<br>`41_merkmale.ipynb` | Notebook 39 findet bei Filter, Durchfluss und Sollwert nichts, bei der Dämmung ein Muster ohne Erklärung. Liegt das an den Daten, an den Kennzahlen oder an den Labels? | Nur der Ventiltausch hinterlässt eine messbare Spur (Sommernacht-Durchfluss sinkt, AUC 0,81, nach Holm gesichert). Dämmung, Filter und Durchfluss ändern nach der Maßnahme nichts Messbares. Erster physikalischer Hinweis zur Dämmung: Abkühlrate im Stillstand (0,69, nicht gesichert). | 27, 39 |
+
+## Lernpfad
+
+Neben der Nummernfolge liegt in `notebooks/lernpfad/` ein Nachbau der Notebooks 27 bis 32 in sieben Phasen (A bis G):
+von der Frage über eine einfache Baseline bis zum LSTM, zum Wächter und zur Einteilung nach Folie 5. Er rechnet auf
+denselben Daten. Die Geschichte dazu mit allen Umwegen steht unter [Mein Strang](lernpfad.md).
 
 ## Wichtige Abhängigkeiten
 
@@ -95,6 +102,7 @@ Alle Notebooks liegen in `notebooks/`. Sie sind in acht Teile gegliedert und lau
 - Notebook 26 schreibt den Monitor-Status für Notebook 36.
 - Notebook 34 baut den Netz-Cache `notebooks/daten_cache/` für die Notebooks 35, 36 und 40.
 - Notebook 39 baut die Modellpakete in `models/` für das Dashboard in Notebook 40.
+- Notebook 39 schreibt die Vorhersagen aus Test C nach `outputs/finalvergleich/` für Notebook 41.
 - Notebook 08 braucht `inspections_tidy.csv` aus `python -m src.main`.
 
 ## Alte und neue Nummern
@@ -144,3 +152,4 @@ Im Projektverlauf gab es andere Dateinamen und Nummern. Ältere Notizen und der 
 | `38_modellvergleich.ipynb` | `32_modellvergleich.ipynb` |
 | `39_endmodell.ipynb` | `34_modellvergleich_und_umsetzung_nach_aufgabenstellung.ipynb` |
 | `40_dashboard.ipynb` | `35_dashboard.ipynb` |
+| `41_merkmale.ipynb` | `36_feature_engineering_zeitstruktur_shap.ipynb` |

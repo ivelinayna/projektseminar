@@ -20,7 +20,7 @@ Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`
 
 | Ordner | Inhalt |
 |---|---|
-| `notebooks/` | 41 Notebooks (00 bis 40) in acht Teilen, siehe unten |
+| `notebooks/` | 42 Notebooks (00 bis 41) in acht Teilen, siehe unten, dazu der Lernpfad in `notebooks/lernpfad/` |
 | `src/` | wiederverwendbarer Code, eine Datei je Aufgabe |
 | `tests/` | Tests mit pytest |
 | `docs/` | Doku für Read the Docs |
@@ -40,7 +40,7 @@ Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`
 | 5 | 18 bis 26 | Anomalien und Monitoring |
 | 6 | 27 bis 33 | Lernende Modelle |
 | 7 | 34 bis 37 | Netz und Karte |
-| 8 | 38 bis 40 | Modellvergleich, Endmodell, Dashboard |
+| 8 | 38 bis 41 | Modellvergleich, Endmodell, Dashboard, Merkmale und Erklärbarkeit |
 
 Notebook 00 immer zuerst ausführen. Alle anderen lesen dessen Ergebnis. Details in `docs/notebooks.md`.
 

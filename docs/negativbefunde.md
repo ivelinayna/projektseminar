@@ -164,6 +164,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Regler und Einstellung ohne Spur: AUC 0,57, Top-1 0,46 gegen 0,64 für „immer Regler“. Befund ja/nein AUC 0,55, p = 0,34.
 - Dämmung ist ein Artefakt der Matrix: 12-mal Hauptursache, 2 Treffer.
 - In Notebook 28 hält die Ventil-Gegenprobe nach Holm nicht (p = 0,021, Holm 0,13).
+- Notebook 41 prüft mit vorab festgelegter Richtung, ob die Maßnahmen überhaupt eine Spur hinterlassen. Nur der Ventiltausch tut es (Sommernacht-Durchfluss, AUC 0,81, nach Holm gesichert). Dämmung, Filter und Durchfluss ändern nichts Messbares, neue Kennzahlen finden nichts Gesichertes. Bessere Labels würden hier mehr helfen als bessere Modelle.
 
 ## 20 Gesamtpipeline, Bestwert und Lückenfüllung
 
