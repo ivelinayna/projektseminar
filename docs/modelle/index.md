@@ -67,6 +67,30 @@ Notebook 40   Dashboard (HTML-Datei)
 - **Notebook 41** prüft, ob die Maßnahmen bei den Begehungen überhaupt eine Spur in den Daten
   hinterlassen. Das erklärt, warum manche Fehlerarten nicht erkennbar sind.
 
+## Ausführen und Ablage
+
+Die Notebooks laufen in dieser Reihenfolge. Jedes liest, was das vorige geschrieben hat:
+
+| Schritt | liest | schreibt | Laufzeit (mit Grafikkarte) |
+|---|---|---|---|
+| Notebook 00 | Zählerexporte in `data/raw/` | Stundenreihen `data/processed/real_meters/`, `hast_features.csv` | unter 1 Minute |
+| Notebook 27 | Stundenreihen, Begehungsprotokoll in `data/raw/`, Wetter (Cache `data/raw/weather/`) | `data/processed/modell_stunden.parquet`, `modell_labels.csv`, `modell_kennzahlen.csv` | gut 1 Minute |
+| Notebook 29 | Dateien aus 27 | `data/processed/lstm_embedding.csv`, `lstm_scores.csv`, Gewichte nach `notebooks/models/` | rund 7 Minuten, davon die meiste Zeit Vorversuche |
+| Notebook 30 | Dateien aus 27, Gewichte der Vorversuche aus 29 | `data/processed/prognose_tage.csv`, Gewichte nach `notebooks/models/` | rund 2 Minuten |
+| Notebook 39 | Stundenreihen, Labels | Tabellen nach `outputs/finalvergleich/`, Modellpakete nach `models/` | länger, das Endmodell lernt alle Netze je Prüfteil neu |
+| `python -m src.dashboard_daten` | Modellpakete, aktuelle Stundenreihen | `outputs/dashboard/` | wenige Minuten |
+| Notebook 40 | `outputs/dashboard/`, Netz-Cache aus Notebook 34 | HTML-Datei des Dashboards | wenige Minuten |
+
+- **Ohne Grafikkarte** rechnen die Netze auf dem Prozessor, nur langsamer.
+- **Gewichte:** Notebook 29 und 30 speichern ihre Gewichte unter `notebooks/models/`, die Vorversuche unter
+  `notebooks/models/vorversuche/`. Beim nächsten Lauf werden sie geladen statt neu gelernt. Auf einem
+  frischen Stand lernen die Notebooks neu. Weil alle Seeds fest sind, kommen dabei dieselben Zahlen heraus.
+  Geprüft ist das auf dem Rechner, auf dem die Notebooks laufen. Auf anderer Hardware können die letzten
+  Stellen abweichen.
+- **Modellpakete** für das Dashboard baut Notebook 39 nach `models/`.
+- **Nicht im Repository:** Rohdaten, aufbereitete Daten, Gewichte und Pakete. Sie sind aus Firmendaten
+  der ÜZ gelernt und enthalten Zählernummern. Die Dashboard-Datei enthält zusätzlich Adressen.
+
 ## Das Ergebnis in Kürze
 
 - Ein offenes Ventil ist erkennbar. Die gewählte Regression auf den 16 Zahlen des Fingerabdrucks kommt
