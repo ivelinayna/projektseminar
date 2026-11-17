@@ -1,0 +1,3 @@
+# Aufteilung im Team
+
+Folgt.
