@@ -105,7 +105,7 @@ def effekt_je_station(serien: Mapping[int, pd.DataFrame],
     """Vorher-Nachher-Effekt je Station, wahlweise auf eine Saison begrenzt.
 
     ``saison=None`` nimmt die gesamte Historie und entspricht dem
-    naiven Schnitt aus Notebook 12. Stationen ohne Punkte fallen nicht
+    naiven Schnitt aus Notebook 13. Stationen ohne Punkte fallen nicht
     still heraus, sie stehen mit n = 0 in der Tabelle.
     """
     begangen = set(begangen)

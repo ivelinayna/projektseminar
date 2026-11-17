@@ -12,8 +12,15 @@ bauen, statt ein Durchschnittsprofil über die gesamte Historie — denn
 
 ## Datenbasis
 
-- Loader `src/load_timeseries.py`: führt Exportgenerationen
-  (`<nr>__n.csv` / `<nr>_2025n.csv`) zusammen, dedupliziert, Stundenraster.
+- Stundenreihen nur aus Notebook 00 (`data/processed/real_meters/`),
+  geladen über `src/nb00_daten.lade_serien()`. NB 00 führt die
+  Exportgenerationen samt ODS-Nachlieferung zusammen, dedupliziert und
+  legt ein Stundenraster an. Nicht `load_timeseries.load_meter_timeseries`
+  auf `data/raw/` benutzen; nach einer Nachlieferung NB 00 neu ausführen.
+- Stationsfeatures aus `src/features.py` über `nb00.stationsfeatures()`
+  rechnen. `features_for_directory(real_meters)` liest die Dateien ohne
+  Ergänzung, dann fehlen bei den Zählern mit Nachlieferung
+  Jahresenergie, Jahresvolumen und Volllaststunden.
 - Kanäle: kumulative Energie (kWh), Volumenstrom (l/h), Leistung (kW),
   ΔT, Vorlauf/Rücklauf (°C), kumulatives Volumen (m³).
 - Zähler↔Adresse jahresbezogen über `Zuordnung.xlsx`

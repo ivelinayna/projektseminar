@@ -1,6 +1,6 @@
 """Daten für das Wächter-Dashboard: Modellpakete auf die aktuellen Daten anwenden.
 
-Das Dashboard (`src/dashboard_waechter.py`) rechnet selbst nichts. Es liest
+Das Dashboard (Notebook 40 mit `src/dashboard_karte.py`) rechnet selbst nichts. Es liest
 nur die Tabellen, die dieses Modul nach ``outputs/dashboard/`` schreibt.
 So bleibt die App schnell, braucht kein torch und zeigt immer genau das,
 was mit einer bestimmten Paketversion gerechnet wurde.
@@ -165,7 +165,7 @@ def _ja(wert) -> bool:
 
 
 def _handlung(z: pd.Series) -> list:
-    #Regelungsoptimierung (K-Means „schlechter“) wird nicht empfohlen: In Notebook 34 landen 24 bzw. 25
+    #Regelungsoptimierung (K-Means „schlechter“) wird nicht empfohlen: In Notebook 39 landen 24 bzw. 25
     #von 31 Stationen, an denen Durchfluss oder Sollwert eingestellt wurden, bei „kein Handlungsbedarf“
     #Sonderfall: Werte außerhalb dessen, woraus gelernt wurde, oder keine typische Hausstation. Dort ist
     #kein Score geprüft, also zuerst nur die Daten prüfen
@@ -184,7 +184,7 @@ def _handlung(z: pd.Series) -> list:
 
 
 def empfehlungen(st: pd.DataFrame) -> pd.DataFrame:
-    """Handlung, Dringlichkeit und Begründung je Station, nur aus geprüften Teilen (Notebook 34).
+    """Handlung, Dringlichkeit und Begründung je Station, nur aus geprüften Teilen (Notebook 39).
 
     Erwartet je Zähler: ``klasse``, ``p_ventil``, ``hinweis_vertrag``,
     ``hinweis_daemmung``, ``netz_fehlerbild``, ``auslastung``, ``sonderfall``;
@@ -203,7 +203,7 @@ def empfehlungen(st: pd.DataFrame) -> pd.DataFrame:
 
     - Regelungsoptimierung (K-Means): erkennt die Maßnahme nicht (Test C, Folie 5)
     - Sortieren nach Verschlechterung im Tagesmonitor: vor Begehungen mit Befund
-      gab es nicht mehr davon als bei Kontrollen (alarme.ipynb)
+      gab es nicht mehr davon als bei Kontrollen (23_alarme.ipynb)
     - Sortieren nach Potenzial: sagt nicht vorher, wo eine Begehung am meisten
       bringt (Test D, rho = 0,16)
     - „hoch“ allein ab Score 0,8: diese Grenze ist nirgends geprüft
@@ -218,7 +218,7 @@ def empfehlungen(st: pd.DataFrame) -> pd.DataFrame:
         p = z.get("p_ventil", np.nan)
         gruende = []
         if rep:
-            #Score, nicht p: er ist eine Rangfolge, keine Wahrscheinlichkeit (Notebook 34)
+            #Score, nicht p: er ist eine Rangfolge, keine Wahrscheinlichkeit (Notebook 39)
             gruende.append(f"Ventilverdacht (Score {p:.2f})".replace(".", ","))
             anteil = z.get("sommer_durchlauf_anteil", np.nan)
             if pd.notna(anteil):
@@ -251,7 +251,7 @@ def empfehlungen(st: pd.DataFrame) -> pd.DataFrame:
     return e
 
 
-#Stand vor den Begehungen: Winter 23/24 und Sommer 2024, nur Tage vor der ersten Begehung (Notebook 18).
+#Stand vor den Begehungen: Winter 23/24 und Sommer 2024, nur Tage vor der ersten Begehung (Notebook 27).
 #Im Dashboard gilt er, solange der Zeitregler vor diesem Tag steht (fehlerklassen.STICHTAG).
 WECHSEL_VOR_BEGEHUNG = "2024-09-01"
 
@@ -303,18 +303,18 @@ def empfehlungen_vor_begehung(vorher: pd.DataFrame, kz_vor: pd.DataFrame, fehler
     return aus[list(VOR_SPALTEN)].rename(columns=VOR_SPALTEN)
 
 
-#Maßnahmen aus den Begehungen (Notebook 18), so wie sie im Protokoll stehen
+#Maßnahmen aus den Begehungen (Notebook 27), so wie sie im Protokoll stehen
 BEFUND_TEXT = {"ventil": "Ventil getauscht / Ventilbefund", "daemmung": "Leitungen gedämmt",
                "filter": "Filter gereinigt", "durchfluss": "Durchfluss neu eingestellt",
                "temperatur": "Rücklauf-Sollwert gesenkt", "ueberdimensioniert": "Vertrag verkleinert"}
 SOMMERNACHT_AUFFAELLIG = 0.5
-#ab diesem Anteil der Heiztage mit Konto am Deckel gilt die Referenz als veraltet (Notebook 34)
+#ab diesem Anteil der Heiztage mit Konto am Deckel gilt die Referenz als veraltet (Notebook 39)
 DECKEL_ANTEIL = 0.5
 
 
 def wissensstand(st: pd.DataFrame, labels: Optional[pd.DataFrame] = None,
                  termine: Optional[dict] = None) -> pd.DataFrame:
-    """Fünf getrennte Aussagen je Station (Notebook 34, Abschnitt 13).
+    """Fünf getrennte Aussagen je Station (Notebook 39, Abschnitt 13).
 
     - ``symptom``: was die Messwerte jetzt zeigen (Netzvergleich, Sommernächte)
     - ``veraenderung``: was die Wächter gemeldet haben, oder warum sie nicht bewerten
@@ -343,7 +343,7 @@ def wissensstand(st: pd.DataFrame, labels: Optional[pd.DataFrame] = None,
                 veraenderung.append(f"Tagesmonitor: {int(z['tm_verschlechterung'])} Verschlechterung(en) in der letzten Heizperiode")
             deckel = z.get("tm_deckel_anteil", np.nan)
             if pd.notna(deckel) and deckel >= DECKEL_ANTEIL:
-                #Notebook 34, Fall 1 und 2: ein Konto am Deckel kann nicht neu alarmieren
+                #Notebook 39, Fall 1 und 2: ein Konto am Deckel kann nicht neu alarmieren
                 veraenderung.append(f"Tagesmonitor: dauerhaft anders als die Referenz ({100 * deckel:.0f} % der Heiztage "
                                     "am Deckel), meldet nichts Neues; Referenz neu lernen")
         lstm_status = str(z.get("lstm_status", ""))
@@ -525,8 +525,8 @@ def rechne(ausgabe: Path = AUSGABE, stunden: Optional[pd.DataFrame] = None,
     netz = sbl.rechne(sb_e["serien"], sb_e["termine"], sb_e["anschlusswerte"], sb_e["bhkw"],
                       sb_e["ohne_datum"], baujahr=sb_e["baujahr"])
     status = sbl.statustabelle(netz).set_index("meter")
-    #Sonderfall: Werte außerhalb des Lernbereichs (NB 22, Abschnitt 8) oder ein
-    #Volumen, das für eine Hausstation nicht passt (NB 22: 81050517, 81062289)
+    #Sonderfall: Werte außerhalb des Lernbereichs (NB 31, Abschnitt 8) oder ein
+    #Volumen, das für eine Hausstation nicht passt (NB 31: 81050517, 81062289)
     grund, _ = sonderfall_gruende(aktuell, stunden, winter)
     sonderfall = grund != ""
     #derselbe Stand vor den Begehungen, mit Ivelinas Fehlerbild aus Winter 23/24
@@ -567,7 +567,7 @@ def rechne(ausgabe: Path = AUSGABE, stunden: Optional[pd.DataFrame] = None,
                  .rename(columns={"winter": "netz_winter", "rang": "netz_rang", "score": "netz_score",
                                   "auffaellig": "netz_auffaellig", "fehlerbild": "netz_fehlerbild",
                                   "prioritaet": "prioritaet_kennlinien_strang"}))
-    #größte Lücke zum besten Viertel in Worten (Notebook 27), z. B. "Spreizung 9,0 K unter dem besten Viertel"
+    #größte Lücke zum besten Viertel in Worten (Notebook 24), z. B. "Spreizung 9,0 K unter dem besten Viertel"
     st["luecke_text"] = [sbl.luecke_text(k, status.at[m, f"bw_abstand_{k}"])
                          if isinstance(k, str) and k and m in status.index and f"bw_abstand_{k}" in status.columns
                          else "" for m, k in zip(st.index, st["groesste_luecke"])]
@@ -647,7 +647,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     try:
         rechne(args.out)
     except mp.PaketFehler as exc:
-        raise SystemExit(f"{exc}\nPakete bauen: Notebook 34, Abschnitt 14") from exc
+        raise SystemExit(f"{exc}\nPakete bauen: Notebook 39, Abschnitt 14") from exc
 
 
 if __name__ == "__main__":

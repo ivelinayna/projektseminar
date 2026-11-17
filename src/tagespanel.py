@@ -108,7 +108,7 @@ def zustandsanteile(stundencluster: pd.DataFrame,
 
     Eingabe ist das Stundenpanel aus `clustervalidierung.lade_stundenpanel`
     mit angehaengter Clusterspalte, also genau das Objekt, mit dem
-    Notebook 09 arbeitet. Rueckgabe hat eine Zeile je Station und Tag mit
+    Notebook 10 arbeitet. Rueckgabe hat eine Zeile je Station und Tag mit
     einer Anteilsspalte je Cluster (Zeilensumme 1) und
     ``n_stunden_cluster``.
 

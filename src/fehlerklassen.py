@@ -1,16 +1,16 @@
 """Fehler erkennen und unterteilen nach Folie 5, als Modellpaket für den Betrieb.
 
-Die Kette stammt aus den Notebooks 18 bis 22 (Dominik):
+Die Kette stammt aus den Notebooks 27 bis 31 (Dominik):
 
 1. **Kennzahlen** je Zähler aus einem Winter und dem folgenden Sommer
-   (Notebook 18): Sommernächte, Rücklauf, Spreizung, Regelverhalten,
+   (Notebook 27): Sommernächte, Rücklauf, Spreizung, Regelverhalten,
    Auslastung.
-2. **LSTM-Embedding** (Notebook 20): ein Netz, das aus einem Tag den nächsten
+2. **LSTM-Embedding** (Notebook 29): ein Netz, das aus einem Tag den nächsten
    vorhersagt, übersetzt jeden Tag in acht Zahlen; je Zähler und Zeitraum
    der Mittelwert.
-3. **Ventil-Modell** (Notebook 22): logistische Regression auf Kennzahlen
+3. **Ventil-Modell** (Notebook 31): logistische Regression auf Kennzahlen
    und Embedding, Grenze fest 0,5 (AUC 0,89 aus der Kreuzvalidierung).
-4. **Optimum oder schlechter** (Notebook 19): K-Means mit k = 2 auf drei
+4. **Optimum oder schlechter** (Notebook 28): K-Means mit k = 2 auf drei
    Regelungs-Kennzahlen, die Gruppe mit dem kälteren Rücklauf ist das
    Optimum.
 5. **Klasse nach Folie 5** in dieser Reihenfolge: Regelventil tauschen
@@ -46,7 +46,7 @@ PAKETNAME = "fehlerklassen"
 SEED = 0
 STICHTAG = pd.Timestamp("2024-09-01")
 
-#Zeiträume der Notebooks 18 und 20 (vor den Begehungen)
+#Zeiträume der Notebooks 27 und 29 (vor den Begehungen)
 WINTER = ("2023-10-01", "2024-04-01")
 SOMMER = ("2024-06-01", "2024-09-01")
 
@@ -74,10 +74,10 @@ HANDLUNG = {"Regelventil tauschen": "Reparatur",
             "kein Handlungsbedarf": "keine", "nicht einstufbar": "Daten prüfen"}
 
 
-# --- Kennzahlen (Notebook 18) -------------------------------------------------
+# --- Kennzahlen (Notebook 27) -------------------------------------------------
 
 def _kennzahlen_eines_zaehlers(g: pd.DataFrame, winter, sommer) -> pd.Series:
-    """Wie `kennzahlen` in Notebook 18, Zelle 35, mit Zeiträumen als Parameter."""
+    """Wie `kennzahlen` in Notebook 27, Zelle 35, mit Zeiträumen als Parameter."""
     w = g[(g["timestamp"] >= winter[0]) & (g["timestamp"] < winter[1])]
     s = g[(g["timestamp"] >= sommer[0]) & (g["timestamp"] < sommer[1])]
     k = {"stunden_winter": int(w["durchfluss"].notna().sum()),
@@ -122,7 +122,7 @@ def kennzahlen(stunden: pd.DataFrame, winter=WINTER, sommer=SOMMER,
                vertrag: Optional[pd.Series] = None) -> pd.DataFrame:
     """Kennzahlen je Zähler für einen Winter und den folgenden Sommer.
 
-    ``grenze`` schneidet je Zähler alles ab diesem Datum ab (Notebook 18:
+    ``grenze`` schneidet je Zähler alles ab diesem Datum ab (Notebook 27:
     erste Begehung, spätestens Stichtag). ``anschluss`` ist der
     Anschlusswert in kW (Auslastung = Spitzenlast / Anschlusswert),
     ``vertrag`` der Vertrag vor der Begehung (``auslastung_vertrag``).
@@ -154,7 +154,7 @@ def grenze_vor_begehung(labels: pd.DataFrame, zaehler: Sequence[int],
             .reindex(sorted(zaehler)).fillna(stichtag))
 
 
-# --- LSTM-Embedding (Notebook 20) --------------------------------------------
+# --- LSTM-Embedding (Notebook 29) --------------------------------------------
 
 def _torch():
     import torch
@@ -162,7 +162,7 @@ def _torch():
 
 
 def embedding_netz():
-    """Netz aus Notebook 20, Abschnitt 3 (gleiche Namen der Gewichte)."""
+    """Netz aus Notebook 29, Abschnitt 3 (gleiche Namen der Gewichte)."""
     torch = _torch()
     nn = torch.nn
 
@@ -199,7 +199,7 @@ def _tagesfeld(stunden: pd.DataFrame) -> Tuple[np.ndarray, pd.DataFrame, pd.Data
 
 
 def embedding_skalierung(stunden: pd.DataFrame, grenze: pd.Series) -> dict:
-    """Skalen aus den Tagen vor der Begehung (Notebook 20, Abschnitt 2)."""
+    """Skalen aus den Tagen vor der Begehung (Notebook 29, Abschnitt 2)."""
     werte, tage, s = _tagesfeld(stunden)
     vorher = (tage["tag"] < tage["zaehler"].map(grenze).fillna(STICHTAG)).to_numpy()
     stunde_vorher = np.repeat(vorher, 24)
@@ -220,7 +220,7 @@ def embeddings(modell, skal: dict, stunden: pd.DataFrame,
                geraet: Optional[str] = None) -> pd.DataFrame:
     """Mittleres Embedding je Zähler und Zeitraum (Spalten lstm_<name>_z0..7).
 
-    Mit ``grenze`` zählen nur Tage davor (Notebook 20). Zähler ohne Teiler
+    Mit ``grenze`` zählen nur Tage davor (Notebook 29). Zähler ohne Teiler
     im Paket bekommen ihr eigenes 95-%-Quantil aus den übergebenen Daten.
     """
     torch = _torch()
@@ -252,7 +252,7 @@ def embeddings(modell, skal: dict, stunden: pd.DataFrame,
     return pd.concat(teile, axis=1)
 
 
-# --- Modelle (Notebook 19 und 22) ---------------------------------------------
+# --- Modelle (Notebook 28 und 31) ---------------------------------------------
 
 def _lr_suche():
     from sklearn.impute import SimpleImputer
@@ -268,7 +268,7 @@ def _lr_suche():
 
 
 def kreuzvalidiert(X: pd.DataFrame, y: np.ndarray) -> np.ndarray:
-    """Verschachtelte Leave-one-out-Werte wie Notebook 20 und 22."""
+    """Verschachtelte Leave-one-out-Werte wie Notebook 29 und 31."""
     from sklearn.model_selection import LeaveOneOut, cross_val_predict
     return cross_val_predict(_lr_suche(), X, y, cv=LeaveOneOut(),
                              method="predict_proba", n_jobs=-1)[:, 1]
@@ -281,7 +281,7 @@ def youden(y: np.ndarray, score: np.ndarray) -> float:
 
 
 def kmeans_lernen(kz: pd.DataFrame) -> dict:
-    """K-Means k = 2 auf drei Regelungs-Kennzahlen (Notebook 19)."""
+    """K-Means k = 2 auf drei Regelungs-Kennzahlen (Notebook 28)."""
     from sklearn.cluster import KMeans
     from sklearn.preprocessing import StandardScaler
     daten = kz[KMEANS_MERKMALE].dropna()
@@ -306,7 +306,7 @@ def kmeans_einstufen(km: dict, kz: pd.DataFrame) -> pd.Series:
 
 def trainingsdaten(kz: pd.DataFrame, emb: pd.DataFrame,
                    labels: pd.DataFrame) -> pd.DataFrame:
-    """Prüfbasis von Notebook 22: begangene mit Winter-Embedding und Sommerwerten."""
+    """Prüfbasis von Notebook 31: begangene mit Winter-Embedding und Sommerwerten."""
     merkmale = kz.join(emb[EMB_WINTER + EMB_SOMMER])
     daten = labels.join(merkmale, how="inner")
     return daten.dropna(subset=EMB_WINTER + ["sommer_durchlauf_anteil"])
@@ -348,11 +348,11 @@ def bewerten(teile: dict, kz: pd.DataFrame, emb: pd.DataFrame,
 
     ``teile`` kommt aus `lernen` oder `lade`. Mit ``oof`` werden für
     begangene Zähler die Werte aus der Kreuzvalidierung eingesetzt (wie
-    Notebook 22), sonst gilt für alle das fertige Modell.
+    Notebook 31), sonst gilt für alle das fertige Modell.
     """
     par = teile["parameter"]
     merkmale = kz.join(emb.reindex(columns=EMB_WINTER + EMB_SOMMER))
-    #die Merkmale stehen im Paket (Notebook 34 lernt ohne die Auslastung zum Anschlusswert)
+    #die Merkmale stehen im Paket (Notebook 39 lernt ohne die Auslastung zum Anschlusswert)
     X = merkmale.reindex(columns=par.get("merkmale", MERKMALE))
     k = pd.DataFrame(index=merkmale.index)
     #float64: nur mit dem Embedding (float32) käme sonst float32 heraus und die Werte aus der Kreuzvalidierung passen nicht hinein
@@ -388,11 +388,11 @@ def paket_bauen(stunden: Optional[pd.DataFrame] = None,
                 gewichte: Path = NB_MODELLE / "lstm_embedding_begangen.pt",
                 version: Optional[str] = None, wurzel: Path = mp.MODELS,
                 aktuell: bool = True) -> mp.Paket:
-    """Paket ``fehlerklassen`` aus den Ausgaben der Notebooks 18 bis 20.
+    """Paket ``fehlerklassen`` aus den Ausgaben der Notebooks 27 bis 29.
 
     Ohne Argumente liest es `modell_stunden.parquet`, `modell_labels.csv`,
     `modell_kennzahlen.csv` und `lstm_embedding.csv`, also genau das, woraus
-    Notebook 22 gelernt hat.
+    Notebook 31 gelernt hat.
     """
     import joblib
     torch = _torch()
@@ -484,7 +484,7 @@ def saison_bewerten(geladen: dict, stunden: pd.DataFrame, winter: Tuple[str, str
 
 
 def gegenprobe(geladen: dict) -> dict:
-    """Paket gegen `fehlerklassen_je_hast.csv` aus Notebook 22 halten."""
+    """Paket gegen `fehlerklassen_je_hast.csv` aus Notebook 31 halten."""
     kz = pd.read_csv(PROCESSED / "modell_kennzahlen.csv", index_col="zaehler")
     emb = pd.read_csv(PROCESSED / "lstm_embedding.csv", index_col="zaehler")
     neu = bewerten(geladen, kz, emb, oof=geladen["kreuzvalidierung"])

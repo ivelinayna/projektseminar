@@ -1,7 +1,7 @@
-site_name: Fernwärme Fault Detection — ÜZ Mainfranken
+site_name: Fehlererkennung im Fernwärmenetz
 site_description: >-
-  Projektseminar JMU Würzburg: datengestützte Fehlererkennung und
-  Leistungsoptimierung im Fernwärmenetz Wiesentheid.
+  Projektseminar JMU Würzburg mit der ÜZ Mainfranken: Fehler in
+  Hausübergabestationen aus Zählerdaten erkennen.
 docs_dir: docs
 theme:
   name: material
@@ -20,8 +20,59 @@ markdown_extensions:
   - admonition
   - toc:
       permalink: true
+extra_css:
+  - stylesheets/extra.css
+
 nav:
-  - Übersicht: README.md
-  - Modellvergleich: modellvergleich.md
-  - Pipeline: pipeline.md
-  - Ergebnisse Notebooks 12–15: output_NB12-15.md
+  - Einleitung: 
+      - Ausgangslage: ausgangslage.md
+      - Aufgabe und Ziel: aufgabe_und_ziel.md
+      - Aufbau der Arbeit: aufbau.md
+
+  - Installation und Ausführung:
+      - Vorbereitung:
+      - Start mit Docker:
+      - Ausführung bis zum Dashboard:
+      - Lokaler Start ohne Docker: 
+      
+  - Datengrundlage: 
+      - Zählerdaten: daten_zaehlerdaten.md
+      - Begehungen: daten_begehungen.md
+      - Netz und Zuordnung:
+      - Ergänzende Daten:
+      - Qualität und Einschränkungen:
+
+  - Vorgehen:
+      - Überblick: 
+      - Daten aufbereiten:
+      - Begehungen auswerten:
+      - Merkmale und Clustering:
+      - Stationsbilder und Befunde: 
+      - Anomalien und Monitoring:
+      - Lernende Modelle:
+      - Netz einbeziehen:
+      - Modelle vergleichen: 
+      - Was nicht getragen hat: 
+     
+  - Ergebnisse:
+      - Überblick:
+      - Datenanalyse:
+      - Endmodell: 
+      - Handlungsempfehlungen:
+      - Dashboard: 
+
+  - Grenzen und Erkenntnisse:
+      - Annahmen:
+      - Grenzen der Daten:
+      - Grenzen der Modelle:
+      - Erkenntnisse:
+
+  - Ausblick:
+      - Probebetrieb:
+      - Prüfung nach vorn:
+      - Weiterentwicklung:
+      - Offene Fragen an die ÜZ:
+
+  - Aufteilung im Team:
+
+  - Anhang: 

@@ -20,4 +20,4 @@ python -m src.modellpaket
 ```
 
 Aufbau und Laden: Docstring von `src/modellpaket.py`. Geprüft werden die Pakete in
-`notebooks/32_modellvergleich.ipynb`.
+`notebooks/38_modellvergleich.ipynb`.

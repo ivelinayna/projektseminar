@@ -1,0 +1,46 @@
+#Start: docker compose up jupyter   (oder dashboard, docs, app)
+#Die Rohdaten liegen nicht im Image. Sie müssen lokal unter data/raw/ liegen und werden eingehängt.
+x-projekt: &projekt
+  build: .
+  image: fernwaerme-projekt
+  working_dir: /app
+  volumes:
+    - ./data:/app/data
+    - ./outputs:/app/outputs
+    - ./models:/app/models
+    - ./notebooks:/app/notebooks
+    - ./src:/app/src
+    - ./docs:/app/docs
+
+services:
+  #Notebooks im Browser: http://localhost:8888
+  jupyter:
+    <<: *projekt
+    ports:
+      - "127.0.0.1:8888:8888"
+
+  #Fertiges Dashboard aus Notebook 40: http://localhost:8000/fernwaerme_dashboard_final.html
+  #Die HTML-Datei muss vorher mit Notebook 40 erzeugt worden sein (liegt in notebooks/).
+  dashboard:
+    <<: *projekt
+    ports:
+      - "127.0.0.1:8000:8000"
+    command: ["python", "-m", "http.server", "8000", "--directory", "/app/notebooks"]
+
+  #Dokumentation wie auf Read the Docs: http://localhost:8001
+  docs:
+    <<: *projekt
+    ports:
+      - "127.0.0.1:8001:8001"
+    volumes:
+      - ./docs:/app/docs
+      - ./mkdocs.yml:/app/mkdocs.yml
+    command: ["mkdocs", "serve", "-a", "0.0.0.0:8001"]
+
+  #Ältere Streamlit-App (Rücklauf-Ampel): http://localhost:8501
+  app:
+    <<: *projekt
+    profiles: ["extra"]
+    ports:
+      - "127.0.0.1:8501:8501"
+    command: ["streamlit", "run", "src/dashboard_app.py", "--server.address=0.0.0.0", "--server.port=8501"]

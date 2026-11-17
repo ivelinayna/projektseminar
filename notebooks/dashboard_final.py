@@ -1,8 +1,8 @@
 # dashboard_final.py
-# Kopie von dashboard_export.py (Notebook 16) in der Rohrbaum-Fassung aus Notebook 28, erweitert um die
-# Ergebnisse der Modelle aus Notebook 34. Das Original dashboard_export.py bleibt unverändert.
+# Kopie von dashboard_export.py (Notebook 34) in der Rohrbaum-Fassung aus Notebook 35, erweitert um die
+# Ergebnisse der Modelle aus Notebook 39. Das Original dashboard_export.py bleibt unverändert.
 #
-# Ausführen in Notebook 35 mit runpy.run_path("dashboard_final.py", init_globals={...}).
+# Ausführen in Notebook 40 mit runpy.run_path("dashboard_final.py", init_globals={...}).
 # Gebraucht werden serien, knoten, G, pos, roh und optional linien, kml_linien, geschaetzt.
 # Die Modellergebnisse kommen fertig aus outputs/dashboard/ (python -m src.dashboard_daten),
 # gelesen über src/dashboard_karte.py. Dieses Skript rechnet keine Modelle.
@@ -36,7 +36,7 @@ MELDUNG_TAGE = 14               # Färbung "Meldungen": Meldungen der letzten so
 # ------------------------------------------------------------------ Voraussetzungen prüfen
 fehlt = [n for n in ("serien", "knoten", "G", "pos", "roh") if n not in globals()]
 if fehlt:
-    raise SystemExit(f"Diese Variablen fehlen: {fehlt}. Notebook 35 von oben ausführen.")
+    raise SystemExit(f"Diese Variablen fehlen: {fehlt}. Notebook 40 von oben ausführen.")
 
 ROOT = globals().get("ROOT") or next(
     (p for p in [Path.cwd(), *Path.cwd().parents] if (p / "src" / "dashboard_karte.py").exists()), None)
@@ -490,7 +490,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
       <h2>So funktioniert das Dashboard</h2>
       <p>Das Dashboard beantwortet für jede Hausstation die Fragen der Aufgabenstellung: Wie läuft das Netz, wie läuft die
         Station, hat sich etwas verändert, welcher Fehler steckt dahinter und was soll zuerst gemacht werden. Jede Anzeige
-        kommt von dem Modell, das im Vergleich in Notebook 34 dafür am besten abgeschnitten hat. Kein Modell kann alles,
+        kommt von dem Modell, das im Vergleich in Notebook 39 dafür am besten abgeschnitten hat. Kein Modell kann alles,
         deshalb arbeiten zwei Ansätze zusammen:</p>
       <ul>
         <li><b>Modell Monitoring:</b> Jede Station hat eine Kennlinie über der Außentemperatur. Ein Konto (CUSUM) zählt, ob sie über
@@ -519,9 +519,9 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
             <td>Messwert. Monate, in denen nur wenige Stationen Daten haben, sind markiert.</td></tr>
           <tr><td><b>Wie gut läuft eine Station im Vergleich, wo liegt Potenzial?</b><br><span class="muted">Datenanalyse, Visualisierung</span></td>
             <td>Färbung „Potenzial“, Hausfenster „Leistung im Netz“</td>
-            <td>Modell Monitoring: Netzvergleich je Winter (Notebook 20) und Abstand zum besten Viertel (Notebook 27)</td>
+            <td>Modell Monitoring: Netzvergleich je Winter (Notebook 21) und Abstand zum besten Viertel (Notebook 24)</td>
             <td>Nur der Vergleich mit den anderen Stationen sieht eine Station, die schon immer schlecht läuft. Ein Wächter, der
-              jede Station mit sich selbst vergleicht, hält das für normal (Notebook 34, Test D).</td>
+              jede Station mit sich selbst vergleicht, hält das für normal (Notebook 39, Test D).</td>
             <td>Beschreibt, wo die Station steht. Sagt keine Einsparung voraus.</td></tr>
           <tr><td><b>Hat sich an einer Station etwas verändert?</b><br><span class="muted">Anomalieerkennung</span></td>
             <td>Färbung „Meldungen“, Hausfenster „Veränderung“</td>
@@ -538,7 +538,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
             <td>LSTM-Modell: logistische Regression nur auf der LSTM-Zusammenfassung (16 Zahlen), nur auf begangenen Stationen gelernt.
               Bestätigung durch das Fehlerbild „ventil“ aus Modell Monitoring.</td>
             <td>Test C (Kreuzvalidierung über Stationsgruppen): AUC 0,83, findet 8 von 11 Ventilfällen bei 4 Fehlalarmen
-              (Notebook 34). Mit der Wahl des Modells ohne die Teststationen kommt dasselbe heraus (0,84, Abschnitt 16). Die
+              (Notebook 39). Mit der Wahl des Modells ohne die Teststationen kommt dasselbe heraus (0,84, Abschnitt 16). Die
               einfache Regel „nachts im Sommer fließt Wasser“ ist genauso gut (0,85). Das Fehlerbild aus Modell Monitoring ist 4 von 4 richtig,
               findet aber nur 4. Es ist dasselbe Modell wie auf der Folie. Weil die Regel genauso gut und leicht verständlich
               ist, steht der Sommernacht-Anteil als Erklärung daneben.</td>
@@ -548,7 +548,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
             <td>LSTM-Modell: eigenes Dämmungsmodell, Hinweis ab Score <span class="g-daemmung"></span></td>
             <td>Keine einzelne Regel kommt über AUC 0,61, auch wenn man sie an den Befunden einstellt. Die KI findet ein Muster
               in der LSTM-Zusammenfassung, Test C 0,79 (findet 15 von 22 bei 7 Fehlalarmen). Der Vorsprung (+0,18) ist knapp nicht gesichert
-              (Notebook 34, Abschnitt 16b).</td>
+              (Notebook 39, Abschnitt 16b).</td>
             <td>Nur Hinweis: Was das Muster physikalisch bedeutet, ist offen, gedämmt wurde eher an Stationen, die im Winter gut
               laufen. Dämmung ist bei 41 % der begangenen Stationen eingetragen, entsprechend oft erscheint der Hinweis.</td></tr>
           <tr><td><b>Ist der Anschluss zu groß?</b><br><span class="muted">Klassifizierung → Kapazitätsanpassung</span></td>
@@ -568,7 +568,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
             <td><b>hoch:</b> Reparatur, bestätigt durch das Fehlerbild „ventil“ aus Modell Monitoring (4 von 4 richtig).
               <b>mittel:</b> Reparatur nur nach dem Ventil-Score (Test C: 8 von 11 gefunden bei 4 Fehlalarmen).
               <b>niedrig:</b> nur Kapazität, Dämmung (Hinweis) oder Daten prüfen. Innerhalb einer Stufe nach Ventil-Score:
-              Unter den ersten 10 nach Score hatten 7 einen Ventilbefund, Zufall wären etwa 2 (Notebook 34, Test E).</td>
+              Unter den ersten 10 nach Score hatten 7 einen Ventilbefund, Zufall wären etwa 2 (Notebook 39, Test E).</td>
             <td>Die Stufen sind gesetzt, nicht gelernt. Ob die Reihenfolge im Betrieb trägt, zeigt erst eine Begehung nach der
               Liste.</td></tr>
         </tbody>
@@ -577,7 +577,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
 
       <h3>Warum zwei Ansätze und nicht ein Modell für alles?</h3>
       <ul>
-        <li>Keins der beiden Modelle ist allein besser. Sie können Verschiedenes (Notebook 34).</li>
+        <li>Keins der beiden Modelle ist allein besser. Sie können Verschiedenes (Notebook 39).</li>
         <li>Wir haben ein LSTM gebaut, das genauso arbeitet wie der Tagesmonitor aus Modell Monitoring: feste Referenz statt Vergleich mit der
           Vorwoche. Es ist gleich gut wie die Kennlinie. Den Unterschied macht also die Bauweise, nicht der Modelltyp. Bei
           Gleichstand bleibt das einfachere Modell.</li>
@@ -593,8 +593,8 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
         <li><b>XGBoost</b> für die Fehlerart: nicht verlässlich besser, schwankt je nach Startwerten stark.</li>
         <li><b>LSTM mit fester Referenz:</b> gleich gut wie die Kennlinie, also bleibt die einfachere Kennlinie.</li>
         <li><b>Eigenes Sommer-LSTM:</b> nur ein Sommer zum Lernen, kein Vorteil.</li>
-        <li><b>Nachbarn im Rohrbaum als Merkmal:</b> Nachbarn teilen kaum Signal (Notebook 28) und verbessern weder Meldung noch
-          Erkennung (Notebook 32).</li>
+        <li><b>Nachbarn im Rohrbaum als Merkmal:</b> Nachbarn teilen kaum Signal (Notebook 35) und verbessern weder Meldung noch
+          Erkennung (Notebook 38).</li>
         <li><b>Filter, Sollwert, Durchfluss einstellen und Regelhysterese als Fehlerart:</b> in den Daten nicht erkennbar
           (AUC 0,26 bis 0,57). Sie erscheinen höchstens als Symptom.</li>
       </ul>
@@ -612,7 +612,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
         <li><b>Reparatur bei Sonderfällen:</b> Bei Stationen mit Werten außerhalb dessen, woraus die Modelle gelernt haben, oder mit
           einem großen Teil des Netzvolumens ist kein Score geprüft. Sie bekommen nur „Daten prüfen“.</li>
         <li><b>Einspar-Schätzung für das Netz:</b> Sie hätte angenommen, dass jede Station mit Maßnahme den Rücklauf der besten
-          Gruppe erreicht. Ob Begehungen den Rücklauf messbar senken, ist nicht gesichert (Notebook 34, Test D).</li>
+          Gruppe erreicht. Ob Begehungen den Rücklauf messbar senken, ist nicht gesichert (Notebook 39, Test D).</li>
       </ul>
 
       <h3>Richtig lesen</h3>
@@ -652,9 +652,9 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
       <h3>Wie die Daten ins Dashboard kommen</h3>
       <div class="fluss">
         <div><b>Notebook 00</b>Stundenreihen aller Zähler</div>
-        <div><b>Notebook 34</b>Modelle gelernt, geprüft und als Pakete gespeichert</div>
+        <div><b>Notebook 39</b>Modelle gelernt, geprüft und als Pakete gespeichert</div>
         <div><b>python -m src.dashboard_daten</b>Pakete auf die aktuellen Daten angewendet, ohne neu zu lernen</div>
-        <div><b>Notebook 35</b>Rohrbaum aus Notebook 28, Karte gebaut</div>
+        <div><b>Notebook 40</b>Rohrbaum aus Notebook 35, Karte gebaut</div>
       </div>
       <p class="muted klein" id="infoStand"></p>
     </div>
@@ -1199,7 +1199,7 @@ $('punkteText').textContent = D.punkte ? 'Graue Punkte sind Abzweige und Anschlu
 const pk = MD.meta.pakete || {};
 $('infoStand').textContent = 'Stand: Modellpakete ' + Object.keys(pk).map(k => k + ' ' + pk[k]).join(', ')
   + '; angewendet am ' + String(MD.meta.erstellt).slice(0, 10) + '; Messdaten bis ' + MD.meta.datenende
-  + '. Zahlen zur Güte aus Notebook 34.';
+  + '. Zahlen zur Güte aus Notebook 39.';
 
 letzterStand = stand(); renderListe();
 setH(h);

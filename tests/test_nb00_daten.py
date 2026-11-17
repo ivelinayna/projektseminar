@@ -34,7 +34,7 @@ def ablage(tmp_path):
 
 def test_fehlende_ausgabe_nennt_notebook_00(ablage):
     raw, meter = ablage
-    with pytest.raises(FileNotFoundError, match="00_eda_hast_stationsprofile"):
+    with pytest.raises(FileNotFoundError, match="00_daten"):
         nb00.lade_serien(meter)
 
 

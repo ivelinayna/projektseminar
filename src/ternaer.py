@@ -110,7 +110,7 @@ REFERENZ_QUANTIL = 0.95
 #durcheinander.
 MIN_VOLUMEN_STUNDE_M3 = 0.05
 
-#Fenster um den Begehungstag, das als Umbauphase gilt. Siehe NB 08:
+#Fenster um den Begehungstag, das als Umbauphase gilt. Siehe NB 05:
 #waehrend Einstellung und Reparatur herrschen Sonderzustaende.
 PUFFER_TAGE = 7
 
@@ -141,7 +141,7 @@ def lade_serien(meter_dir: Path,
     """Stundenreihen aus Notebook 00 als Dict Zählernummer → Stundenreihe.
 
     Erwartet den Ordner ``data/processed/real_meters``, den
-    ``notebooks/00_eda_hast_stationsprofile.ipynb`` schreibt, und reicht
+    ``notebooks/00_daten.ipynb`` schreibt, und reicht
     an `nb00_daten.lade_serien` durch. Rückgabe trägt das Schema von
     `features.features_for_meter` auf einem DatetimeIndex; Stunden, die
     NB 00 nur als leere Rasterzeile führt, fallen heraus.

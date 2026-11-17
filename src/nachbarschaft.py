@@ -15,7 +15,7 @@ Statt über Kanten lassen sich Nachbarn auch über die Luftlinie bilden
 (`radius_nachbarn`). Dafür braucht es Koordinaten je Haus; die
 Nominatim-Positionen in `data/processed/hast_geocoded.csv` liegen fast
 alle nur auf Straßenebene und taugen dafür nicht. `positionen_aus_handliste`
-liest die von Hand gepflegte Liste aus NB 16 (Spalten ``adresse`` und
+liest die von Hand gepflegte Liste aus NB 34 (Spalten ``adresse`` und
 ``koordinate``, optional ``zaehler``).
 
 Knotennamen im Graph sind Adressen und werden nie ausgegeben.
@@ -90,7 +90,7 @@ def _koordinate(text) -> Tuple[float, float]:
 
 
 def positionen_aus_handliste(pfad, adressen: Mapping[int, str]) -> pd.DataFrame:
-    """Zählernummer, lat, lon aus der Koordinatenliste von NB 16.
+    """Zählernummer, lat, lon aus der Koordinatenliste von NB 34.
 
     ``adressen`` ist Zählernummer -> Adresse (``load_begehungen.meter_to_address``).
     Steht in der Liste eine Spalte ``zaehler``, gilt die Koordinate direkt
