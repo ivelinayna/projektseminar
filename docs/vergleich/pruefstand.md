@@ -130,6 +130,6 @@ Bei der Nachprüfung fielen vier Schwächen auf:
 - Das beste Modell für die Fehlerart wurde nach den Testwerten gewählt.
 
 Notebook 39 rechnet deshalb alles neu und strenger. Beim Ventil kommt es auf 0,84 statt 0,89 (siehe
-[Strenger Vergleich und Entscheidung](endmodell.md)). Für Aussagen gelten die Zahlen aus Notebook 39. Die
+[Endmodell](../ergebnisse_endmodell.md)). Für Aussagen gelten die Zahlen aus Notebook 39. Die
 Rollen der beiden Systeme bleiben gleich: das Monitoring-Modell für den Alarm in der Heizperiode, die LSTM-Kette für
 die Fehlerart und die warmen Tage.

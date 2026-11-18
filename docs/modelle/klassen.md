@@ -32,7 +32,7 @@ verschachtelt geprüft, mit ausgelassenen Stationen und mit ausgelassenen Straß
 
 Das ist der erste Stand. Die strengere Prüfung in Notebook 39 kommt beim Ventil auf 0,84 und bei der Dämmung auf
 0,78, mit der Regression nur auf den 16 LSTM-Zahlen (siehe
-[Strenger Vergleich und Entscheidung](../vergleich/endmodell.md)).
+[Endmodell](../ergebnisse_endmodell.md)).
 
 **Warum eine logistische Regression.** Bei 11 Ventil- und 9 Vertragsfällen kann ein Modell nur wenige Gewichte
 sicher lernen. Die logistische Regression hat je Merkmal ein Gewicht, ihre Regularisierung wird in der inneren
@@ -90,7 +90,7 @@ Jede Station durchläuft dieselbe Reihenfolge:
 3. sonst K-Means „Optimum“: **kein Handlungsbedarf.**
 4. ohne genug Daten: **nicht einstufbar.**
 
-Unabhängig von der Klasse kommen die Hinweise Dämmung (Dämmungs-Score über der Youden-Grenze) und Kapazität
+Unabhängig von der Klasse kommen die Hinweise Dämmung (Dämmungs-Score ab 0,5, im Paket aus Notebook 39 fest wie beim Ventil) und Kapazität
 (Auslastung zum Vertrag unter der Grenze).
 
 **Warum die Ventil-Grenze fest bei 0,5 liegt.** Eine Grenze nach dem Youden-Index sprang nach dem Neuaufbau der

@@ -37,7 +37,7 @@ Programm dashboard_daten     wendet die Pakete auf die aktuellen Stundenreihen a
 | Wächter für die Heizperiode | 22 | Tagesmonitor des Monitoring-Modells: Kennlinie je Station mit CUSUM |
 | Daten, Labels, Fingerabdruck, Klassen | 27 bis 29, 31 | Labels aus den Begehungen, Kennzahlen, LSTM-Fingerabdruck, Einstufung mit K-Means, Klassen nach Folie 5 (siehe [Lernende Modelle](modelle/index.md)) |
 | Wächter für warme Tage | 30 | Prognose-LSTM, das jeden Tag Rücklauf und Durchfluss vorhersagt |
-| Endmodell | 39 | lernt die gewählten Modelle neu, prüft sie streng und speichert sie als Pakete (siehe [Strenger Vergleich und Entscheidung](vergleich/endmodell.md)) |
+| Endmodell | 39 | lernt die gewählten Modelle neu, prüft sie streng und speichert sie als Pakete (siehe [Strenger Vergleich](vergleich/endmodell.md)) |
 | Anwendung | Programm dashboard_daten | wendet die Pakete auf die aktuellen Daten an, ohne neu zu lernen. Die Ergebnistabellen enthalten nur Zählernummern. |
 | Netz und Rohrbaum | 34, 35 | Leitungsnetz und Lage der Häuser aus einer von Hand gepflegten Koordinatentabelle (siehe *Datengrundlage → Netz und Zuordnung*), dazu der Rohrbaum vom Erzeuger zu jedem Haus |
 | Dashboard | 40 | verbindet die Ergebnistabellen mit dem Rohrbaum und schreibt die HTML-Datei |
@@ -78,31 +78,18 @@ in der Liste, färben die Karte aber nicht. So meldet für jede Station und jede
 mit den LSTM-Zahlen. „LSTM-Zahl 5 ist hoch“ hilft keinem Techniker, „in den meisten Sommernächten läuft Wasser durch“
 schon.
 
-## Handlungsliste und Dringlichkeit
+## Handlungsliste
 
-| Dringlichkeit | wann |
-|---|---|
-| hoch | Reparatur, bestätigt durch das Fehlerbild „ventil“ des Monitoring-Modells. Dieses Fehlerbild war in Notebook 39 bei 4 von 4 Stationen richtig. |
-| mittel | Reparatur nur nach dem Ventil-Score. Die Klasse fand in Notebook 39 8 von 11 Ventilfällen. |
-| niedrig | nur Hinweise: Kapazität prüfen, Dämmung prüfen, Daten prüfen |
+Die Handlungsliste ordnet alle Zähler nach Dringlichkeit und innerhalb einer Stufe nach dem Ventil-Score. Wie Handlung
+und Dringlichkeit entstehen, was beim aktuellen Datenstand herauskommt und was bewusst nicht empfohlen wird, steht unter
+[Handlungsempfehlungen](ergebnisse_handlungsempfehlungen.md).
 
-- Innerhalb einer Stufe wird nach dem Ventil-Score sortiert. Das ist der Teil der Reihenfolge, den Notebook 39 belegt.
-- **Sonderfälle** bekommen nur „Daten prüfen“, keine Reparatur. Sonderfall heißt: Mindestens zwei Kennzahlen liegen
-  außerhalb dessen, woraus das Modell gelernt hat, oder die Station hat mehr als 10 % des Wintervolumens im Netz und
-  ist damit keine typische Hausstation.
-- Die Stufen sind festgelegt, nicht gelernt. Ob die Reihenfolge im Betrieb trägt, zeigt erst eine Begehung nach der
-  Liste.
+## Keine Meldung heißt nicht „in Ordnung“
 
-## Was das Dashboard bewusst nicht tut
-
-- **Keine Empfehlung „Regelung optimieren“.** Kein Modell erkennt diese Maßnahme (Notebook 39, Test C).
-- **Kein Sortieren nach Meldungen.** Vor Begehungen mit Befund gab es nicht mehr Verschlechterungen als bei
-  Vergleichsstationen (Notebook 23).
-- **Kein Sortieren nach Potenzial und keine Einspar-Schätzung in Euro.** Das Potenzial sagt nicht vorher, wo eine
-  Begehung am meisten bringt (Notebook 39, Test D, Rangkorrelation 0,16).
-- **Kein „in Ordnung“.** Keine Meldung heißt nicht, dass die Station in Ordnung ist. Stationen, für die ein Wächter
-  noch keine Referenz hat, stehen als „noch nicht bewertbar“ im Dashboard. Das betrifft 7 Stationen beim
-  Monitoring-Modell, 6 davon auch beim Prognose-LSTM.
+Das Dashboard zeigt nie „in Ordnung“. Stationen, für die ein Wächter noch keine Referenz hat, stehen als „noch nicht
+bewertbar“ im Dashboard, nicht als „kein Alarm“. Im aktuellen Stand sind das 7 Stationen, bei beiden Wächtern
+dieselben. Das Monitoring-Modell braucht dafür 60 Heiztage, das Prognose-LSTM rund vier Wochen volle Stundenwerte
+(Notebook 39).
 
 ## Datenschutz
 
