@@ -5,8 +5,11 @@ den Code. Die Daten bleiben außerhalb des Images und werden beim Start eingehä
 
 ## Voraussetzungen
 
-- Docker Desktop (Windows, macOS) oder Docker Engine mit Compose (Linux).
-- Die Rohdaten der ÜZ liegen lokal unter `data/raw/` (siehe [Daten](daten.md)).
+- Docker Desktop (Windows, macOS) oder Docker Engine mit Compose (Linux). Auf dem Mac geht auch Colima statt Docker
+  Desktop (`colima start --cpu 4 --memory 4`), dann den Projektordner beim Start einhängen.
+- Die Rohdaten der ÜZ liegen lokal unter `data/raw/` (siehe [Daten](daten.md)). Sie sind nicht im Repo, ohne sie
+  läuft kein Notebook.
+- Rund 5 GB frei für das Image, mindestens 4 GB Arbeitsspeicher für den Container.
 
 ## Image bauen
 
@@ -67,3 +70,8 @@ docker compose run --rm jupyter python -m pytest -q
 - JupyterLab startet ohne Passwort. Die Ports sind deshalb nur auf dem eigenen Rechner erreichbar (`127.0.0.1`). Das
   so lassen und nicht ins Netz freigeben.
 - Das Image wurde für Linux gebaut. Auf Windows und macOS läuft es über Docker Desktop.
+- Im Container rechnet PyTorch nur auf der CPU. Die Notebooks 27 und 28 trainieren die LSTMs neu, wenn keine Gewichte
+  in `notebooks/models/` liegen. Das dauert auf der CPU mehrere Stunden.
+- Getestet am 18.11.2026 auf einem Mac (Apple Silicon) mit Colima: Bau rund 3,5 Minuten, Tests grün bis auf
+  `test_dashboard_app` (braucht `data/processed/priority_scores.csv` aus `python -m src.priority`), Notebooks 00, 01,
+  07, 21 und 37 und `src.dashboard_daten` laufen durch und liefern dieselben Zahlen wie lokal.

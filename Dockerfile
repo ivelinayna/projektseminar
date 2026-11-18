@@ -6,8 +6,7 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=utf-8 \
-    PIP_NO_CACHE_DIR=1 \
-    MPLBACKEND=Agg
+    PIP_NO_CACHE_DIR=1
 
 #libgomp1 braucht XGBoost, git nur für den Code-Stand in den Modellpaketen
 RUN apt-get update \
