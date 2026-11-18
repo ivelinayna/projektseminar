@@ -1,16 +1,16 @@
-"""Modellvergleich und Umsetzung nach Aufgabenstellung: Modell Ivelina gegen Modell LSTM (Notebook 39).
+"""Modellvergleich und Umsetzung nach Aufgabenstellung: Monitoring-Modell gegen LSTM-Modell (Notebook 35).
 
 Beide Modelle werden hier aus denselben Notebook-00-Stundenreihen neu
 gebaut, mit einer gemeinsamen, vorher festgelegten Zeitachse, und auf
 denselben Fällen geprüft. Neu erfunden wird kaum etwas:
 
-- **Modell Ivelina** (Kennlinien-Strang): Tagesmonitor aus
+- **Monitoring-Modell** (Kennlinien-Strang): Tagesmonitor aus
   `tagesmonitor` (Kennlinie + CUSUM), Netzvergleich und Potenzial aus
   `netzvergleich`, Fehlerbild und Priorität aus `alarmbewertung`. Hier wird
   nur die Lernzeit auf das gemeinsame Ende gesetzt.
-- **Modell LSTM** (Modell-Strang): Prognose-LSTM als Wächter aus
+- **LSTM-Modell** (Modell-Strang): Prognose-LSTM als Wächter aus
   `prognose_waechter`, Embedding + logistische Regression und K-Means aus
-  `fehlerklassen`. Dazu XGBoost aus Notebook 31 als dritter Kandidat.
+  `fehlerklassen`. Dazu XGBoost aus Notebook 29 als dritter Kandidat.
 
 Die Spielregeln stehen als Konstanten oben und gelten, bevor ein
 Testergebnis angeschaut wird:
@@ -19,7 +19,7 @@ Testergebnis angeschaut wird:
   ``VAL_START`` bis ``VAL_ENDE``, Test ab ``TEST_START``. Die 7 Tage
   Abstand sind das Eingabefenster des LSTM, so teilen die Abschnitte keinen
   Rohdatentag.
-- Schwellen und Alarmlast nur aus der Probezeit. Bezug ist Ivelinas Wächter
+- Schwellen und Alarmlast nur aus der Probezeit. Bezug ist der Monitoring-Wächter
   mit ihrer eigenen Einstellung h = 5: Jeder andere Wächter bekommt so
   viele Alarme, wie er in der Probezeit gibt.
 - Fehlerarten je Station: fünffache Kreuzvalidierung über physische
@@ -30,7 +30,7 @@ Testergebnis angeschaut wird:
 
 Neu ist `stoerung_einrechnen`: Fehler mit bekanntem Beginn werden in die
 NB-00-Stundenwerte geschrieben, **einschließlich der Energie- und
-Volumenzähler**. Erst damit lässt sich Ivelinas Wächter, der aus
+Volumenzähler**. Erst damit lässt sich der Monitoring-Wächter, der aus
 Zählerständen rechnet, genauso prüfen wie das LSTM.
 """
 
@@ -60,7 +60,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PROCESSED = ROOT / "data" / "processed"
 AUSGABE = ROOT / "outputs" / "finalvergleich"
 
-# --- Spielregeln (Notebook 39, Abschnitt 4) ---------------------------------
+# --- Spielregeln (Notebook 35, Abschnitt 4) ---------------------------------
 
 LERN_ENDE = pd.Timestamp("2024-02-01")     # erster Tag, der nicht mehr gelernt wird
 VAL_START = pd.Timestamp("2024-02-08")     # 7 Tage Abstand = Eingabefenster LSTM
@@ -70,14 +70,14 @@ WAHL_START = pd.Timestamp("2024-04-01")
 VAL_ENDE = pd.Timestamp("2024-06-01")
 TEST_START = pd.Timestamp("2024-06-08")
 SEED = 0
-H_IVELINA = tm.CUSUM_H                     # Ivelinas Einstellung, nicht verändert
+H_MONITORING = tm.CUSUM_H                     #Einstellung des Monitoring-Modells, nicht verändert
 MIN_VAL_TAGE = pw.MIN_VAL_TAGE
 
 #Raster für die Suche nach gleicher Alarmlast (nur Probezeit)
 RASTER_SCHWELLE = [1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 8.0]
 RASTER_CUSUM_H = [2.0, 2.5, 3.0, 3.5, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 15.0, 20.0, 30.0]
 
-#Klassifikation (Notebook 27 und 29)
+#Klassifikation (Notebook 25 und 27)
 WINTER = fk.WINTER
 SOMMER = fk.SOMMER
 STICHTAG = fk.STICHTAG
@@ -95,7 +95,7 @@ GRENZE = 0.5
 N_FOLDS = 5
 FOLD_SEED = 42
 
-#Ivelinas Fehlerbilder (alarmbewertung.FEHLERBILDER) als Hinweis auf eine Maßnahme
+#Fehlerbilder des Monitoring-Modells (alarmbewertung.FEHLERBILDER) als Hinweis auf eine Maßnahme
 FEHLERBILD_ZU_ZIEL = {"ventil": {"ventil"},
                       "durchfluss": {"durchfluss", "durchfluss_je_kw"},
                       "temperatur": {"regelung", "unruhig", "rücklauf"}}
@@ -116,7 +116,7 @@ def lade_eingaben(root: Path = ROOT) -> dict:
     Stundenreihen nur aus Notebook 00 (`nb00_daten.lade_serien`), daraus
     auch die Stundentabelle des LSTM (`stunden_aus_serien`). Anschlusswert
     und BHKW wie im Stationsblatt (`stationsblatt.eingaben`), Labels aus
-    Notebook 27.
+    Notebook 25.
     """
     from . import load_data as ld
     root = Path(root)
@@ -183,10 +183,10 @@ def gleiche_daten_pruefen(serien: Mapping[int, pd.DataFrame], stunden: pd.DataFr
                           nb18: Path = PROCESSED / "modell_stunden.parquet") -> pd.DataFrame:
     """Prüft, dass beide Modelle dieselben Messwerte bekommen.
 
-    Vergleicht die LSTM-Stundentabelle mit den NB-00-Reihen (Ivelina) und,
-    falls vorhanden, mit `modell_stunden.parquet` aus Notebook 27.
+    Vergleicht die LSTM-Stundentabelle mit den NB-00-Reihen (Monitoring) und,
+    falls vorhanden, mit `modell_stunden.parquet` aus Notebook 25.
     """
-    zeilen = [{"Prüfung": "Zähler in den NB-00-Reihen (Ivelina)", "Wert": len(serien)},
+    zeilen = [{"Prüfung": "Zähler in den NB-00-Reihen (Monitoring)", "Wert": len(serien)},
               {"Prüfung": "Zähler in der LSTM-Stundentabelle", "Wert": stunden["zaehler"].nunique()}]
     abw = 0.0
     for m, s in serien.items():
@@ -200,12 +200,12 @@ def gleiche_daten_pruefen(serien: Mapping[int, pd.DataFrame], stunden: pd.DataFr
         neu = stunden.dropna(subset=["ruecklauf", "durchfluss"])
         m = alt.merge(neu, on=["zaehler", "timestamp"], suffixes=("_nb18", "_neu"))
         zeilen += [
-            {"Prüfung": "gemessene Stunden in NB 27", "Wert": len(alt)},
+            {"Prüfung": "gemessene Stunden in NB 25", "Wert": len(alt)},
             {"Prüfung": "gemessene Stunden hier", "Wert": len(neu)},
             {"Prüfung": "davon gleiche Zähler-Stunden", "Wert": len(m)},
-            {"Prüfung": "größte Abweichung Rücklauf zu NB 27 [K]",
+            {"Prüfung": "größte Abweichung Rücklauf zu NB 25 [K]",
              "Wert": float((m["ruecklauf_nb18"] - m["ruecklauf_neu"]).abs().max())},
-            {"Prüfung": "größte Abweichung Durchfluss zu NB 27 [l/h]",
+            {"Prüfung": "größte Abweichung Durchfluss zu NB 25 [l/h]",
              "Wert": float((m["durchfluss_nb18"] - m["durchfluss_neu"]).abs().max())}]
     return pd.DataFrame(zeilen)
 
@@ -314,18 +314,18 @@ def stoerung_einrechnen(serie: pd.DataFrame, start, art: str,
     return s
 
 
-# --- Modell Ivelina: Tagesmonitor ---------------------------------------------
+# --- Monitoring-Modell: Tagesmonitor ---------------------------------------------
 
-def ivelina_tage(serien: Mapping[int, pd.DataFrame], temp: pd.Series) -> pd.DataFrame:
+def monitoring_tage(serien: Mapping[int, pd.DataFrame], temp: pd.Series) -> pd.DataFrame:
     """Nutzbare Heiztage mit Abkühlung und Tagesvolumen (`tagesmonitor`)."""
     return tm.modelltage(tm.alle_tageswerte(serien, temp))
 
 
-def ivelina_referenz(mt: pd.DataFrame, termine: Mapping[int, Sequence],
+def monitoring_referenz(mt: pd.DataFrame, termine: Mapping[int, Sequence],
                      lern_ende: Optional[pd.Timestamp] = LERN_ENDE) -> pd.DataFrame:
     """Referenzzeit je Station.
 
-    ``lern_ende=None`` ist Ivelinas eigene Regel (`tagesmonitor.referenz`:
+    ``lern_ende=None`` ist die eigene Regel des Monitoring-Modells (`tagesmonitor.referenz`:
     erstes Jahr, spätestens 14 Tage vor der ersten Begehung). Sonst endet
     die Referenz am gemeinsamen Lernende oder 14 Tage vor einer früheren
     Begehung. Mindestens 60 Referenztage und 8 K Temperaturspanne wie bei ihr.
@@ -358,13 +358,13 @@ def ivelina_referenz(mt: pd.DataFrame, termine: Mapping[int, Sequence],
     return pd.DataFrame(zeilen).set_index("meter")
 
 
-def ivelina_verlauf(mt: pd.DataFrame, ref: pd.DataFrame, mod: dict) -> pd.DataFrame:
+def monitoring_verlauf(mt: pd.DataFrame, ref: pd.DataFrame, mod: dict) -> pd.DataFrame:
     """z-Werte je Station, Kanal und Heiztag nach der Referenz (ohne CUSUM)."""
     verlauf, _ = tm.monitor(mt, ref, mod)
     return verlauf
 
 
-def ivelina_alarme(verlauf: pd.DataFrame, h: float = H_IVELINA) -> pd.DataFrame:
+def monitoring_alarme(verlauf: pd.DataFrame, h: float = H_MONITORING) -> pd.DataFrame:
     """CUSUM je Station und Kanal wie `tagesmonitor.monitor`, mit Grenze ``h``.
 
     Bei h = 5 identisch mit `tagesmonitor.monitor`. Der Deckel des Kontos
@@ -385,22 +385,22 @@ def ivelina_alarme(verlauf: pd.DataFrame, h: float = H_IVELINA) -> pd.DataFrame:
     return a
 
 
-def ivelina_beobachtet(verlauf: pd.DataFrame) -> pd.DataFrame:
+def monitoring_beobachtet(verlauf: pd.DataFrame) -> pd.DataFrame:
     v = verlauf[verlauf["kanal"] == "kwh_pro_m3"]
     return pd.DataFrame({"zaehler": v["meter"].astype(int).to_numpy(),
                          "datum": pd.to_datetime(v["datum"]).to_numpy()})
 
 
-def ivelina_station(serie: pd.DataFrame, meter: int, temp: pd.Series,
+def monitoring_station(serie: pd.DataFrame, meter: int, temp: pd.Series,
                     ref: pd.DataFrame, mod: dict,
-                    h: float = H_IVELINA) -> Tuple[pd.DataFrame, pd.DataFrame]:
+                    h: float = H_MONITORING) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Tagesmonitor für eine (z. B. gestörte) Stundenreihe mit festen Kennlinien."""
-    mt = ivelina_tage({int(meter): serie}, temp)
-    verlauf = ivelina_verlauf(mt, ref.loc[[int(meter)]], mod)
-    return ivelina_beobachtet(verlauf), ivelina_alarme(verlauf, h)
+    mt = monitoring_tage({int(meter): serie}, temp)
+    verlauf = monitoring_verlauf(mt, ref.loc[[int(meter)]], mod)
+    return monitoring_beobachtet(verlauf), monitoring_alarme(verlauf, h)
 
 
-# --- Modell LSTM: Prognose-Wächter -------------------------------------------
+# --- LSTM-Modell: Prognose-Wächter -------------------------------------------
 
 def trainiere(bauplan, lern: tuple, val: tuple, epochen: int, geduld: int, lr: float,
               geraet: Optional[str] = None, stapel: int = 512, seed: int = SEED,
@@ -706,7 +706,7 @@ def grenze_vor_begehung(labels: pd.DataFrame, zaehler: Iterable[int]) -> pd.Seri
 
 
 def kennzahlen_vor_begehung(stunden: pd.DataFrame, labels: pd.DataFrame) -> pd.DataFrame:
-    """Kennzahlen aus Winter 23/24 und Sommer 2024, nur vor der ersten Begehung (NB 27).
+    """Kennzahlen aus Winter 23/24 und Sommer 2024, nur vor der ersten Begehung (NB 25).
 
     Die Auslastung zum Vertrag vor der Begehung (``auslastung_vertrag``)
     wird nur für die Regel Überdimensionierung gebraucht.
@@ -717,7 +717,7 @@ def kennzahlen_vor_begehung(stunden: pd.DataFrame, labels: pd.DataFrame) -> pd.D
 
 
 def basis_stationen(kz: pd.DataFrame, labels: pd.DataFrame, emb_alle: pd.DataFrame) -> pd.DataFrame:
-    """Begangene Stationen mit Winter-Embedding und Sommerkennzahl (Notebook 31, 38 und Audit)."""
+    """Begangene Stationen mit Winter-Embedding und Sommerkennzahl (Notebook 29, 34 und Audit)."""
     return fk.trainingsdaten(kz, emb_alle, labels)
 
 
@@ -744,7 +744,7 @@ def _embedding_skalieren(werte: np.ndarray, tage: pd.DataFrame, lern_roh: np.nda
 def embedding_lernen(stunden: pd.DataFrame, labels: pd.DataFrame,
                      ohne: Iterable[int] = (), seed: int = SEED, log=print,
                      feld: Optional[tuple] = None) -> dict:
-    """LSTM-Encoder aus Notebook 29 ohne die Stationen ``ohne`` lernen.
+    """LSTM-Encoder aus Notebook 27 ohne die Stationen ``ohne`` lernen.
 
     Gelernt wird auf allen anderen Stationen (auch unbegangenen, das Netz
     sieht keine Labels), nur aus Tagen vor der ersten Begehung bzw. dem
@@ -799,7 +799,7 @@ try:
     from xgboost import XGBClassifier as _XGBClassifier
 
     class XGBAusgeglichen(_XGBClassifier):
-        """XGBoost, das die seltene Klasse in jedem Lernteil neu gewichtet (Notebook 31, Zelle 14)."""
+        """XGBoost, das die seltene Klasse in jedem Lernteil neu gewichtet (Notebook 29, Zelle 14)."""
 
         def fit(self, X, y, **kwargs):
             self.set_params(scale_pos_weight=(len(y) - np.sum(y)) / max(np.sum(y), 1))
@@ -864,11 +864,11 @@ def xgb_beitraege(modell, X: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(b, index=X.index, columns=[*X.columns, "basis"])
 
 
-# --- Modell Ivelina: Netzvergleich, Fehlerbild, Priorität ------------------------
+# --- Monitoring-Modell: Netzvergleich, Fehlerbild, Priorität ------------------------
 
 def netzvergleich(serien: Mapping[int, pd.DataFrame], termine: Mapping[int, Sequence],
                   anschluss: Mapping[int, float], bhkw: Iterable[int]) -> dict:
-    """Ivelinas Netzvergleich je Kernwinter, genau wie `stationsblatt.rechne`.
+    """Netzvergleich des Monitoring-Modells je Kernwinter, genau wie `stationsblatt.rechne`.
 
     Ohne Labels: Jede Station wird gegen den Median der übrigen Stationen
     desselben Winters gemessen. Stunden um eine Begehung fallen heraus.
@@ -886,9 +886,9 @@ def netzvergleich(serien: Mapping[int, pd.DataFrame], termine: Mapping[int, Sequ
             "referenz_ausschluss": ref_aus}
 
 
-def ivelina_je_station(netz: dict, winter: str, alarme_wie_gebaut: Optional[pd.DataFrame] = None
+def monitoring_je_station(netz: dict, winter: str, alarme_wie_gebaut: Optional[pd.DataFrame] = None
                        ) -> pd.DataFrame:
-    """Ivelinas Ausgaben für einen Winter je Station: Score, Fehlerbild, Potenzial, Priorität."""
+    """Ausgaben des Monitoring-Modells für einen Winter je Station: Score, Fehlerbild, Potenzial, Priorität."""
     m = netz["markiert"]
     m = m[(m["winter"] == winter) & m["score"].notna()].set_index("meter")
     fb = netz["fehlerbild"]
@@ -910,7 +910,7 @@ def ivelina_je_station(netz: dict, winter: str, alarme_wie_gebaut: Optional[pd.D
     return out
 
 
-def folie5_ivelina(fehlerbild: pd.Series) -> pd.Series:
+def folie5_monitoring(fehlerbild: pd.Series) -> pd.Series:
     regelung = FEHLERBILD_ZU_ZIEL["durchfluss"] | FEHLERBILD_ZU_ZIEL["temperatur"]
     return pd.Series(np.select([fehlerbild.eq("ventil"), fehlerbild.isin(regelung)],
                                [F5_REPARATUR, F5_REGELUNG], F5_KEINE), index=fehlerbild.index)
@@ -1015,7 +1015,7 @@ def kappa(a: pd.Series, b: pd.Series) -> float:
 
 # --- Grafiken --------------------------------------------------------------------
 
-FARBE_IVELINA = "#2563EB"
+FARBE_MONITORING = "#2563EB"
 FARBE_LSTM = "#DC2626"
 FARBE_XGB = "#7C3AED"
 FARBE_REGEL = "#6B7280"
@@ -1089,9 +1089,9 @@ def paket_normalmodell(ref: pd.DataFrame, mod: dict, modtab: pd.DataFrame, versi
                    "cusum_max": tm.CUSUM_MAX, "phi_max": tm.PHI_MAX,
                    "min_ref_tage": tm.MIN_REF_TAGE, "abstand_begehung_tage": tm.ABSTAND_BEGEHUNG},
         kennzahlen=kennzahlen, datenstand=datenstand, lernzeitraum=lernzeitraum,
-        beschreibung=("Modell Ivelina: Kennlinie je Station und Kanal gegen die Tagesmitteltemperatur "
+        beschreibung=("Monitoring-Modell: Kennlinie je Station und Kanal gegen die Tagesmitteltemperatur "
                       "(Abkühlung kWh/m³, Tagesvolumen), CUSUM h = 5 auf den Abweichungen"),
-        quelle="notebooks/39_endmodell.ipynb, src/tagesmonitor.py",
+        quelle="notebooks/8_modellvergleich/35_endmodell.ipynb, src/tagesmonitor.py",
         version=version, aktuell=False)
 
 
@@ -1122,10 +1122,10 @@ def paket_prognose(gelernt: dict, kal: pd.DataFrame, faktor: pd.DataFrame, regel
                    "lernzaehler": gelernt["lern_stationen"]},
         kennzahlen=kennzahlen, datenstand=datenstand,
         lernzeitraum=(gelernt["tage"]["tag"].min(), LERN_ENDE - pd.Timedelta(days=1)),
-        beschreibung=("Modell LSTM: Encoder–Decoder-LSTM sagt aus 7 Vortagen, Wetter und Vorlauf "
+        beschreibung=("LSTM-Modell: Encoder–Decoder-LSTM sagt aus 7 Vortagen, Wetter und Vorlauf "
                       "Rücklauf und Durchfluss des Tages voraus; z-Werte je Station aus der Probezeit, "
                       f"Alarm nach Regel {regel}"),
-        quelle="notebooks/39_endmodell.ipynb, src/prognose_waechter.py",
+        quelle="notebooks/8_modellvergleich/35_endmodell.ipynb, src/prognose_waechter.py",
         version=version, aktuell=False)
 
 
@@ -1150,10 +1150,10 @@ def paket_fehlerklassen(netz, x_skal: dict, ventil, daemmung, kmeans: dict, lern
         fk.PAKETNAME, "Fehler erkennen und unterteilen (Folie 5)", dateien, parameter=par,
         kennzahlen=kennzahlen, datenstand=datenstand,
         lernzeitraum=f"Winter {WINTER[0]}–{WINTER[1]}, Sommer {SOMMER[0]}–{SOMMER[1]}, vor der ersten Begehung",
-        beschreibung=("Modell LSTM: LSTM-Embedding (ohne Kennzahlen) → "
+        beschreibung=("LSTM-Modell: LSTM-Embedding (ohne Kennzahlen) → "
                       "logistische Regression (Ventil, Dämmung), Auslastungsregel (Vertrag), "
                       "K-Means Optimum/schlechter → Klasse nach Folie 5"),
-        quelle="notebooks/39_endmodell.ipynb, src/fehlerklassen.py",
+        quelle="notebooks/8_modellvergleich/35_endmodell.ipynb, src/fehlerklassen.py",
         version=version, aktuell=False)
 
 
@@ -1172,21 +1172,21 @@ def embedding_skalierung_paket(werte: np.ndarray, tage: pd.DataFrame, lern_roh: 
     return skal
 
 
-# --- Ablauf für Notebook 39 --------------------------------------------------------
+# --- Ablauf für Notebook 35 --------------------------------------------------------
 
-WAECHTER = {"ivelina": "Modell Ivelina (Kennlinie + CUSUM)",
-            "nv": "LSTM mit fester Referenz (gebaut wie Ivelinas Wächter)",
-            "lstm_s": "Modell LSTM + Schwelle",
-            "lstm_c": "Modell LSTM + CUSUM",
-            "lstm_beg": "Modell LSTM + CUSUM, nur begangene Stationen gelernt",
+WAECHTER = {"monitoring": "Monitoring-Modell (Kennlinie + CUSUM)",
+            "nv": "LSTM mit fester Referenz (gebaut wie der Monitoring-Wächter)",
+            "lstm_s": "LSTM-Modell + Schwelle",
+            "lstm_c": "LSTM-Modell + CUSUM",
+            "lstm_beg": "LSTM-Modell + CUSUM, nur begangene Stationen gelernt",
             "wm_s": "Wochenmittel + Schwelle (ohne Lernen)",
             "wm_c": "Wochenmittel + CUSUM (ohne Lernen)"}
-RASTER_H_IVELINA = [2.0, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 15.0, 20.0, 30.0, 40.0]
+RASTER_H_MONITORING = [2.0, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 15.0, 20.0, 30.0, 40.0]
 
 
 def _quelle(w: dict, key: str):
     """Woraus ein Wächter seine Alarme rechnet: Tagesverlauf (Kennlinien-Art) oder z-Werte (LSTM-Art)."""
-    if key == "ivelina":
+    if key == "monitoring":
         return "verlauf", w["verlauf"], None
     if key == "nv":
         return "verlauf", w["nv"]["verlauf"], None
@@ -1199,12 +1199,12 @@ def _quelle(w: dict, key: str):
 
 def _alarme_fuer(quelle, regel: str, wert: float) -> pd.DataFrame:
     art, daten, kal = quelle
-    return ivelina_alarme(daten, wert) if art == "verlauf" else lstm_alarme(daten, kal, regel, wert)
+    return monitoring_alarme(daten, wert) if art == "verlauf" else lstm_alarme(daten, kal, regel, wert)
 
 
 def _raster(key: str) -> List[Tuple[str, float]]:
-    if key in ("ivelina", "nv"):
-        return [("cusum", h) for h in RASTER_H_IVELINA]
+    if key in ("monitoring", "nv"):
+        return [("cusum", h) for h in RASTER_H_MONITORING]
     if key.endswith("_s"):
         return [("schwelle", s) for s in RASTER_SCHWELLE]
     return [("cusum", h) for h in RASTER_CUSUM_H]
@@ -1213,13 +1213,13 @@ def _raster(key: str) -> List[Tuple[str, float]]:
 def waechter_bauen(e: dict, log=print) -> dict:
     """Beide Wächter mit gemeinsamer Lernzeit bauen und auf gleiche Alarmlast einstellen.
 
-    Ivelina behält h = 5. Ihre Alarmzahl auf den gemeinsamen Tagen von
+    Das Monitoring-Modell behält h = 5. Seine Alarmzahl auf den gemeinsamen Tagen von
     April und Mai 2024 ist das Ziel für alle anderen (`gleiche_alarmlast`).
     """
-    mt = ivelina_tage(e["serien"], e["temp"])
-    ref = ivelina_referenz(mt, e["termine"])
+    mt = monitoring_tage(e["serien"], e["temp"])
+    ref = monitoring_referenz(mt, e["termine"])
     mod, modtab = tm.modelle(mt, ref)
-    verl = ivelina_verlauf(mt, ref, mod)
+    verl = monitoring_verlauf(mt, ref, mod)
     g = lstm_lernen(e["stunden"], log=log)
     feld = (g["werte"], g["tage"])
     abw = lstm_tage(g["modell"], g["skalierung"], feld=feld)
@@ -1228,23 +1228,23 @@ def waechter_bauen(e: dict, log=print) -> dict:
     abw_wm = lstm_tage(None, g["skalierung"], feld=feld, erwartung="wochenmittel")
     kal_wm, fak_wm = lstm_kalibrieren(abw_wm)
     z_wm = lstm_z(abw_wm, kal_wm, fak_wm)
-    beob = {"ivelina": ivelina_beobachtet(verl), "lstm": lstm_beobachtet(z), "wm": lstm_beobachtet(z_wm)}
+    beob = {"monitoring": monitoring_beobachtet(verl), "lstm": lstm_beobachtet(z), "wm": lstm_beobachtet(z_wm)}
     gem = gemeinsame_tage(*beob.values())
     wahl = gem[(gem["datum"] >= WAHL_START) & (gem["datum"] < VAL_ENDE)]
-    al_iv = ivelina_alarme(verl, H_IVELINA)
+    al_iv = monitoring_alarme(verl, H_MONITORING)
     w = {"mt": mt, "ref": ref, "mod": mod, "modtab": modtab, "verlauf": verl,
          "lstm": g, "abw": abw, "kal": kal, "faktor": fak, "z": z,
          "abw_wm": abw_wm, "kal_wm": kal_wm, "faktor_wm": fak_wm, "z_wm": z_wm,
          "beobachtet": beob, "gemeinsam": gem, "wahltage": wahl,
          "ziel_alarme": len(nur_tage(al_iv, wahl)),
-         "einstellung": {"ivelina": ("cusum", H_IVELINA)}, "alarme": {"ivelina": al_iv}, "suche": []}
+         "einstellung": {"monitoring": ("cusum", H_MONITORING)}, "alarme": {"monitoring": al_iv}, "suche": []}
     for key in ("lstm_s", "lstm_c", "wm_s", "wm_c"):
         _einstellen(w, key)
     return w
 
 
 def _einstellen(w: dict, key: str) -> None:
-    """Wert aus dem Raster, der in der Einstellzeit so viele Alarme gibt wie Ivelinas Wächter."""
+    """Wert aus dem Raster, der in der Einstellzeit so viele Alarme gibt wie der Monitoring-Wächter."""
     quelle = _quelle(w, key)
     regel = _raster(key)[0][0]
     wert, tab = gleiche_alarmlast(lambda v: _alarme_fuer(quelle, regel, v),
@@ -1256,14 +1256,14 @@ def _einstellen(w: dict, key: str) -> None:
 
 
 def nv_hinzufuegen(w: dict, e: dict, log=print) -> dict:
-    """Dritter Wächter: LSTM mit fester Referenz, gebaut wie Ivelinas Wächter (siehe `nv_lernen`)."""
+    """Dritter Wächter: LSTM mit fester Referenz, gebaut wie der Monitoring-Wächter (siehe `nv_lernen`)."""
     w["nv"] = nv_lernen(w["mt"], w["ref"], e["temp"], log=log)
     _einstellen(w, "nv")
     return w
 
 
 def nur_begangene_hinzufuegen(w: dict, e: dict, log=print) -> dict:
-    """Variante: Prognose-LSTM nur auf den begangenen Stationen lernen (wie Notebook 29/30).
+    """Variante: Prognose-LSTM nur auf den begangenen Stationen lernen (wie Notebook 27/28).
 
     Alles andere bleibt gleich: Zeitachse, Kalibrierung je Station (auch der
     nie begangenen, aus ihrer eigenen Probezeit), Regel CUSUM, gleiche Alarmlast.
@@ -1363,14 +1363,14 @@ def stoerungen_rechnen(w: dict, e: dict, saisons: Mapping[str, Tuple[str, str]] 
             serie = e["serien"][f.zaehler]
             if typ:
                 serie = stoerung_einrechnen(serie, f.beginn, typ, staerke)
-            mt = ivelina_tage({f.zaehler: serie}, e["temp"])
-            verl = ivelina_verlauf(mt, w["ref"].loc[[f.zaehler]], w["mod"])
+            mt = monitoring_tage({f.zaehler: serie}, e["temp"])
+            verl = monitoring_verlauf(mt, w["ref"].loc[[f.zaehler]], w["mod"])
             feld = pw.tagesfeld(stunden_aus_serien({f.zaehler: serie}, e["wetter"]))
             z = lstm_z(lstm_tage(g["modell"], g["skalierung"], feld=feld), w["kal"], w["faktor"])
             z_wm = lstm_z(lstm_tage(None, g["skalierung"], feld=feld, erwartung="wochenmittel"),
                           w["kal_wm"], w["faktor_wm"])
             r = {"zaehler": f.zaehler, "saison": f.saison, "beginn": f.beginn, "art": art,
-                 "ivelina": verl[["meter", "kanal", "datum", "z"]],
+                 "monitoring": verl[["meter", "kanal", "datum", "z"]],
                  "lstm": z[spalten_z], "wm": z_wm[spalten_z]}
             if "nv" in w:
                 r["nv"] = nv_anwenden(w["nv"], mt, w["ref"], e["temp"])[["meter", "kanal", "datum", "z"]]
@@ -1389,7 +1389,7 @@ def _fenster_tage(art: str) -> int:
 
 
 def _quelle_fall(r: dict, w: dict, key: str):
-    if key in ("ivelina", "nv"):
+    if key in ("monitoring", "nv"):
         return "verlauf", r[key], None
     if key == "lstm_beg":
         return "z", r["lstm_beg"], w["beg"]["kal"]
@@ -1407,7 +1407,7 @@ def stoerungen_auswerten(st: dict, w: dict, werte: Optional[Mapping[str, Tuple[s
         fenster = _fenster_tage(r["art"])
         for key, (regel, v) in werte.items():
             quelle = _quelle_fall(r, w, key)
-            beob = ivelina_beobachtet(quelle[1]) if quelle[0] == "verlauf" else lstm_beobachtet(quelle[1])
+            beob = monitoring_beobachtet(quelle[1]) if quelle[0] == "verlauf" else lstm_beobachtet(quelle[1])
             erg = fensterergebnis(_alarme_fuer(quelle, regel, v), beob, r["beginn"], fenster)
             zeilen.append({"zaehler": r["zaehler"], "saison": r["saison"], "beginn": r["beginn"],
                            "art": r["art"], "key": key, "Wächter": WAECHTER[key], "Wert": v, **erg})
@@ -1430,7 +1430,7 @@ def stoerungen_kurve(st: dict, w: dict) -> pd.DataFrame:
     return pd.DataFrame(teile)
 
 
-# --- Zusatz: LSTM mit fester Referenz (gebaut wie Ivelinas Wächter) ------------------
+# --- Zusatz: LSTM mit fester Referenz (gebaut wie der Monitoring-Wächter) ------------------
 
 NV_TAGE = 7
 
@@ -1439,7 +1439,7 @@ def nv_netz(n_stationen: int, versteckt: int = 32, emb: int = 8):
     """LSTM über die Tagesmitteltemperaturen der letzten 7 Tage plus Stationsvektor.
 
     Es sieht **keine** gemessenen Werte der Station, nur das Wetter. So kann
-    es sich nicht an eine Veränderung gewöhnen, genau wie Ivelinas Kennlinie.
+    es sich nicht an eine Veränderung gewöhnen, genau wie die Kennlinie des Monitoring-Modells.
     """
     import torch
     nn = torch.nn
@@ -1493,16 +1493,16 @@ def _nv_vorhersage(nv: dict, d: pd.DataFrame, folge: np.ndarray) -> np.ndarray:
 
 
 def nv_lernen(mt: pd.DataFrame, ref: pd.DataFrame, temp: pd.Series, seed: int = SEED, log=print) -> dict:
-    """LSTM mit fester Referenz: gleiche Aufgabe, gleiche Tage, gleiche Regel wie Ivelinas Wächter.
+    """LSTM mit fester Referenz: gleiche Aufgabe, gleiche Tage, gleiche Regel wie der Monitoring-Wächter.
 
     - Lernen auf genau den Referenztagen ihrer Kennlinien (Heiztage bis zum Lernende).
     - Vorhersage von Abkühlung (kWh/m³) und Tagesvolumen (log) nur aus dem
       Temperaturverlauf der letzten 7 Tage, ein Netz für alle Stationen mit
       Stationsvektor; Zielwerte je Station auf ihre Referenz skaliert.
     - Frühes Stoppen auf Februar/März 2024 (Kalibrierzeit), nie auf Einstellzeit oder Test.
-    - Streuung wie bei Ivelina: robuste Streuung der Referenzreste, vergrößert
+    - Streuung wie beim Monitoring-Modell: robuste Streuung der Referenzreste, vergrößert
       für ähnliche Folgetage; danach dieselbe CUSUM-Regel.
-    Unterschied zu Ivelina ist damit nur: Gerade bzw. Temperaturklassen gegen Netz.
+    Unterschied zum Monitoring-Modell ist damit nur: Gerade bzw. Temperaturklassen gegen Netz.
     """
     import torch
     ok = [int(m) for m in ref.index[ref["status"] == "ok"]]
@@ -1568,7 +1568,7 @@ def klassifikation(e: dict, log=print, ziele: Sequence[str] = ZIELE, seed: int =
     XGBoost-Beiträge und die endgültigen Modelle (auf allen 53 Stationen).
     ``seed`` ändert nur die Startgewichte der Encoder (Prüfung der
     Stabilität), die Folds bleiben gleich. ``nur_begangene`` lernt auch den
-    Encoder nur auf begangenen Stationen (wie Notebook 29).
+    Encoder nur auf begangenen Stationen (wie Notebook 27).
     """
     from sklearn.metrics import roc_curve
     st, labels, gruppen = e["stunden"], e["labels"], e["gruppen"]
@@ -1647,7 +1647,7 @@ def oof_breit(kl: dict, ziel: str) -> pd.DataFrame:
 
 
 def bewertung_tabelle(kl: dict, iv: pd.DataFrame, gruppen: pd.Series, ziel: str) -> pd.DataFrame:
-    """AUC mit Intervall, gepaarte Differenz zur Regel/zu Ivelina und Konfusion je Kandidat."""
+    """AUC mit Intervall, gepaarte Differenz zur Regel/zum Monitoring-Modell und Konfusion je Kandidat."""
     b = oof_breit(kl, ziel).join(iv[["netz_score", "fehlerbild", "auffaellig", "potenzial_score"]])
     g = gruppen.reindex(b.index).to_numpy()
     y = b["y"].to_numpy()
@@ -1663,7 +1663,7 @@ def bewertung_tabelle(kl: dict, iv: pd.DataFrame, gruppen: pd.Series, ziel: str)
         d, dlo, dhi = (bootstrap_auc_differenz(y, s, b[bezug].to_numpy(dtype=float), g)
                        if c != bezug and bezug in b else (np.nan, np.nan, np.nan))
         if c == "netz_score":
-            name, entscheidung = "Modell Ivelina (Netz-Score / Fehlerbild)", None
+            name, entscheidung = "Monitoring-Modell (Netz-Score / Fehlerbild)", None
             treffer = FEHLERBILD_ZU_ZIEL.get(ziel)
             if treffer:
                 entscheidung = b["fehlerbild"].isin(treffer).to_numpy()
@@ -1681,7 +1681,7 @@ def bewertung_tabelle(kl: dict, iv: pd.DataFrame, gruppen: pd.Series, ziel: str)
 def ab_wann_bewertbar(e: dict, w: dict) -> pd.DataFrame:
     """Wie viele Tage nach dem ersten Messwert jedes Modell eine Station bewerten kann.
 
-    Ivelina (Tagesmonitor): 60 Heiztage mit 8 K Temperaturspanne in der
+    Monitoring-Modell (Tagesmonitor): 60 Heiztage mit 8 K Temperaturspanne in der
     Referenz. LSTM (Wächter): 7 volle Vortage, 10 Tage für die Skala und
     10 Tage für die Kalibrierung, also rund 27 volle Tage, in jeder
     Jahreszeit. Gerechnet auf den echten Daten jeder Station.
@@ -1704,7 +1704,7 @@ def ab_wann_bewertbar(e: dict, w: dict) -> pd.DataFrame:
         if len(tt) >= pw.VORGESCHICHTE + 2 * MIN_VAL_TAGE:
             ls = (tt["tag"].iloc[pw.VORGESCHICHTE + 2 * MIN_VAL_TAGE - 1] - start.normalize()).days
         zeilen.append({"zaehler": int(m), "erster Messwert": start.normalize(),
-                       "Ivelina Tagesmonitor ab Tag": iv, "LSTM-Wächter ab Tag": ls})
+                       "Monitoring-Modell ab Tag": iv, "LSTM-Wächter ab Tag": ls})
     return pd.DataFrame(zeilen)
 
 
@@ -1727,7 +1727,7 @@ def stabilitaet(e: dict, seeds: Sequence[int] = (1, 2), log=print, nur_begangene
 
 
 def fehlerklassen_teile(kl: dict) -> dict:
-    """Endgültiges Modell LSTM für Fehlerarten im Format von `fehlerklassen.lade`.
+    """Endgültiges LSTM-Modell für Fehlerarten im Format von `fehlerklassen.lade`.
 
     Ventil und Dämmung: ``ENDMODELL`` (LR nur auf dem LSTM-Embedding), auf allen 53
     Stationen gelernt, Grenze 0,5. Überdimensionierung: Regel Auslastung zum
@@ -1762,15 +1762,15 @@ SOMMER_NACH = ("2025-06-01", "2025-09-01")
 def gegenprobe_nach_reparatur(teile: dict, e: dict, kl: dict, netz: dict) -> pd.DataFrame:
     """Bekannte HAST später: beide Modelle unverändert auf Winter 24/25 (und Sommer 2025).
 
-    Vorher: Modell LSTM mit den Werten außerhalb des Folds (begangene) bzw.
-    dem Endmodell (nie begangene), Ivelina mit dem Netzvergleich 23/24.
+    Vorher: LSTM-Modell mit den Werten außerhalb des Folds (begangene) bzw.
+    dem Endmodell (nie begangene), Monitoring-Modell mit dem Netzvergleich 23/24.
     Nachher: dieselben Modelle auf den Daten nach den Begehungen.
     """
     nach = fk.saison_bewerten(teile, e["stunden"], WINTER_NACH, SOMMER_NACH)
     emb = kl["final"]["embedding"]
     vor = fk.bewerten(teile, kl["kz"], emb, oof=teile["kreuzvalidierung"])
-    iv_vor = ivelina_je_station(netz, "23/24")
-    iv_nach = ivelina_je_station(netz, "24/25")
+    iv_vor = monitoring_je_station(netz, "23/24")
+    iv_nach = monitoring_je_station(netz, "24/25")
     lab = e["labels"]
     idx = sorted(set(vor.index) | set(nach.index))
     t = pd.DataFrame(index=pd.Index(idx, name="zaehler"))
@@ -1788,11 +1788,11 @@ def gegenprobe_nach_reparatur(teile: dict, e: dict, kl: dict, netz: dict) -> pd.
 
 def wirkung_und_potenzial(w: dict, netz: dict, kl: dict, termine: Mapping[int, Sequence]) -> pd.DataFrame:
     """Abkühlung bei 5 °C je Station im Winter 23/24 und 24/25 (`tagesmonitor.norm_winter`)
-    neben Ivelinas Potenzial und der K-Means-Gruppe aus dem Winter 23/24."""
+    neben dem Potenzial des Monitoring-Modells und der K-Means-Gruppe aus dem Winter 23/24."""
     norm = tm.norm_winter(w["mt"])
     a = norm[norm["winter"] == "23/24"].set_index("meter")["norm_kwh_m3"]
     b = norm[norm["winter"] == "24/25"].set_index("meter")["norm_kwh_m3"]
-    iv = ivelina_je_station(netz, "23/24")
+    iv = monitoring_je_station(netz, "23/24")
     t = pd.DataFrame({"kwh_m3_2324": a, "kwh_m3_2425": b}).dropna()
     t.index.name = "zaehler"
     t["delta_kwh_m3"] = t["kwh_m3_2425"] - t["kwh_m3_2324"]
@@ -1839,15 +1839,15 @@ def fallbild(meter: int, w: dict, e: dict, von, bis, titel: str = ""):
     v = v[(v["meter"] == meter) & (v["datum"] >= von) & (v["datum"] <= bis)]
     k = v[v["kanal"] == "kwh_pro_m3"]
     ax[0].plot(k["datum"], k["wert"], ".", ms=4, color="black", label="gemessen")
-    ax[0].plot(k["datum"], k["erwartung"], "-", color=FARBE_IVELINA, label="Erwartung Kennlinie (Ivelina)")
+    ax[0].plot(k["datum"], k["erwartung"], "-", color=FARBE_MONITORING, label="Erwartung Kennlinie (Monitoring)")
     ax[0].set_ylabel("Abkühlung\n[kWh/m³]")
     ax[0].set_title(titel or f"Station {meter}", fontsize=11)
-    for kanal, farbe in (("kwh_pro_m3", FARBE_IVELINA), ("log_volumen", "#60A5FA")):
+    for kanal, farbe in (("kwh_pro_m3", FARBE_MONITORING), ("log_volumen", "#60A5FA")):
         g = v[v["kanal"] == kanal]
         ax[1].plot(g["datum"], np.maximum(g["s_plus"], g["s_minus"]), color=farbe,
                    label=f"CUSUM-Konto {tm.KANAELE[kanal]}")
-    ax[1].axhline(H_IVELINA, color=FARBE_IVELINA, ls="--", lw=1, label=f"Grenze h = {H_IVELINA:g}")
-    ax[1].set_ylabel("Konto Ivelina")
+    ax[1].axhline(H_MONITORING, color=FARBE_MONITORING, ls="--", lw=1, label=f"Grenze h = {H_MONITORING:g}")
+    ax[1].set_ylabel("Konto Monitoring")
     z = w["z"]
     z = z[(z["zaehler"] == meter) & (z["tag"] >= von) & (z["tag"] <= bis)]
     ax[2].plot(z["tag"], z["rl_gemessen"], ".", ms=4, color="black", label="Rücklauf gemessen")
@@ -1856,7 +1856,7 @@ def fallbild(meter: int, w: dict, e: dict, von, bis, titel: str = ""):
     ax[3].plot(z["tag"], z["z_rl"], color=FARBE_LSTM, label="z Rücklauf (LSTM)")
     ax[3].plot(z["tag"], z["z_fluss"], color="#F59E0B", label="z Nachtdurchfluss (LSTM)")
     ax[3].set_ylabel("z-Wert LSTM")
-    for key, a_ax, farbe in (("ivelina", ax[1], FARBE_IVELINA), ("lstm_c", ax[3], FARBE_LSTM)):
+    for key, a_ax, farbe in (("monitoring", ax[1], FARBE_MONITORING), ("lstm_c", ax[3], FARBE_LSTM)):
         a = w["alarme"][key]
         a = a[(a["zaehler"] == meter) & (a["datum"] >= von) & (a["datum"] <= bis)]
         for d, b in zip(a["datum"], a["bewertung"]):
@@ -2004,8 +2004,8 @@ def waechter_zusammen(faelle: pd.DataFrame, a: str, b: str, saison: str) -> pd.D
     return quote.assign(Fälle=t.groupby(level="art").size())
 
 
-def ivelina_kennzahlen(netz: dict, winter: str) -> pd.DataFrame:
-    """Ivelinas 5 Kennzahlen je Station für einen Kernwinter (Rohwerte aus dem Netzvergleich)."""
+def monitoring_kennzahlen(netz: dict, winter: str) -> pd.DataFrame:
+    """5 Kennzahlen des Monitoring-Modells je Station für einen Kernwinter (Rohwerte aus dem Netzvergleich)."""
     t = netz["tabelle"]
     t = t[t["winter"] == winter].assign(meter=lambda d: d["meter"].astype(int)).set_index("meter")
     return t[list(nv.KENNZAHLEN)]
@@ -2038,7 +2038,7 @@ def merkmalssaetze_vergleich(X: pd.DataFrame, oof: pd.DataFrame, gruppen: pd.Ser
     return pd.DataFrame(zeilen)
 
 
-# --- Modellwahl im Lernteil (Notebook 39, Abschnitt 16) -------------------------
+# --- Modellwahl im Lernteil (Notebook 35, Abschnitt 16) -------------------------
 
 #bei gleicher AUC im Lernteil gewinnt der einfachere Kandidat
 EINFACHHEIT = ["LR Kennzahlen", "LR nur LSTM-Embedding", "LR Kennzahlen + LSTM",

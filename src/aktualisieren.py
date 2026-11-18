@@ -17,7 +17,7 @@ Der Lauf macht nacheinander, was sonst von Hand passiert:
    Kernwinter, Alarme der letzten Tage, Änderungen gegenüber dem letzten
    Lauf.
 
-Netzkarte (NB 26 und NB 36) gehört nicht dazu, die wird bei Bedarf danach
+Netzkarte (NB 24 und NB 33) gehört nicht dazu, die wird bei Bedarf danach
 in Jupyter ausgeführt. Alles ohne Adressen, nur Zählernummern.
 """
 
@@ -36,10 +36,10 @@ from typing import List, Optional, Sequence
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-NB00 = ROOT / "notebooks" / "00_daten.ipynb"
+NB00 = ROOT / "notebooks" / "1_daten" / "00_daten.ipynb"
 LOG_DIR = ROOT / "outputs" / "aktualisierung"
 TAGE_AKTUELL = 14
-#ab so vielen Stationen mit Verschlechterung im selben Zeitraum eher Wetter oder Netz (NB 26)
+#ab so vielen Stationen mit Verschlechterung im selben Zeitraum eher Wetter oder Netz (NB 24)
 NETZEREIGNIS_STATIONEN = 11
 PRIO_REIHENFOLGE = ("hoch", "mittel", "niedrig")
 

@@ -1,10 +1,10 @@
 """Normalverhaltensmodell als Wächter im Betrieb (Tagesmonitor als Paket).
 
-Das Normalverhaltensmodell stammt aus Notebook 20 (Seb). `src/tagesmonitor.py`
+Das Normalverhaltensmodell stammt aus Notebook 18. `src/tagesmonitor.py`
 rechnet dieselbe Idee auf den Stundenreihen aus Notebook 00: je Station und
 Kanal (Abkühlung in kWh/m³, logarithmiertes Tagesvolumen) eine Kennlinie
 gegen die Tagesmitteltemperatur aus dem ersten Jahr, danach ein CUSUM auf
-den Abweichungen. Auf Sebs Prüfung sind beide gleichwertig (Notebook 38:
+den Abweichungen. Auf der Prüfung aus Notebook 18 sind beide gleichwertig (Notebook 34:
 29 gegen 30 von 43 Begehungen bemerkt, im 14-Tage-Fenster der Tagesmonitor
 vorn). Für den Betrieb wird der Tagesmonitor genommen, weil er als Modul
 auf neuen Daten läuft.
@@ -108,7 +108,7 @@ def paket_bauen(serien: Optional[Mapping[int, pd.DataFrame]] = None,
         lernzeitraum="erstes Jahr je Station, spätestens 14 Tage vor der ersten Begehung",
         beschreibung=("Kennlinie je Station und Kanal gegen die Tagesmitteltemperatur "
                       "(Abkühlung kWh/m³, Tagesvolumen), CUSUM auf den Abweichungen"),
-        quelle="notebooks/20_normalverhalten.ipynb, src/tagesmonitor.py",
+        quelle="notebooks/5_monitoring/18_normalverhalten.ipynb, src/tagesmonitor.py",
         version=version, wurzel=wurzel, aktuell=aktuell)
 
 

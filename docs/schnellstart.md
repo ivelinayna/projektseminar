@@ -21,7 +21,7 @@ pip install -r requirements.txt
 pip install jupyterlab
 ```
 
-- `torch` und `xgboost` brauchen nur die Notebooks 29 bis 31, 38 und 39 und die Modellpakete.
+- `torch` und `xgboost` brauchen nur die Notebooks 27 bis 29, 34 und 35 und die Modellpakete.
 - Ohne Grafikkarte läuft alles auf der CPU, nur langsamer.
 
 ## 3 Vorbereitende Befehle
@@ -49,8 +49,8 @@ python -m src.fehlerklassen --bauen --gegenprobe
 python -m src.dashboard_daten     # Modellergebnisse nach outputs/dashboard/
 ```
 
-- Die Modellpakete landen in `models/` (gitignored). Notebook 39 baut sie ebenfalls.
-- Danach Notebook 34 (Netz-Cache) und Notebook 40 (Dashboard) ausführen. Mehr unter [Dashboard](dashboard.md).
+- Die Modellpakete landen in `models/` (gitignored). Notebook 35 baut sie ebenfalls.
+- Danach Notebook 31 (Netz-Cache) und Notebook 36 (Dashboard) ausführen. Mehr unter [Dashboard](dashboard.md).
 
 ## 6 Neue Zählerdaten einspielen
 

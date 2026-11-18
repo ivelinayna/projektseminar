@@ -23,7 +23,7 @@ docker compose build
 | Dienst | Befehl | Adresse | Wofür |
 |---|---|---|---|
 | `jupyter` | `docker compose up jupyter` | http://localhost:8888 | Notebooks ausführen |
-| `dashboard` | `docker compose up dashboard` | http://localhost:8000/fernwaerme_dashboard_final.html | fertiges Dashboard aus Notebook 40 ansehen |
+| `dashboard` | `docker compose up dashboard` | http://localhost:8000/fernwaerme_dashboard_final.html | fertiges Dashboard aus Notebook 36 ansehen |
 | `docs` | `docker compose up docs` | http://localhost:8001 | diese Doku lokal |
 | `app` | `docker compose --profile extra up app` | http://localhost:8501 | ältere Streamlit-App (Rücklauf-Ampel) |
 
@@ -57,8 +57,8 @@ docker compose run --rm jupyter python -m pytest -q
 
 1. `docker compose build`
 2. `docker compose up jupyter`, im Browser Notebook 00 und danach die gewünschten Notebooks ausführen.
-3. Für das Dashboard die Modellpakete bauen (Notebook 39 oder die Befehle unter [Schnellstart](schnellstart.md)),
-   dann Notebook 34 und Notebook 40 ausführen.
+3. Für das Dashboard die Modellpakete bauen (Notebook 35 oder die Befehle unter [Schnellstart](schnellstart.md)),
+   dann Notebook 31 und Notebook 36 ausführen.
 4. `docker compose up dashboard` und die angezeigte Adresse öffnen.
 
 ## Hinweise

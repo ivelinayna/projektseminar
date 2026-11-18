@@ -20,7 +20,7 @@ Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`
 
 | Ordner | Inhalt |
 |---|---|
-| `notebooks/` | 41 Notebooks (00 bis 40) in acht Teilen, siehe unten |
+| `notebooks/` | 39 Notebooks (00 bis 38) in neun Teilen und einem Anhang, je ein Ordner, siehe unten |
 | `src/` | wiederverwendbarer Code, eine Datei je Aufgabe |
 | `tests/` | Tests mit pytest |
 | `docs/` | Doku für Read the Docs |
@@ -31,16 +31,18 @@ Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`
 
 ## Notebooks
 
-| Teil | Notebooks | Thema |
-|---|---|---|
-| 1 | 00 bis 01 | Daten laden und Lücken füllen |
-| 2 | 02 bis 06 | Begehungen und ihre Wirkung |
-| 3 | 07 bis 12 | Clustering |
-| 4 | 13 bis 17 | Stationsbilder und Befunde |
-| 5 | 18 bis 26 | Anomalien und Monitoring |
-| 6 | 27 bis 33 | Lernende Modelle |
-| 7 | 34 bis 37 | Netz und Karte |
-| 8 | 38 bis 40 | Modellvergleich, Endmodell, Dashboard |
+| Teil | Ordner | Notebooks | Thema |
+|---|---|---|---|
+| 1 | `1_daten/` | 00 bis 01 | Daten laden und Lücken füllen |
+| 2 | `2_begehungen/` | 02 bis 06 | Begehungen und ihre Wirkung |
+| 3 | `3_clustering/` | 07 bis 10 | Clustering |
+| 4 | `4_stationsbilder/` | 11 bis 15 | Stationsbilder und Befunde |
+| 5 | `5_monitoring/` | 16 bis 24 | Anomalien und Monitoring |
+| 6 | `6_lernende_modelle/` | 25 bis 30 | Lernende Modelle |
+| 7 | `7_netz/` | 31 bis 33 | Netz und Karte |
+| 8 | `8_modellvergleich/` | 34 bis 35 | Modellvergleich und Endmodell |
+| 9 | `9_dashboard/` | 36 | Dashboard |
+| Anhang | `weitere_versuche/` | 37 bis 38 | Weitere Versuche (Bayes-Diagnose, GNN) |
 
 Notebook 00 immer zuerst ausführen. Alle anderen lesen dessen Ergebnis. Details in `docs/notebooks.md`.
 
@@ -82,4 +84,4 @@ Read the Docs baut die Seite aus `.readthedocs.yaml` und `mkdocs.yml`.
 
 - Rohdaten, Ergebnisse und Modellpakete werden nie committet.
 - Die Doku nennt Stationen nur über die Zählernummer, nie über die Adresse.
-- Die Dashboard-HTML und die Netz-Notebooks 34 bis 36 zeigen Adressen. Sie sind nur für den internen Gebrauch.
+- Die Dashboard-HTML und die Netz-Notebooks 31 bis 33 zeigen Adressen. Sie sind nur für den internen Gebrauch.

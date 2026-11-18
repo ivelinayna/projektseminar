@@ -87,7 +87,7 @@ PRAEDIKTOREN = ("t_out_tag", "last_anteil", "power_mean")
 #Stunden eines Tages und nicht der Mittelwert ueber die Laststunden:
 #die Zahl der Laststunden schwankt im Winter von Tag zu Tag, der
 #Mittelwert steht dann je Tag auf verschieden vielen Stunden. Die
-#Gegenprobe in Notebook 18 zeigt den Unterschied deutlich - die
+#Gegenprobe in Notebook 16 zeigt den Unterschied deutlich - die
 #bekannte Ruecklaufsenkung nach einer Begehung ist auf `rt_median`
 #messbar und auf `rt_mean_loaded` nicht.
 ZIEL = "rt_median"
@@ -295,7 +295,7 @@ def score_zustand(panel: pd.DataFrame,
 
     `spalten` sind die Anteilsspalten aus `tagespanel.zustandsanteile`,
     die fachlich als auffaellig gelten - im Projekt der Zustand mit
-    hohem normiertem Durchfluss bei kleiner Spreizung, in Notebook 10
+    hohem normiertem Durchfluss bei kleiner Spreizung, in Notebook 09
     als Verdacht auf hydraulischen Kurzschluss benannt. Der Score ist
     die Summe dieser Anteile und liegt damit zwischen 0 und 1.
     """

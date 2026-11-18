@@ -6,6 +6,25 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Geändert (Aufbau der Notebooks, 2026-11-17)
+
+- Notebooks liegen jetzt je Teil in einem eigenen Ordner: `1_daten/` bis `8_modellvergleich/`, das Dashboard
+  als eigener Teil in `9_dashboard/`, dazu `weitere_versuche/`. Jedes Notebook wechselt am Anfang nach
+  `notebooks/`, relative Pfade wie `../data`, `daten_cache/` und die Dashboard-HTML bleiben dadurch gleich.
+- Neu nummeriert, 00 bis 38 ohne Lücken. Die Tabelle in `docs/notebooks.md` zeigt neue Namen, Namen im
+  Abgabestand vom 13.11. und die alten Dateinamen. Verweise in Notebooks, `src/`, `tests/` und Doku sind
+  angepasst. Nummern in Anführungszeichen und Beschriftungen im Code bleiben bei der alten Zählung, die
+  betroffenen Notebooks sagen das selbst.
+- Archiviert (nur lokal in `archiv/`): `09_stundencluster` (dasselbe Clustering rechnet die
+  Clustervalidierung sauber über `src/clustervalidierung.py`) und `12_gesamtpipeline` (eigene Aufbereitung nur
+  auf dem neuesten Export, nicht auf Notebook 00). Beide stehen in `docs/negativbefunde.md`.
+- Bayes-Diagnose und GNN-Entwurf nach `weitere_versuche/` (37 und 38), weil nichts auf ihnen aufbaut.
+- Personennamen durch Modellnamen ersetzt: Monitoring-Modell, LSTM-Modell, Normalverhaltensmodell,
+  LSTM-Wächter. In `src/finalvergleich.py` heißen die Bezeichner jetzt `monitoring_*` statt nach Personen.
+- Clusterbenchmark rechnet nur noch auf den 93 HAST aus Notebook 00, die Variante mit und ohne BHKW entfällt.
+- Code-Kommentare in den Notebooks gekürzt und einheitlich geschrieben, Wiederholungen der Notizen gestrichen.
+- Erledigte Punkte unter „Offen“ entfernt.
+
 ### Geändert (Abgabestand, 2026-11-13)
 
 - Finaler Stand aus `to_ignore/projektseminar-main-finalerstand` übernommen. Der alte Stand liegt in `archiv/`
@@ -113,7 +132,7 @@ versioniert wird nicht — Einträge sind datumsbasiert.
   in `19` ist die Ventil-Gegenprobe nach Holm-Korrektur nicht mehr abgesichert;
   in `21` zeigt schon der erste Blick auf die Begehungen keinen Vorsprung, und
   vier neu überwachte nie begangene Zähler mit nur 14 Validierungstagen
-  erzeugen einen großen Teil der Winterwarnungen; in `23` liegt Sebs
+  erzeugen einen großen Teil der Winterwarnungen; in `23` liegt das
   Normalverhaltensmodell deutlicher vorne (30 von 43, McNemar p = 0,001).
 - `docs/pipeline.md`: Hinweis, dass die LSTM-Gewichte nach einer Änderung der
   Datenbasis gelöscht werden müssen.
@@ -141,8 +160,8 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ### Hinzugefügt (Wächtervergleich, 2026-10-19)
 
-- `23_vergleich_waechter`: Sebs Begehungsprüfung aus `17` als Funktion,
-  Fall für Fall gegen seine Ergebnisse geprüft, dann auf Normalverhaltensmodell
+- `23_vergleich_waechter`: die Begehungsprüfung aus `17` als Funktion,
+  Fall für Fall gegen deren Ergebnisse geprüft, dann auf Normalverhaltensmodell
   und Prognose-LSTM unter gleichen Bedingungen angewendet (gleiche Stationen,
   Heiztage, Fälle, Kontrollgruppe und gleiches Alarmbudget). Liest die
   Ausgaben von `06`, `17` und `21`.
@@ -451,7 +470,7 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 - Zwei Notebooks hießen beide `04_*`: das eigene
   `04_clustering_benchmark.ipynb` (Stationsprofile, Methodenvergleich)
-  und Paulines direkt auf `main` hinzugefügtes
+  und das direkt auf `main` hinzugefügte
   `04_kmeans_operatingConditions.ipynb` (stundenweises K-Means, k=5,
   fachlich interpretierbare Betriebszustände). Letzteres umbenannt zu
   `05_kmeans_stundenweise_betriebszustaende.ipynb`, da es methodisch
@@ -469,7 +488,7 @@ versioniert wird nicht — Einträge sind datumsbasiert.
   `docs/datensichtung.md`, `src/profile_timeseries.py`, `mkdocs.yml`,
   Agent- und Skill-Dateien) fehlten noch. Jetzt vollständig nachgezogen.
 - `.github/agents/hast-clusteranalyse.agent.md`: Roadmap-Punkt 3 um
-  Paulines Ergebnis ergänzt (offene Fragen: Stabilität, Ground-Truth-
+  das Ergebnis zu Betriebszuständen ergänzt (offene Fragen: Stabilität, Ground-Truth-
   Join, Jahreszeiten- vs. Betriebszustand-Trennung).
 
 ### Hinzugefügt (Docs-Hosting 2026-09-22)

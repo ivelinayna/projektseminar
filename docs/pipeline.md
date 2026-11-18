@@ -14,18 +14,18 @@ data/processed/real_meters/   Stundenreihe je Zähler
    |
    |  nb00_daten.lade_serien()  +  weather (DWD-Außentemperatur)
    v
-Notebooks 01-40 und src-Module
+Notebooks 01-36 und src-Module
    |
-   +-- Notebook 11   -> hast_tage            (Tageswerte für 20, 32, 37, 38)
-   +-- Notebook 20   -> normalmodell_*       (für 32, 38)
-   +-- Notebooks 27-31 -> Modelldaten, LSTM-Embedding, Ventil-Modell
-   +-- Notebook 26   -> monitor_status       (für 36)
-   +-- Notebook 34   -> notebooks/daten_cache/  (Netz, für 35, 36, 40)
-   +-- Notebook 39   -> models/              (Modellpakete)
+   +-- Notebook 10   -> hast_tage            (Tageswerte für 18, 30, 34, 38)
+   +-- Notebook 18   -> normalmodell_*       (für 30, 34)
+   +-- Notebooks 25-29 -> Modelldaten, LSTM-Embedding, Ventil-Modell
+   +-- Notebook 24   -> monitor_status       (für 33)
+   +-- Notebook 31   -> notebooks/daten_cache/  (Netz, für 32, 33, 36)
+   +-- Notebook 35   -> models/              (Modellpakete)
           |
           |  python -m src.dashboard_daten
           v
-      outputs/dashboard/  ->  Notebook 40  ->  fernwaerme_dashboard_final.html
+      outputs/dashboard/  ->  Notebook 36  ->  fernwaerme_dashboard_final.html
 ```
 
 ## Befehle
@@ -51,8 +51,8 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 
 | Modul | Aufgabe | Notebooks |
 |---|---|---|
-| `nb00_daten` | Zugang zu den Stundenreihen aus Notebook 00, Stationsmerkmale | 01, 04, 05, 06, 10, 18, 19, 38 |
-| `load_data` | Netzdaten, Begehungen, Adressabgleich (`_normalize_address`) | 08, 10, 18, 21, 27 |
+| `nb00_daten` | Zugang zu den Stundenreihen aus Notebook 00, Stationsmerkmale | 01, 04, 05, 06, 09, 16, 17, 34 |
+| `load_data` | Netzdaten, Begehungen, Adressabgleich (`_normalize_address`) | 08, 09, 16, 19, 25 |
 | `load_begehungen` | Begehungen und Zuordnung Zählernummer zu Abnahmestelle | viele |
 | `load_timeseries` | Rohdaten-Inventur und Prüfung der ODS-Nachlieferung | 05 |
 | `luecken` | fehlende Stundenwerte auffüllen | 01 |
@@ -66,53 +66,53 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 
 | Modul | Aufgabe | Notebooks |
 |---|---|---|
-| `features` | etwa 25 Stationsmerkmale | 10, 18, 38 |
+| `features` | etwa 25 Stationsmerkmale | 09, 16, 34 |
 | `window_features` | Merkmale in 14-Tage-Fenstern mit Begehungsmarke | nur Befehlszeile |
-| `tagespanel` | Tabelle Station mal Tag | 18, 19, 38 |
-| `dynamik` | Änderungstempo des Rücklaufs | 18 |
+| `tagespanel` | Tabelle Station mal Tag | 16, 17, 34 |
+| `dynamik` | Änderungstempo des Rücklaufs | 16 |
 | `performance` | Kennzahl kWh/m³ gegen Außentemperatur | 05 |
 
 ### Begehungen und Labels
 
 | Modul | Aufgabe | Notebooks |
 |---|---|---|
-| `jahresvergleich` | Vorher/Nachher zum selben Kalenderzeitpunkt | 04, 18 |
-| `befundcodes` | Freitexte der Begehungen in Befundcodes | 16, 17, 21 bis 25, 27 |
-| `freitext` | Freitexte in Fehlerkategorien | 19 |
-| `fallsammlung` | Fälle zur Begehungswirkung im Ternärbild | 17, 23, 25 |
-| `inspections` | schnelle Auswertung der Begehungsbefunde | 27 |
+| `jahresvergleich` | Vorher/Nachher zum selben Kalenderzeitpunkt | 04, 16 |
+| `befundcodes` | Freitexte der Begehungen in Befundcodes | 14, 15, 19 bis 23, 25 |
+| `freitext` | Freitexte in Fehlerkategorien | 17 |
+| `fallsammlung` | Fälle zur Begehungswirkung im Ternärbild | 15, 21, 23 |
+| `inspections` | schnelle Auswertung der Begehungsbefunde | 25 |
 
 ### Clustering
 
 | Modul | Aufgabe | Notebooks |
 |---|---|---|
-| `clustervalidierung` | Stabilität und Prüfung der Cluster aus 07 bis 09 | 10, 18, 19, 38 |
+| `clustervalidierung` | Stabilität und Prüfung der Cluster aus 07 bis 09 | 09, 16, 17, 34 |
 
 ### Stationsbilder und Kennlinien
 
 | Modul | Aufgabe | Notebooks |
 |---|---|---|
-| `ternaer` | Ternärdiagramme je Station | 13 bis 17, 21 |
-| `stationsbilder` | drei ergänzende Stationsbilder | 01, 14, 15, 21 |
-| `kennlinien_monitor` | Kennlinienüberwachung ohne Labels | 15, 16, 21, 38 |
+| `ternaer` | Ternärdiagramme je Station | 11 bis 15, 19 |
+| `stationsbilder` | drei ergänzende Stationsbilder | 01, 12, 13, 19 |
+| `kennlinien_monitor` | Kennlinienüberwachung ohne Labels | 13, 14, 19, 34 |
 
 ### Anomalien, Monitoring und Empfehlung
 
 | Modul | Aufgabe | Notebooks |
 |---|---|---|
-| `anomalie` | Anomalieerkennung ohne Labels | 18, 19, 38 |
-| `regelkalibrierung` | Regel-Baseline an echten Daten nachstellen | 18, 38 |
-| `fault_detection` | ursprüngliche Regel-Baseline | 38 |
-| `empfehlung` | vom Anomaliewert zur Handlungsempfehlung | 19, 38 |
-| `priority` | Wartungspriorität als Punktwert | 19 |
-| `netzvergleich` | Station im Vergleich zum Netz im Winter | 21, 23 bis 25, 38 |
-| `tagesmonitor` | wetterbereinigte Tageswerte mit CUSUM-Alarm | 22, 23, 26, 38, 39 |
-| `alarmbewertung` | Schwelle, Richtung und Priorität der Alarme | 23, 25, 26, 38 |
-| `stationsblatt` | Monitorbild je Station, `status.csv` | 21 bis 26, 38 |
-| `vergleichsgruppen` | Vergleichsgruppen nach Wärmemenge | 25, 38 |
-| `nachbarschaft` | häufen sich auffällige Stationen im Netz? | 25, 26, 38 |
-| `netzereignisse` | gleichzeitige Alarme: Netz oder Einzelstation? | 26, 38 |
-| `zeitreihenmodell` | ARIMA und SARIMAX auf Tagesmitteln | 06, 38 |
+| `anomalie` | Anomalieerkennung ohne Labels | 16, 17, 34 |
+| `regelkalibrierung` | Regel-Baseline an echten Daten nachstellen | 16, 34 |
+| `fault_detection` | ursprüngliche Regel-Baseline | 34 |
+| `empfehlung` | vom Anomaliewert zur Handlungsempfehlung | 17, 34 |
+| `priority` | Wartungspriorität als Punktwert | 17 |
+| `netzvergleich` | Station im Vergleich zum Netz im Winter | 19, 21 bis 23, 34 |
+| `tagesmonitor` | wetterbereinigte Tageswerte mit CUSUM-Alarm | 20, 21, 24, 34, 35 |
+| `alarmbewertung` | Schwelle, Richtung und Priorität der Alarme | 21, 23, 24, 34 |
+| `stationsblatt` | Monitorbild je Station, `status.csv` | 19 bis 24, 34 |
+| `vergleichsgruppen` | Vergleichsgruppen nach Wärmemenge | 23, 34 |
+| `nachbarschaft` | häufen sich auffällige Stationen im Netz? | 23, 24, 34 |
+| `netzereignisse` | gleichzeitige Alarme: Netz oder Einzelstation? | 24, 34 |
+| `zeitreihenmodell` | ARIMA und SARIMAX auf Tagesmitteln | 06, 34 |
 | `detect_real` | Regel-Baseline auf echten Daten | nur Befehlszeile |
 | `ml_classifier` | überwachter Klassifikator (Negativbefund) | nur Befehlszeile |
 
@@ -120,18 +120,18 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 
 | Modul | Aufgabe | Notebooks |
 |---|---|---|
-| `pruefstand` | alle Verfahren unter gleichen Bedingungen prüfen | 38, 39 |
-| `normalmodell_waechter` | Tagesmonitor als Paket | 38, 39 |
-| `prognose_waechter` | Prognose-LSTM als Paket | 38, 39 |
-| `fehlerklassen` | Folie-5-Klassen als Paket | 38, 39 |
-| `finalvergleich` | Modell Ivelina gegen Modell LSTM, Endmodell | 39 |
-| `modellpaket` | Pakete speichern und laden | 38 bis 40 |
+| `pruefstand` | alle Verfahren unter gleichen Bedingungen prüfen | 34, 35 |
+| `normalmodell_waechter` | Tagesmonitor als Paket | 34, 35 |
+| `prognose_waechter` | Prognose-LSTM als Paket | 34, 35 |
+| `fehlerklassen` | Folie-5-Klassen als Paket | 34, 35 |
+| `finalvergleich` | Monitoring-Modell gegen LSTM-Modell, Endmodell | 35 |
+| `modellpaket` | Pakete speichern und laden | 34 bis 36 |
 
 ### Netz und Karte
 
 | Modul | Aufgabe | Notebooks |
 |---|---|---|
-| `build_graph` | Netzgraph aus Shapefiles und Knotenliste | 25, 26, 38 |
+| `build_graph` | Netzgraph aus Shapefiles und Knotenliste | 23, 24, 34 |
 | `network_graph` | interaktive Ansicht des logischen Netzes | nur Befehlszeile |
 | `geocode`, `geocode_stub`, `osm_addresses` | Adressen in Koordinaten | nur Befehlszeile |
 | `snap_hast` | Stationen an den nächsten Netzknoten setzen | nur Befehlszeile |
@@ -141,8 +141,8 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 
 | Modul | Aufgabe | Notebooks |
 |---|---|---|
-| `dashboard_daten` | Modellergebnisse für das Dashboard | 40 |
-| `dashboard_karte` | Modellergebnisse in die Netzkarte | 40 |
+| `dashboard_daten` | Modellergebnisse für das Dashboard | 36 |
+| `dashboard_karte` | Modellergebnisse in die Netzkarte | 36 |
 | `dashboard_map` | einfache Folium-Karte | nur Befehlszeile |
 | `dashboard_app` | ältere Streamlit-App | nur Befehlszeile |
 | `aktualisieren` | neue Daten in einem Schritt einspielen | nur Befehlszeile |

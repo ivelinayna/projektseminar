@@ -1,12 +1,12 @@
 """Stationsblatt: Monitorbild je Station mit dem Netz als Maßstab.
 
-Der Monitor aus NB 15 vergleicht eine Station nur mit ihrer eigenen
+Der Monitor aus NB 13 vergleicht eine Station nur mit ihrer eigenen
 Vergangenheit. Das Stationsblatt stellt ihre Kennlinie im gleitenden
 Fenster vor das Band aller Stationen am selben Tag und vergleicht die
 Kennlinie Kernwinter gegen Kernwinter. Gerechnet wird kaum etwas Neues,
 das Modul setzt `netzvergleich`, `kennlinien_monitor` und
 `stationsbilder` zusammen. Alarme kommen nur aus dem Tagesmonitor
-(`tagesmonitor`), vom Monitor aus NB 15 bleiben nur die Fensterkurven.
+(`tagesmonitor`), vom Monitor aus NB 13 bleiben nur die Fensterkurven.
 Ausgabe je Zähler ein PNG und eine Zeile der Statustabelle, ohne Adressen.
 
     python -m src.stationsblatt
@@ -157,7 +157,7 @@ WV_SPALTEN: Dict[str, str] = {
 
 
 def eingaben(root: Path = ROOT) -> dict:
-    """Serien und Kontext so laden wie NB 21, Zelle 1.
+    """Serien und Kontext so laden wie NB 19, Zelle 1.
 
     Stundenreihen kommen nur aus NB 00 (`data/processed/real_meters`).
     Anschlusswert aus Nodes_Edges, BHKW aus der Zuordnungsexcel.
@@ -209,10 +209,10 @@ def rechne(serien: Mapping[int, pd.DataFrame],
            fortschritt: bool = False) -> dict:
     """Alles, was Blatt und Statustabelle brauchen, in einem Durchlauf.
 
-    Dieselbe Kette wie NB 21: Punkttabellen, Winterkennzahlen, Netzbezug
+    Dieselbe Kette wie NB 19: Punkttabellen, Winterkennzahlen, Netzbezug
     ohne BHKW, Score, Markierung, Übersicht, Wintervergleich. Dazu der
-    Monitor aus NB 15 mit Netzband und Tages-z-Wert je Kanal und der
-    Tagesmonitor aus NB 22 (CUSUM, Abkühlung bei 5 °C). Ohne
+    Monitor aus NB 13 mit Netzband und Tages-z-Wert je Kanal und der
+    Tagesmonitor aus NB 20 (CUSUM, Abkühlung bei 5 °C). Ohne
     ``tagestemperatur`` holt der Tagesmonitor das Tagesmittel aus dem
     DWD-Cache. Priorität je Station und Winter kommt aus `alarmbewertung`,
     ``baujahr`` (`alarmbewertung.baujahr_kontext`) wird nur durchgereicht.
@@ -664,7 +664,7 @@ def _zeitachse(ax, meter, kanal, ergebnis) -> None:
     for d in ergebnis["termine"].get(meter, []):
         ax.axvline(pd.Timestamp(d), color="red", ls="--", lw=1)
     #Alarme kommen nur noch aus dem Tagesmonitor (CUSUM-Zeile), der
-    #Fensteralarm aus NB 15 traf Begehungen kaum besser als Zufall
+    #Fensteralarm aus NB 13 traf Begehungen kaum besser als Zufall
     ax.set_xlim(start, ende)
     #Legende über der Achse rechts, damit sie keine Werte verdeckt
     ax.legend(loc="lower right", bbox_to_anchor=(1.0, 1.0), fontsize=8,

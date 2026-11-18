@@ -20,7 +20,7 @@ gitignored.
 | Netz (logisch) | `Nodes_Edges.ods` | Knoten, Kanten, Anschlusswert |
 | Netz (räumlich) | `Leitungsverlauf_*.shp` und Begleitdateien | Rohrverlauf als Geometrie |
 | Außentemperatur | wird geholt, Cache in `data/raw/weather/` | DWD-Station 2600 Kitzingen, stündlich |
-| Netz (KML) | `Leitungsverlauf.kml` | Rohrverlauf für die Karten in Notebook 34 und 36, optional |
+| Netz (KML) | `Leitungsverlauf.kml` | Rohrverlauf für die Karten in Notebook 31 und 33, optional |
 | Baujahr | `zensus/.../Zensus2022_Baujahr_JZ_100m-Gitter.csv` | Zensus 2022 im 100-m-Gitter, öffentlich, optional |
 
 Der Dateiname der Begehungstabelle ändert sich zwischen Lieferungen. Der Code sucht sie deshalb per Muster.
@@ -30,8 +30,8 @@ Der Dateiname der Begehungstabelle ändert sich zwischen Lieferungen. Der Code s
 - Spalten: Zeitstempel, Energie (kWh), Volumenstrom (l/h), Leistung (kW), Spreizung (°C), Vorlauf (°C), Rücklauf
   (°C), Volumen (m³).
 - Energie und Volumen sind Zählerstände, sie wachsen also immer weiter.
-- Zwei Exportgenerationen überlappen: bis etwa Mai 2024 und bis etwa Juli 2025. Zusammen 154 Dateien für 101 Zähler ab
-  etwa November 2021.
+- Zwei Exportgenerationen überlappen: bis etwa Mai 2024 und bis etwa Juli 2025. Mit der Nachlieferung zusammen 198
+  Export-Dateien für 101 Zähler ab November 2021. 8 davon sind keine HAST, es bleiben 93.
 - Bei gleichem Zeitstempel gewinnt die neuere Datei.
 - Der Zeitstempel hat oft einen Minutenversatz (z. B. `13:01`). Es gibt vereinzelt negative Werte und Lücken.
 
@@ -47,7 +47,7 @@ Der Dateiname der Begehungstabelle ändert sich zwischen Lieferungen. Der Code s
 - 66 Begehungen, die Ground Truth des Projekts.
 - Alt- und Neuwerte: Anlagenkonfiguration, Heizzeiten, Vertragsleistung, Regelparameter.
 - Ja/Nein-Angaben zu Filter, Ventil, Stellmotor, Dämmung und Regler.
-- Freitext des Monteurs bei 57 von 66 Begehungen. Die Notebooks 16 und 19 ordnen ihn Fehlerkategorien zu.
+- Freitext des Monteurs bei 57 von 66 Begehungen. Die Notebooks 14 und 17 ordnen ihn Fehlerkategorien zu.
 
 ### Zuordnung und Netz
 
@@ -70,11 +70,11 @@ Notebook 00 ist der einzige Ladeweg für die Stundenreihen.
 
 | Problem | Folge |
 |---|---|
-| 8 Stationen hängen im logischen Netz an keiner Kante | fehlen in Netzauswertungen |
+| 5 Zähler mit Zeitreihe hängen im logischen Netz an keiner Kante, 8 Stationen haben keine Nachbarn mit Zähler | fehlen in Netzauswertungen |
 | OpenStreetMap kennt im Neubaugebiet zu wenige Hausnummern | Kartenpositionen einzelner Stationen sind ungenau |
 | Zählerwechsel ohne Datum (zwei Adressen) | Reihen lassen sich nicht zusammensetzen |
 | CSV endet im Juli 2025 | netzweite Auswertungen enden dort |
 | Bei 8 Begehungen fehlt das Datum, bei einigen Zählern beginnt die Reihe erst danach | diese Fälle fehlen im Vorher/Nachher-Vergleich |
 | Begehungstabelle lässt Reparaturen aus (Beispiel Zähler 68956351) | Labels sind unvollständig |
-| Zähler 41704231 und 41704232 sind Temperaturfühler im Heizhaus | keine Übergabestationen |
-| Zähler 86792512 ist laut Zuordnung ein BHKW | Sonderfall, kein normaler Hausanschluss |
+| Zähler 41704231 und 41704232 sind Temperaturfühler im Heizhaus | keine Übergabestationen, ab Notebook 00 ausgeschlossen |
+| Zähler 86792512 ist laut Zuordnung ein BHKW | kein Hausanschluss, ab Notebook 00 ausgeschlossen |

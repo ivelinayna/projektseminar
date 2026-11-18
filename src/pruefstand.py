@@ -13,12 +13,12 @@ Drei Aufgaben, drei Prüfungen
 
    - `trefferpruefung`: Alarm im Fenster von 7 Tagen vor bis 60 Tage nach
      einer Begehung, gegen Kontrollstationen im selben Fenster. Das ist
-     Sebs Prüfung aus Notebook 20, Abschnitt 11, und Notebook 32.
+     die Prüfung aus Notebook 18, Abschnitt 11, und Notebook 30.
    - Fair nur bei **gleichen Stationen und Tagen** (`gemeinsame_tage`) und
      **gleich vielen Alarmen** (`budget_anpassen`): Wer öfter alarmiert,
      trifft automatisch öfter.
    - `einrechnen`: Fehler mit bekanntem Beginn in echte Stundenwerte
-     schreiben (Notebook 30, Abschnitt 7), für Trefferquote bei bekannter
+     schreiben (Notebook 28, Abschnitt 7), für Trefferquote bei bekannter
      Fehlalarmquote.
 
 2. **Fehler erkennen** (welche Stationen haben einen Dauerfehler, z. B. ein
@@ -45,7 +45,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-#Sebs Prüfung (Notebook 20, Abschnitt 1)
+#Prüfung aus Notebook 18, Abschnitt 1
 FENSTER_VOR = 7
 FENSTER_NACH = 60
 MIN_TAGE_IM_FENSTER = 5
@@ -111,8 +111,8 @@ def trefferpruefung(alarme: pd.DataFrame, beobachtet: pd.DataFrame,
     Ein Fall zählt nur, wenn die Station im Fenster mindestens
     ``min_tage`` überwachte Tage hat. Kontrollen sind überwachte Stationen
     ohne eigene Begehung von ``kontroll_vorlauf`` Tagen vor dem Fenster bis
-    zu seinem Ende. Identisch mit Notebook 20, Abschnitt 11 (dort Fall für
-    Fall nachgeprüft in Notebook 32).
+    zu seinem Ende. Identisch mit Notebook 18, Abschnitt 11 (dort Fall für
+    Fall nachgeprüft in Notebook 30).
     """
     al = als_tage(alarme)
     beob = als_tage(beobachtet)
@@ -203,7 +203,7 @@ def erster_alarm_nach(alarme: pd.DataFrame, zaehler: int, datum,
 
 def einrechnen(werte: np.ndarray, fenster: np.ndarray, fehler: str,
                rl: int = 0, fl: int = 1, vl: int = 2) -> np.ndarray:
-    """Fehler in eine Kopie der Stundenwerte schreiben (Notebook 30, Abschnitt 7).
+    """Fehler in eine Kopie der Stundenwerte schreiben (Notebook 28, Abschnitt 7).
 
     ``werte`` ist das Feld Tage × 24 × Kanäle, ``fenster`` je Zeile die
     Positionen der gestörten Tage. Fehler:
@@ -240,7 +240,7 @@ def _auc(y: np.ndarray, s: np.ndarray) -> float:
 
 
 def auc_mit_intervall(y, score, n: int = 2000, seed: int = SEED) -> Tuple[float, float, float]:
-    """AUC und 95-%-Bootstrap-Intervall (wie Notebook 29 und 31)."""
+    """AUC und 95-%-Bootstrap-Intervall (wie Notebook 27 und 29)."""
     y, score = np.asarray(y, dtype=int), np.asarray(score, dtype=float)
     rng = np.random.default_rng(seed)
     ziehungen = []
@@ -276,7 +276,7 @@ def zufallstest(y, score, n: int = 10000, seed: int = SEED) -> float:
 
     Gilt für feste Werte je Station (Regeln, Werte aus der
     Kreuzvalidierung). Für gelernte Modelle ist der strengere Test, das
-    ganze Lernen mit vertauschten Labels zu wiederholen (Notebook 31).
+    ganze Lernen mit vertauschten Labels zu wiederholen (Notebook 29).
     """
     y, score = np.asarray(y, dtype=int), np.asarray(score, dtype=float)
     echt = _auc(y, score)

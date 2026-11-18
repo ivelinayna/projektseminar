@@ -4,7 +4,7 @@ Das Dashboard zeigt für jede Station, ob Handlungsbedarf besteht und welche Ma�
 
 ## Warum eine HTML-Datei und kein Streamlit
 
-- Das Hauptdashboard ist eine einzelne HTML-Datei aus Notebook 40.
+- Das Hauptdashboard ist eine einzelne HTML-Datei aus Notebook 36.
 - Sie läuft in jedem Browser, ohne Python und ohne Server. Man kann sie per Doppelklick öffnen oder weitergeben.
 - Die Modelle rechnen vorher. Das Dashboard liest nur fertige Tabellen. Deshalb ist es schnell und braucht kein `torch`.
 - Streamlit hätte einen laufenden Python-Server gebraucht. Für eine Abgabe und für die ÜZ ist die Datei einfacher.
@@ -25,10 +25,10 @@ Drei Reiter:
 Reihenfolge:
 
 1. Notebook 00 (Stundenreihen) und `python -m src.weather` (Außentemperatur).
-2. Modellpakete bauen: Notebook 39 oder die Befehle unter [Schnellstart](schnellstart.md).
+2. Modellpakete bauen: Notebook 35 oder die Befehle unter [Schnellstart](schnellstart.md).
 3. `python -m src.dashboard_daten` wendet die Pakete auf die aktuellen Daten an und schreibt nach `outputs/dashboard/`.
-4. Notebook 34 ausführen. Es baut den Netz-Cache `notebooks/daten_cache/`.
-5. Notebook 40 ausführen. Es schreibt `notebooks/fernwaerme_dashboard_final.html`.
+4. Notebook 31 ausführen. Es baut den Netz-Cache `notebooks/daten_cache/`.
+5. Notebook 36 ausführen. Es schreibt `notebooks/fernwaerme_dashboard_final.html`.
 
 Ansehen:
 
@@ -47,14 +47,14 @@ Die Karte lädt Kartenkacheln und die Bibliothek Leaflet aus dem Internet. Ohne 
 4. Netzvergleich und Potenzial: Rang im Netz, Fehlerbild, Abstand zum besten Viertel.
 5. Empfehlung je Station, Netzeffizienz je Monat und Optimierungspotenzial.
 
-Alles nur mit Zählernummern. Die Adressen kommen erst in Notebook 40 aus der Zuordnung dazu.
+Alles nur mit Zählernummern. Die Adressen kommen erst in Notebook 36 aus der Zuordnung dazu.
 
 ## Weitere Exporte
 
 | Datei | Erzeugt von | Inhalt |
 |---|---|---|
-| `notebooks/dashboard_export.py` | Notebooks 34 und 35 | erste Fassung der Netzkarte |
-| `notebooks/dashboard_monitor.py` | Notebook 36 | Netzkarte mit Monitor-Status |
+| `notebooks/dashboard_export.py` | Notebooks 31 und 32 | erste Fassung der Netzkarte |
+| `notebooks/dashboard_monitor.py` | Notebook 33 | Netzkarte mit Monitor-Status |
 | `src/dashboard_app.py` | `streamlit run src/dashboard_app.py` | ältere Rücklauf-Ampel |
 | `src/dashboard_map.py` | `python -m src.main --dashboard` | einfache Folium-Karte |
 
