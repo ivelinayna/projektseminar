@@ -2,7 +2,7 @@
 # Kopie von dashboard_export.py (Notebook 31) in der Rohrbaum-Fassung aus Notebook 32, erweitert um die
 # Ergebnisse der Modelle aus Notebook 35. Das Original dashboard_export.py bleibt unverändert.
 #
-# Ausführen in Notebook 36 mit runpy.run_path("dashboard_final.py", init_globals={...}).
+# Ausführen in Notebook 37 mit runpy.run_path("dashboard_final.py", init_globals={...}).
 # Gebraucht werden serien, knoten, G, pos, roh und optional linien, kml_linien, geschaetzt.
 # Die Modellergebnisse kommen fertig aus outputs/dashboard/ (python -m src.dashboard_daten),
 # gelesen über src/dashboard_karte.py. Dieses Skript rechnet keine Modelle.
@@ -36,7 +36,7 @@ MELDUNG_TAGE = 14               # Färbung "Meldungen": Meldungen der letzten so
 # ------------------------------------------------------------------ Voraussetzungen prüfen
 fehlt = [n for n in ("serien", "knoten", "G", "pos", "roh") if n not in globals()]
 if fehlt:
-    raise SystemExit(f"Diese Variablen fehlen: {fehlt}. Notebook 36 von oben ausführen.")
+    raise SystemExit(f"Diese Variablen fehlen: {fehlt}. Notebook 37 von oben ausführen.")
 
 ROOT = globals().get("ROOT") or next(
     (p for p in [Path.cwd(), *Path.cwd().parents] if (p / "src" / "dashboard_karte.py").exists()), None)
@@ -287,8 +287,8 @@ payload = {"t0": idx[0].strftime("%Y-%m-%dT%H:%M"), "H": H, "M": M, "scale": lis
            "basis": HINTERGRUND, "bg": bg, "punkte": PUNKTE_ZEIGEN, "mt": MELDUNG_TAGE, "modell": modell,
            "b64": base64.b64encode(raw).decode("ascii")}
 daten = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
-#ältere Pakete schreiben "Modell LSTM" und "Modell Ivelina" in die Ursache, im Dashboard heißt es LSTM-Modell und Monitoring-Modell
-daten = daten.replace("Modell LSTM", "LSTM-Modell").replace("Modell Ivelina", "Monitoring-Modell")
+#wissensstand schreibt "Modell LSTM" in die Ursache, im Dashboard heißt es LSTM-Modell
+daten = daten.replace("Modell LSTM", "LSTM-Modell")
 
 VORLAGE = r"""<!doctype html>
 <html lang="de">
@@ -654,7 +654,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
         <div><b>Notebook 00</b>Stundenreihen aller Zähler</div>
         <div><b>Notebook 35</b>Modelle gelernt, geprüft und als Pakete gespeichert</div>
         <div><b>python -m src.dashboard_daten</b>Pakete auf die aktuellen Daten angewendet, ohne neu zu lernen</div>
-        <div><b>Notebook 36</b>Rohrbaum aus Notebook 32, Karte gebaut</div>
+        <div><b>Notebook 37</b>Rohrbaum aus Notebook 32, Karte gebaut</div>
       </div>
       <p class="muted klein" id="infoStand"></p>
     </div>

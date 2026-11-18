@@ -1,6 +1,6 @@
 # Ergebnisse
 
-- Diese Seite fasst die wichtigsten Ergebnisse der 39 Notebooks zusammen, geordnet nach den Teilen.
+- Diese Seite fasst die wichtigsten Ergebnisse der 40 Notebooks zusammen, geordnet nach den Teilen.
 - Je Teil stehen zuerst die belastbaren Ergebnisse, danach die zentralen Schwächen.
 - Alle Zahlen stammen aus den Ausgaben und Zusammenfassungen der Notebooks. Mehr Tiefe bieten [Stationsbilder und Befunde](stationsbilder.md), [Modellvergleich](modellvergleich.md), [Endmodell](endmodell.md) und [Negativbefunde](negativbefunde.md).
 - Über alle Teile hinweg gilt: Einfache Regeln und Modelle liegen meist gleichauf mit komplexen. Die größte Grenze sind die Labels: wenige Begehungen, Befunde ohne bekannten Fehlerbeginn, Freitexte statt klarer Fehlerarten.
@@ -49,23 +49,24 @@
 
 - Das Ventil hat ein klares Signal: 9 von 11 Ventilfällen laufen im Sommer nachts durch, gegen 3 von 42 ohne Befund (Notebook 25).
 - K-Means trennt Optimum (70) und schlechter (18) mit Silhouette 0,44. Die Gegenprobe Ventil (p = 0,021) ist nach Holm-Korrektur nicht mehr signifikant (0,13) (Notebook 26).
-- Das LSTM erkennt Stationen über zwei Winter wieder (85 %, nie gesehene 83 %, Zufall 2 %). Ventil AUC 0,89, aber nicht belegt besser als die Sommernacht-Regel (0,85) (Notebook 27).
+- Das LSTM erkennt Stationen über zwei Winter wieder (83 %, nie gesehene 78 %, Zufall 2 %). Ventil AUC 0,89, aber nicht belegt besser als die Sommernacht-Regel (0,85) (Notebook 27). Im Endmodell mit Modellwahl im Lernteil sind es 0,84 (Notebook 35).
 - Das Prognose-LSTM sagt den Rücklauf besser voraus als „wie gestern“ (4,3 K gegen 6,2 K) und findet einen eingerechneten Bypass von 150 l/h zu 84 % bei 8 % Fehlalarmen. An echten Begehungen bemerkt es 16 von 43, das Normalverhaltensmodell 30 von 43 (McNemar p = 0,001) (Notebook 28, 30).
-- Schwach: Filter, Durchfluss und Temperatur liegen bei AUC 0,24 bis 0,64, im Bereich des Zufalls. XGBoost ist nirgends besser als die beste Regression oder Regel. Die Bayes-Diagnose (Ventil AUC 0,92) beruht auf einer Matrix, von der 0 von 132 Feldern mit der ÜZ abgestimmt sind (Notebook 29, 37).
+- Schwach: Filter, Durchfluss und Temperatur liegen bei AUC 0,24 bis 0,64, im Bereich des Zufalls. XGBoost ist nirgends besser als die beste Regression oder Regel. Die Bayes-Diagnose (Ventil AUC 0,92) beruht auf einer Matrix, von der 0 von 132 Feldern mit der ÜZ abgestimmt sind (Notebook 29, 38).
 
 ## Teil 7 Netz
 
 - Das Netzmodell hat 110 Nodes und 110 Kanten, 89 Zähler sind zugeordnet. Die Pfeilrichtung der Kantendatei passt oft nicht zum Vorlaufgefälle (22 Kanten plausibel, 26 verdächtig) (Notebook 31).
 - Entlang des Rohrbaums ist das obere Haus bei 36 von 38 Paaren wärmer. Rohrbaum-Nachbarn schwanken aber nicht stärker gemeinsam als zufällige Häuser (0,231 gegen 0,223). Ein Effekt je Strang ist nicht nachweisbar (Notebook 32).
 - Nachbarn im Leitungsgraphen beginnen Verschlechterungen nicht häufiger gemeinsam als zufällige Paare (p 0,21 bis 0,48). Gemeinsame Verbesserungen passen zu gemeinsamen Begehungsterminen (Notebook 24).
-- Das GNN gewinnt durch das Netz nichts Messbares: Beitrag +0,010 und −0,009 (p = 0,172 und 0,423) (Notebook 38).
+- Das GNN gewinnt durch das Netz nichts Messbares: Beitrag +0,010 und −0,009 (p = 0,172 und 0,423) (Notebook 39).
 - Schwach: Der Graph ist logisch, nicht hydraulisch. Lage der Quelle und Kantenrichtung sind Annahmen.
 
 ## Teil 8 Modellvergleich und Ergebnis
 
 - Im Vergleich aller Kandidaten bleibt nach Holm über 15 Wächter nur der Tagesmonitor belegt (33 von 43 Begehungen gegen 53 % Kontrolle, p = 0,017 nach Holm). Beim Ventil ist kein Modell belegt besser als die Sommernacht-Regel. Nachbarn und Lage im Netz verbessern nichts (Notebook 34, [Modellvergleich](modellvergleich.md)).
 - Endmodell auf strengerer Zeitachse: Das Monitoring-Modell übernimmt Heizperiode, Erfolgskontrolle und Netzvergleich (18 von 43 als „besser“ gegen 24 %, p = 0,006). Das LSTM-Modell übernimmt warme Tage (Dauerdurchfluss 150 l/h 78 % bei 5 % Fehlalarmen) und die Fehlerart Ventil (AUC 0,84). Dämmung ist nur ein Hinweis (0,78), Kapazität nur per Regel (0,76) (Notebook 35, [Endmodell](endmodell.md)).
-- Das Dashboard zeigt Karte, Handlungsliste und Erklärungen. Unter den ersten 10 nach Ventil-Score hatten 7 einen Ventilbefund, Zufall wäre etwa 2 (Notebook 35, 36).
+- Das Dashboard zeigt Karte, Handlungsliste und Erklärungen. Unter den ersten 10 nach Ventil-Score hatten 7 einen Ventilbefund, Zufall wäre etwa 2 (Notebook 35, 37).
+- Warum manche Fehlerarten nicht erkennbar sind: Nur der Ventiltausch hinterlässt eine messbare Spur, der Sommernacht-Durchfluss sinkt danach (AUC 0,81, nach Holm gesichert). Nach Dämmung, Filter und Durchfluss ändert sich nichts Messbares, Sollwert (62 %) und Filter (47 %) sind eher Routine als gefundene Fehler. Erster physikalischer Hinweis zur Dämmung ist die Abkühlrate im Stillstand (0,69, nicht gesichert) (Notebook 36, [Was nicht getragen hat](nicht_getragen.md)).
 - Schwach: 43 Begehungen, 11 Ventil- und 9 Vertragsfälle. Viele Vorsprünge sind nicht gesichert. Regelungsoptimierung und echte Frühwarnung sind nicht erkennbar bzw. nicht prüfbar. Die Referenz des Monitoring-Modells steht an 43 % der Testtage am Deckel und muss neu gelernt werden (Notebook 35).
 
 ## Was die ÜZ nutzen kann

@@ -34,8 +34,8 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbef
 - Viele Schwellen sind gesetzt, nicht hergeleitet.
     - Beispiele: CUSUM mit k = 0,5 und h = 5, Deckel 10, Referenz 365 Tage, Fenster −7 bis +60 Tage um die Begehung, Leistungsklassen 5 und 10 kW.
     - Die Zielquote von rund 15 % Treffern je Regel ist gesetzt (NB 16), ebenso Stufen und Gewichte der Empfehlung (NB 17).
-- Die Lage der Einspeisung ist aus dem Wärmenetzplan angenommen (NB 32, NB 38). Die Richtung der Kanten ist offen.
-- Die Fehler-Symptom-Matrix im Bayes-Modell ist ein Entwurf (NB 37).
+- Die Lage der Einspeisung ist aus dem Wärmenetzplan angenommen (NB 32, NB 39). Die Richtung der Kanten ist offen.
+- Die Fehler-Symptom-Matrix im Bayes-Modell ist ein Entwurf (NB 38).
     - 0 von 132 Feldern sind mit der ÜZ abgestimmt.
     - Der Anteil gesunder Stationen ist mit 50 % angenommen.
 
@@ -46,7 +46,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbef
 - Im Test stehen 43 Begehungen, darunter 11 Ventilfälle und 9 Fälle mit zu großer Vertragsleistung.
 - Unterschiede unter etwa 0,1 AUC oder unter etwa 5 Fällen sind damit nicht sichtbar.
 - Bei 11 Ventilfällen schwankt die AUC je nach Trainingslauf um etwa ±0,15 (NB 27, NB 34).
-- Ein einziges Label verschiebt die Winter-AUC beim Ventil um 0,07 (NB 27).
+- Ein einziges Label verschiebt die Winter-AUC beim Ventil um 0,06 (NB 27).
 - Mechanische Eingriffe sind nur bei 19 Terminen kodiert (NB 14).
 - Die größte Fehlerkategorie hat 9 Fälle. Für einen Entscheidungsbaum über alle Kategorien reicht das nicht.
 - Nur 10 begangene Stationen liegen in der „schlechteren“ Gruppe der Einstufung (NB 26).
@@ -75,7 +75,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbef
 - Fühlerfehler sind kaum zu sehen. „Fühler hängt“ wird zu 43 % erkannt, ein um 5 K verstellter Sollwert zu 19 % (NB 28). Das ist nur an eingerechneten Fehlern geprüft, nicht an echten.
 - Regelungsoptimierung, Filter, Durchfluss und Hysterese sind als Ursache nicht erkennbar (AUC um oder unter 0,5).
 - Stundenwerte sind Momentaufnahmen. Takten der Regelung erscheint darin als Rauschen.
-- Dämmung ist statistisch erkennbar, aber physikalisch nicht erklärt. Die Flottenkennzahlen zeigen die umgekehrte Richtung (NB 27, NB 37).
+- Dämmung ist statistisch erkennbar, aber physikalisch nicht erklärt. Die Flottenkennzahlen zeigen die umgekehrte Richtung (NB 27, NB 38).
 - Das Prognose-LSTM ist nur an eingerechneten Fehlern geprüft, nicht an echten Ereignissen. Das Normalverhaltensmodell ist umgekehrt nicht an eingerechneten Fehlern geprüft (NB 30).
 - Stationen, die von Anfang an falsch eingestellt sind, haben keine gesunde Referenz (NB 13).
 - Stillstand sieht der Kennlinienmonitor nicht (NB 13).
@@ -96,14 +96,14 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbef
 ### Netz
 
 - Der Netzgraph ist logisch, nicht hydraulisch. Leitungslängen, Durchmesser und Drücke fehlen (NB 23).
-- 35 von 110 Kanten haben keinen Rohrweg (NB 38).
-- Die Pfeile in `Nodes_Edges.ods` passen zu keiner Quelle. Gegen die angenommene Einspeisung zeigen etwa gleich viele hin wie weg (NB 38).
+- 35 von 110 Kanten haben keinen Rohrweg (NB 39).
+- Die Pfeile in `Nodes_Edges.ods` passen zu keiner Quelle. Gegen die angenommene Einspeisung zeigen etwa gleich viele hin wie weg (NB 39).
 - Ein Einfluss des Strangs auf die Fehler ist nicht nachweisbar (NB 23, NB 32, NB 34).
 
 ### Vergleichbarkeit und Übertragbarkeit
 
 - Alle Modelle sind nur auf einem Teilnetz gelernt und geprüft. Ob sie auf andere Teilnetze passen, ist offen.
-- Das GNN (NB 38) und das Bayes-Modell (NB 37) lassen sich nicht mit den übrigen Modellen vergleichen, weil ihnen Eingaben fehlen. Details unter [Modellvergleich](modellvergleich.md).
+- Das GNN (NB 39) und das Bayes-Modell (NB 38) lassen sich nicht mit den übrigen Modellen vergleichen, weil ihnen Eingaben fehlen. Details unter [Modellvergleich](modellvergleich.md).
 - Die Stationscluster (NB 07, NB 08) nutzen die ganze Historie, also auch die Zeit nach der Begehung. Für einen Vergleich mit Labels sind sie deshalb ungeeignet.
 - Auf Stationsebene gibt es keine klaren Typen. Die Silhouette bleibt unter 0,25, die Flotte ist eher ein Kontinuum (NB 07, NB 08).
 
@@ -120,6 +120,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbef
     - Was steckt hinter den Stationen 72135442, 80912173 und 68956359, die nach der Begehung mehr Wasser brauchen?
     - Was ist bei Zähler 72167783 passiert? Der Rücklauf stieg nach der Begehung von 18,6 auf 71,0 °C.
     - Was erklärt die großen Sprünge im Herbst 2024 ohne Begehung (72167777, 69513891, 80956410, NB 06)?
+    - Kann das Protokoll künftig festhalten, ob etwas kaputt war, und nicht nur, was gemacht wurde? Sollwert und Filter wurden bei 62 % und 47 % der Begehungen gemacht, eine Spur im Zähler hinterlassen sie nicht (NB 36).
 - Betrieb
     - Welche Alarmlast ist im Betrieb tragbar?
     - Soll die CUSUM-Schwelle bei h = 5 bleiben oder auf h = 8 steigen? h = 8 bringt etwa ein Drittel weniger Alarme.
@@ -141,7 +142,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbef
     - Wie sollen Übergabestationen ohne Kante im Netz behandelt werden?
 - Weitere Daten
     - Gibt es Minutenwerte oder Reglerdaten mit Stellsignal? Ohne sie bleibt Hysterese unsichtbar.
-    - Gibt es das Baujahr je Gebäude?
+    - Gibt es das Baujahr je Gebäude? Es ist der letzte ungeprüfte Störfaktor für das Dämmungsmuster des gelernten Modells (NB 36).
 
 ## Mögliche nächste Schritte
 
@@ -152,4 +153,5 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbef
 - Den Nachtdurchfluss im Sommer als Kennzahl in den Netzvergleich aufnehmen.
 - Den Winter 2025/26 auswerten, sobald Daten für mehr Zähler vorliegen.
 - Neue Begehungen nach vorab festgelegten Regeln auswerten.
+- Die Abkühlrate im Stillstand (Dämmung) und die Filter-Sättigung an neuen Daten prüfen, Richtung vorab festgelegt (NB 36).
 - Die Pipeline auf weitere Teilnetze übertragen.

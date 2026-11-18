@@ -61,10 +61,10 @@ Die Notebooks liegen in `notebooks/`, je Teil in einem eigenen Ordner (`1_daten/
 
 | Nr. | Notebook | Worum es geht | Ergebnis | vorher |
 |---|---|---|---|---|
-| 25 | Modelldaten: Stundenwerte, Kennzahlen und Labels je Zähler<br>`25_modelldaten.ipynb` | Hier entsteht noch kein Modell. Das Notebook stellt die Daten bereit, aus denen die Notebooks 26 bis 29 lernen. | `modell_stunden.parquet`: 2,1 Mio. Stundenzeilen von 93 Zählern, mit Außentemperatur. Gebraucht in Notebook 27 und 28. |  |
+| 25 | Daten, Labels und Messlatte<br>`25_modelldaten.ipynb` | Was soll ein Modell erkennen, woran sieht man einen Fehler in den Stundenwerten, und wie gut trennt eine einzige, vorher festgelegte Kennzahl je Fehlerart? | Datenbasis für 26 bis 29: 2,1 Mio. Stundenzeilen von 93 Zählern mit Außentemperatur, 6 Labels je begangenem Zähler, Kennzahlen vor der Begehung. Nur das Ventil ist in den Daten deutlich sichtbar. Messlatte: Ventil AUC 0,88, Überdimensionierung 0,78, Dämmung 0,64, die übrigen bei Raten. |  |
 | 26 | Einstufung mit K-Means: Läuft eine Station im Optimum oder schlechter?<br>`26_einstufung.ipynb` | Folie 5 der ÜZ teilt die Stationen in drei Klassen mit je einer Empfehlung. Lässt sich das ohne Labels aus dem Winterbetrieb ablesen? | Einstufung aller 88 Zähler mit genug Wintermessungen: Optimum (70) und schlechter (18). Nur aus dem Regelverhalten im Winter 23/24, ohne Label. Gespeichert in `kmeans_einstufung.csv`. |  |
-| 27 | LSTM: Normalbetrieb lernen, Fehler finden<br>`27_lstm.ipynb` | Die Kennzahlen aus Notebook 25 sind von Hand ausgewählt. Ein LSTM (neuronales Netz für Zeitreihen mit Gedächtnis) soll aus den Stundenwerten selbst lernen, was eine Station ausmacht, ohne Labels. | Ein LSTM (117.000 Gewichte, rund 6 Minuten Training auf der CPU) sagt aus einem Tag einer Station den nächsten vorher und beschreibt dabei jede Station in acht Zahlen. |  |
-| 28 | Prognose-LSTM: ein Wächter für neue Veränderungen<br>`28_prognose_lstm.ipynb` | Notebook 27 zeigt: Ein LSTM (neuronales Netz für Zeitreihen mit Gedächtnis) kann das Verhalten einer Station lernen. Hier wird daraus ein Wächter. | Ein Encoder-Decoder-LSTM (35.000 Gewichte, 24 Sekunden Training auf der GPU) sagt für 87 Stationen jeden Tag Rücklauf und Durchfluss vorher. Gelernt nach Vorgabe nur auf begangenen HAST, ein Netz auf allen HAST dient zum Vergleich. |  |
+| 27 | LSTM-Fingerabdruck: Normalbetrieb lernen, Stationen beschreiben<br>`27_lstm.ipynb` | Kann ein LSTM ohne Labels lernen, was eine Station ausmacht? Vorversuche zu Sequenzen, Lernkurve, Early Stopping und Engpass, dann das endgültige Netz. | Ein LSTM (116.941 Gewichte) sagt aus einem Tag den nächsten vorher und beschreibt jeden Tag in 8 Zahlen, je Station 16 für Winter und Sommer. Wiedererkennung über zwei Winter 83 %, nie gesehene Stationen 78 %. |  |
+| 28 | Prognose-LSTM: ein Wächter für neue Veränderungen<br>`28_prognose_lstm.ipynb` | Wie viele Tage Vorgeschichte, was bringt ein LSTM gegenüber dem 7-Tage-Mittel, wie weit kommt ein Wächter ohne Netz? Dann der endgültige Wächter. | 7 Tage sind am besten (U-Form). Ein Encoder-Decoder-LSTM (35.458 Gewichte) sagt für 87 Stationen jeden Tag Rücklauf und Durchfluss vorher. Eingebaute Bypässe von 150 l/h zu 84 % erkannt bei 8 % Fehlalarmen. |  |
 | 29 | XGBoost: Fehlerart und Handlungsklasse je Station<br>`29_xgboost.ipynb` | Die Notebooks 25 bis 28 liefern je eine Sicht auf die Stationen: Kennzahlen, ein gelerntes LSTM-Embedding (Embedding = kurze Zahlenreihe, die das Verhalten einer Station zusammenfasst), die Abweichungen des Wächters. | Sieben Verfahren über sechs Fehlerarten verglichen, alle verschachtelt geprüft, mit Stationen und mit ganzen Straßen ausgelassen. |  |
 | 30 | Wächtervergleich: Normalverhaltensmodell gegen Prognose-LSTM<br>`30_waechtervergleich.ipynb` | Im Projekt gibt es zwei Wächter, die melden, wenn sich an einer Station etwas verändert: das Normalverhaltensmodell (Notebook 18) und das Prognose-LSTM (Notebook 28). | Die Prüfung aus Notebook 18 liegt als Funktion vor, Fall für Fall gegen dessen Zahlen kontrolliert (30/43, p = 0,017). | 10, 18 |
 
@@ -82,30 +82,32 @@ Die Notebooks liegen in `notebooks/`, je Teil in einem eigenen Ordner (`1_daten/
 |---|---|---|---|---|
 | 34 | Modellvergleich: welches Modell für welche Aufgabe?<br>`34_modellvergleich.ipynb` | Fast jedes Notebook hat sein Modell selbst geprüft, mit eigenem Zeitraum, eigenen Stationen und eigener Alarmmenge. Die Ergebnisse sind so nicht vergleichbar. | Kein System ist allein das beste. Beste Kombination: Alarm aus dem Monitoring-Modell (Tagesmonitor), dazu das Prognose-LSTM für plötzliche Fehler; Fehlererkennung und Klasse aus der LSTM-Kette; Netzvergleich als Bestätigung, die die Dringlichkeit hebt. | 10, 18, 25 bis 29 |
 | 35 | Endmodell: Monitoring-Modell gegen LSTM-Modell<br>`35_endmodell.ipynb` | Im Projekt gibt es zwei fertige Ansätze: Monitoring-Modell (Kennlinie und Netzvergleich) und LSTM-Modell (neuronales Netz). | Keins der beiden Modelle ist allein besser. Das Monitoring-Modell übernimmt Heizperiode, Erfolgskontrolle und Netzvergleich, das LSTM-Modell die warmen Tage und die Fehlerart Ventil (mit dem Fehlerbild des Monitoring-Modells als Bestätigung). | 25 bis 29 |
+| 36 | Feature Engineering: Zeitstruktur und Erklärbarkeit<br>`36_merkmale.ipynb` | Notebook 35 findet bei Filter, Durchfluss und Sollwert nichts, bei der Dämmung ein Muster ohne Erklärung. Liegt das an den Daten, an den Kennzahlen oder an den Labels? | Nur der Ventiltausch hinterlässt eine messbare Spur (Sommernacht-Durchfluss sinkt, AUC 0,81, nach Holm gesichert). Dämmung, Filter und Durchfluss ändern nach der Maßnahme nichts Messbares. Erster physikalischer Hinweis zur Dämmung: Abkühlrate im Stillstand (0,69, nicht gesichert). | 27, 39 |
 
 ## Teil 9: Dashboard
 
 | Nr. | Notebook | Worum es geht | Ergebnis | vorher |
 |---|---|---|---|---|
-| 36 | Dashboard: Handlungsempfehlungen auf dem Rohrbaum<br>`36_dashboard.ipynb` | Das fertige Dashboard: Es zeigt auf dem Rohrbaum aus Notebook 32 für jede Hausstation, was die Modelle aus Notebook 35 sagen. | Ein Dashboard mit drei Reitern auf dem Rohrbaum aus Notebook 32: Karte, Handlungsliste und „So funktioniert's“. Jede Anzeige kommt von dem Modell, das in Notebook 35 dafür am besten abgeschnitten hat. | 31, 35, `python -m src.dashboard_daten` |
+| 37 | Dashboard: Handlungsempfehlungen auf dem Rohrbaum<br>`37_dashboard.ipynb` | Das fertige Dashboard: Es zeigt auf dem Rohrbaum aus Notebook 32 für jede Hausstation, was die Modelle aus Notebook 35 sagen. | Ein Dashboard mit drei Reitern auf dem Rohrbaum aus Notebook 32: Karte, Handlungsliste und „So funktioniert's“. Jede Anzeige kommt von dem Modell, das in Notebook 35 dafür am besten abgeschnitten hat. | 31, 35, `python -m src.dashboard_daten` |
 
 ## Anhang: Weitere Versuche
 
-Eigene Ansätze, die sich nicht durchgesetzt haben und auf denen nichts aufbaut. Sie stehen hinter dem Dashboard, damit die Hauptkette 00 bis 36 durchgeht. Die Befunde aller Versuche fasst [Negativbefunde](negativbefunde.md) zusammen.
+Eigene Ansätze, die sich nicht durchgesetzt haben und auf denen nichts aufbaut. Sie stehen hinter dem Dashboard, damit die Hauptkette 00 bis 37 durchgeht. Die Befunde aller Versuche fasst [Negativbefunde](negativbefunde.md) zusammen.
 
 | Nr. | Notebook | Worum es geht | Ergebnis | vorher |
 |---|---|---|---|---|
-| 37 | Bayes-Diagnose je Station<br>`37_bayes.ipynb` | Frage: Welche Fehlerart erklärt die Messdaten einer Station am besten, und wie sicher ist das? | Ventil/Stellantrieb hat als einzige Fehlerart eine klare Spur: Begehungen mit Ventilbefund bekamen im Mittel 40 % dafür, die übrigen 1 % (n = 10). Im Zweikampf gegen „kein Befund“ AUC 0,92. |  |
-| 38 | GNN-Entwurf: Hilft das Netz bei der Früherkennung?<br>`38_gnn.ipynb` | Frage: Verbessert ein GNN das Normalverhaltensmodell aus Notebook 18, und zwar wegen des Netzes? GNN = Graph Neural Network, ein Modell, das auch die Messwerte der Nachbarn im Netz nutzt. | Ohne Netz erklärt das Modell nach der Referenz 12,1 % (Abkühlung) und 18,5 % (Wassermenge) des Fehlers von Notebook 18. Die neuen eigenen Merkmale helfen also. | 10 |
+| 38 | Bayes-Diagnose je Station<br>`38_bayes.ipynb` | Frage: Welche Fehlerart erklärt die Messdaten einer Station am besten, und wie sicher ist das? | Ventil/Stellantrieb hat als einzige Fehlerart eine klare Spur: Begehungen mit Ventilbefund bekamen im Mittel 40 % dafür, die übrigen 1 % (n = 10). Im Zweikampf gegen „kein Befund“ AUC 0,92. |  |
+| 39 | GNN-Entwurf: Hilft das Netz bei der Früherkennung?<br>`39_gnn.ipynb` | Frage: Verbessert ein GNN das Normalverhaltensmodell aus Notebook 18, und zwar wegen des Netzes? GNN = Graph Neural Network, ein Modell, das auch die Messwerte der Nachbarn im Netz nutzt. | Ohne Netz erklärt das Modell nach der Referenz 12,1 % (Abkühlung) und 18,5 % (Wassermenge) des Fehlers von Notebook 18. Die neuen eigenen Merkmale helfen also. | 10 |
 
 ## Wichtige Abhängigkeiten
 
-- Notebook 10 schreibt die Tageswerte `hast_tage` für die Notebooks 18, 30, 38 und 34.
+- Notebook 10 schreibt die Tageswerte `hast_tage` für die Notebooks 18, 30, 34 und 39.
 - Notebook 18 schreibt das Normalverhaltensmodell für die Notebooks 30 und 34.
 - Die Notebooks 25 bis 29 schreiben Modelldaten, LSTM-Embedding und Ventil-Modell für 34 und 35.
 - Notebook 24 schreibt den Monitor-Status für Notebook 33.
-- Notebook 31 baut den Netz-Cache `notebooks/daten_cache/` für die Notebooks 32, 33 und 36.
-- Notebook 35 baut die Modellpakete in `models/` für das Dashboard in Notebook 36.
+- Notebook 31 baut den Netz-Cache `notebooks/daten_cache/` für die Notebooks 32, 33 und 37.
+- Notebook 35 baut die Modellpakete in `models/` für das Dashboard in Notebook 37.
+- Notebook 35 schreibt die Vorhersagen aus Test C nach `outputs/finalvergleich/` für Notebook 36.
 - Notebook 08 braucht `inspections_tidy.csv` aus `python -m src.main`.
 
 ## Alte und neue Nummern
@@ -145,11 +147,12 @@ Im Projektverlauf gab es andere Dateinamen und Nummern. Ältere Notizen und der 
 | `28_prognose_lstm.ipynb` | `30_prognose_lstm.ipynb` | `21_prognose_lstm_waechter.ipynb` |
 | `29_xgboost.ipynb` | `31_xgboost.ipynb` | `22_xgboost_fehlerklassen.ipynb` |
 | `30_waechtervergleich.ipynb` | `32_waechtervergleich.ipynb` | `23_vergleich_waechter.ipynb` |
-| `37_bayes.ipynb` | `33_bayes.ipynb` | `31_bayes_diagnose.ipynb` |
+| `38_bayes.ipynb` | `33_bayes.ipynb` | `31_bayes_diagnose.ipynb` |
 | `31_netz.ipynb` | `34_netz.ipynb` | `16_Netz.ipynb` |
 | `32_einspeisung.ipynb` | `35_einspeisung.ipynb` | `28_Netz_experimente.ipynb` |
 | `33_netzkarte.ipynb` | `36_netzkarte.ipynb` | `25_netzkarte.ipynb` |
-| `38_gnn.ipynb` | `37_gnn.ipynb` | `30_gnn_entwurf.ipynb` |
+| `39_gnn.ipynb` | `37_gnn.ipynb` | `30_gnn_entwurf.ipynb` |
 | `34_modellvergleich.ipynb` | `38_modellvergleich.ipynb` | `32_modellvergleich.ipynb` |
 | `35_endmodell.ipynb` | `39_endmodell.ipynb` | `34_modellvergleich_und_umsetzung_nach_aufgabenstellung.ipynb` |
-| `36_dashboard.ipynb` | `40_dashboard.ipynb` | `35_dashboard.ipynb` |
+| `36_merkmale.ipynb` | `41_merkmale.ipynb` | `36_feature_engineering_zeitstruktur_shap.ipynb` |
+| `37_dashboard.ipynb` | `40_dashboard.ipynb` | `35_dashboard.ipynb` |

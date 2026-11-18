@@ -14,18 +14,18 @@ data/processed/real_meters/   Stundenreihe je Zähler
    |
    |  nb00_daten.lade_serien()  +  weather (DWD-Außentemperatur)
    v
-Notebooks 01-36 und src-Module
+Notebooks 01-37 und src-Module
    |
    +-- Notebook 10   -> hast_tage            (Tageswerte für 18, 30, 34, 38)
    +-- Notebook 18   -> normalmodell_*       (für 30, 34)
    +-- Notebooks 25-29 -> Modelldaten, LSTM-Embedding, Ventil-Modell
    +-- Notebook 24   -> monitor_status       (für 33)
-   +-- Notebook 31   -> notebooks/daten_cache/  (Netz, für 32, 33, 36)
+   +-- Notebook 31   -> notebooks/daten_cache/  (Netz, für 32, 33, 37)
    +-- Notebook 35   -> models/              (Modellpakete)
           |
           |  python -m src.dashboard_daten
           v
-      outputs/dashboard/  ->  Notebook 36  ->  fernwaerme_dashboard_final.html
+      outputs/dashboard/  ->  Notebook 37  ->  fernwaerme_dashboard_final.html
 ```
 
 ## Befehle
@@ -123,9 +123,10 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 | `pruefstand` | alle Verfahren unter gleichen Bedingungen prüfen | 34, 35 |
 | `normalmodell_waechter` | Tagesmonitor als Paket | 34, 35 |
 | `prognose_waechter` | Prognose-LSTM als Paket | 34, 35 |
-| `fehlerklassen` | Folie-5-Klassen als Paket | 34, 35 |
-| `finalvergleich` | Monitoring-Modell gegen LSTM-Modell, Endmodell | 35 |
-| `modellpaket` | Pakete speichern und laden | 34 bis 36 |
+| `fehlerklassen` | Folie-5-Klassen als Paket | 34 bis 36 |
+| `finalvergleich` | Monitoring-Modell gegen LSTM-Modell, Endmodell | 35, 36 |
+| `merkmalsbau` | Wirkung der Maßnahmen, Zeitstruktur und neue Kennzahlen je Befund | 36 |
+| `modellpaket` | Pakete speichern und laden | 34 bis 37 |
 
 ### Netz und Karte
 
@@ -141,8 +142,8 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 
 | Modul | Aufgabe | Notebooks |
 |---|---|---|
-| `dashboard_daten` | Modellergebnisse für das Dashboard | 36 |
-| `dashboard_karte` | Modellergebnisse in die Netzkarte | 36 |
+| `dashboard_daten` | Modellergebnisse für das Dashboard | 37 |
+| `dashboard_karte` | Modellergebnisse in die Netzkarte | 37 |
 | `dashboard_map` | einfache Folium-Karte | nur Befehlszeile |
 | `dashboard_app` | ältere Streamlit-App | nur Befehlszeile |
 | `aktualisieren` | neue Daten in einem Schritt einspielen | nur Befehlszeile |

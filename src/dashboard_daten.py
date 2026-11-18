@@ -1,6 +1,6 @@
 """Daten für das Wächter-Dashboard: Modellpakete auf die aktuellen Daten anwenden.
 
-Das Dashboard (Notebook 36 mit `src/dashboard_karte.py`) rechnet selbst nichts. Es liest
+Das Dashboard (Notebook 37 mit `src/dashboard_karte.py`) rechnet selbst nichts. Es liest
 nur die Tabellen, die dieses Modul nach ``outputs/dashboard/`` schreibt.
 So bleibt die App schnell, braucht kein torch und zeigt immer genau das,
 was mit einer bestimmten Paketversion gerechnet wurde.
@@ -190,7 +190,7 @@ def empfehlungen(st: pd.DataFrame) -> pd.DataFrame:
     ``hinweis_daemmung``, ``netz_fehlerbild``, ``auslastung``, ``sonderfall``;
     optional ``sommer_durchlauf_anteil`` für die Begründung.
 
-    - hoch: Reparatur, bestätigt durch das Fehlerbild des Monitoring-Modells „ventil“
+    - hoch: Reparatur, bestätigt durch das Fehlerbild „ventil“ des Monitoring-Modells
       (Test C: 4 von 4 richtig)
     - mittel: Reparatur nur nach dem Ventil-Score des LSTM-Modells
       (LR nur auf dem LSTM-Embedding, Test C: 8 von 11 gefunden bei 4 Fehlalarmen)
@@ -290,7 +290,7 @@ def empfehlungen_vor_begehung(vorher: pd.DataFrame, kz_vor: pd.DataFrame, fehler
 
     ``vorher`` kommt aus `fehlerklassen.bewerten` mit den Werten aus der Kreuzvalidierung für
     begangene Zähler (das Modell hat sie beim Lernen nicht gesehen), ``fehlerbild`` ist
-    Fehlerbild des Monitoring-Modells im Winter 23/24, ``grund`` der Sonderfall-Grund in diesem Winter.
+    das Fehlerbild des Monitoring-Modells im Winter 23/24, ``grund`` der Sonderfall-Grund in diesem Winter.
     Rückgabe mit den Spaltennamen aus ``VOR_SPALTEN``.
     """
     st = vorher[["klasse", "p_ventil", "p_daemmung", "auslastung", "hinweis_daemmung",

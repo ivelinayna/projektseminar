@@ -19,8 +19,8 @@ Testergebnis angeschaut wird:
   ``VAL_START`` bis ``VAL_ENDE``, Test ab ``TEST_START``. Die 7 Tage
   Abstand sind das Eingabefenster des LSTM, so teilen die Abschnitte keinen
   Rohdatentag.
-- Schwellen und Alarmlast nur aus der Probezeit. Bezug ist der Monitoring-Wächter
-  mit ihrer eigenen Einstellung h = 5: Jeder andere Wächter bekommt so
+- Schwellen und Alarmlast nur aus der Probezeit. Bezug ist der Wächter des Monitoring-Modells
+  mit seiner eigenen Einstellung h = 5: Jeder andere Wächter bekommt so
   viele Alarme, wie er in der Probezeit gibt.
 - Fehlerarten je Station: fünffache Kreuzvalidierung über physische
   Stationsgruppen, der LSTM-Encoder wird je Fold ohne die Teststationen
@@ -30,7 +30,7 @@ Testergebnis angeschaut wird:
 
 Neu ist `stoerung_einrechnen`: Fehler mit bekanntem Beginn werden in die
 NB-00-Stundenwerte geschrieben, **einschließlich der Energie- und
-Volumenzähler**. Erst damit lässt sich der Monitoring-Wächter, der aus
+Volumenzähler**. Erst damit lässt sich der Wächter des Monitoring-Modells, der aus
 Zählerständen rechnet, genauso prüfen wie das LSTM.
 """
 
@@ -183,10 +183,10 @@ def gleiche_daten_pruefen(serien: Mapping[int, pd.DataFrame], stunden: pd.DataFr
                           nb18: Path = PROCESSED / "modell_stunden.parquet") -> pd.DataFrame:
     """Prüft, dass beide Modelle dieselben Messwerte bekommen.
 
-    Vergleicht die LSTM-Stundentabelle mit den NB-00-Reihen (Monitoring) und,
+    Vergleicht die LSTM-Stundentabelle mit den NB-00-Reihen und,
     falls vorhanden, mit `modell_stunden.parquet` aus Notebook 25.
     """
-    zeilen = [{"Prüfung": "Zähler in den NB-00-Reihen (Monitoring)", "Wert": len(serien)},
+    zeilen = [{"Prüfung": "Zähler in den NB-00-Reihen", "Wert": len(serien)},
               {"Prüfung": "Zähler in der LSTM-Stundentabelle", "Wert": stunden["zaehler"].nunique()}]
     abw = 0.0
     for m, s in serien.items():
@@ -1175,7 +1175,7 @@ def embedding_skalierung_paket(werte: np.ndarray, tage: pd.DataFrame, lern_roh: 
 # --- Ablauf für Notebook 35 --------------------------------------------------------
 
 WAECHTER = {"monitoring": "Monitoring-Modell (Kennlinie + CUSUM)",
-            "nv": "LSTM mit fester Referenz (gebaut wie der Monitoring-Wächter)",
+            "nv": "LSTM mit fester Referenz (gebaut wie der Wächter des Monitoring-Modells)",
             "lstm_s": "LSTM-Modell + Schwelle",
             "lstm_c": "LSTM-Modell + CUSUM",
             "lstm_beg": "LSTM-Modell + CUSUM, nur begangene Stationen gelernt",
@@ -1231,20 +1231,20 @@ def waechter_bauen(e: dict, log=print) -> dict:
     beob = {"monitoring": monitoring_beobachtet(verl), "lstm": lstm_beobachtet(z), "wm": lstm_beobachtet(z_wm)}
     gem = gemeinsame_tage(*beob.values())
     wahl = gem[(gem["datum"] >= WAHL_START) & (gem["datum"] < VAL_ENDE)]
-    al_iv = monitoring_alarme(verl, H_MONITORING)
+    al_mm = monitoring_alarme(verl, H_MONITORING)
     w = {"mt": mt, "ref": ref, "mod": mod, "modtab": modtab, "verlauf": verl,
          "lstm": g, "abw": abw, "kal": kal, "faktor": fak, "z": z,
          "abw_wm": abw_wm, "kal_wm": kal_wm, "faktor_wm": fak_wm, "z_wm": z_wm,
          "beobachtet": beob, "gemeinsam": gem, "wahltage": wahl,
-         "ziel_alarme": len(nur_tage(al_iv, wahl)),
-         "einstellung": {"monitoring": ("cusum", H_MONITORING)}, "alarme": {"monitoring": al_iv}, "suche": []}
+         "ziel_alarme": len(nur_tage(al_mm, wahl)),
+         "einstellung": {"monitoring": ("cusum", H_MONITORING)}, "alarme": {"monitoring": al_mm}, "suche": []}
     for key in ("lstm_s", "lstm_c", "wm_s", "wm_c"):
         _einstellen(w, key)
     return w
 
 
 def _einstellen(w: dict, key: str) -> None:
-    """Wert aus dem Raster, der in der Einstellzeit so viele Alarme gibt wie der Monitoring-Wächter."""
+    """Wert aus dem Raster, der in der Einstellzeit so viele Alarme gibt wie der Wächter des Monitoring-Modells."""
     quelle = _quelle(w, key)
     regel = _raster(key)[0][0]
     wert, tab = gleiche_alarmlast(lambda v: _alarme_fuer(quelle, regel, v),
@@ -1256,7 +1256,7 @@ def _einstellen(w: dict, key: str) -> None:
 
 
 def nv_hinzufuegen(w: dict, e: dict, log=print) -> dict:
-    """Dritter Wächter: LSTM mit fester Referenz, gebaut wie der Monitoring-Wächter (siehe `nv_lernen`)."""
+    """Dritter Wächter: LSTM mit fester Referenz, gebaut wie der Wächter des Monitoring-Modells (siehe `nv_lernen`)."""
     w["nv"] = nv_lernen(w["mt"], w["ref"], e["temp"], log=log)
     _einstellen(w, "nv")
     return w
@@ -1430,7 +1430,7 @@ def stoerungen_kurve(st: dict, w: dict) -> pd.DataFrame:
     return pd.DataFrame(teile)
 
 
-# --- Zusatz: LSTM mit fester Referenz (gebaut wie der Monitoring-Wächter) ------------------
+# --- Zusatz: LSTM mit fester Referenz (gebaut wie der Wächter des Monitoring-Modells) ------------------
 
 NV_TAGE = 7
 
@@ -1493,7 +1493,7 @@ def _nv_vorhersage(nv: dict, d: pd.DataFrame, folge: np.ndarray) -> np.ndarray:
 
 
 def nv_lernen(mt: pd.DataFrame, ref: pd.DataFrame, temp: pd.Series, seed: int = SEED, log=print) -> dict:
-    """LSTM mit fester Referenz: gleiche Aufgabe, gleiche Tage, gleiche Regel wie der Monitoring-Wächter.
+    """LSTM mit fester Referenz: gleiche Aufgabe, gleiche Tage, gleiche Regel wie der Wächter des Monitoring-Modells.
 
     - Lernen auf genau den Referenztagen ihrer Kennlinien (Heiztage bis zum Lernende).
     - Vorhersage von Abkühlung (kWh/m³) und Tagesvolumen (log) nur aus dem
@@ -1646,9 +1646,9 @@ def oof_breit(kl: dict, ziel: str) -> pd.DataFrame:
         o.groupby("zaehler")["y"].first())
 
 
-def bewertung_tabelle(kl: dict, iv: pd.DataFrame, gruppen: pd.Series, ziel: str) -> pd.DataFrame:
-    """AUC mit Intervall, gepaarte Differenz zur Regel/zum Monitoring-Modell und Konfusion je Kandidat."""
-    b = oof_breit(kl, ziel).join(iv[["netz_score", "fehlerbild", "auffaellig", "potenzial_score"]])
+def bewertung_tabelle(kl: dict, mm: pd.DataFrame, gruppen: pd.Series, ziel: str) -> pd.DataFrame:
+    """AUC mit Intervall, gepaarte Differenz zur Regel bzw. zum Monitoring-Modell und Konfusion je Kandidat."""
+    b = oof_breit(kl, ziel).join(mm[["netz_score", "fehlerbild", "auffaellig", "potenzial_score"]])
     g = gruppen.reindex(b.index).to_numpy()
     y = b["y"].to_numpy()
     zeilen = []
@@ -1692,19 +1692,19 @@ def ab_wann_bewertbar(e: dict, w: dict) -> pd.DataFrame:
     for m, s in e["serien"].items():
         start = s["flow"].dropna().index.min()
         d = mt[mt["meter"] == m].sort_values("datum")
-        iv = np.nan
+        mm = np.nan
         if len(d):
             t = d["t_mittel_c"].to_numpy()
             spanne = np.maximum.accumulate(t) - np.minimum.accumulate(t)
             ok = np.flatnonzero((np.arange(1, len(d) + 1) >= tm.MIN_REF_TAGE) & (spanne >= tm.MIN_REF_SPANNE_K))
             if len(ok):
-                iv = (pd.Timestamp(d["datum"].iloc[ok[0]]) - start.normalize()).days
+                mm = (pd.Timestamp(d["datum"].iloc[ok[0]]) - start.normalize()).days
         tt = tage[tage["zaehler"] == m].sort_values("tag")
         ls = np.nan
         if len(tt) >= pw.VORGESCHICHTE + 2 * MIN_VAL_TAGE:
             ls = (tt["tag"].iloc[pw.VORGESCHICHTE + 2 * MIN_VAL_TAGE - 1] - start.normalize()).days
         zeilen.append({"zaehler": int(m), "erster Messwert": start.normalize(),
-                       "Monitoring-Modell ab Tag": iv, "LSTM-Wächter ab Tag": ls})
+                       "Monitoring-Modell ab Tag": mm, "LSTM-Wächter ab Tag": ls})
     return pd.DataFrame(zeilen)
 
 
@@ -1763,14 +1763,14 @@ def gegenprobe_nach_reparatur(teile: dict, e: dict, kl: dict, netz: dict) -> pd.
     """Bekannte HAST später: beide Modelle unverändert auf Winter 24/25 (und Sommer 2025).
 
     Vorher: LSTM-Modell mit den Werten außerhalb des Folds (begangene) bzw.
-    dem Endmodell (nie begangene), Monitoring-Modell mit dem Netzvergleich 23/24.
+    dem Endmodell (nie begangene), das Monitoring-Modell mit dem Netzvergleich 23/24.
     Nachher: dieselben Modelle auf den Daten nach den Begehungen.
     """
     nach = fk.saison_bewerten(teile, e["stunden"], WINTER_NACH, SOMMER_NACH)
     emb = kl["final"]["embedding"]
     vor = fk.bewerten(teile, kl["kz"], emb, oof=teile["kreuzvalidierung"])
-    iv_vor = monitoring_je_station(netz, "23/24")
-    iv_nach = monitoring_je_station(netz, "24/25")
+    mm_vor = monitoring_je_station(netz, "23/24")
+    mm_nach = monitoring_je_station(netz, "24/25")
     lab = e["labels"]
     idx = sorted(set(vor.index) | set(nach.index))
     t = pd.DataFrame(index=pd.Index(idx, name="zaehler"))
@@ -1779,10 +1779,10 @@ def gegenprobe_nach_reparatur(teile: dict, e: dict, kl: dict, netz: dict) -> pd.
     t["p_ventil_vor"] = vor["p_ventil"].reindex(t.index)
     t["p_ventil_nach"] = nach["p_ventil"].reindex(t.index)
     t["stunden_sommer_nach"] = nach["stunden_sommer"].reindex(t.index)
-    t["fehlerbild_vor"] = iv_vor["fehlerbild"].reindex(t.index)
-    t["fehlerbild_nach"] = iv_nach["fehlerbild"].reindex(t.index)
-    t["netz_score_vor"] = iv_vor["netz_score"].reindex(t.index)
-    t["netz_score_nach"] = iv_nach["netz_score"].reindex(t.index)
+    t["fehlerbild_vor"] = mm_vor["fehlerbild"].reindex(t.index)
+    t["fehlerbild_nach"] = mm_nach["fehlerbild"].reindex(t.index)
+    t["netz_score_vor"] = mm_vor["netz_score"].reindex(t.index)
+    t["netz_score_nach"] = mm_nach["netz_score"].reindex(t.index)
     return t
 
 
@@ -1792,14 +1792,14 @@ def wirkung_und_potenzial(w: dict, netz: dict, kl: dict, termine: Mapping[int, S
     norm = tm.norm_winter(w["mt"])
     a = norm[norm["winter"] == "23/24"].set_index("meter")["norm_kwh_m3"]
     b = norm[norm["winter"] == "24/25"].set_index("meter")["norm_kwh_m3"]
-    iv = monitoring_je_station(netz, "23/24")
+    mm = monitoring_je_station(netz, "23/24")
     t = pd.DataFrame({"kwh_m3_2324": a, "kwh_m3_2425": b}).dropna()
     t.index.name = "zaehler"
     t["delta_kwh_m3"] = t["kwh_m3_2425"] - t["kwh_m3_2324"]
     t["begangen"] = [any(pd.Timestamp("2024-03-01") <= pd.Timestamp(d) < pd.Timestamp("2024-12-01")
                          for d in termine.get(int(m), [])) for m in t.index]
-    t["potenzial_score"] = iv["potenzial_score"].reindex(t.index)
-    t["potenzial"] = iv["potenzial"].reindex(t.index)
+    t["potenzial_score"] = mm["potenzial_score"].reindex(t.index)
+    t["potenzial"] = mm["potenzial"].reindex(t.index)
     t["kmeans"] = kl["kmeans_klasse"].reindex(t.index)
     return t
 
@@ -1839,7 +1839,7 @@ def fallbild(meter: int, w: dict, e: dict, von, bis, titel: str = ""):
     v = v[(v["meter"] == meter) & (v["datum"] >= von) & (v["datum"] <= bis)]
     k = v[v["kanal"] == "kwh_pro_m3"]
     ax[0].plot(k["datum"], k["wert"], ".", ms=4, color="black", label="gemessen")
-    ax[0].plot(k["datum"], k["erwartung"], "-", color=FARBE_MONITORING, label="Erwartung Kennlinie (Monitoring)")
+    ax[0].plot(k["datum"], k["erwartung"], "-", color=FARBE_MONITORING, label="Erwartung Kennlinie (Monitoring-Modell)")
     ax[0].set_ylabel("Abkühlung\n[kWh/m³]")
     ax[0].set_title(titel or f"Station {meter}", fontsize=11)
     for kanal, farbe in (("kwh_pro_m3", FARBE_MONITORING), ("log_volumen", "#60A5FA")):
@@ -1847,7 +1847,7 @@ def fallbild(meter: int, w: dict, e: dict, von, bis, titel: str = ""):
         ax[1].plot(g["datum"], np.maximum(g["s_plus"], g["s_minus"]), color=farbe,
                    label=f"CUSUM-Konto {tm.KANAELE[kanal]}")
     ax[1].axhline(H_MONITORING, color=FARBE_MONITORING, ls="--", lw=1, label=f"Grenze h = {H_MONITORING:g}")
-    ax[1].set_ylabel("Konto Monitoring")
+    ax[1].set_ylabel("Konto Monitoring-Modell")
     z = w["z"]
     z = z[(z["zaehler"] == meter) & (z["tag"] >= von) & (z["tag"] <= bis)]
     ax[2].plot(z["tag"], z["rl_gemessen"], ".", ms=4, color="black", label="Rücklauf gemessen")
@@ -2005,7 +2005,7 @@ def waechter_zusammen(faelle: pd.DataFrame, a: str, b: str, saison: str) -> pd.D
 
 
 def monitoring_kennzahlen(netz: dict, winter: str) -> pd.DataFrame:
-    """5 Kennzahlen des Monitoring-Modells je Station für einen Kernwinter (Rohwerte aus dem Netzvergleich)."""
+    """Die 5 Kennzahlen des Monitoring-Modells je Station für einen Kernwinter (Rohwerte aus dem Netzvergleich)."""
     t = netz["tabelle"]
     t = t[t["winter"] == winter].assign(meter=lambda d: d["meter"].astype(int)).set_index("meter")
     return t[list(nv.KENNZAHLEN)]

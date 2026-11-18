@@ -4,7 +4,7 @@ Das Normalverhaltensmodell stammt aus Notebook 18. `src/tagesmonitor.py`
 rechnet dieselbe Idee auf den Stundenreihen aus Notebook 00: je Station und
 Kanal (Abkühlung in kWh/m³, logarithmiertes Tagesvolumen) eine Kennlinie
 gegen die Tagesmitteltemperatur aus dem ersten Jahr, danach ein CUSUM auf
-den Abweichungen. Auf der Prüfung aus Notebook 18 sind beide gleichwertig (Notebook 34:
+den Abweichungen. Mit der Prüfung aus Notebook 18 sind beide gleichwertig (Notebook 34:
 29 gegen 30 von 43 Begehungen bemerkt, im 14-Tage-Fenster der Tagesmonitor
 vorn). Für den Betrieb wird der Tagesmonitor genommen, weil er als Modul
 auf neuen Daten läuft.

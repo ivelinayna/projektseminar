@@ -1,4 +1,4 @@
-"""Modellergebnisse für die Netzkarte (Notebook 36, ``notebooks/dashboard_final.py``).
+"""Modellergebnisse für die Netzkarte (Notebook 37, ``notebooks/dashboard_final.py``).
 
 Dieses Modul rechnet keine Modelle. Es liest die Tabellen, die
 ``python -m src.dashboard_daten`` nach ``outputs/dashboard/`` schreibt, und macht
@@ -14,7 +14,7 @@ Je Zähler:
 - **Meldungen** der Wächter, je Tag mit dem Hauptkanal
 
 Hauptkanal (Notebook 35, Abschnitt 13): An einem Tag, an dem der
-Tagesmonitor rechnet (Heiztag, Referenz vorhanden), zählt seine Meldung. Sonst
+Tagesmonitor des Monitoring-Modells rechnet (Heiztag, Referenz vorhanden), zählt seine Meldung. Sonst
 zählt das Prognose-LSTM (warme Tage, Stationen ohne Referenz). LSTM-Meldungen an
 Tagen des Tagesmonitors bleiben als Hinweis in der Liste, färben die Karte aber
 nicht. So meldet für jede Station und jeden Tag genau ein Wächter.

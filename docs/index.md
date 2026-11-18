@@ -34,12 +34,13 @@ Mehr unter [Ergebnisse](ergebnisse.md), [Endmodell](endmodell.md) und [Negativbe
 | [Schnellstart](schnellstart.md) | Projekt lokal einrichten und ausführen |
 | [Docker](docker.md) | Projekt ohne eigene Python-Installation starten |
 | [Daten](daten.md) | Datenquellen, Aufbereitung, bekannte Probleme |
-| [Notebooks](notebooks.md) | alle 39 Notebooks mit Frage, Ergebnis und Reihenfolge |
+| [Notebooks](notebooks.md) | alle 40 Notebooks mit Frage, Ergebnis und Reihenfolge |
 | [Ergebnisse](ergebnisse.md) | wichtigste Ergebnisse je Teil |
 | [Stationsbilder und Befunde](stationsbilder.md) | Ternärdiagramme, Kennlinienmonitor, Freitexte |
 | [Modellvergleich](modellvergleich.md) | alle Verfahren auf demselben Prüfstand |
 | [Endmodell](endmodell.md) | gewählte Modelle je Frage, Modellpakete |
 | [Negativbefunde](negativbefunde.md) | was nicht funktioniert hat und warum |
+| [Lernende Modelle](modelle/index.md) | LSTM-Fingerabdruck, Prognose-LSTM, Prüfung und Statistik: was gemacht wurde und warum |
 | [Pipeline und Module](pipeline.md) | Code in `src/`, Datenfluss, Befehle, Tests |
 | [Dashboard](dashboard.md) | Aufbau und Erzeugung des Dashboards |
 | [Grenzen und offene Fragen](grenzen.md) | Annahmen, Grenzen, Fragen an die ÜZ |

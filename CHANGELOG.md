@@ -6,19 +6,28 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
-### Geändert (Aufbau der Notebooks, 2026-11-17)
+### Entfernt (2026-11-18)
+
+- `notebooks/12_gesamtpipeline.ipynb`: eigene Datenaufbereitung mit 78 statt 93 Stationen, Zahlen passen nicht zu den
+  übrigen Notebooks, kein Notebook baut darauf auf. Idee und Ergebnis stehen in `docs/negativbefunde.md` (unter „Nicht mehr im Abgabestand“),
+  die Zahlen in Notebook 34. Verweise in Notebook 25 bis 28 und 34, in der Doku und im README angepasst.
+
+### Geändert (Aufbau der Notebooks, 2026-11-17/18)
 
 - Notebooks liegen jetzt je Teil in einem eigenen Ordner: `1_daten/` bis `8_modellvergleich/`, das Dashboard
   als eigener Teil in `9_dashboard/`, dazu `weitere_versuche/`. Jedes Notebook wechselt am Anfang nach
   `notebooks/`, relative Pfade wie `../data`, `daten_cache/` und die Dashboard-HTML bleiben dadurch gleich.
-- Neu nummeriert, 00 bis 38 ohne Lücken. Die Tabelle in `docs/notebooks.md` zeigt neue Namen, Namen im
+- Stand von `abgabe-doku` vom 18.11. eingearbeitet: neue Doku-Gliederung, Notebooks 25, 27, 28, 30 und 35 in
+  der überarbeiteten Fassung, neues Notebook 36 (Merkmale und Erklärbarkeit, früher 41). Das Dashboard ist
+  dadurch Notebook 37.
+- Neu nummeriert, 00 bis 39 ohne Lücken. Die Tabelle in `docs/notebooks.md` zeigt neue Namen, Namen im
   Abgabestand vom 13.11. und die alten Dateinamen. Verweise in Notebooks, `src/`, `tests/` und Doku sind
   angepasst. Nummern in Anführungszeichen und Beschriftungen im Code bleiben bei der alten Zählung, die
   betroffenen Notebooks sagen das selbst.
 - Archiviert (nur lokal in `archiv/`): `09_stundencluster` (dasselbe Clustering rechnet die
   Clustervalidierung sauber über `src/clustervalidierung.py`) und `12_gesamtpipeline` (eigene Aufbereitung nur
   auf dem neuesten Export, nicht auf Notebook 00). Beide stehen in `docs/negativbefunde.md`.
-- Bayes-Diagnose und GNN-Entwurf nach `weitere_versuche/` (37 und 38), weil nichts auf ihnen aufbaut.
+- Bayes-Diagnose und GNN-Entwurf nach `weitere_versuche/` (38 und 39), weil nichts auf ihnen aufbaut.
 - Personennamen durch Modellnamen ersetzt: Monitoring-Modell, LSTM-Modell, Normalverhaltensmodell,
   LSTM-Wächter. In `src/finalvergleich.py` heißen die Bezeichner jetzt `monitoring_*` statt nach Personen.
 - Clusterbenchmark rechnet nur noch auf den 93 HAST aus Notebook 00, die Variante mit und ohne BHKW entfällt.
@@ -336,7 +345,7 @@ versioniert wird nicht — Einträge sind datumsbasiert.
   aus dem Anschlusswert.
 - **`tests/test_clustervalidierung.py`:** 33 Tests, ohne Netz und ohne
   Rohdaten lauffähig (synthetische Exporte im tmp-Verzeichnis).
-- **`notebooks/09_clustervalidierung.ipynb`:** neues Notebook. Die
+- **`notebooks/3_clustering/09_clustervalidierung.ipynb`:** neues Notebook. Die
   Saisonhypothese ist widerlegt — ein flacher Baum auf der Außentemperatur
   allein erreicht 0,371 gegen eine Trivialrate von 0,248, derselbe Baum auf
   den Clusterfeatures 0,919; die Witterung holt damit rund 18 % des

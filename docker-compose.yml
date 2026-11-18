@@ -19,8 +19,8 @@ services:
     ports:
       - "127.0.0.1:8888:8888"
 
-  #Fertiges Dashboard aus Notebook 36: http://localhost:8000/fernwaerme_dashboard_final.html
-  #Die HTML-Datei muss vorher mit Notebook 36 erzeugt worden sein (liegt in notebooks/).
+  #Fertiges Dashboard aus Notebook 37: http://localhost:8000/fernwaerme_dashboard_final.html
+  #Die HTML-Datei muss vorher mit Notebook 37 erzeugt worden sein (liegt in notebooks/).
   dashboard:
     <<: *projekt
     ports:

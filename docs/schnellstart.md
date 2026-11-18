@@ -50,7 +50,7 @@ python -m src.dashboard_daten     # Modellergebnisse nach outputs/dashboard/
 ```
 
 - Die Modellpakete landen in `models/` (gitignored). Notebook 35 baut sie ebenfalls.
-- Danach Notebook 31 (Netz-Cache) und Notebook 36 (Dashboard) ausführen. Mehr unter [Dashboard](dashboard.md).
+- Danach Notebook 31 (Netz-Cache) und Notebook 37 (Dashboard) ausführen. Mehr unter [Dashboard](dashboard.md).
 
 ## 6 Neue Zählerdaten einspielen
 

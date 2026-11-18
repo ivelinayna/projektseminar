@@ -6,7 +6,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 
 - Probiert: Klassifikator auf dem Label „Maßnahme ja/nein“ aus der Begehungstabelle, Code in `src/ml_classifier.py`. Läuft nur über die Befehlszeile (siehe [Pipeline](pipeline.md)), nicht in einem Notebook.
 - Ergebnis: Balanced Accuracy 0,33 bzw. 0,42 gegen 0,50 für die triviale Vorhersage (Notebook 16).
-- Das Label ist bei 40 von 49 Stationen wahr, es bleiben 9 Negative (Notebook 25 und 29). Notebook 37 nennt dazu Label-Leakage.
+- Das Label ist bei 40 von 49 Stationen wahr, es bleiben 9 Negative (Notebook 25 und 29). Notebook 38 nennt dazu Label-Leakage.
 - Das Label ist zu grob: „Maßnahme“ sagt nicht, welcher Fehler vorlag.
 - In Notebook 29 trägt erst ein Label je Fehlerart. Nötig wären mehr Begehungen mit ausdrücklichem „kein Befund“.
 
@@ -131,7 +131,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 
 ## 16 Graphenmodell auf dem Netz
 
-- Probiert in Notebook 38: Entwurf eines GraphSAGE in numpy, Ablation gegen ein MLP ohne Netz.
+- Probiert in Notebook 39: Entwurf eines GraphSAGE in numpy, Ablation gegen ein MLP ohne Netz.
 - Beitrag des Netzes an 59 Stationen: +0,010 (Abkühlung) und −0,009 (Wassermenge).
 - Je Station (58) nicht signifikant: Wilcoxon p = 0,172 bzw. 0,423 bei Schwelle 0,025.
 - Im Ventilfall ist das GNN schlechter (Fehler 0,77 gegen 0,53 bei der Abkühlung). Der eigene Vorlauf ist kein unabhängiges Signal.
@@ -144,7 +144,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Positionen kommen jetzt aus einer Handliste mit 101 Einträgen, die nicht im Repository liegt.
 - Notebook 31: 93 von 100 Adressen einem Rohrende zugeordnet (höchstens 40 m), 7 ohne. Im Netz verankert sind 93 von 110 Knoten.
 - Notebook 32: Anschlussabstand im Median 6 m, höchstens 36 m (109 Häuser).
-- Notebook 38: 35 von 110 Kanten ohne Rohrweg, 18 Einträge ohne Position, die Pfeilrichtung passt zu keiner Quelle.
+- Notebook 39: 35 von 110 Kanten ohne Rohrweg, 18 Einträge ohne Position, die Pfeilrichtung passt zu keiner Quelle.
 - Nötig wären Koordinaten der Hausanschlüsse aus dem GIS der ÜZ.
 
 ## 18 Wächtervergleich
@@ -158,12 +158,13 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 
 ## 19 Fehlerarten ohne Messspur
 
-- Probiert in Notebook 29 und 37: je Fehlerart ein Modell, dazu ein Bayes-Ansatz.
+- Probiert in Notebook 29 und 38: je Fehlerart ein Modell, dazu ein Bayes-Ansatz.
 - Filter, Durchfluss und Temperatur sind nicht erkennbar (AUC 0,24 bis 0,64).
 - Random Forest und XGBoost sind nicht besser als logistische Regression oder Regel. Wechselwirkungen bringen −0,03 bis +0,05, Klassengewichtung nichts.
 - Regler und Einstellung ohne Spur: AUC 0,57, Top-1 0,46 gegen 0,64 für „immer Regler“. Befund ja/nein AUC 0,55, p = 0,34.
 - Dämmung ist ein Artefakt der Matrix: 12-mal Hauptursache, 2 Treffer.
 - In Notebook 26 hält die Ventil-Gegenprobe nach Holm nicht (p = 0,021, Holm 0,13).
+- Notebook 36 prüft mit vorab festgelegter Richtung, ob die Maßnahmen überhaupt eine Spur hinterlassen. Nur der Ventiltausch tut es (Sommernacht-Durchfluss, AUC 0,81, nach Holm gesichert). Dämmung, Filter und Durchfluss ändern nichts Messbares, neue Kennzahlen finden nichts Gesichertes. Bessere Labels würden hier mehr helfen als bessere Modelle.
 
 ## 20 Bestwert und Lückenfüllung
 
@@ -177,7 +178,12 @@ Diese Versuche liegen nur im lokalen Archiv, nicht im Abgabestand. Ihre Zahlen s
 
 - Entscheidungsbaum als Vorhersagemodell: schlägt die Mehrheitsklasse nicht.
 - Erste Fassung der Stundencluster (früher Notebook 09): ersetzt durch Notebook 09, das dasselbe Clustering über `src/clustervalidierung.py` rechnet und zusätzlich prüft.
-- Eigenständige Gesamtpipeline von den Rohdaten bis zum Wartungsbenchmark (früher Notebook 12): eigene Aufbereitung nur auf dem neuesten Export; unüberwachte Anomalie-Scores trennen die Begehungen nicht.
+- Gesamtpipeline (August, früher Notebook 12): Ein eigenständiges Notebook las die Rohdaten selbst, clusterte die
+  Stationen und verglich unüberwachte Anomaliescores mit Wartungen als Ersatzlabel. Ergebnis: AUC 0,51, höchstens
+  2 von 10 Ereignissen (Zahlen im [Modellvergleich](modellvergleich.md), Notebook 34). Das Notebook ist nicht mehr
+  im Abgabestand: Es nutzte eine eigene Datenaufbereitung mit 78 statt 93 Stationen, seine Zahlen passen deshalb
+  nicht zu den übrigen Notebooks, und kein anderes Notebook baut darauf auf. Es liegt im Verlauf des Repositorys
+  (Commit `1b5798b`).
 - Graph Neural Network auf dem Leitungsnetz: nicht besser als dasselbe Netz ohne Kanten oder eine logistische Regression.
 - Netzeffekt und gedämpfte Temperatur im Tagesmonitor: weniger Wellenalarme, aber mehr Alarme insgesamt und ein schwächerer Hebel.
 - Treffer je Fehlerart aus den Freitexten: zu wenige Fälle je Fehlerart, kein Unterschied belegbar.

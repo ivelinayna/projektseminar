@@ -20,21 +20,75 @@ markdown_extensions:
   - admonition
   - toc:
       permalink: true
+extra_css:
+  - stylesheets/extra.css
+
 nav:
-  - Start: index.md
-  - Erste Schritte:
+  - Startseite: index.md
+
+  - Einleitung:
+      - Ausgangslage: ausgangslage.md
+      - Aufgabe und Ziel: aufgabe_und_ziel.md
+      - Aufbau der Arbeit: aufbau.md
+
+  - Installation und Ausführung:
+      # - Vorbereitung:   # noch leer
       - Schnellstart: schnellstart.md
-      - Docker: docker.md
-      - Daten: daten.md
-  - Notebooks: notebooks.md
+      - Start mit Docker: docker.md
+      - Ausführung bis zum Dashboard: pipeline.md
+      # - Lokaler Start ohne Docker:   # noch leer
+
+  - Datengrundlage:
+      - Zählerdaten: daten_zaehlerdaten.md
+      - Begehungen: daten_begehungen.md
+      - Quellen, Netz und bekannte Probleme: daten.md
+      # - Ergänzende Daten:   # noch leer
+      # - Qualität und Einschränkungen:   # noch leer
+
+  - Vorgehen:
+      - Überblick der Notebooks: notebooks.md
+      # - Daten aufbereiten:   # noch leer
+      # - Begehungen auswerten:   # noch leer
+      # - Merkmale und Clustering:   # noch leer
+      - Stationsbilder und Befunde: stationsbilder.md
+      # - Anomalien und Monitoring:   # noch leer
+      - Lernende Modelle:
+          - Überblick: modelle/index.md
+          - Daten, Labels und Messlatte: modelle/daten.md
+          - LSTM-Fingerabdruck: modelle/lstm.md
+          - Prognose-LSTM als Wächter: modelle/prognose.md
+          - Fehlerart und Klasse je Station: modelle/klassen.md
+      # - Netz einbeziehen:   # noch leer
+      - Modelle vergleichen:
+          - Prüfdesign und Statistik: vergleich/pruefung.md
+          - Erster Prüfstand: vergleich/pruefstand.md
+          - Strenger Vergleich: vergleich/endmodell.md
+          - Modellvergleich im Detail: modellvergleich.md
+          - Endmodell im Detail: endmodell.md
+      - Was nicht getragen hat:
+          - Überblick: nicht_getragen.md
+          - Negativbefunde im Detail: negativbefunde.md
+
   - Ergebnisse:
       - Überblick: ergebnisse.md
-      - Stationsbilder und Befunde: stationsbilder.md
-      - Modellvergleich: modellvergleich.md
-      - Endmodell: endmodell.md
-      - Negativbefunde: negativbefunde.md
-  - Technik:
-      - Pipeline und Module: pipeline.md
-      - Dashboard: dashboard.md
-  - Grenzen und offene Fragen: grenzen.md
-  - Begriffe: begriffe.md
+      # - Datenanalyse:   # noch leer
+      - Endmodell: ergebnisse_endmodell.md
+      - Handlungsempfehlungen: ergebnisse_handlungsempfehlungen.md
+      - Dashboard: ergebnisse_dashboard.md
+      - Dashboard bedienen: dashboard.md
+
+  - Grenzen und Erkenntnisse:
+      - Annahmen, Grenzen und offene Fragen: grenzen.md
+      - Grenzen der Modelle: grenzen_modelle.md
+      - Erkenntnisse: erkenntnisse.md
+
+  - Ausblick:
+      - Probebetrieb: ausblick_probebetrieb.md
+      - Prüfung nach vorn: ausblick_pruefung.md
+      - Weiterentwicklung: ausblick_weiterentwicklung.md
+      # - Offene Fragen an die ÜZ:   # noch leer, bisher in grenzen.md
+
+  - Aufteilung im Team: aufteilung.md
+
+  - Anhang:
+      - Begriffe: begriffe.md

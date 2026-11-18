@@ -4,7 +4,7 @@ Das Dashboard zeigt für jede Station, ob Handlungsbedarf besteht und welche Ma�
 
 ## Warum eine HTML-Datei und kein Streamlit
 
-- Das Hauptdashboard ist eine einzelne HTML-Datei aus Notebook 36.
+- Das Hauptdashboard ist eine einzelne HTML-Datei aus Notebook 37.
 - Sie läuft in jedem Browser, ohne Python und ohne Server. Man kann sie per Doppelklick öffnen oder weitergeben.
 - Die Modelle rechnen vorher. Das Dashboard liest nur fertige Tabellen. Deshalb ist es schnell und braucht kein `torch`.
 - Streamlit hätte einen laufenden Python-Server gebraucht. Für eine Abgabe und für die ÜZ ist die Datei einfacher.
@@ -28,7 +28,7 @@ Reihenfolge:
 2. Modellpakete bauen: Notebook 35 oder die Befehle unter [Schnellstart](schnellstart.md).
 3. `python -m src.dashboard_daten` wendet die Pakete auf die aktuellen Daten an und schreibt nach `outputs/dashboard/`.
 4. Notebook 31 ausführen. Es baut den Netz-Cache `notebooks/daten_cache/`.
-5. Notebook 36 ausführen. Es schreibt `notebooks/fernwaerme_dashboard_final.html`.
+5. Notebook 37 ausführen. Es schreibt `notebooks/fernwaerme_dashboard_final.html`.
 
 Ansehen:
 
@@ -47,7 +47,7 @@ Die Karte lädt Kartenkacheln und die Bibliothek Leaflet aus dem Internet. Ohne 
 4. Netzvergleich und Potenzial: Rang im Netz, Fehlerbild, Abstand zum besten Viertel.
 5. Empfehlung je Station, Netzeffizienz je Monat und Optimierungspotenzial.
 
-Alles nur mit Zählernummern. Die Adressen kommen erst in Notebook 36 aus der Zuordnung dazu.
+Alles nur mit Zählernummern. Die Adressen kommen erst in Notebook 37 aus der Zuordnung dazu.
 
 ## Weitere Exporte
 
