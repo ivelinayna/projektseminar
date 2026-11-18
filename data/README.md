@@ -15,7 +15,7 @@ Diese Dateien von der ÜZ hierher kopieren:
 | `Zuordnung.xlsx` | Zählernummer zu Abnahmestelle, je Jahr ein Blatt |
 | `Nodes_Edges.ods` | logisches Netz mit Anschlusswert |
 | `Leitungsverlauf_LineString.*`, `Leitungsverlauf_Point.*`, `Leitungsverlauf_MultiPoint.*` | Rohrverlauf als Shapefile (je `.shp`, `.shx`, `.dbf`, `.prj`, `.cpg`) |
-| `Leitungsverlauf.kml` | Rohrverlauf als KML, optional für die Netz-Notebooks 34 und 36 |
+| `Leitungsverlauf.kml` | Rohrverlauf als KML, optional für die Netz-Notebooks 31 und 33 |
 | `zensus/.../Zensus2022_Baujahr_JZ_100m-Gitter.csv` | Zensus 2022, Gebäude nach Baujahr im 100-m-Gitter, optional (öffentlich, etwa 200 MB) |
 
 - Die Außentemperatur holt `python -m src.weather` selbst. Der Cache liegt in `data/raw/weather/`.
@@ -30,4 +30,4 @@ Diese Dateien von der ÜZ hierher kopieren:
 
 - Von Hand gepflegte Listen mit Adressen.
 - Derzeit `adressen_koordinaten.ods` (Spalten `adresse`, `koordinate`, `quelle`).
-- Wird von Notebook 26 (Teil E) und Notebook 36 benutzt.
+- Wird von den Notebooks 24, 31 und 33 benutzt.

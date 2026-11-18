@@ -3,23 +3,91 @@
 Mit Docker läuft das Projekt ohne eigene Python-Installation. Ein Image enthält Python, alle Pakete, die Notebooks und
 den Code. Die Daten bleiben außerhalb des Images und werden beim Start eingehängt.
 
-## Voraussetzungen
+## Schritt für Schritt auf dem eigenen Rechner
 
-- Docker Desktop (Windows, macOS) oder Docker Engine mit Compose (Linux). Auf dem Mac geht auch Colima statt Docker
-  Desktop (`colima start --cpu 4 --memory 4`), dann den Projektordner beim Start einhängen.
-- Die Rohdaten der ÜZ liegen lokal unter `data/raw/` (siehe [Daten](daten.md)). Sie sind nicht im Repo, ohne sie
-  läuft kein Notebook.
-- Rund 5 GB frei für das Image, mindestens 4 GB Arbeitsspeicher für den Container.
+### 1 Docker installieren
 
-## Image bauen
+- **Windows und macOS:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) installieren und einmal
+  starten. Es muss laufen (Wal-Symbol in der Taskleiste bzw. Menüleiste), sonst findet `docker` keinen Dienst.
+- **Linux:** Docker Engine mit dem Compose-Plugin über die Paketquellen der Distribution.
+- **macOS ohne Docker Desktop:** Colima geht auch, ohne Admin-Rechte. `colima`, `docker` und `docker compose`
+  installieren (z. B. `brew install colima docker docker-compose`), dann:
+
+  ```bash
+  colima start --cpu 4 --memory 4 --mount "$HOME/projektseminar:w"
+  ```
+
+  Den Pfad hinter `--mount` auf den eigenen Projektordner setzen. `colima stop` beendet es wieder.
+- Prüfen, ob alles da ist:
+
+  ```bash
+  docker --version
+  docker compose version
+  ```
+
+Bedarf: rund 5 GB Platte für das Image, mindestens 4 GB Arbeitsspeicher für Docker (in Docker Desktop unter
+Settings → Resources einstellbar).
+
+### 2 Projekt holen
+
+```bash
+git clone https://github.com/ivelinayna/projektseminar.git
+cd projektseminar
+```
+
+Ohne Git geht auch der ZIP-Download auf GitHub (Code → Download ZIP), dann entpacken und in den Ordner wechseln. Alle
+folgenden Befehle laufen in diesem Ordner.
+
+### 3 Rohdaten ablegen
+
+- Die Daten der ÜZ sind vertraulich und nicht im Repo. Ohne sie läuft kein Notebook.
+- Die Dateien nach `data/raw/` kopieren. Welche Dateien es sind, steht in `data/README.md` und unter
+  [Daten](daten.md).
+
+### 4 Image bauen
 
 ```bash
 docker compose build
 ```
 
-- Der erste Bau dauert einige Minuten. PyTorch wird ohne Grafikkarten-Unterstützung installiert, das hält das Image
-  kleiner.
-- Danach muss nur neu gebaut werden, wenn sich `requirements.txt` ändert. Code und Notebooks werden eingehängt.
+- Beim ersten Mal einige Minuten (auf einem aktuellen Mac rund 3,5 Minuten). PyTorch wird ohne Grafikkarte installiert,
+  das hält das Image kleiner.
+- Neu bauen nur, wenn sich `requirements.txt` oder das `Dockerfile` ändert. Code und Notebooks werden eingehängt.
+
+### 5 Vorbereiten und Notebooks ausführen
+
+```bash
+docker compose run --rm jupyter python -m src.weather   # Außentemperatur vom DWD, braucht Internet
+docker compose run --rm jupyter python -m src.main      # Graphen, Karten, Begehungstabelle
+docker compose up jupyter
+```
+
+- Im Browser http://localhost:8888 öffnen, ein Passwort gibt es nicht.
+- Zuerst `notebooks/1_daten/00_daten.ipynb` ausführen, danach in Nummernfolge (siehe [Notebooks](notebooks.md)).
+- Beenden mit `Strg+C` im Terminal.
+
+### 6 Dashboard
+
+```bash
+docker compose run --rm jupyter python -m src.prognose_waechter --bauen --gegenprobe
+docker compose run --rm jupyter python -m src.normalmodell_waechter --bauen
+docker compose run --rm jupyter python -m src.fehlerklassen --bauen --gegenprobe
+docker compose run --rm jupyter python -m src.dashboard_daten
+```
+
+- Danach in Jupyter Notebook 31 (Netz) und Notebook 37 (Dashboard) ausführen.
+- `docker compose up dashboard` und http://localhost:8000/fernwaerme_dashboard_final.html öffnen.
+- Die Modellpakete brauchen die LSTM-Gewichte aus den Notebooks 27 und 28 in `notebooks/models/`. Fehlen sie, die
+  beiden Notebooks vorher ausführen (auf der CPU mehrere Stunden).
+
+### 7 Aufräumen
+
+```bash
+docker compose down          # Container stoppen
+docker image rm fernwaerme-projekt   # Image löschen, gibt die 4 GB wieder frei
+```
+
+Daten, Ergebnisse und Notebooks bleiben im Projektordner erhalten.
 
 ## Dienste
 
@@ -55,14 +123,6 @@ docker compose run --rm jupyter python -m src.aktualisieren
 docker compose run --rm jupyter python -m src.dashboard_daten
 docker compose run --rm jupyter python -m pytest -q
 ```
-
-## Typischer Ablauf
-
-1. `docker compose build`
-2. `docker compose up jupyter`, im Browser Notebook 00 und danach die gewünschten Notebooks ausführen.
-3. Für das Dashboard die Modellpakete bauen (Notebook 35 oder die Befehle unter [Schnellstart](schnellstart.md)),
-   dann Notebook 31 und Notebook 37 ausführen.
-4. `docker compose up dashboard` und die angezeigte Adresse öffnen.
 
 ## Hinweise
 

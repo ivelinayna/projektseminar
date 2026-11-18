@@ -551,22 +551,22 @@ def anwenden(geladen: dict, stunden: pd.DataFrame,
 
 
 def gegenprobe(tab: pd.DataFrame,
-               nb21: Path = PROCESSED / "prognose_tage.csv") -> dict:
+               nb28: Path = PROCESSED / "prognose_tage.csv") -> dict:
     """Paket gegen die Ausgabe von Notebook 28 halten.
 
     Vergleicht je Zähler und Tag z-Werte, Warnung und Alarm. Kleine
     Abweichungen bei den z-Werten kommen von Grafikkarte gegen CPU.
     """
-    alt = pd.read_csv(nb21, parse_dates=["tag"])
-    m = alt.merge(tab, on=["zaehler", "tag"], suffixes=("_nb21", "_paket"))
+    alt = pd.read_csv(nb28, parse_dates=["tag"])
+    m = alt.merge(tab, on=["zaehler", "tag"], suffixes=("_nb28", "_paket"))
     return {
-        "zeilen_nb21": len(alt), "zeilen_paket": int(tab["status"].eq("überwacht").sum()),
+        "zeilen_nb28": len(alt), "zeilen_paket": int(tab["status"].eq("überwacht").sum()),
         "gemeinsam": len(m),
-        "max_abw_z_rl": float((m["z_rl_nb21"] - m["z_rl_paket"]).abs().max()),
-        "max_abw_z_fluss": float((m["z_fluss_nb21"] - m["z_fluss_paket"]).abs().max()),
-        "warnung_gleich": float((m["warnung_nb21"] == m["warnung_paket"]).mean()),
-        "alarm_gleich": float((m["alarm_nb21"] == m["alarm_schwelle"]).mean()),
-        "alarme_nb21": int(m["alarm_nb21"].sum()),
+        "max_abw_z_rl": float((m["z_rl_nb28"] - m["z_rl_paket"]).abs().max()),
+        "max_abw_z_fluss": float((m["z_fluss_nb28"] - m["z_fluss_paket"]).abs().max()),
+        "warnung_gleich": float((m["warnung_nb28"] == m["warnung_paket"]).mean()),
+        "alarm_gleich": float((m["alarm_nb28"] == m["alarm_schwelle"]).mean()),
+        "alarme_nb28": int(m["alarm_nb28"].sum()),
         "alarme_paket": int(m["alarm_schwelle"].sum()),
     }
 
