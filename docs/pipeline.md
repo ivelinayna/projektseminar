@@ -41,7 +41,6 @@ Notebooks 01-37 und src-Module
 | `python -m src.fehlerklassen --bauen --gegenprobe` | Paket Folie-5-Klassen bauen |
 | `python -m src.modellpaket` | gespeicherte Pakete auflisten |
 | `python -m src.dashboard_daten` | Pakete auf aktuelle Daten anwenden, Ergebnis nach `outputs/dashboard/` |
-| `streamlit run src/dashboard_app.py` | ältere Streamlit-App |
 
 ## Module
 
@@ -145,7 +144,6 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 | `dashboard_daten` | Modellergebnisse für das Dashboard | 37 |
 | `dashboard_karte` | Modellergebnisse in die Netzkarte | 37 |
 | `dashboard_map` | einfache Folium-Karte | nur Befehlszeile |
-| `dashboard_app` | ältere Streamlit-App | nur Befehlszeile |
 | `aktualisieren` | neue Daten in einem Schritt einspielen | nur Befehlszeile |
 | `main` | Gesamtablauf Netz, Karten, Begehungstabelle | nur Befehlszeile |
 

@@ -8,7 +8,7 @@ Das Dashboard zeigt für jede Station, ob Handlungsbedarf besteht und welche Ma�
 - Sie läuft in jedem Browser, ohne Python und ohne Server. Man kann sie per Doppelklick öffnen oder weitergeben.
 - Die Modelle rechnen vorher. Das Dashboard liest nur fertige Tabellen. Deshalb ist es schnell und braucht kein `torch`.
 - Streamlit hätte einen laufenden Python-Server gebraucht. Für eine Abgabe und für die ÜZ ist die Datei einfacher.
-- Die ältere Streamlit-App (`src/dashboard_app.py`) bleibt als Extra erhalten.
+- Die erste Fassung als Streamlit-App (Rücklauf-Ampel, Juli 2026) ist archiviert und nicht mehr im Repo.
 
 ## Inhalt
 
@@ -55,7 +55,6 @@ Alles nur mit Zählernummern. Die Adressen kommen erst in Notebook 37 aus der Zu
 |---|---|---|
 | `notebooks/dashboard_export.py` | Notebooks 31 und 32 | erste Fassung der Netzkarte |
 | `notebooks/dashboard_monitor.py` | Notebook 33 | Netzkarte mit Monitor-Status |
-| `src/dashboard_app.py` | `streamlit run src/dashboard_app.py` | ältere Rücklauf-Ampel |
 | `src/dashboard_map.py` | `python -m src.main --dashboard` | einfache Folium-Karte |
 
 ## Datenschutz

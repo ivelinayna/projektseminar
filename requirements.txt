@@ -15,12 +15,7 @@ pyshp>=2.3
 mapclassify>=2.6
 geopy>=2.4
 ipywidgets>=8.0
-# Dashboard-App (src/dashboard_app.py): Streamlit als App-Rahmen,
-# Plotly fuer die klickbare Stationskarte (Auswahl-Events).
-streamlit>=1.36
-plotly>=5.24
-# pyarrow 25 segfaultet beim Streamlit-Rerun (zweiter Script-Thread,
-# Arrow-Serialisierung); mit 21.x reproduzierbar stabil (2026-07-12).
+# pyarrow für die Parquet-Dateien der Modell-Notebooks; 25 ist abgestürzt, 21.x lief stabil (2026-07-12).
 pyarrow<25
 # Modell-Notebooks 27 bis 29: LSTM (PyTorch) und Gradient Boosting (XGBoost).
 # PyTorch rechnet auf der Grafikkarte, wenn eine da ist, sonst auf der CPU.

@@ -96,7 +96,6 @@ Daten, Ergebnisse und Notebooks bleiben im Projektordner erhalten.
 | `jupyter` | `docker compose up jupyter` | http://localhost:8888 | Notebooks ausführen |
 | `dashboard` | `docker compose up dashboard` | http://localhost:8000/fernwaerme_dashboard_final.html | fertiges Dashboard aus Notebook 37 ansehen |
 | `docs` | `docker compose up docs` | http://localhost:8001 | diese Doku lokal |
-| `app` | `docker compose --profile extra up app` | http://localhost:8501 | ältere Streamlit-App (Rücklauf-Ampel) |
 
 Beenden mit `Strg+C` oder `docker compose down`.
 
@@ -132,6 +131,5 @@ docker compose run --rm jupyter python -m pytest -q
 - Das Image wurde für Linux gebaut. Auf Windows und macOS läuft es über Docker Desktop.
 - Im Container rechnet PyTorch nur auf der CPU. Die Notebooks 27 und 28 trainieren die LSTMs neu, wenn keine Gewichte
   in `notebooks/models/` liegen. Das dauert auf der CPU mehrere Stunden.
-- Getestet am 18.11.2026 auf einem Mac (Apple Silicon) mit Colima: Bau rund 3,5 Minuten, Tests grün bis auf
-  `test_dashboard_app` (braucht `data/processed/priority_scores.csv` aus `python -m src.priority`), Notebooks 00, 01,
-  07, 21 und 37 und `src.dashboard_daten` laufen durch und liefern dieselben Zahlen wie lokal.
+- Getestet am 18.11.2026 auf einem Mac (Apple Silicon) mit Colima: Bau rund 3,5 Minuten, alle Tests grün, Notebooks 00, 01, 07, 21
+  und 37 und `src.dashboard_daten` laufen durch und liefern dieselben Zahlen wie lokal.

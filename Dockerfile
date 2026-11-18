@@ -25,7 +25,7 @@ RUN pip install -r /tmp/requirements.txt -r /tmp/requirements-docs.txt "jupyterl
 
 COPY . .
 
-EXPOSE 8888 8000 8001 8501
+EXPOSE 8888 8000 8001
 
 CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", \
      "--ServerApp.root_dir=/app", "--IdentityProvider.token="]

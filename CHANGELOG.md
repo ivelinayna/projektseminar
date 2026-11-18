@@ -8,6 +8,9 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ### Entfernt (2026-11-18)
 
+- `src/dashboard_app.py` und `tests/test_dashboard_app.py`: erste Streamlit-App (Rücklauf-Ampel) vom Juli, ersetzt
+  durch das HTML-Dashboard aus Notebook 37. Liegt nur noch lokal im Archiv. Dadurch fallen `streamlit` und `plotly`
+  aus `requirements.txt` und der Docker-Dienst `app` weg.
 - `notebooks/12_gesamtpipeline.ipynb`: eigene Datenaufbereitung mit 78 statt 93 Stationen, Zahlen passen nicht zu den
   übrigen Notebooks, kein Notebook baut darauf auf. Idee und Ergebnis stehen in `docs/negativbefunde.md` (unter „Nicht mehr im Abgabestand“),
   die Zahlen in Notebook 34. Verweise in Notebook 25 bis 28 und 34, in der Doku und im README angepasst.

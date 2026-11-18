@@ -168,8 +168,8 @@ JAHR_TAGE = 365
 #Leistungsschwelle fuer "unter Last", identisch zu features.features_for_meter
 LAST_SCHWELLE_KW = 0.5
 
-#Rücklaufschwelle der Vierfeldertafel, identisch zu Notebook 02,
-#src/dashboard_app.py (RT_YELLOW_MAX) und features.rt_above_50_share_loaded
+#Rücklaufschwelle der Vierfeldertafel, identisch zu Notebook 02
+#und features.rt_above_50_share_loaded
 RT_SCHWELLE = 50.0
 
 #Kennzahlen, die je Fenster berechnet werden; Reihenfolge = Spaltenreihenfolge
