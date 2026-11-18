@@ -63,7 +63,12 @@ nav:
 
   - Vorgehen:
       # - Überblick:   # noch leer
-      # - Daten aufbereiten:   # noch leer
+      - Daten aufbereiten:
+          - Überblick: aufbereitung/index.md
+          - Die Schritte im Einzelnen: aufbereitung/schritte.md
+          - "Änderungen 1: Rohdaten lesbar machen": aufbereitung/rohdaten.md
+          - "Änderungen 2: Kennzahlen ans Raster anpassen": aufbereitung/kennzahlen.md
+          - "Änderungen 3: Rückmeldung der ÜZ": aufbereitung/uez_rueckmeldung.md
       # - Begehungen auswerten:   # noch leer
       # - Merkmale und Clustering:   # noch leer
       # - Stationsbilder und Befunde:   # noch leer

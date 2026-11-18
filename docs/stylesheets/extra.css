@@ -6,6 +6,23 @@
   --md-primary-fg-color--dark: #011a4f;
 }
 
+/* Überschriften im Uni-Blau */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+  color: var(--md-primary-fg-color);
+}
+
+/* Im Menü links nur die Kapitel der obersten Ebene (Einleitung,
+   Datengrundlage, …) im Uni-Blau, die Seiten darunter bleiben wie gehabt */
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link,
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link[for] {
+  color: var(--md-primary-fg-color);
+}
+
 /* Uni-Logo rechts neben der Seitenüberschrift, auf schmalen Bildschirmen darüber */
 .md-typeset p:has(> .titel-logo) {
   margin: 0;
