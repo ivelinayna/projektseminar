@@ -164,10 +164,16 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Regler und Einstellung ohne Spur: AUC 0,57, Top-1 0,46 gegen 0,64 für „immer Regler“. Befund ja/nein AUC 0,55, p = 0,34.
 - Dämmung ist ein Artefakt der Matrix: 12-mal Hauptursache, 2 Treffer.
 - In Notebook 28 hält die Ventil-Gegenprobe nach Holm nicht (p = 0,021, Holm 0,13).
+- Notebook 41 prüft mit vorab festgelegter Richtung, ob die Maßnahmen überhaupt eine Spur hinterlassen. Nur der Ventiltausch tut es (Sommernacht-Durchfluss, AUC 0,81, nach Holm gesichert). Dämmung, Filter und Durchfluss ändern nichts Messbares, neue Kennzahlen finden nichts Gesichertes. Bessere Labels würden hier mehr helfen als bessere Modelle.
 
 ## 20 Gesamtpipeline, Bestwert und Lückenfüllung
 
-- Gesamtpipeline aus Notebook 12: AUC 0,51, höchstens 2 von 10 Ereignissen (siehe [Modellvergleich](modellvergleich.md)).
+- Gesamtpipeline (August, früher Notebook 12): Ein eigenständiges Notebook las die Rohdaten selbst, clusterte die
+  Stationen und verglich unüberwachte Anomaliescores mit Wartungen als Ersatzlabel. Ergebnis: AUC 0,51, höchstens
+  2 von 10 Ereignissen (Zahlen im [Modellvergleich](modellvergleich.md), Notebook 38). Das Notebook ist nicht mehr
+  im Abgabestand: Es nutzte eine eigene Datenaufbereitung mit 78 statt 93 Stationen, seine Zahlen passen deshalb
+  nicht zu den übrigen Notebooks, und kein anderes Notebook baut darauf auf. Es liegt im Verlauf des Repositorys
+  (Commit `1b5798b`).
 - Bestwert aus Notebook 24: sagt keine Befunde vorher und zeigt keine Verbesserung nach Begehungen.
 - Notebook 21: Streuung nur bedingt aussagekräftig, Regelhysterese nicht nachweisbar.
 - Notebook 01: Bei Lücken über einen Tag ist die Tagesform nicht besser als linear, der Rücklauffehler liegt bei 6 bis 7 K.

@@ -6,6 +6,12 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Entfernt (2026-11-18)
+
+- `notebooks/12_gesamtpipeline.ipynb`: eigene Datenaufbereitung mit 78 statt 93 Stationen, Zahlen passen nicht zu den
+  übrigen Notebooks, kein Notebook baut darauf auf. Idee und Ergebnis stehen in `docs/negativbefunde.md` (Nr. 20),
+  die Zahlen in Notebook 38. Verweise in Notebook 27 bis 30 und 38, in der Doku und im README angepasst.
+
 ### Geändert (Abgabestand, 2026-11-13)
 
 - Finaler Stand aus `to_ignore/projektseminar-main-finalerstand` übernommen. Der alte Stand liegt in `archiv/`

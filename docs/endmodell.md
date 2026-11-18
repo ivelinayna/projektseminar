@@ -75,7 +75,7 @@
 ### Fehlerart und Einstufung nach Folie 5
 
 - Ventil: Mit Modellwahl im Lernteil (0,84) liegt das gelernte Modell gleichauf mit der festen Sommernacht-Regel (0,85; Unterschied −0,01 [−0,14; +0,12]). Besser ist es nicht belegt. Die Sommernacht-Regel bleibt im Hausfenster die Begründung.
-- In der inneren Validierung lagen zwei Kandidaten gleichauf (Ventil beide 0,84, Dämmung 0,77 und 0,76). Gewählt ist der einfachere: Regression nur auf den 16 LSTM-Zahlen (`fv.ENDMODELL = "LR nur LSTM-Embedding"`).
+- In der inneren Validierung lagen zwei Kandidaten gleichauf (Ventil beide 0,84, Dämmung 0,77 und 0,76). Gewählt ist der einfachere: Regression nur auf den 16 LSTM-Zahlen (`fv.ENDMODELL = "LR nur LSTM-Embedding"`). Er vermeidet auch ein Leck über das Vorwissen: Die 12 Kennzahlen wurden festgelegt, als die Begehungsprotokolle schon bekannt waren, die LSTM-Zahlen sind ohne Befund-Labels gelernt.
 - Die zuerst gewählte Ventil-AUC von 0,88 war um etwa 0,05 zu optimistisch, weil der Sieger nach den Testwerten gewählt war. Für Aussagen gelten die Werte mit Modellwahl im Lernteil: Ventil 0,84, Dämmung 0,78.
 - Ivelinas Fehlerbild „ventil“ dient als Bestätigung: 4 von 4 richtig, aber nur 4 von 11 Ventilfällen gefunden.
 - Reihenfolge (Test E): Unter den ersten 10 nach Ventil-Score hatten 7 einen Ventilbefund. Ivelinas Priorität kommt auf 5, Zufall auf etwa 2.

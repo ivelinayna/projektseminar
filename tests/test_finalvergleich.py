@@ -75,12 +75,12 @@ def test_ohne_ueberschneidung_bleibt_gleich():
     pd.testing.assert_frame_equal(g, s)
 
 
-def test_ivelina_alarme_wie_tagesmonitor():
+def test_monitoring_alarme_wie_tagesmonitor():
     rng = np.random.default_rng(1)
     z = np.r_[rng.normal(0, 1, 60), rng.normal(2, 1, 30)]
     v = pd.DataFrame({"meter": 1, "kanal": "kwh_pro_m3",
                       "datum": pd.date_range("2024-01-01", periods=len(z)), "z": z})
-    a = fv.ivelina_alarme(v, tm.CUSUM_H)
+    a = fv.monitoring_alarme(v, tm.CUSUM_H)
     _, _, ref = tm.cusum(z)
     assert len(a) == len(ref)
     assert list(a["richtung"]) == [r for _, r, _ in ref]
@@ -123,7 +123,7 @@ def test_folie5_klassen():
                         "temperatur": [True, False, False]}, index=[1, 2, 3])
     assert list(fv.folie5_befund(lab)) == [fv.F5_REPARATUR, fv.F5_REGELUNG, fv.F5_KEINE]
     fb = pd.Series(["ventil", "unruhig", ""], index=[1, 2, 3])
-    assert list(fv.folie5_ivelina(fb)) == [fv.F5_REPARATUR, fv.F5_REGELUNG, fv.F5_KEINE]
+    assert list(fv.folie5_monitoring(fb)) == [fv.F5_REPARATUR, fv.F5_REGELUNG, fv.F5_KEINE]
 
 
 def _oof_beispiel(n=40, folds=4, seed=0):
@@ -149,11 +149,11 @@ def test_waechter_zusammen_zaehlt_oder():
     zeilen = []
     for art, a, b in [("ohne Fehler", False, False), ("ohne Fehler", True, True),
                       ("Sprung", False, True), ("Sprung", True, False)]:
-        for key, alarm in (("ivelina", a), ("lstm_c", b)):
+        for key, alarm in (("monitoring", a), ("lstm_c", b)):
             zeilen.append({"zaehler": len(zeilen) // 2, "saison": "Winter", "art": art, "key": key,
                            "bewertbar": True, "alarm": alarm})
-    q = fv.waechter_zusammen(pd.DataFrame(zeilen), "ivelina", "lstm_c", "Winter")
-    assert q.loc["Sprung", "zusammen"] == 1.0 and q.loc["Sprung", "ivelina"] == 0.5
+    q = fv.waechter_zusammen(pd.DataFrame(zeilen), "monitoring", "lstm_c", "Winter")
+    assert q.loc["Sprung", "zusammen"] == 1.0 and q.loc["Sprung", "monitoring"] == 0.5
     assert q.loc["ohne Fehler", "zusammen"] == 0.5 and q.loc["ohne Fehler", "Fälle"] == 2
 
 

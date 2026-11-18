@@ -50,29 +50,37 @@ nav:
       - Stationsbilder und Befunde: 
       - Anomalien und Monitoring:
       - Lernende Modelle:
+          - Überblick: modelle/index.md
+          - Daten, Labels und Messlatte: modelle/daten.md
+          - LSTM-Fingerabdruck: modelle/lstm.md
+          - Prognose-LSTM als Wächter: modelle/prognose.md
+          - Fehlerart und Klasse je Station: modelle/klassen.md
       - Netz einbeziehen:
-      - Modelle vergleichen: 
-      - Was nicht getragen hat: 
+      - Modelle vergleichen:
+          - Prüfdesign und Statistik: vergleich/pruefung.md
+          - Erster Prüfstand: vergleich/pruefstand.md
+          - Strenger Vergleich: vergleich/endmodell.md
+      - Was nicht getragen hat: nicht_getragen.md
      
   - Ergebnisse:
       - Überblick:
       - Datenanalyse:
-      - Endmodell: 
-      - Handlungsempfehlungen:
-      - Dashboard: 
+      - Endmodell: ergebnisse_endmodell.md
+      - Handlungsempfehlungen: ergebnisse_handlungsempfehlungen.md
+      - Dashboard: ergebnisse_dashboard.md
 
   - Grenzen und Erkenntnisse:
       - Annahmen:
       - Grenzen der Daten:
-      - Grenzen der Modelle:
-      - Erkenntnisse:
+      - Grenzen der Modelle: grenzen_modelle.md
+      - Erkenntnisse: erkenntnisse.md
 
   - Ausblick:
-      - Probebetrieb:
-      - Prüfung nach vorn:
-      - Weiterentwicklung:
+      - Probebetrieb: ausblick_probebetrieb.md
+      - Prüfung nach vorn: ausblick_pruefung.md
+      - Weiterentwicklung: ausblick_weiterentwicklung.md
       - Offene Fragen an die ÜZ:
 
-  - Aufteilung im Team:
+  - Aufteilung im Team: aufteilung.md
 
   - Anhang: 
