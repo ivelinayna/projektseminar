@@ -99,8 +99,10 @@ einen ersten physikalischen Hinweis, die Abkühlrate im Stillstand (0,69, nicht 
 Dieses Kapitel und die Modelle darin hat Dominik bearbeitet:
 
 - **Notebooks:** 27 bis 32 (Modelldaten, Einstufung, LSTM-Fingerabdruck,
-  Prognose-LSTM, XGBoost, Wächtervergleich), 38 (Modellvergleich), 41 (Merkmale und Erklärbarkeit),
-  zusammen mit Ivelina 39 (Endmodell) und 40 (Dashboard).
+  Prognose-LSTM, XGBoost, Wächtervergleich), 38 (Modellvergleich), 39 (Endmodell), 40 (Dashboard),
+  41 (Merkmale und Erklärbarkeit). Notebook 39 vergleicht Ivelinas Monitoring-Modell mit dem LSTM,
+  Notebook 40 baut auf Paulines Rohrbaum aus Notebook 35 auf. Ivelina hat beide für den Abgabestand
+  hochgeladen und umnummeriert.
 - **Vorarbeit:** die Gesamtpipeline aus dem August (früher Notebook 12, nicht mehr im Abgabestand).
 - **Code in `src/`:** `fehlerklassen.py`, `prognose_waechter.py`, `finalvergleich.py`, `pruefstand.py`,
   `modellpaket.py`, `merkmalsbau.py`, `normalmodell_waechter.py`, zusammen mit Ivelina
