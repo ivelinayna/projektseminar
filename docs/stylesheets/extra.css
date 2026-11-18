@@ -1,3 +1,30 @@
+/* Uni-Blau der JMU (Hex #02246C) für Kopfzeile und Links,
+   helle Stufe = Akzentfarbe 2 (#5E8AC7) */
+:root {
+  --md-primary-fg-color: #02246c;
+  --md-primary-fg-color--light: #5e8ac7;
+  --md-primary-fg-color--dark: #011a4f;
+}
+
+/* Uni-Logo rechts neben der Seitenüberschrift, auf schmalen Bildschirmen darüber */
+.md-typeset p:has(> .titel-logo) {
+  margin: 0;
+}
+
+.md-typeset .titel-logo {
+  float: right;
+  height: 2.4rem;
+  margin-left: 1rem;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .titel-logo {
+    float: none;
+    display: block;
+    margin: 0 0 1rem;
+  }
+}
+
 .md-typeset p {
   text-align: justify;
   hyphens: auto;
