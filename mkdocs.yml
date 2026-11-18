@@ -3,6 +3,22 @@ site_description: >-
   Projektseminar JMU Würzburg mit der ÜZ Mainfranken: Fehler in
   Hausübergabestationen aus Zählerdaten erkennen.
 docs_dir: docs
+# Alte Seiten aus dem Abgabestand: bleiben im Repo, werden aber nicht gebaut
+exclude_docs: |
+  /anhang.md
+  /begriffe.md
+  /dashboard.md
+  /daten.md
+  /docker.md
+  /endmodell.md
+  /ergebnisse.md
+  /grenzen.md
+  /modellvergleich.md
+  /negativbefunde.md
+  /notebooks.md
+  /pipeline.md
+  /schnellstart.md
+  /stationsbilder.md
 theme:
   name: material
   language: de
@@ -28,7 +44,7 @@ extra_css:
 
 nav:
   - Einleitung: 
-      - Ausgangslage: ausgangslage.md
+      - Ausgangslage: index.md
       - Aufgabe und Ziel: aufgabe_und_ziel.md
       - Aufbau der Arbeit: aufbau.md
 

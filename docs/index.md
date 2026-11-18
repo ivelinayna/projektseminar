@@ -1,52 +1,25 @@
-# Fehlererkennung im Fernwärmenetz
+![Universität Würzburg](assets/logo/uni_wuerzburg_blau.png){ .titel-logo }
 
-Projektseminar der Julius-Maximilians-Universität Würzburg mit der ÜZ Mainfranken, SS 2026 und WS 2026.
+# Ausgangslage
 
-## Worum es geht
+Die ÜZ Mainfranken betreibt ein Fernwärmenetz, das Gebäude über Hausanschlussstationen (HAST) mit Wärme versorgt. An
+jeder Station gibt das heiße Wasser aus dem Netz seine Wärme an das Gebäude ab und fließt abgekühlt zurück. Ein
+Wärmezähler misst dabei jede Stunde unter anderem Vorlauf- und Rücklauftemperatur, Durchfluss und Leistung.
 
-- Ein Fernwärmenetz versorgt Gebäude über Hausanschlussstationen (HAST). Jede HAST hat einen Wärmezähler mit Stundenwerten.
-- Fehler an einer HAST, etwa ein klemmendes Ventil oder eine schlecht eingestellte Regelung, zeigen sich vor allem als hoher Rücklauf.
-- Ziel: solche Fehler aus den Zählerdaten erkennen und eine Maßnahme vorschlagen.
-- Grundlage: etwa 100 Zähler eines Teilnetzes, 66 Begehungen durch Monteure und der Leitungsplan.
+Wie gut eine Station arbeitet, zeigt sich vor allem an der Rücklauftemperatur. Kommt das Wasser zu warm zurück, hat die
+Station die Wärme schlecht ausgenutzt. Für das Netz heißt das: Es muss mehr Wasser umgewälzt werden, die Leitungen
+verlieren mehr Wärme und die Erzeugung arbeitet weniger effizient. Typische Ursachen sind ein klemmendes Regelventil
+oder eine schlecht eingestellte Regelung.
 
-## Vorgehen
+Im Betrieb fallen solche Fehler kaum auf, denn das Gebäude wird trotzdem warm. Gefunden werden sie bei einer Begehung:
+Ein Monteur prüft die Station vor Ort, ändert Einstellungen oder tauscht Bauteile und hält das Ergebnis fest. Jede
+Begehung kostet Zeit, und ohne Auswertung der Messdaten bleibt offen, welche Station sie am dringendsten braucht.
 
-- Zuerst Daten aufbereiten und die Wirkung der Begehungen messen.
-- Dann ohne Labels arbeiten: Clustering, Kennlinien je Station, Vergleich mit dem Netz, Alarm bei Abweichung.
-- Danach lernende Modelle (LSTM, XGBoost) und die Netzstruktur prüfen.
-- Am Ende alle Verfahren unter gleichen Bedingungen vergleichen und das beste je Frage auswählen.
+Für ein Teilnetz hat die ÜZ dem Projekt folgende Daten bereitgestellt:
 
-## Ergebnis in Kürze
+- Stundenwerte von 101 Zählern seit Ende 2021, davon 93 Hausanschlussstationen
+- Protokolle von 66 Begehungen mit den geänderten Einstellungen und dem Freitext des Monteurs
+- den Leitungsplan des Netzes
 
-- Überwachtes Lernen direkt auf den Begehungen scheitert an zu wenigen und unvollständigen Labels.
-- Stationen bilden keine klaren Typen. Betriebsstunden lassen sich dagegen gut in fünf Zustände einteilen.
-- Für die laufende Überwachung trägt der Tagesmonitor: Kennlinie je Station mit CUSUM-Alarm.
-- Für die Einstufung nach den Handlungsklassen der ÜZ dient eine logistische Regression auf einem LSTM-Embedding.
-- Viele Ansätze haben nicht getragen. Sie sind als Negativbefunde dokumentiert.
-- Für die ÜZ gibt es ein Dashboard als HTML-Datei mit Karte und Handlungsliste.
-
-Mehr unter [Ergebnisse](ergebnisse.md), [Endmodell](endmodell.md) und [Negativbefunde](negativbefunde.md).
-
-## Wo was steht
-
-| Seite | Inhalt |
-|---|---|
-| [Schnellstart](schnellstart.md) | Projekt lokal einrichten und ausführen |
-| [Docker](docker.md) | Projekt ohne eigene Python-Installation starten |
-| [Daten](daten.md) | Datenquellen, Aufbereitung, bekannte Probleme |
-| [Notebooks](notebooks.md) | alle 41 Notebooks mit Frage, Ergebnis und Reihenfolge |
-| [Ergebnisse](ergebnisse.md) | wichtigste Ergebnisse je Teil |
-| [Stationsbilder und Befunde](stationsbilder.md) | Ternärdiagramme, Kennlinienmonitor, Freitexte |
-| [Modellvergleich](modellvergleich.md) | alle Verfahren auf demselben Prüfstand |
-| [Endmodell](endmodell.md) | gewählte Modelle je Frage, Modellpakete |
-| [Negativbefunde](negativbefunde.md) | was nicht funktioniert hat und warum |
-| [Lernende Modelle](modelle/index.md) | LSTM-Fingerabdruck, Prognose-LSTM, Prüfung und Statistik: was gemacht wurde und warum |
-| [Pipeline und Module](pipeline.md) | Code in `src/`, Datenfluss, Befehle, Tests |
-| [Dashboard](dashboard.md) | Aufbau und Erzeugung des Dashboards |
-| [Grenzen und offene Fragen](grenzen.md) | Annahmen, Grenzen, Fragen an die ÜZ |
-| [Begriffe](begriffe.md) | Fachbegriffe kurz erklärt |
-
-## Datenschutz
-
-- Die Rohdaten der ÜZ liegen nicht im Repo.
-- Diese Doku nennt Stationen nur über die Zählernummer, nie über die Adresse.
+Daraus ergibt sich die Frage dieses Projekts: Lassen sich Fehler an einer Station schon aus den Zählerdaten erkennen,
+bevor ein Monteur ausrückt?
