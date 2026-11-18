@@ -441,7 +441,7 @@ def paket_bauen(stunden: Optional[pd.DataFrame] = None,
         lernzeitraum=f"Winter {WINTER[0]}–{WINTER[1]}, Sommer {SOMMER[0]}–{SOMMER[1]}, vor der ersten Begehung",
         beschreibung=("Kennzahlen + LSTM-Embedding → logistische Regression (Ventil, Dämmung), "
                       "Auslastungsregel (Vertrag), K-Means Optimum/schlechter → Klasse nach Folie 5"),
-        quelle="notebooks/18 bis 22", version=version, wurzel=wurzel, aktuell=aktuell)
+        quelle="notebooks/6_lernende_modelle/25 bis 29", version=version, wurzel=wurzel, aktuell=aktuell)
 
 
 def lade(version: Optional[str] = None, wurzel: Path = mp.MODELS) -> dict:

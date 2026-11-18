@@ -3,7 +3,7 @@
 Im Projekt hat fast jedes Notebook sein Modell selbst geprüft, mit eigenem
 Fenster, eigener Kontrollgruppe, eigener Alarmmenge und eigener
 Prüfbasis. Die Zahlen lassen sich dann nicht nebeneinanderlegen (Notebook
-23: „70 % gegen 53 %“ und „11–17 % gegen 13 %“ meinten Verschiedenes).
+30: „70 % gegen 53 %“ und „11–17 % gegen 13 %“ meinten Verschiedenes).
 Dieses Modul sammelt die Prüfungen an einer Stelle, damit jeder Kandidat,
 gelernt oder Regel, durch dieselbe Prüfung läuft.
 
