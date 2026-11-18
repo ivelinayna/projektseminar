@@ -10,11 +10,11 @@ Je Zähler:
 - **Empfehlung** und **Dringlichkeit** (Empfehlungssystem, `dashboard_daten.empfehlungen`)
 - **Verdacht auf eine Fehlerart:** Ventil, Dämmung, Kapazität (Klassifizierung,
   Paket ``fehlerklassen``)
-- **Stand im Netz** und **Potenzial** (Stationsleistung, Netzvergleich von Modell Ivelina)
+- **Stand im Netz** und **Potenzial** (Stationsleistung, Netzvergleich des Monitoring-Modells)
 - **Meldungen** der Wächter, je Tag mit dem Hauptkanal
 
-Hauptkanal (Notebook 39, Abschnitt 13): An einem Tag, an dem Ivelinas
-Tagesmonitor rechnet (Heiztag, Referenz vorhanden), zählt seine Meldung. Sonst
+Hauptkanal (Notebook 39, Abschnitt 13): An einem Tag, an dem der
+Tagesmonitor des Monitoring-Modells rechnet (Heiztag, Referenz vorhanden), zählt seine Meldung. Sonst
 zählt das Prognose-LSTM (warme Tage, Stationen ohne Referenz). LSTM-Meldungen an
 Tagen des Tagesmonitors bleiben als Hinweis in der Liste, färben die Karte aber
 nicht. So meldet für jede Station und jeden Tag genau ein Wächter.

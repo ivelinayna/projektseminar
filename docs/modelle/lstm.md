@@ -98,7 +98,7 @@ Mit den 8 LSTM-Zahlen werden 19 von 23 Stationen wiedererkannt, mit 3 Wintermitt
 typischen Wintertag aus 72 Zahlen 15. Raten ergäbe 0,4. Mehr Zahlen allein bringen es also nicht. Eine
 Station wird gar nicht erkannt, und das zu Recht: Bei 68956372 stieg der Rücklauf von 41 auf 70 °C und
 der Durchfluss von 51 auf 318 l/h. Dort ging im Sommer 2023 ein Ventil kaputt. Die Station verhält sich
-seither wirklich anders. Genau das nutzt der Wächter.
+seither wirklich anders. Das nutzt der Wächter.
 
 **Befunde.** Eine logistische Regression auf dem Winter-Steckbrief findet Ventil (AUC 0,83) und Dämmung
 (0,67) über dem Zufall, Filter, Durchfluss, Temperatur und Überdimensionierung nicht. Drei Wintermittel

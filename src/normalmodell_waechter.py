@@ -1,10 +1,10 @@
 """Normalverhaltensmodell als Wächter im Betrieb (Tagesmonitor als Paket).
 
-Das Normalverhaltensmodell stammt aus Notebook 20 (Seb). `src/tagesmonitor.py`
+Das Normalverhaltensmodell stammt aus Notebook 20. `src/tagesmonitor.py`
 rechnet dieselbe Idee auf den Stundenreihen aus Notebook 00: je Station und
 Kanal (Abkühlung in kWh/m³, logarithmiertes Tagesvolumen) eine Kennlinie
 gegen die Tagesmitteltemperatur aus dem ersten Jahr, danach ein CUSUM auf
-den Abweichungen. Auf Sebs Prüfung sind beide gleichwertig (Notebook 38:
+den Abweichungen. Mit der Prüfung aus Notebook 20 sind beide gleichwertig (Notebook 38:
 29 gegen 30 von 43 Begehungen bemerkt, im 14-Tage-Fenster der Tagesmonitor
 vorn). Für den Betrieb wird der Tagesmonitor genommen, weil er als Modul
 auf neuen Daten läuft.

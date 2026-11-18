@@ -142,7 +142,7 @@ hängt nur am Vorhersagefehler.
 
 ## Warum das Modell im Lernteil gewählt wird
 
-Wer mehrere Modelle prüft und den Sieger nach den Testwerten nimmt, bekommt eine zu gute Zahl. Genau das
+Wer mehrere Modelle prüft und den Sieger nach den Testwerten nimmt, bekommt eine zu gute Zahl. Das
 ist zuerst passiert: Die Regression auf Kennzahlen und LSTM-Zahlen war im Test die beste, mit einer
 Ventil-AUC von 0,88. In Notebook 39, Abschnitt 19, wird die Wahl deshalb in den Lernteil verlegt: In
 jedem der fünf Teile entscheidet nur die innere Prüfung, welcher Kandidat gewinnt, erst danach wird

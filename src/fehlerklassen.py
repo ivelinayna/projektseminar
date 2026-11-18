@@ -1,6 +1,6 @@
 """Fehler erkennen und unterteilen nach Folie 5, als Modellpaket für den Betrieb.
 
-Die Kette stammt aus den Notebooks 27 bis 31 (Dominik):
+Die Kette stammt aus den Notebooks 27 bis 31:
 
 1. **Kennzahlen** je Zähler aus einem Winter und dem folgenden Sommer
    (Notebook 27): Sommernächte, Rücklauf, Spreizung, Regelverhalten,

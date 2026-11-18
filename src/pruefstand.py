@@ -13,7 +13,7 @@ Drei Aufgaben, drei Prüfungen
 
    - `trefferpruefung`: Alarm im Fenster von 7 Tagen vor bis 60 Tage nach
      einer Begehung, gegen Kontrollstationen im selben Fenster. Das ist
-     Sebs Prüfung aus Notebook 20, Abschnitt 11, und Notebook 32.
+     die Prüfung aus Notebook 20, Abschnitt 11, und Notebook 32.
    - Fair nur bei **gleichen Stationen und Tagen** (`gemeinsame_tage`) und
      **gleich vielen Alarmen** (`budget_anpassen`): Wer öfter alarmiert,
      trifft automatisch öfter.
@@ -45,7 +45,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-#Sebs Prüfung (Notebook 20, Abschnitt 1)
+#Prüfung aus Notebook 20, Abschnitt 1
 FENSTER_VOR = 7
 FENSTER_NACH = 60
 MIN_TAGE_IM_FENSTER = 5
