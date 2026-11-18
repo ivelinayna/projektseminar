@@ -4,9 +4,8 @@ Der [erste Prüfstand](pruefstand.md) hat gezeigt, welches System welche Aufgabe
 zu optimistisch. Notebook 39 lernt deshalb die beiden fertigen Ansätze des Projekts aus denselben Daten neu und prüft
 sie nach den Regeln aus [Prüfdesign und Statistik](pruefung.md):
 
-- **Modell Ivelina** (Monitoring-Modell): Kennlinie je Station mit CUSUM (Tagesmonitor), dazu Netzvergleich und
-  Potenzial.
-- **Modell LSTM:** das [Prognose-LSTM](../modelle/prognose.md) als Wächter und die
+- **Monitoring-Modell:** Kennlinie je Station mit CUSUM (Tagesmonitor), dazu Netzvergleich und Potenzial.
+- **LSTM-Modell:** das [Prognose-LSTM](../modelle/prognose.md) als Wächter und die
   [Fehlerklassen](../modelle/klassen.md) aus dem [Fingerabdruck](../modelle/lstm.md).
 
 Am Ende speichert Notebook 39 die gewählten Modelle als Pakete für das Dashboard.
@@ -33,12 +32,12 @@ Am Ende speichert Notebook 39 die gewählten Modelle als Pakete für das Dashboa
 
 | Frage | Modell | Ergebnis in Notebook 39 | Urteil |
 |---|---|---|---|
-| Veränderung in der Heizperiode, Erfolgskontrolle | Modell Ivelina: Kennlinie + CUSUM, h = 5 | 18 von 43 Begehungen als „besser“ bemerkt, Kontrolle 24 %, p = 0,006 | Pilot mit Einschränkungen |
+| Veränderung in der Heizperiode, Erfolgskontrolle | Monitoring-Modell: Kennlinie + CUSUM, h = 5 | 18 von 43 Begehungen als „besser“ bemerkt, Kontrolle 24 %, p = 0,006 | Pilot mit Einschränkungen |
 | Veränderung an warmen Tagen, plötzlicher Dauerdurchfluss | Prognose-LSTM + CUSUM, h = 10, auf allen Stationen gelernt | 78 % der Dauerdurchflüsse von 150 l/h bei höchstens 5 % Fehlalarmen, Wochenmittel 45 % | Pilot mit Einschränkungen |
 | Regelventil tauschen | logistische Regression nur auf den 16 LSTM-Zahlen | AUC 0,84 mit Modellwahl im Lernteil, gleichauf mit der Sommernacht-Regel (0,85) | Pilot |
 | Hinweis Dämmung | dasselbe Modell | AUC 0,78 mit Modellwahl im Lernteil, beste Einzelregel 0,61 | weitere Validierung nötig |
 | Hinweis Kapazitätsanpassung | Regel „Spitzenlast zum alten Vertrag“ | AUC 0,76 [0,58; 0,93], 5 von 9 bei 1 Fehlalarm, gelernte Modelle höchstens 0,53 | Pilot mit Einschränkungen |
-| Stationsleistung, Netzeffizienz | Modell Ivelina: Netzvergleich je Kernwinter, Potenzial | Ventilfall 68956351 vor der Reparatur auf Rang 1 | Pilot, nur beschreibend |
+| Stationsleistung, Netzeffizienz | Monitoring-Modell: Netzvergleich je Kernwinter, Potenzial | Ventilfall 68956351 vor der Reparatur auf Rang 1 | Pilot, nur beschreibend |
 | Regelungsoptimierung | keins | von keinem Modell getroffen | ungeeignet |
 | Durchfluss, Sollwert, Filter als Ursache | keins | AUC 0,26 bis 0,57 | nicht erkennbar |
 | Frühwarnung vor einem Fehler | keins | der Beginn ist bei keinem Befund bekannt | nicht prüfbar |
@@ -50,10 +49,10 @@ nicht für eine Entscheidung ohne Prüfung vor Ort.
 
 **Überwachung.**
 
-- In der Heizperiode bemerkt Modell Ivelina die Begehungen am deutlichsten. Das Prognose-LSTM liegt auf Höhe der
+- In der Heizperiode bemerkt das Monitoring-Modell die Begehungen am deutlichsten. Das Prognose-LSTM liegt auf Höhe der
   Kontrolle (10 von 43 gegen 26 %).
-- An eingebauten Fehlern im Winter liegt Modell Ivelina vorn, zum Beispiel beim Rücklauf +5 K mit 47 % gegen 33 %.
-  Der Vorteil kommt von der festen Referenz, nicht vom Modelltyp: Ein LSTM, das wie Ivelinas Wächter gegen eine feste
+- An eingebauten Fehlern im Winter liegt das Monitoring-Modell vorn, zum Beispiel beim Rücklauf +5 K mit 47 % gegen 33 %.
+  Der Vorteil kommt von der festen Referenz, nicht vom Modelltyp: Ein LSTM, das wie das Monitoring-Modell gegen eine feste
   Referenz prüft, liegt praktisch gleichauf (46 %). Bei Gleichstand bleibt die einfachere, erklärbare Kennlinie.
 - An warmen Tagen rechnet nur das Prognose-LSTM. Dort schlägt es das Wochenmittel deutlich.
 - Zusammen ergänzen sich beide im Winter: Über alle eingebauten Fehler steigt die Trefferquote von 51 % auf 60 %,
@@ -68,9 +67,9 @@ nicht für eine Entscheidung ohne Prüfung vor Ort.
 - Warum die Regression nur auf den LSTM-Zahlen gewählt ist und die zuerst genannten 0,88 nicht gelten, steht unter
   [Prüfdesign und Statistik](pruefung.md#warum-das-modell-im-lernteil-gewahlt-wird).
 - Reihenfolge (Test E): Unter den ersten 10 Stationen nach Ventil-Score hatten 7 einen Ventilbefund. Nach der
-  Priorität von Modell Ivelina sind es 5, Zufall wären etwa 2.
-- Folie 5: Die Klasse „Regelventil tauschen“ trifft Modell LSTM bei 8 von 11 Ventilfällen, Modell Ivelina bei 4 von 11.
-  Ivelinas Fehlerbild „ventil“ ist dafür sehr genau (4 von 4 richtig) und dient als Bestätigung. „Regelparameter
+  Priorität des Monitoring-Modells sind es 5, Zufall wären etwa 2.
+- Folie 5: Die Klasse „Regelventil tauschen“ trifft das LSTM-Modell bei 8 von 11 Ventilfällen, das Monitoring-Modell bei 4
+  von 11. Dessen Fehlerbild „ventil“ ist dafür sehr genau (4 von 4 richtig) und dient als Bestätigung. „Regelparameter
   optimieren“ trifft keins der beiden.
 - Dämmung: Nur das gelernte Modell findet ein Muster. Der Vorsprung vor der besten Einzelregel (+0,17 [−0,04; +0,38])
   ist knapp nicht gesichert, die Ursache physikalisch ungeklärt. Deshalb nur ein Hinweis mit niedriger Dringlichkeit.
@@ -87,7 +86,7 @@ Lernzeitraum, Code-Stand und Prüfsummen. Die Pakete liegen in `models/` und sin
 
 | Paket | Inhalt | Rolle im Dashboard |
 |---|---|---|
-| `normalmodell` | Ivelinas Kennlinien je Station, CUSUM h = 5 | Alarm in der Heizperiode |
+| `normalmodell` | Kennlinien je Station des Monitoring-Modells, CUSUM h = 5 | Alarm in der Heizperiode |
 | `prognose_lstm` | Prognose-LSTM, Kalibrierung je Station, CUSUM h = 10 | Alarm an warmen Tagen, Hinweis an Heiztagen |
 | `fehlerklassen` | Regression auf den LSTM-Zahlen für Ventil und Dämmung, K-Means, Regel Spitzenlast | Ventil-Score, Klasse nach Folie 5, Hinweise Dämmung und Vertrag |
 
@@ -96,8 +95,8 @@ Lernzeitraum, Code-Stand und Prüfsummen. Die Pakete liegen in `models/` und sin
 - Nach dem Speichern prüft Notebook 39, dass die geladenen Pakete dasselbe liefern wie die Modelle im Speicher.
 - `python -m src.dashboard_daten` wendet die Pakete auf die aktuellen Daten an, Notebook 40 baut daraus das
   Dashboard. Das Dashboard selbst lernt nichts neu.
-- Die Handlungsliste sortiert nach Dringlichkeit, dann nach Ventil-Score: hoch ist eine Reparatur, wenn Ivelinas
-  Fehlerbild „ventil“ dazukommt, mittel eine Reparatur nach Ventil-Score, niedrig sind Hinweise zu Kapazität, Dämmung
+- Die Handlungsliste sortiert nach Dringlichkeit, dann nach Ventil-Score: hoch ist eine Reparatur, wenn das
+  Fehlerbild „ventil“ des Monitoring-Modells dazukommt, mittel eine Reparatur nach Ventil-Score, niedrig sind Hinweise zu Kapazität, Dämmung
   und Datenlage.
 
 ## Grenzen

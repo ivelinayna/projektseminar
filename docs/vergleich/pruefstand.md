@@ -12,11 +12,11 @@ erste Stand. Was daran zu optimistisch war, steht am Ende der Seite.
 
 ## Zwei Wächter unter gleichen Bedingungen
 
-Notebook 32 vergleicht die beiden Wächter des Projekts: Sebs Normalverhaltensmodell (Notebook 20) und das
+Notebook 32 vergleicht die beiden Wächter des Projekts: das Normalverhaltensmodell (Notebook 20) und das
 Prognose-LSTM (Notebook 30).
 
-- **Dieselbe Prüfung:** Sebs Verfahren aus Notebook 20 ist als Funktion nachgebaut und Fall für Fall an seinen Zahlen
-  kontrolliert (30 von 43, p = 0,017). Gezählt wird, ob eine begangene Station im Fenster von 7 Tagen vor bis 60 Tage
+- **Dieselbe Prüfung:** Das Prüfverfahren aus Notebook 20 ist als Funktion nachgebaut und Fall für Fall an dessen
+  Zahlen kontrolliert (30 von 43, p = 0,017). Gezählt wird, ob eine begangene Station im Fenster von 7 Tagen vor bis 60 Tage
   nach der Begehung einen Alarm hat, und wie oft Kontrollstationen im selben Fenster alarmieren.
 - **Dieselbe Grundlage:** 86 Stationen, Heiztage ab Juni 2024, 43 Begehungen.
 - **Dieselbe Alarmmenge:** Die Schwelle des LSTM wird so gewählt, dass es etwa gleich viele Alarme gibt wie beim
