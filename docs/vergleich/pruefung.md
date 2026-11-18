@@ -3,8 +3,8 @@
 Mit 53 begangenen Stationen, davon 11 mit Ventil- und 9 mit Vertragsbefund, entscheidet die Prüfung
 mehr über die Aussagekraft als das Modell. Diese Seite beschreibt, wie geprüft wurde und warum so. Die
 Regeln gelten für die [lernenden Modelle](../modelle/index.md) und für beide Vergleiche, den
-[ersten Prüfstand](pruefstand.md) und den [strengen Vergleich](endmodell.md). Gerechnet wird in den Notebooks 27, 29 bis 32, 38 und 39, die Prüfwerkzeuge stehen in
-`src/pruefstand.py` und `src/finalvergleich.py`.
+[ersten Prüfstand](pruefstand.md) und den [strengen Vergleich](endmodell.md). Gerechnet wird in den Notebooks 27, 29 bis 32, 38 und 39. Die Prüfungen sind dort als feste Funktionen
+hinterlegt, damit jedes Modell genau dieselbe Prüfung durchläuft.
 
 ## Was gemessen wird
 
@@ -33,12 +33,12 @@ Begehungen gegen den Anteil bei Vergleichsstationen im selben Zeitraum.
 hängen eng zusammen. Wer zufällig nach Tagen aufteilt, prüft eine Station mit ihren eigenen Nachbartagen.
 Deshalb wird nach Stationen getrennt:
 
-- **Außen:** fünf Teile über ganze Stationen (`StratifiedGroupKFold`, Seed 42). Jede Station ist genau
+- **Außen:** fünf Teile über ganze Stationen, mit festem Zufallsstartwert. Jede Station ist genau
   einmal Teststation. Ein Zählertausch am selben Ort bleibt in einem Teil. Die Teile sind so gemischt,
   dass in jedem zwei bis drei Ventilfälle liegen.
 - **Innen:** Auf den Lernstationen eines Teils wählt eine zweite, vierfache Kreuzvalidierung die
-  Einstellungen des Modells: die Regularisierung `C` der logistischen Regression aus 0,03, 0,1, 0,3 und
-  1,0, bei XGBoost Tiefe 1 bis 3 und 100 oder 300 Bäume. In Notebook 39 wählt sie auch, welcher
+  Einstellungen des Modells: die Stärke der Regularisierung der logistischen Regression aus 0,03, 0,1, 0,3
+  und 1,0, bei XGBoost Tiefe 1 bis 3 und 100 oder 300 Bäume. In Notebook 39 wählt sie auch, welcher
   Kandidat gewinnt.
 - **LSTM-Encoder je Teil neu:** In Notebook 39 wird der Fingerabdruck für jeden der fünf Teile ohne die
   Teststationen neu gelernt. Die Teststation beeinflusst also weder das Netz noch die Regression noch die
@@ -118,9 +118,9 @@ auswendig. Ein Vorversuch in Notebook 29 zeigt das: Der Validierungsfehler steig
 der Trainingsfehler weiter fällt. Kein Testwert und kein Befund steuert das Training.
 
 **Wiederholbar.** Alle Seeds sind fest. In den Vorversuchen und in Notebook 39 rechnet die
-Grafikkarte zusätzlich deterministisch (`cudnn.deterministic`). Ein frischer Lauf der Netze aus Notebook
+Grafikkarte zusätzlich im deterministischen Modus, also bei jedem Lauf in derselben Reihenfolge. Ein frischer Lauf der Netze aus Notebook
 29 und 30 ohne gespeicherte Gewichte lieferte dieselben Zahlen wie die gespeicherte Fassung. Die
-Gewichte werden unter `notebooks/models/` gespeichert und beim nächsten Lauf geladen.
+Gewichte werden gespeichert und beim nächsten Lauf geladen.
 
 ## Warum keine Hyperparameter-Suche für die Netze
 

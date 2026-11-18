@@ -80,24 +80,21 @@ vorher (Rangkorrelation 0,16, p = 0,30). Das Dashboard zeigt deshalb Rang und Po
 
 ## Vom Modell ins Dashboard
 
-Gelernt wird im Notebook, gespeichert als Paket, angewendet im Modul, angezeigt im Dashboard. Ein Paket enthält nicht
-nur Gewichte, sondern alles, was zum Anwenden gehört: Merkmalsliste, Skalierung, Kalibrierung, Schwellen,
-Lernzeitraum, Code-Stand und Prüfsummen. Die Pakete liegen in `models/` und sind nicht im Repository.
+Gelernt wird im Notebook, gespeichert als Paket, angewendet auf die aktuellen Daten, angezeigt im Dashboard. Ein Paket
+enthält nicht nur Gewichte, sondern alles, was zum Anwenden gehört: Merkmalsliste, Skalierung, Kalibrierung,
+Schwellen, Lernzeitraum und Prüfsummen. Notebook 39 speichert drei Pakete:
 
-| Paket | Inhalt | Rolle im Dashboard |
+| Paket für | Inhalt | Rolle im Dashboard |
 |---|---|---|
-| `normalmodell` | Kennlinien je Station des Monitoring-Modells, CUSUM h = 5 | Alarm in der Heizperiode |
-| `prognose_lstm` | Prognose-LSTM, Kalibrierung je Station, CUSUM h = 10 | Alarm an warmen Tagen, Hinweis an Heiztagen |
-| `fehlerklassen` | Regression auf den LSTM-Zahlen für Ventil und Dämmung, K-Means, Regel Spitzenlast | Ventil-Score, Klasse nach Folie 5, Hinweise Dämmung und Vertrag |
+| das Monitoring-Modell | Kennlinie je Station, CUSUM h = 5 | Meldungen in der Heizperiode |
+| das Prognose-LSTM | Netz, Kalibrierung je Station, CUSUM h = 10 | Meldungen an warmen Tagen, Hinweis an Heiztagen |
+| die Fehlerklassen | Regression auf den LSTM-Zahlen für Ventil und Dämmung, K-Means, Regel für die Kapazität | Ventil-Score, Klasse nach Folie 5, Hinweise |
 
 - Wo mit Befunden gelernt wird (Fehlerart), nur auf begangenen Stationen. Wo Normalverhalten gelernt wird (Wächter),
   auf allen Stationen, die überwacht werden sollen.
 - Nach dem Speichern prüft Notebook 39, dass die geladenen Pakete dasselbe liefern wie die Modelle im Speicher.
-- `python -m src.dashboard_daten` wendet die Pakete auf die aktuellen Daten an, Notebook 40 baut daraus das
-  Dashboard. Das Dashboard selbst lernt nichts neu.
-- Die Handlungsliste sortiert nach Dringlichkeit, dann nach Ventil-Score: hoch ist eine Reparatur, wenn das
-  Fehlerbild „ventil“ des Monitoring-Modells dazukommt, mittel eine Reparatur nach Ventil-Score, niedrig sind Hinweise zu Kapazität, Dämmung
-  und Datenlage.
+- Wie die Pakete auf aktuelle Daten angewendet werden und was das Dashboard daraus macht, steht unter
+  [Dashboard](../ergebnisse_dashboard.md).
 
 ## Grenzen
 

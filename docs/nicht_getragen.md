@@ -11,7 +11,7 @@ lag die AUC bei 0,49 bis 0,53, von 10 Ereignissen wurden höchstens 2 gefunden. 
 Ohne Erwartung, was für diese Station bei diesem Wetter normal ist, findet ein Score nur seltene Betriebszustände.
 Daraus folgten die Labels je Fehlerart und die Wächter, die jede Station mit sich selbst vergleichen. Das Notebook ist
 nicht mehr im Abgabestand: Es nutzte eine eigene Datenaufbereitung mit 78 statt 93 Stationen, seine Zahlen passen
-deshalb nicht zu den übrigen Notebooks. Es liegt im Verlauf des Repositorys (Commit `1b5798b`), seine Zahlen stehen
+deshalb nicht zu den übrigen Notebooks. Es liegt im Verlauf des Repositorys (Abgabestand vom 14.11.2026), seine Zahlen stehen
 auch in Notebook 38.
 
 **Regelparameter optimieren (Notebook 28).** K-Means teilt die Stationen nach ihrem Regelverhalten im Winter in

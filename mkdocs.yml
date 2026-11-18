@@ -67,7 +67,7 @@ nav:
       - Datenanalyse:
       - Endmodell: 
       - Handlungsempfehlungen:
-      - Dashboard: 
+      - Dashboard: ergebnisse_dashboard.md
 
   - Grenzen und Erkenntnisse:
       - Annahmen:

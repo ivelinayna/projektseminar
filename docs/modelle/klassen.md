@@ -11,8 +11,7 @@ Folie 5 der Aufgabenstellung teilt jede Station in eine von drei Klassen mit je 
 Dazu kommen zwei Hinweise aus der Aufgabenstellung: Leitungen dämmen und die Anschlussleistung anpassen. Diese Seite
 beschreibt, wie eine Station zu ihrer Klasse kommt. Die Bausteine sind der
 [LSTM-Fingerabdruck](lstm.md) und die Kennzahlen aus [Daten, Labels und Messlatte](daten.md). Gerechnet wird in
-Notebook 28 (K-Means) und Notebook 31 (Fehlerart und Klassen). Das Paket für das Dashboard baut Notebook 39 mit
-`src/fehlerklassen.py`.
+Notebook 28 (K-Means) und Notebook 31 (Fehlerart und Klassen). Das Paket für das Dashboard baut Notebook 39.
 
 ## Ein Modell je Fehlerart
 

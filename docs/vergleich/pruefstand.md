@@ -6,8 +6,8 @@ vergleichen. Das Normalverhaltensmodell bemerkte in Notebook 20 70 % der Begehun
 Kontrollstationen, das Prognose-LSTM in Notebook 30 11 bis 17 % gegen 13 %. Welcher Wächter besser ist, folgt daraus
 nicht.
 
-Notebook 32 und 38 schicken deshalb alle Kandidaten über denselben Prüfstand. Die Prüfungen stehen als Funktionen in
-`src/pruefstand.py`, damit jeder Kandidat genau dieselbe Prüfung durchläuft. Die Zahlen auf dieser Seite sind der
+Notebook 32 und 38 schicken deshalb alle Kandidaten über denselben Prüfstand. Die Prüfungen sind als feste Funktionen
+hinterlegt, damit jeder Kandidat genau dieselbe Prüfung durchläuft. Die Zahlen auf dieser Seite sind der
 erste Stand. Was daran zu optimistisch war, steht am Ende der Seite.
 
 ## Zwei Wächter unter gleichen Bedingungen
