@@ -319,7 +319,7 @@ Monitoring-Modell gewinnt beim Alarm, die LSTM-Kette beim Erkennen. Das Netz ver
 |---|---|---|
 | 37 GNN | braucht die Kanten- und Positionsdateien aus Notebook 34 in `notebooks/` | eigenes Ergebnis: kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft der Abschnitt „Haus oder Netz“ |
 | 33 Bayes | braucht die Handtabellen unter `data/manual/` | eigenes Ergebnis: Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
-| 12 Gesamtpipeline | eigene Aufbereitung im Notebook, Stundenscores ohne Modul | eigenes Ergebnis: AUC 0,51, höchstens 2 von 10 Ereignissen |
+| Gesamtpipeline (früher 12) | eigene Aufbereitung im Notebook, Stundenscores ohne Modul | eigenes Ergebnis: AUC 0,51, höchstens 2 von 10 Ereignissen |
 | 07 Stationscluster, 08 Clusterbenchmark | Profile über die ganze Historie, also auch nach der Begehung (Datenleck) | eigenes Ergebnis: kein Cluster trennt die Begehungen; verglichen wird K-Means aus Notebook 28 |
 | 03 Labels | Label-Vorschlag, kein Erkenner | dieselben Größen stecken in den README- und Kennzahl-Regeln |
 | 34 Netz, 36 Netzkarte | Karte und Graphaufbau, kein Modell je Station | das Netz selbst ist als Kandidat geprüft (Abschnitt „Haus oder Netz“) |

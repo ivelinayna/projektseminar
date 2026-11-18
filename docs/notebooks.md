@@ -32,7 +32,8 @@ Alle Notebooks liegen in `notebooks/`. Sie sind in acht Teile gegliedert und lau
 | 09 | Stundencluster: Betriebszustände mit K-Means<br>`09_stundencluster.ipynb` | Jede Betriebsstunde einer HAST (Hausübergabestation) wird einzeln geclustert, nicht die Station als Ganzes. | Fünf gut lesbare Betriebszustände in 1 658 002 Stunden, darunter ein Verdacht auf hydraulischen Kurzschluss (hoher Durchfluss, kleine Spreizung). |  |
 | 10 | Clustervalidierung: Betriebszustand oder Jahreszeit?<br>`10_clustervalidierung.ipynb` | Notebook 09 findet in den Betriebsstunden bei k = 5 fünf Zustände. Es fehlten Stabilitätsprüfung, Saisonkontrolle und Abgleich mit den Begehungen. | Die Stundencluster aus Notebook 09 reproduzieren sich: k = 5, Silhouette 0,404, Bootstrap-ARI 0,853. |  |
 | 11 | Tagescluster: Tagestypen je HAST<br>`11_tagescluster.ipynb` | Jede HAST bekommt für jeden Tag eine Zeile mit wenigen, gut lesbaren Merkmalen. | Vier Tagestypen an Heiztagen, drei im Sommer. Die Tage einer HAST liegen meist im selben Cluster, die Cluster beschreiben also eher Stationen als Tageszustände. Schreibt `hast_tage` (61.408 nutzbare Tage). |  |
-| 12 | Gesamtpipeline: von Rohdaten bis Wartungsbenchmark<br>`12_gesamtpipeline.ipynb` | Ein Notebook, das ohne Vorarbeit läuft: Rohdaten lesen, bereinigen, Wartungen zuordnen, clustern, Anomaliescores vergleichen. | Aus den Rohdaten entstehen 78 vergleichbare HAST mit 18.518 gemeinsamen Stunden. Alle 10 Checks des Laufs sind bestanden. |  |
+
+Notebook 12 (Gesamtpipeline) ist nicht mehr im Abgabestand. Es nutzte eine eigene Datenaufbereitung, seine Zahlen passen nicht zu den übrigen Notebooks. Idee und Ergebnis stehen unter [Negativbefunde](negativbefunde.md), Nr. 20.
 
 ## Teil 4: Stationsbilder und Befunde
 
@@ -117,7 +118,6 @@ Im Projektverlauf gab es andere Dateinamen und Nummern. Ältere Notizen und der 
 | `09_stundencluster.ipynb` | `04_kmeans_operatingConditions.ipynb` |
 | `10_clustervalidierung.ipynb` | `09_clustervalidierung.ipynb` |
 | `11_tagescluster.ipynb` | `06_tagesmerkmale_clusteranalyse.ipynb` |
-| `12_gesamtpipeline.ipynb` | `02_gesamtpipeline_rohdaten_bis_wartungsbenchmark.ipynb` |
 | `13_ternaer.ipynb` | `12_ternaer.ipynb` |
 | `14_stationsbilder.ipynb` | `13_stationsbilder.ipynb` |
 | `15_kennlinienmonitor.ipynb` | `14_monitor.ipynb` |

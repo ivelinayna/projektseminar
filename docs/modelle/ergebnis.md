@@ -39,12 +39,13 @@ Im Hausfenster wird ein Ventilverdacht mit der Sommernacht-Regel begründet, nic
 
 ## Was nicht getragen hat
 
-**Unüberwachte Anomaliescores (Notebook 12).** Die erste Pipeline im August suchte ohne Labels nach
+**Unüberwachte Anomaliescores (Gesamtpipeline, August).** Die erste Pipeline im August suchte ohne Labels nach
 ungewöhnlichen Stunden: Isolation Forest, LOF, PCA und Abstand zu K-Means-Clustern. Gegen das Label
 „Maßnahme ja/nein“ lag die AUC bei 0,49 bis 0,53, von 10 Ereignissen wurden höchstens 2 gefunden.
 „Ungewöhnlich“ ist nicht „defekt“: Ohne Erwartung, was für diese Station bei diesem Wetter normal ist,
 findet ein Score nur seltene Betriebszustände. Daraus folgten die Labels je Fehlerart und die Wächter,
-die jede Station mit sich selbst vergleichen.
+die jede Station mit sich selbst vergleichen. Das Notebook dazu ist nicht mehr im Abgabestand, weil es eine eigene
+Datenaufbereitung mit 78 statt 93 Stationen nutzte. Seine Zahlen stehen in Notebook 38.
 
 **Einstufung mit K-Means (Notebook 28).** K-Means teilt die Stationen nach ihrem Regelverhalten im Winter
 in „Optimum“ (70) und „schlechter“ (18), mit einer Silhouette von 0,44. Die Gegenprobe gegen die
@@ -97,9 +98,10 @@ einen ersten physikalischen Hinweis, die Abkühlrate im Stillstand (0,69, nicht 
 
 Dieses Kapitel und die Modelle darin hat Dominik bearbeitet:
 
-- **Notebooks:** 12 (Gesamtpipeline, August), 27 bis 32 (Modelldaten, Einstufung, LSTM-Fingerabdruck,
+- **Notebooks:** 27 bis 32 (Modelldaten, Einstufung, LSTM-Fingerabdruck,
   Prognose-LSTM, XGBoost, Wächtervergleich), 38 (Modellvergleich), 41 (Merkmale und Erklärbarkeit),
   zusammen mit Ivelina 39 (Endmodell) und 40 (Dashboard).
+- **Vorarbeit:** die Gesamtpipeline aus dem August (früher Notebook 12, nicht mehr im Abgabestand).
 - **Code in `src/`:** `fehlerklassen.py`, `prognose_waechter.py`, `finalvergleich.py`, `pruefstand.py`,
   `modellpaket.py`, `merkmalsbau.py`, `normalmodell_waechter.py`, zusammen mit Ivelina
   `dashboard_daten.py` und `dashboard_karte.py`.

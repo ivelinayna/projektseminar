@@ -34,7 +34,7 @@ Mehr unter [Ergebnisse](ergebnisse.md), [Endmodell](endmodell.md) und [Negativbe
 | [Schnellstart](schnellstart.md) | Projekt lokal einrichten und ausführen |
 | [Docker](docker.md) | Projekt ohne eigene Python-Installation starten |
 | [Daten](daten.md) | Datenquellen, Aufbereitung, bekannte Probleme |
-| [Notebooks](notebooks.md) | alle 42 Notebooks mit Frage, Ergebnis und Reihenfolge |
+| [Notebooks](notebooks.md) | alle 41 Notebooks mit Frage, Ergebnis und Reihenfolge |
 | [Ergebnisse](ergebnisse.md) | wichtigste Ergebnisse je Teil |
 | [Stationsbilder und Befunde](stationsbilder.md) | Ternärdiagramme, Kennlinienmonitor, Freitexte |
 | [Modellvergleich](modellvergleich.md) | alle Verfahren auf demselben Prüfstand |

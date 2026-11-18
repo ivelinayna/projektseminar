@@ -20,7 +20,7 @@ Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`
 
 | Ordner | Inhalt |
 |---|---|
-| `notebooks/` | 42 Notebooks (00 bis 41) in acht Teilen, siehe unten |
+| `notebooks/` | 41 Notebooks (00 bis 41, ohne 12) in acht Teilen, siehe unten |
 | `src/` | wiederverwendbarer Code, eine Datei je Aufgabe |
 | `tests/` | Tests mit pytest |
 | `docs/` | Doku für Read the Docs |
@@ -35,7 +35,7 @@ Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`
 |---|---|---|
 | 1 | 00 bis 01 | Daten laden und Lücken füllen |
 | 2 | 02 bis 06 | Begehungen und ihre Wirkung |
-| 3 | 07 bis 12 | Clustering |
+| 3 | 07 bis 11 | Clustering |
 | 4 | 13 bis 17 | Stationsbilder und Befunde |
 | 5 | 18 bis 26 | Anomalien und Monitoring |
 | 6 | 27 bis 33 | Lernende Modelle |

@@ -168,7 +168,12 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 
 ## 20 Gesamtpipeline, Bestwert und Lückenfüllung
 
-- Gesamtpipeline aus Notebook 12: AUC 0,51, höchstens 2 von 10 Ereignissen (siehe [Modellvergleich](modellvergleich.md)).
+- Gesamtpipeline (August, früher Notebook 12): Ein eigenständiges Notebook las die Rohdaten selbst, clusterte die
+  Stationen und verglich unüberwachte Anomaliescores mit Wartungen als Ersatzlabel. Ergebnis: AUC 0,51, höchstens
+  2 von 10 Ereignissen (Zahlen im [Modellvergleich](modellvergleich.md), Notebook 38). Das Notebook ist nicht mehr
+  im Abgabestand: Es nutzte eine eigene Datenaufbereitung mit 78 statt 93 Stationen, seine Zahlen passen deshalb
+  nicht zu den übrigen Notebooks, und kein anderes Notebook baut darauf auf. Es liegt im Verlauf des Repositorys
+  (Commit `1b5798b`).
 - Bestwert aus Notebook 24: sagt keine Befunde vorher und zeigt keine Verbesserung nach Begehungen.
 - Notebook 21: Streuung nur bedingt aussagekräftig, Regelhysterese nicht nachweisbar.
 - Notebook 01: Bei Lücken über einen Tag ist die Tagesform nicht besser als linear, der Rücklauffehler liegt bei 6 bis 7 K.
