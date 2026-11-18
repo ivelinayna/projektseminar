@@ -288,7 +288,7 @@ payload = {"t0": idx[0].strftime("%Y-%m-%dT%H:%M"), "H": H, "M": M, "scale": lis
            "b64": base64.b64encode(raw).decode("ascii")}
 daten = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 #wissensstand schreibt "Modell LSTM" in die Ursache, im Dashboard heißt es LSTM-Modell
-daten = daten.replace("Modell LSTM", "LSTM-Modell").replace("Modell Ivelina", "Modell Monitoring")
+daten = daten.replace("Modell LSTM", "LSTM-Modell")
 
 VORLAGE = r"""<!doctype html>
 <html lang="de">

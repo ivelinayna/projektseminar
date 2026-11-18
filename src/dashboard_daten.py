@@ -190,7 +190,7 @@ def empfehlungen(st: pd.DataFrame) -> pd.DataFrame:
     ``hinweis_daemmung``, ``netz_fehlerbild``, ``auslastung``, ``sonderfall``;
     optional ``sommer_durchlauf_anteil`` für die Begründung.
 
-    - hoch: Reparatur, bestätigt durch Ivelinas Fehlerbild „ventil“
+    - hoch: Reparatur, bestätigt durch das Fehlerbild „ventil“ des Monitoring-Modells
       (Test C: 4 von 4 richtig)
     - mittel: Reparatur nur nach dem Ventil-Score des LSTM-Modells
       (LR nur auf dem LSTM-Embedding, Test C: 8 von 11 gefunden bei 4 Fehlalarmen)
@@ -290,7 +290,7 @@ def empfehlungen_vor_begehung(vorher: pd.DataFrame, kz_vor: pd.DataFrame, fehler
 
     ``vorher`` kommt aus `fehlerklassen.bewerten` mit den Werten aus der Kreuzvalidierung für
     begangene Zähler (das Modell hat sie beim Lernen nicht gesehen), ``fehlerbild`` ist
-    Ivelinas Fehlerbild im Winter 23/24, ``grund`` der Sonderfall-Grund in diesem Winter.
+    das Fehlerbild des Monitoring-Modells im Winter 23/24, ``grund`` der Sonderfall-Grund in diesem Winter.
     Rückgabe mit den Spaltennamen aus ``VOR_SPALTEN``.
     """
     st = vorher[["klasse", "p_ventil", "p_daemmung", "auslastung", "hinweis_daemmung",
@@ -529,7 +529,7 @@ def rechne(ausgabe: Path = AUSGABE, stunden: Optional[pd.DataFrame] = None,
     #Volumen, das für eine Hausstation nicht passt (NB 31: 81050517, 81062289)
     grund, _ = sonderfall_gruende(aktuell, stunden, winter)
     sonderfall = grund != ""
-    #derselbe Stand vor den Begehungen, mit Ivelinas Fehlerbild aus Winter 23/24
+    #derselbe Stand vor den Begehungen, mit dem Fehlerbild des Monitoring-Modells aus Winter 23/24
     vor_tab = None
     if vorher is not None:
         fb = ab.fehlerbild_je_winter(netz["markiert"], list(netz["kennzahlen"]))

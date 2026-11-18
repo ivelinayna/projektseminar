@@ -27,7 +27,7 @@ def test_empfehlung_stufen():
                    hinweis_vertrag=[False, False, False, False, True, np.nan, False],
                    tm_verschlechterung=[0, 0, 3, 0, 5, 0, 0])
     e = dd.empfehlungen(st)
-    #hoch nur mit Ivelinas Fehlerbild, ein Score ab 0,8 allein reicht nicht
+    #hoch nur mit dem Fehlerbild des Monitoring-Modells, ein Score ab 0,8 allein reicht nicht
     assert list(e["dringlichkeit"]) == ["mittel", "hoch", "mittel", "keine", "niedrig", "keine", "niedrig"]
     #K-Means „schlechter“ wird nicht als Regelungsoptimierung empfohlen
     assert e.loc[4, "handlung"] == "keine"

@@ -32,7 +32,8 @@ Alle Notebooks liegen in `notebooks/`. Sie sind in acht Teile gegliedert und lau
 | 09 | Stundencluster: Betriebszustände mit K-Means<br>`09_stundencluster.ipynb` | Jede Betriebsstunde einer HAST (Hausübergabestation) wird einzeln geclustert, nicht die Station als Ganzes. | Fünf gut lesbare Betriebszustände in 1 658 002 Stunden, darunter ein Verdacht auf hydraulischen Kurzschluss (hoher Durchfluss, kleine Spreizung). |  |
 | 10 | Clustervalidierung: Betriebszustand oder Jahreszeit?<br>`10_clustervalidierung.ipynb` | Notebook 09 findet in den Betriebsstunden bei k = 5 fünf Zustände. Es fehlten Stabilitätsprüfung, Saisonkontrolle und Abgleich mit den Begehungen. | Die Stundencluster aus Notebook 09 reproduzieren sich: k = 5, Silhouette 0,404, Bootstrap-ARI 0,853. |  |
 | 11 | Tagescluster: Tagestypen je HAST<br>`11_tagescluster.ipynb` | Jede HAST bekommt für jeden Tag eine Zeile mit wenigen, gut lesbaren Merkmalen. | Vier Tagestypen an Heiztagen, drei im Sommer. Die Tage einer HAST liegen meist im selben Cluster, die Cluster beschreiben also eher Stationen als Tageszustände. Schreibt `hast_tage` (61.408 nutzbare Tage). |  |
-| 12 | Gesamtpipeline: von Rohdaten bis Wartungsbenchmark<br>`12_gesamtpipeline.ipynb` | Ein Notebook, das ohne Vorarbeit läuft: Rohdaten lesen, bereinigen, Wartungen zuordnen, clustern, Anomaliescores vergleichen. | Aus den Rohdaten entstehen 78 vergleichbare HAST mit 18.518 gemeinsamen Stunden. Alle 10 Checks des Laufs sind bestanden. |  |
+
+Notebook 12 (Gesamtpipeline) ist nicht mehr im Abgabestand. Es nutzte eine eigene Datenaufbereitung, seine Zahlen passen nicht zu den übrigen Notebooks. Idee und Ergebnis stehen unter [Negativbefunde](negativbefunde.md), Nr. 20.
 
 ## Teil 4: Stationsbilder und Befunde
 
@@ -62,10 +63,10 @@ Alle Notebooks liegen in `notebooks/`. Sie sind in acht Teile gegliedert und lau
 
 | Nr. | Notebook | Worum es geht | Ergebnis | vorher |
 |---|---|---|---|---|
-| 27 | Modelldaten: Stundenwerte, Kennzahlen und Labels je Zähler<br>`27_modelldaten.ipynb` | Hier entsteht noch kein Modell. Das Notebook stellt die Daten bereit, aus denen die Notebooks 28 bis 31 lernen. | `modell_stunden.parquet`: 2,1 Mio. Stundenzeilen von 93 Zählern, mit Außentemperatur. Gebraucht in Notebook 29 und 30. |  |
+| 27 | Daten, Labels und Messlatte<br>`27_modelldaten.ipynb` | Was soll ein Modell erkennen, woran sieht man einen Fehler in den Stundenwerten, und wie gut trennt eine einzige, vorher festgelegte Kennzahl je Fehlerart? | Datenbasis für 28 bis 31: 2,1 Mio. Stundenzeilen von 93 Zählern mit Außentemperatur, 6 Labels je begangenem Zähler, Kennzahlen vor der Begehung. Nur das Ventil ist in den Daten deutlich sichtbar. Messlatte: Ventil AUC 0,88, Überdimensionierung 0,78, Dämmung 0,64, die übrigen bei Raten. |  |
 | 28 | Einstufung mit K-Means: Läuft eine Station im Optimum oder schlechter?<br>`28_einstufung.ipynb` | Folie 5 der ÜZ teilt die Stationen in drei Klassen mit je einer Empfehlung. Lässt sich das ohne Labels aus dem Winterbetrieb ablesen? | Einstufung aller 88 Zähler mit genug Wintermessungen: Optimum (70) und schlechter (18). Nur aus dem Regelverhalten im Winter 23/24, ohne Label. Gespeichert in `kmeans_einstufung.csv`. |  |
-| 29 | LSTM: Normalbetrieb lernen, Fehler finden<br>`29_lstm.ipynb` | Die Kennzahlen aus Notebook 27 sind von Hand ausgewählt. Ein LSTM (neuronales Netz für Zeitreihen mit Gedächtnis) soll aus den Stundenwerten selbst lernen, was eine Station ausmacht, ohne Labels. | Ein LSTM (117.000 Gewichte, 11 Sekunden Training auf der GPU) sagt aus einem Tag einer Station den nächsten vorher und beschreibt dabei jede Station in acht Zahlen. |  |
-| 30 | Prognose-LSTM: ein Wächter für neue Veränderungen<br>`30_prognose_lstm.ipynb` | Notebook 29 zeigt: Ein LSTM (neuronales Netz für Zeitreihen mit Gedächtnis) kann das Verhalten einer Station lernen. Hier wird daraus ein Wächter. | Ein Encoder-Decoder-LSTM (35.000 Gewichte, 24 Sekunden Training auf der GPU) sagt für 87 Stationen jeden Tag Rücklauf und Durchfluss vorher. Gelernt nach Vorgabe nur auf begangenen HAST, ein Netz auf allen HAST dient zum Vergleich. |  |
+| 29 | LSTM-Fingerabdruck: Normalbetrieb lernen, Stationen beschreiben<br>`29_lstm.ipynb` | Kann ein LSTM ohne Labels lernen, was eine Station ausmacht? Vorversuche zu Sequenzen, Lernkurve, Early Stopping und Engpass, dann das endgültige Netz. | Ein LSTM (116.941 Gewichte) sagt aus einem Tag den nächsten vorher und beschreibt jeden Tag in 8 Zahlen, je Station 16 für Winter und Sommer. Wiedererkennung über zwei Winter 83 %, nie gesehene Stationen 78 %. |  |
+| 30 | Prognose-LSTM: ein Wächter für neue Veränderungen<br>`30_prognose_lstm.ipynb` | Wie viele Tage Vorgeschichte, was bringt ein LSTM gegenüber dem 7-Tage-Mittel, wie weit kommt ein Wächter ohne Netz? Dann der endgültige Wächter. | 7 Tage sind am besten (U-Form). Ein Encoder-Decoder-LSTM (35.458 Gewichte) sagt für 87 Stationen jeden Tag Rücklauf und Durchfluss vorher. Eingebaute Bypässe von 150 l/h zu 84 % erkannt bei 8 % Fehlalarmen. |  |
 | 31 | XGBoost: Fehlerart und Handlungsklasse je Station<br>`31_xgboost.ipynb` | Die Notebooks 27 bis 30 liefern je eine Sicht auf die Stationen: Kennzahlen, ein gelerntes LSTM-Embedding (Embedding = kurze Zahlenreihe, die das Verhalten einer Station zusammenfasst), die Abweichungen des Wächters. | Sieben Verfahren über sechs Fehlerarten verglichen, alle verschachtelt geprüft, mit Stationen und mit ganzen Straßen ausgelassen. |  |
 | 32 | Wächtervergleich: Normalverhaltensmodell gegen Prognose-LSTM<br>`32_waechtervergleich.ipynb` | Im Projekt gibt es zwei Wächter, die melden, wenn sich an einer Station etwas verändert: Sebs Normalverhaltensmodell (Notebook 20) und Dominiks Prognose-LSTM (Notebook 30). | Sebs Prüfung aus Notebook 20 liegt als Funktion vor, Fall für Fall gegen seine Zahlen kontrolliert (30/43, p = 0,017). | 11, 20 |
 | 33 | Bayes-Diagnose je Station<br>`33_bayes.ipynb` | Frage: Welche Fehlerart erklärt die Messdaten einer Station am besten, und wie sicher ist das? | Ventil/Stellantrieb hat als einzige Fehlerart eine klare Spur: Begehungen mit Ventilbefund bekamen im Mittel 40 % dafür, die übrigen 1 % (n = 10). Im Zweikampf gegen „kein Befund“ AUC 0,92. |  |
@@ -86,6 +87,7 @@ Alle Notebooks liegen in `notebooks/`. Sie sind in acht Teile gegliedert und lau
 | 38 | Modellvergleich: welches Modell für welche Aufgabe?<br>`38_modellvergleich.ipynb` | Fast jedes Notebook hat sein Modell selbst geprüft, mit eigenem Zeitraum, eigenen Stationen und eigener Alarmmenge. Die Ergebnisse sind so nicht vergleichbar. | Kein System ist allein das beste. Beste Kombination: Alarm aus dem Monitoring-Modell (Tagesmonitor), dazu das Prognose-LSTM für plötzliche Fehler; Fehlererkennung und Klasse aus der LSTM-Kette; Netzvergleich als Bestätigung, die die Dringlichkeit hebt. | 11, 20, 27 bis 31 |
 | 39 | Endmodell: Modell Ivelina gegen Modell LSTM<br>`39_endmodell.ipynb` | Im Projekt gibt es zwei fertige Ansätze: Modell Ivelina (Kennlinie und Netzvergleich) und Modell LSTM (neuronales Netz). | Keins der beiden Modelle ist allein besser. Modell Ivelina übernimmt Heizperiode, Erfolgskontrolle und Netzvergleich, Modell LSTM die warmen Tage und die Fehlerart Ventil (mit Ivelinas Fehlerbild als Bestätigung). | 27 bis 31 |
 | 40 | Dashboard: Handlungsempfehlungen auf dem Rohrbaum<br>`40_dashboard.ipynb` | Das fertige Dashboard: Es zeigt auf dem Rohrbaum aus Notebook 35 für jede Hausstation, was die Modelle aus Notebook 39 sagen. | Ein Dashboard mit drei Reitern auf dem Rohrbaum aus Notebook 35: Karte, Handlungsliste und „So funktioniert's“. Jede Anzeige kommt von dem Modell, das in Notebook 39 dafür am besten abgeschnitten hat. | 34, 39, `python -m src.dashboard_daten` |
+| 41 | Feature Engineering: Zeitstruktur und Erklärbarkeit<br>`41_merkmale.ipynb` | Notebook 39 findet bei Filter, Durchfluss und Sollwert nichts, bei der Dämmung ein Muster ohne Erklärung. Liegt das an den Daten, an den Kennzahlen oder an den Labels? | Nur der Ventiltausch hinterlässt eine messbare Spur (Sommernacht-Durchfluss sinkt, AUC 0,81, nach Holm gesichert). Dämmung, Filter und Durchfluss ändern nach der Maßnahme nichts Messbares. Erster physikalischer Hinweis zur Dämmung: Abkühlrate im Stillstand (0,69, nicht gesichert). | 27, 39 |
 
 ## Wichtige Abhängigkeiten
 
@@ -95,6 +97,7 @@ Alle Notebooks liegen in `notebooks/`. Sie sind in acht Teile gegliedert und lau
 - Notebook 26 schreibt den Monitor-Status für Notebook 36.
 - Notebook 34 baut den Netz-Cache `notebooks/daten_cache/` für die Notebooks 35, 36 und 40.
 - Notebook 39 baut die Modellpakete in `models/` für das Dashboard in Notebook 40.
+- Notebook 39 schreibt die Vorhersagen aus Test C nach `outputs/finalvergleich/` für Notebook 41.
 - Notebook 08 braucht `inspections_tidy.csv` aus `python -m src.main`.
 
 ## Alte und neue Nummern
@@ -115,7 +118,6 @@ Im Projektverlauf gab es andere Dateinamen und Nummern. Ältere Notizen und der 
 | `09_stundencluster.ipynb` | `04_kmeans_operatingConditions.ipynb` |
 | `10_clustervalidierung.ipynb` | `09_clustervalidierung.ipynb` |
 | `11_tagescluster.ipynb` | `06_tagesmerkmale_clusteranalyse.ipynb` |
-| `12_gesamtpipeline.ipynb` | `02_gesamtpipeline_rohdaten_bis_wartungsbenchmark.ipynb` |
 | `13_ternaer.ipynb` | `12_ternaer.ipynb` |
 | `14_stationsbilder.ipynb` | `13_stationsbilder.ipynb` |
 | `15_kennlinienmonitor.ipynb` | `14_monitor.ipynb` |
@@ -144,3 +146,4 @@ Im Projektverlauf gab es andere Dateinamen und Nummern. Ältere Notizen und der 
 | `38_modellvergleich.ipynb` | `32_modellvergleich.ipynb` |
 | `39_endmodell.ipynb` | `34_modellvergleich_und_umsetzung_nach_aufgabenstellung.ipynb` |
 | `40_dashboard.ipynb` | `35_dashboard.ipynb` |
+| `41_merkmale.ipynb` | `36_feature_engineering_zeitstruktur_shap.ipynb` |

@@ -27,7 +27,7 @@
 - Im Benchmark ist K-Means mit k = 3 am stabilsten (Bootstrap-ARI 0,71 bzw. 0,60 ohne BHKW). HDBSCAN trägt auf diesen Merkmalen nicht. Kein Cluster ist signifikant maßnahmenreicher (Fisher p ≥ 0,51) (Notebook 08).
 - Stundencluster tragen: k = 5, Silhouette 0,404, Bootstrap-ARI 0,853. Ein Kurzschlussverdacht (hoher Durchfluss bei kleiner Spreizung) umfasst rund 12 % der Stunden und bleibt auch im Kernwinter ein eigener Cluster (Notebook 09, 10).
 - Tagescluster: An Heiztagen entstehen vier, im Sommer drei Typen. Die Tage einer HAST liegen meist im selben Cluster (Median 0,67 bis 0,86 gegen 0,35 bis 0,54 bei Zufall). Die Cluster beschreiben damit eher Stationen als Tageszustände (Notebook 11).
-- Schwach: Im Kernwinter allein fällt die Silhouette der Stundencluster auf 0,315, der Abgleich mit den Begehungen bleibt ohne p < 0,05. Unüberwachte Anomaliescores erreichen nur ROC-AUC 0,49 bis 0,53 und finden höchstens 2 von 10 Proxy-Ereignissen (Notebook 10, 12).
+- Schwach: Im Kernwinter allein fällt die Silhouette der Stundencluster auf 0,315, der Abgleich mit den Begehungen bleibt ohne p < 0,05. Unüberwachte Anomaliescores erreichen nur ROC-AUC 0,49 bis 0,53 und finden höchstens 2 von 10 Proxy-Ereignissen (Notebook 10; Gesamtpipeline, siehe [Negativbefunde](negativbefunde.md)).
 
 ## Teil 4 Stationsbilder und Befunde
 
@@ -49,7 +49,7 @@
 
 - Das Ventil hat ein klares Signal: 9 von 11 Ventilfällen laufen im Sommer nachts durch, gegen 3 von 42 ohne Befund (Notebook 27).
 - K-Means trennt Optimum (70) und schlechter (18) mit Silhouette 0,44. Die Gegenprobe Ventil (p = 0,021) ist nach Holm-Korrektur nicht mehr signifikant (0,13) (Notebook 28).
-- Das LSTM erkennt Stationen über zwei Winter wieder (83 %, nie gesehene 78 %, Zufall 2 %). Ventil AUC 0,89, aber nicht belegt besser als die Sommernacht-Regel (0,85) (Notebook 29).
+- Das LSTM erkennt Stationen über zwei Winter wieder (83 %, nie gesehene 78 %, Zufall 2 %). Ventil AUC 0,89, aber nicht belegt besser als die Sommernacht-Regel (0,85) (Notebook 29). Im Endmodell mit Modellwahl im Lernteil sind es 0,84 (Notebook 39).
 - Das Prognose-LSTM sagt den Rücklauf besser voraus als „wie gestern“ (4,3 K gegen 6,2 K) und findet einen eingerechneten Bypass von 150 l/h zu 84 % bei 8 % Fehlalarmen. An echten Begehungen bemerkt es 16 von 43, Sebs Prüfung 30 von 43 (McNemar p = 0,001) (Notebook 30, 32).
 - Schwach: Filter, Durchfluss und Temperatur liegen bei AUC 0,24 bis 0,64, im Bereich des Zufalls. XGBoost ist nirgends besser als die beste Regression oder Regel. Die Bayes-Diagnose (Ventil AUC 0,92) beruht auf einer Matrix, von der 0 von 132 Feldern mit der ÜZ abgestimmt sind (Notebook 31, 33).
 
@@ -66,6 +66,7 @@
 - Im Vergleich aller Kandidaten bleibt nach Holm über 15 Wächter nur der Tagesmonitor belegt (33 von 43 Begehungen gegen 53 % Kontrolle, p = 0,017 nach Holm). Beim Ventil ist kein Modell belegt besser als die Sommernacht-Regel. Nachbarn und Lage im Netz verbessern nichts (Notebook 38, [Modellvergleich](modellvergleich.md)).
 - Endmodell auf strengerer Zeitachse: Modell Ivelina übernimmt Heizperiode, Erfolgskontrolle und Netzvergleich (18 von 43 als „besser“ gegen 24 %, p = 0,006). Modell LSTM übernimmt warme Tage (Dauerdurchfluss 150 l/h 78 % bei 5 % Fehlalarmen) und die Fehlerart Ventil (AUC 0,84). Dämmung ist nur ein Hinweis (0,78), Kapazität nur per Regel (0,76) (Notebook 39, [Endmodell](endmodell.md)).
 - Das Dashboard zeigt Karte, Handlungsliste und Erklärungen. Unter den ersten 10 nach Ventil-Score hatten 7 einen Ventilbefund, Zufall wäre etwa 2 (Notebook 39, 40).
+- Warum manche Fehlerarten nicht erkennbar sind: Nur der Ventiltausch hinterlässt eine messbare Spur, der Sommernacht-Durchfluss sinkt danach (AUC 0,81, nach Holm gesichert). Nach Dämmung, Filter und Durchfluss ändert sich nichts Messbares, Sollwert (62 %) und Filter (47 %) sind eher Routine als gefundene Fehler. Erster physikalischer Hinweis zur Dämmung ist die Abkühlrate im Stillstand (0,69, nicht gesichert) (Notebook 41, [Was nicht getragen hat](nicht_getragen.md)).
 - Schwach: 43 Begehungen, 11 Ventil- und 9 Vertragsfälle. Viele Vorsprünge sind nicht gesichert. Regelungsoptimierung und echte Frühwarnung sind nicht erkennbar bzw. nicht prüfbar. Ivelinas Referenz steht an 43 % der Testtage am Deckel und muss neu gelernt werden (Notebook 39).
 
 ## Was die ÜZ nutzen kann

@@ -120,6 +120,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbef
     - Was steckt hinter den Stationen 72135442, 80912173 und 68956359, die nach der Begehung mehr Wasser brauchen?
     - Was ist bei Zähler 72167783 passiert? Der Rücklauf stieg nach der Begehung von 18,6 auf 71,0 °C.
     - Was erklärt die großen Sprünge im Herbst 2024 ohne Begehung (72167777, 69513891, 80956410, NB 06)?
+    - Kann das Protokoll künftig festhalten, ob etwas kaputt war, und nicht nur, was gemacht wurde? Sollwert und Filter wurden bei 62 % und 47 % der Begehungen gemacht, eine Spur im Zähler hinterlassen sie nicht (NB 41).
 - Betrieb
     - Welche Alarmlast ist im Betrieb tragbar?
     - Soll die CUSUM-Schwelle bei h = 5 bleiben oder auf h = 8 steigen? h = 8 bringt etwa ein Drittel weniger Alarme.
@@ -141,7 +142,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbef
     - Wie sollen Übergabestationen ohne Kante im Netz behandelt werden?
 - Weitere Daten
     - Gibt es Minutenwerte oder Reglerdaten mit Stellsignal? Ohne sie bleibt Hysterese unsichtbar.
-    - Gibt es das Baujahr je Gebäude?
+    - Gibt es das Baujahr je Gebäude? Es ist der letzte ungeprüfte Störfaktor für das Dämmungsmuster des gelernten Modells (NB 41).
 
 ## Mögliche nächste Schritte
 
@@ -152,4 +153,5 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbef
 - Den Nachtdurchfluss im Sommer als Kennzahl in den Netzvergleich aufnehmen.
 - Den Winter 2025/26 auswerten, sobald Daten für mehr Zähler vorliegen.
 - Neue Begehungen nach vorab festgelegten Regeln auswerten.
+- Die Abkühlrate im Stillstand (Dämmung) und die Filter-Sättigung an neuen Daten prüfen, Richtung vorab festgelegt (NB 41).
 - Die Pipeline auf weitere Teilnetze übertragen.

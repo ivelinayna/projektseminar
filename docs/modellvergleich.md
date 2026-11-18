@@ -7,6 +7,12 @@ wird, und fasst das Ergebnis zusammen.
 - Gerechnet wird in `notebooks/38_modellvergleich.ipynb`.
 - Die Prüfungen stehen in `src/pruefstand.py`.
 - Die Umsetzung als Endmodell steht in `notebooks/39_endmodell.ipynb` (Seite [Endmodell](endmodell.md)).
+- **Neuer Stand:** Notebook 39 wiederholt diesen Vergleich strenger. Der LSTM-Encoder lernt dort ohne die
+  Teststationen, die Schwellen kommen nur aus der Probezeit, die Auslastung zum Anschlusswert fehlt, und das Modell für
+  die Fehlerart wird nur im Lernteil gewählt. Wo Zahlen abweichen, gilt das [Endmodell](endmodell.md). Beispiel
+  Ventil: Die Regression auf Kennzahlen und LSTM-Zahlen kommt hier auf 0,89. Mit Modellwahl im Lernteil kommt die
+  Fehlerart in Notebook 39 auf 0,84, gewählt ist die Regression nur auf den 16 LSTM-Zahlen. Die Gründe stehen in
+  Notebook 39, Abschnitt 16.5.
 
 ## So wird verglichen
 
@@ -313,7 +319,7 @@ Monitoring-Modell gewinnt beim Alarm, die LSTM-Kette beim Erkennen. Das Netz ver
 |---|---|---|
 | 37 GNN | braucht die Kanten- und Positionsdateien aus Notebook 34 in `notebooks/` | eigenes Ergebnis: kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft der Abschnitt „Haus oder Netz“ |
 | 33 Bayes | braucht die Handtabellen unter `data/manual/` | eigenes Ergebnis: Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
-| 12 Gesamtpipeline | eigene Aufbereitung im Notebook, Stundenscores ohne Modul | eigenes Ergebnis: AUC 0,51, höchstens 2 von 10 Ereignissen |
+| Gesamtpipeline (früher 12) | eigene Aufbereitung im Notebook, Stundenscores ohne Modul | eigenes Ergebnis: AUC 0,51, höchstens 2 von 10 Ereignissen |
 | 07 Stationscluster, 08 Clusterbenchmark | Profile über die ganze Historie, also auch nach der Begehung (Datenleck) | eigenes Ergebnis: kein Cluster trennt die Begehungen; verglichen wird K-Means aus Notebook 28 |
 | 03 Labels | Label-Vorschlag, kein Erkenner | dieselben Größen stecken in den README- und Kennzahl-Regeln |
 | 34 Netz, 36 Netzkarte | Karte und Graphaufbau, kein Modell je Station | das Netz selbst ist als Kandidat geprüft (Abschnitt „Haus oder Netz“) |
