@@ -9,8 +9,6 @@ venv/
 env/
 site/
 .git
-.github/
-.ki-lokal/
 **/__pycache__/
 **/.ipynb_checkpoints/
 .pytest_cache/

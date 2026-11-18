@@ -383,8 +383,8 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 - Die Notizdatei mit den offenen Entscheidungen liegt nicht mehr unter
   `docs/`, sondern lokal außerhalb des versionierten Baums. Die Verweise
   darauf wurden aus `.gitignore`, `docs/README.md`, `src/season.py`,
-  `src/weather.py`, `src/jahresvergleich.py`, den Notebooks 06 bis 08 und
-  den Agenten- und Skill-Dateien entfernt statt umgebogen.
+  `src/weather.py`, `src/jahresvergleich.py` und den Notebooks 06 bis 08
+  entfernt statt umgebogen.
 
 ### Hinzugefügt (Vierfeldertafel Zustand vor/nach der Begehung, 2026-09-24)
 
@@ -494,11 +494,8 @@ versioniert wird nicht — Einträge sind datumsbasiert.
   (Commit `a9bae6a` auf `analyse/unsupervised-learning`) war nicht Teil
   von PR #6 — auf `main` wurde die Datei nur manuell gelöscht, aber
   `.gitignore`-Eintrag und alle Verweise (`docs/README.md`,
-  `docs/datensichtung.md`, `src/profile_timeseries.py`, `mkdocs.yml`,
-  Agent- und Skill-Dateien) fehlten noch. Jetzt vollständig nachgezogen.
-- `.github/agents/hast-clusteranalyse.agent.md`: Roadmap-Punkt 3 um
-  das Ergebnis zu Betriebszuständen ergänzt (offene Fragen: Stabilität, Ground-Truth-
-  Join, Jahreszeiten- vs. Betriebszustand-Trennung).
+  `docs/datensichtung.md`, `src/profile_timeseries.py`, `mkdocs.yml`)
+  fehlten noch. Jetzt vollständig nachgezogen.
 
 ### Hinzugefügt (Docs-Hosting 2026-09-22)
 
@@ -554,12 +551,6 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ### Hinzugefügt
 
-- `.github/agents/hast-clusteranalyse.agent.md` — projektspezifischer
-  Agent für die Unsupervised-Learning-Analyse (Datenlage, Befundstand,
-  Roadmap, Konventionen).
-- `.github/skills/` — vier Skills: `clustering-benchmark`,
-  `zeitreihen-features`, `begehungs-wirkungsanalyse`,
-  `projektkonventionen`.
 - `src/window_features.py` — zeitlich aufgelöste Zustandsfeatures
   (14-Tage-Fenster, Coverage- und Zählerwechsel-Flags), Grundlage für
   Cluster-Wanderung um Begehungen. Dazu `tests/test_window_features.py`
