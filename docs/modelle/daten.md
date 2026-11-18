@@ -1,7 +1,7 @@
 # Daten, Labels und Messlatte
 
 Bevor ein Modell lernen kann, muss feststehen, was es erkennen soll, woran man einen Fehler in den
-Zählerdaten überhaupt sieht und wie gut die einfachste Lösung ohne Lernen schon ist. Dieses Kapitel
+Zählerdaten überhaupt sieht und wie gut die einfachste Lösung ohne Lernen schon ist. Diese Seite
 beschreibt die Datenbasis der lernenden Modelle und die Messlatte, an der sie sich messen lassen
 müssen. Gerechnet wird in Notebook 27.
 
@@ -26,7 +26,7 @@ Für die Diagnose entsteht ein Fingerabdruck je Station (siehe [LSTM-Fingerabdru
 
 - **Stundenwerte:** 93 Zähler aus Notebook 00 mit Vorlauf, Rücklauf, Spreizung, Durchfluss und
   Leistung, zusammen 2,1 Millionen Stundenzeilen vom November 2021 bis Juli 2026. 80 % der Stunden sind
-  gemessen.
+  gemessen (siehe [Zählerdaten](../daten_zaehlerdaten.md)).
 - **Außentemperatur:** stündlich von der DWD-Station Kitzingen. Ohne Wetter hielte ein Modell jeden
   kalten Tag für auffällig.
 - **Nur vollständige Tage:** Ein Tag zählt nur, wenn alle 24 Stunden aller Größen gemessen sind. Das
@@ -39,8 +39,8 @@ Für die Diagnose entsteht ein Fingerabdruck je Station (siehe [LSTM-Fingerabdru
 
 ## Labels aus den Begehungen
 
-Was ein Modell erkennen soll, steht im Begehungsprotokoll: 66 Begehungen an 62 Zählern, davon 56 mit
-Zeitreihe. Je Zähler entstehen sechs Labels aus zwei Quellen, den angekreuzten Kästchen und dem
+Was ein Modell erkennen soll, steht im Begehungsprotokoll (siehe [Begehungen](../daten_begehungen.md)).
+Labels gibt es für die 56 Zähler mit datierter Begehung. Je Zähler entstehen sechs Labels aus zwei Quellen, den angekreuzten Kästchen und dem
 Freitext. Viele Befunde stehen nur im Freitext, etwa ein klemmendes Regelventil. Die Kodierung des
 Freitexts stammt aus Notebook 16.
 
@@ -155,7 +155,7 @@ nicht.
 Sie wird trotzdem nicht umgedreht. Hätte man je Befund mehrere Kennzahlen probiert und die beste
 genommen oder die Richtung nach dem Ergebnis gewählt, wäre die Zahl zu gut, weil die Auswahl die
 Antworten schon kennt. Soll doch ausgewählt werden, muss das in jedem Prüfdurchgang nur auf den
-Lernstationen passieren. So machen es die späteren Modelle (siehe [Prüfung](pruefung.md)).
+Lernstationen passieren. So machen es die späteren Modelle (siehe [Prüfdesign und Statistik](../vergleich/pruefung.md)).
 
 **Warum AUC und nicht Accuracy oder F1.** Beim Ventil haben 20 % der Stationen einen Befund. Wer immer
 „kein Befund“ sagt, liegt zu 80 % richtig und findet nichts. Accuracy und F1 hängen zudem an einer
@@ -193,4 +193,4 @@ muss ein Modell mit vielen Gewichten zu viel aus zu wenigen Fällen lernen.
   vom Verhalten einer Station erfasst als eine Handvoll Kennzahlen. Das ist die Idee des
   [LSTM-Fingerabdrucks](lstm.md).
 - Temperatur, Durchfluss und Filter erreicht schon die einfache Kennzahl nicht. Ob überhaupt eine Spur
-  in den Daten steckt, prüft Notebook 41 (siehe [Ergebnis](ergebnis.md)).
+  in den Daten steckt, prüft Notebook 41 (siehe [Was nicht getragen hat](../nicht_getragen.md)).

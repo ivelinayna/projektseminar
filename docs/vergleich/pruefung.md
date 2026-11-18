@@ -1,8 +1,9 @@
 # Prüfung und Statistik
 
 Mit 53 begangenen Stationen, davon 11 mit Ventil- und 9 mit Vertragsbefund, entscheidet die Prüfung
-mehr über die Aussagekraft als das Modell. Dieses Kapitel beschreibt, wie geprüft wurde und warum so.
-Gerechnet wird in den Notebooks 27, 29 bis 32, 38 und 39, die Prüfwerkzeuge stehen in
+mehr über die Aussagekraft als das Modell. Diese Seite beschreibt, wie geprüft wurde und warum so. Die
+Regeln gelten für die [lernenden Modelle](../modelle/index.md) und für beide Vergleiche, den
+[ersten Prüfstand](pruefstand.md) und den [strengen Vergleich](endmodell.md). Gerechnet wird in den Notebooks 27, 29 bis 32, 38 und 39, die Prüfwerkzeuge stehen in
 `src/pruefstand.py` und `src/finalvergleich.py`.
 
 ## Was gemessen wird

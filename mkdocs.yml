@@ -50,9 +50,17 @@ nav:
       - Stationsbilder und Befunde: 
       - Anomalien und Monitoring:
       - Lernende Modelle:
+          - Überblick: modelle/index.md
+          - Daten, Labels und Messlatte: modelle/daten.md
+          - LSTM-Fingerabdruck: modelle/lstm.md
+          - Prognose-LSTM als Wächter: modelle/prognose.md
+          - Fehlerart und Klasse je Station: modelle/klassen.md
       - Netz einbeziehen:
-      - Modelle vergleichen: 
-      - Was nicht getragen hat: 
+      - Modelle vergleichen:
+          - Prüfdesign und Statistik: vergleich/pruefung.md
+          - Erster Prüfstand: vergleich/pruefstand.md
+          - Strenger Vergleich und Entscheidung: vergleich/endmodell.md
+      - Was nicht getragen hat: nicht_getragen.md
      
   - Ergebnisse:
       - Überblick:
@@ -73,6 +81,6 @@ nav:
       - Weiterentwicklung:
       - Offene Fragen an die ÜZ:
 
-  - Aufteilung im Team:
+  - Aufteilung im Team: aufteilung.md
 
   - Anhang: 
