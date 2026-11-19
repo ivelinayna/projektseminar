@@ -29,8 +29,10 @@ pip install jupyterlab
 Aus dem Projektordner:
 
 ```bash
-python -m src.weather        # Außentemperatur vom DWD holen (einmal, danach Cache)
+python -m src.weather        # Außentemperatur vom DWD holen, Stunden- und Tageswerte (einmal, danach Cache)
 python -m src.main           # Graphen, Karten, Begehungstabelle (inspections_tidy.csv)
+python -m src.meter_quality  # Datenqualität je Zähler (für Notebook 17)
+python -m src.detect_real    # Winterkennzahlen je Zähler (für Notebook 17)
 ```
 
 ## 4 Notebooks ausführen

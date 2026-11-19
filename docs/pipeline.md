@@ -32,7 +32,9 @@ Notebooks 01-37 und src-Module
 
 | Befehl | Zweck |
 |---|---|
-| `python -m src.weather` | Außentemperatur der DWD-Station Kitzingen holen, Cache in `data/raw/weather/` |
+| `python -m src.weather` | Außentemperatur der DWD-Station Kitzingen holen: Stundenwerte als Cache in `data/raw/weather/`, Tageswerte für Notebook 10 und 38 in `data/raw/weather/tageswerte/` |
+| `python -m src.meter_quality` | Datenqualität je Zähler (`meter_quality.csv`, für Notebook 17) |
+| `python -m src.detect_real` | Winterkennzahlen je Zähler (`features_real.csv`, für Notebook 17) |
 | `python -m src.main` | Graphen, Karten und Begehungstabelle `inspections_tidy.csv` (für Notebook 08) |
 | `python -m src.main --dashboard` | zusätzlich eine einfache Folium-Karte |
 | `python -m src.aktualisieren` | neue Zählerdaten einspielen: Notebook 00, Wetter, Netzvergleich, Tagesmonitor, Bericht |

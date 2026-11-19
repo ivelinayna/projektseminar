@@ -56,6 +56,8 @@ pip install -r requirements.txt jupyterlab
 #Rohdaten der ÜZ nach data/raw/ kopieren
 python -m src.weather             # Außentemperatur
 python -m src.main                # Netz, Karten, Begehungstabelle
+python -m src.meter_quality       # Datenqualität je Zähler
+python -m src.detect_real         # Winterkennzahlen je Zähler
 jupyter lab                       # dann Notebook 00, danach der Reihe nach
 python -m pytest -q               # Tests
 ```

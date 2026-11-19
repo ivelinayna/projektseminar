@@ -57,8 +57,10 @@ docker compose build
 ### 5 Vorbereiten und Notebooks ausführen
 
 ```bash
-docker compose run --rm jupyter python -m src.weather   # Außentemperatur vom DWD, braucht Internet
-docker compose run --rm jupyter python -m src.main      # Graphen, Karten, Begehungstabelle
+docker compose run --rm jupyter python -m src.weather         # Außentemperatur vom DWD, braucht Internet
+docker compose run --rm jupyter python -m src.main            # Graphen, Karten, Begehungstabelle
+docker compose run --rm jupyter python -m src.meter_quality   # Datenqualität je Zähler (für Notebook 17)
+docker compose run --rm jupyter python -m src.detect_real     # Winterkennzahlen je Zähler (für Notebook 17)
 docker compose up jupyter
 ```
 
