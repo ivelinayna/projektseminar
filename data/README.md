@@ -18,7 +18,8 @@ Diese Dateien von der ÜZ hierher kopieren:
 | `Leitungsverlauf.kml` | Rohrverlauf als KML, optional für die Netz-Notebooks 31 und 33 |
 | `zensus/.../Zensus2022_Baujahr_JZ_100m-Gitter.csv` | Zensus 2022, Gebäude nach Baujahr im 100-m-Gitter, optional (öffentlich, etwa 200 MB) |
 
-- Die Außentemperatur holt `python -m src.weather` selbst. Der Cache liegt in `data/raw/weather/`.
+- Die Außentemperatur holt `python -m src.weather` selbst: Stundenwerte als Cache in `data/raw/weather/`, Tageswerte
+  für die Notebooks 10 und 38 in `data/raw/weather/tageswerte/`.
 - Danach zuerst Notebook 00 ausführen.
 
 ## `data/processed/`
