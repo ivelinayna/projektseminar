@@ -91,7 +91,7 @@ Herkunft des Anschlusswerts bei den 93 HAST (Notebook 00):
   Rohre liegen.
 - **Pfeile:** Jede Kante hat eine Richtung. Es gibt aber 7 Nodes ohne Zufluss und 6 mit mehreren Zuflüssen, also
   keinen einzelnen Startpunkt. Etwa die Hälfte der Pfeile zeigt zur angenommenen Heizzentrale hin statt von ihr weg.
-  Auch der Vorlauf sinkt in Pfeilrichtung nicht häufiger, als er steigt (22 gegen 25 bewertbare Kanten, Notebook 34).
+  Auch der Vorlauf sinkt in Pfeilrichtung nicht häufiger, als er steigt (22 gegen 25 bewertbare Kanten, Notebook 31).
   Was die Pfeile bedeuten, ist offen.
 
 ## Leitungsplan
@@ -111,14 +111,14 @@ Herkunft des Anschlusswerts bei den 93 HAST (Notebook 00):
 - `Leitungsverlauf.kml` enthält mehr Linien: 1289 mit 18,4 km. Jedes Rohr aus den Shapefiles ist darin enthalten.
 - Wo eine KML-Linie ein Shapefile-Rohr überdeckt, bekommt sie dessen Rohrdaten. Das gelingt bei 424 Linien. 865
   Linien mit zusammen 8,6 km bleiben ohne Rohrart.
-- Die KML ist die Grundlage für den Rohrweg zwischen Stationen und für die Netzkarten (Notebooks 34 bis 36).
+- Die KML ist die Grundlage für den Rohrweg zwischen Stationen und für die Netzkarten (Notebooks 31 bis 33).
 
 ### Wärmenetzplan
 
 - `Wärmenetzplan[38].pdf` ist ein Übersichtsplan. Er zeigt ungefähr, wo der Erzeuger liegt und wo Hauptleitungen
   abgehen.
 - Die genaue Lage der Heizzentrale und der Einspeisepunkte fehlt. Die Lage aus dem Plan ist deshalb eine Annahme.
-  Eine Schätzung aus den Vorlauftemperaturen (Notebook 35) landet in ihrer Nähe.
+  Eine Schätzung aus den Vorlauftemperaturen (Notebook 32) landet in ihrer Nähe.
 - Nennweite, Länge und Baujahr je Kante gibt es nur teilweise. Das Netz bleibt damit ein logisches Modell, kein
   hydraulisches.
 
@@ -140,7 +140,7 @@ OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand erf
   Karte für zwei Hausnummern dasselbe Haus.
 - Jeder Zähler der Zuordnung mit Zeitreihe hat eine Koordinate. Ohne Koordinate sind vor allem Nodes der
   Kantendatei ohne Zähler, etwa Abzweige und Schächte. Ihre Lage wird aus den Nachbarn im Netz geschätzt.
-- Adressen ohne Koordinate schreibt Notebook 34 in eine Liste zum Nachtragen
+- Adressen ohne Koordinate schreibt Notebook 31 in eine Liste zum Nachtragen
   (`fehlende_koordinaten_<Zeitpunkt>.ods`).
 - Die Tabelle enthält Adressen und bleibt deshalb lokal.
 

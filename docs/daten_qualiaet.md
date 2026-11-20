@@ -18,7 +18,7 @@ korrigiert, steht unter *Zählerdaten*. Was die Einschränkungen für die Ergebn
 **Was gut ist**
 
 - Nach den Korrekturen in Notebook 00 liegt keine einzige Messzelle außerhalb der Plausibilitätsgrenzen.
-- Die Zählerstände sind fast immer in Ordnung. Unter 89.142 Stationstagen findet Notebook 11 nur 3 Rücksprünge, 24
+- Die Zählerstände sind fast immer in Ordnung. Unter 89.142 Stationstagen findet Notebook 10 nur 3 Rücksprünge, 24
   Tage mit stehendem Zähler trotz Durchfluss und 19 unplausible Tage (über 70 kWh/m³).
 - Echte Lücken sind selten. 84 % der Stunden ohne Messung fallen in die Tageswert-Phase.
 
@@ -55,7 +55,7 @@ korrigiert, steht unter *Zählerdaten*. Was die Einschränkungen für die Ergebn
 - **Fehlerbeginn:** Die Tabelle sagt, was am Termin gefunden wurde, nicht seit wann.
 - **Anlagendaten:** Stationstyp, Zusatzheizung und Personenzahl gibt es nur für begangene Häuser, und sie wurden erst
   bei der Begehung erhoben. Als Merkmal für alle Stationen taugen sie nicht, weil sie verraten würden, ob eine Station
-  begangen wurde (Notebook 37).
+  begangen wurde (Notebook 39).
 - **Nach Juli 2025:** Für spätere Begehungen fehlen meist die Zählerstände danach.
 
 ## Netz und Zuordnung

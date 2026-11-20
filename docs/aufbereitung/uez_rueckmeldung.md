@@ -93,11 +93,11 @@ in mehreren Änderungen eingeflossen.
   Stationen (81050517 und 81062289). Zusammen erreichen sie höchstens 565 kW, in 95 % der Stunden unter 318 kW. Die
   500 kW gelten also für beide zusammen, nicht für jede.
 - Wirkung: Der Anschlusswert fehlt bei 6 statt 8 HAST. 80912166 bekommt 19 kW, 72167784 bekommt 16 kW, jeweils vom
-  alten Zähler an derselben Adresse. Die Lastquoten dieser beiden sind damit gerechnet statt in Notebook 01
+  alten Zähler an derselben Adresse. Die Lastquoten dieser beiden sind damit gerechnet statt in Notebook 07
   geschätzt.
 
 ## Notebooks neu ausgeführt
 
 - Jede Änderung wurde zuerst als Probelauf gerechnet und dann mit einem Neulauf bestätigt (zuletzt mit
   93 HAST). Die Notizen im Notebook sind an diesen Lauf angepasst.
-- Notebook 01 musste danach neu laufen, weil sich mit dem Filtertrend ein Merkmal des Clusterings geändert hat.
+- Notebook 07 musste danach neu laufen, weil sich mit dem Filtertrend ein Merkmal des Clusterings geändert hat.

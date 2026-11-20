@@ -16,7 +16,7 @@ Im Netz selbst wird keine Außentemperatur gemessen. Sie kommt von der nächsten
 
 ### Wofür die Temperatur gebraucht wird
 
-**Temperaturgruppen (Notebook 11):** Jeder Tag bekommt nach seinem Tagesmittel eine Gruppe. Verglichen wird nur
+**Temperaturgruppen (Notebook 10):** Jeder Tag bekommt nach seinem Tagesmittel eine Gruppe. Verglichen wird nur
 innerhalb einer Gruppe, damit kein Sommertag neben einem Wintertag landet.
 
 | Gruppe | Tagesmittel | Tage je Jahr |
@@ -28,11 +28,11 @@ innerhalb einer Gruppe, damit kein Sommertag neben einem Wintertag landet.
 - Tage unter 0 °C gibt es nur 12 bis 30 je Jahr. Deshalb gibt es dafür ein gemeinsames Band.
 - Die Jahre unterscheiden sich: 2022 hatte den wärmsten Sommer (100 Sommertage), 2025 die meisten Frosttage (30).
 
-**Heizgrenze 15 °C (Notebook 20 und 22):** Darüber wird kaum geheizt, die Station macht fast nur Warmwasser. Die
+**Heizgrenze 15 °C (Notebook 18 und 20):** Darüber wird kaum geheizt, die Station macht fast nur Warmwasser. Die
 Kennlinie je Station, also der erwartete Wert bei einer bestimmten Tagesmitteltemperatur, wird deshalb nur an
 Heiztagen gelernt.
 
-**Heizgradstunden (Notebook 21):** Summe aus 15 °C minus Außentemperatur über alle Stunden unter 15 °C, je
+**Heizgradstunden (Notebook 19):** Summe aus 15 °C minus Außentemperatur über alle Stunden unter 15 °C, je
 Kernwinter. Je größer, desto kälter der Winter. So lässt sich zeigen, dass der Winter 2024/25 um 21 % kälter war als
 der Winter 2023/24.
 
@@ -50,7 +50,7 @@ hier. Die dritte, die Koordinaten der Adressen, steht unter *Netz und Zuordnung*
   Blick auf die Messdaten ausgefüllt. Sie werden nicht als Label verwendet, sonst würde sich ein Modell an sich
   selbst prüfen.
 - Die Tabelle enthält keine Adressen, aber vertrauliche Notizen der ÜZ.
-- Verwendet in Notebook 33 (Bayes-Diagnose): als Vorwissen, wie häufig jeder Fehler ist, und als Lösungsschlüssel für
+- Verwendet in Notebook 38 (Bayes-Diagnose): als Vorwissen, wie häufig jeder Fehler ist, und als Lösungsschlüssel für
   die Prüfung.
 
 ### Fehler-Symptom-Matrix (Entwurf)
@@ -71,7 +71,7 @@ hier. Die dritte, die Koordinaten der Adressen, steht unter *Netz und Zuordnung*
   den Daten geprüft, aus denen es stammt.
 - Mit der ÜZ abgestimmt sind 0 von 132 Feldern. Eine Spalte für die Stufe der ÜZ ist vorbereitet. Ist sie gefüllt,
   gilt sie vor dem Entwurf.
-- Verwendet in Notebook 33.
+- Verwendet in Notebook 38.
 
 ## Auskünfte der ÜZ
 
