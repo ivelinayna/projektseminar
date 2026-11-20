@@ -67,7 +67,7 @@ python -m pytest -q               # Tests
 ```bash
 docker compose build
 docker compose up jupyter         # http://localhost:8888
-docker compose up dashboard       # http://localhost:8000/fernwaerme_dashboard_final.html
+docker compose up dashboard       # http://localhost:8000 (Streamlit, vorher Notebook 37)
 docker compose up docs            # http://localhost:8001
 ```
 
@@ -86,4 +86,4 @@ Read the Docs baut die Seite aus `.readthedocs.yaml` und `mkdocs.yml`.
 
 - Rohdaten, Ergebnisse und Modellpakete werden nie committet.
 - Die Doku nennt Stationen nur über die Zählernummer, nie über die Adresse.
-- Die Dashboard-HTML und die Netz-Notebooks 31 bis 33 zeigen Adressen. Sie sind nur für den internen Gebrauch.
+- Das Dashboard (`outputs/dashboard/app/`) und die Netz-Notebooks 31 bis 33 zeigen Adressen. Sie sind nur für den internen Gebrauch.

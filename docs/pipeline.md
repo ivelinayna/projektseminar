@@ -25,7 +25,7 @@ Notebooks 01-37 und src-Module
           |
           |  python -m src.dashboard_daten
           v
-      outputs/dashboard/  ->  Notebook 37  ->  fernwaerme_dashboard_final.html
+      outputs/dashboard/  ->  Notebook 37  ->  outputs/dashboard/app/  ->  streamlit run src/dashboard_app.py
 ```
 
 ## Befehle

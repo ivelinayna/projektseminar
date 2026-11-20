@@ -19,13 +19,13 @@ services:
     ports:
       - "127.0.0.1:8888:8888"
 
-  #Fertiges Dashboard aus Notebook 37: http://localhost:8000/fernwaerme_dashboard_final.html
-  #Die HTML-Datei muss vorher mit Notebook 37 erzeugt worden sein (liegt in notebooks/).
+  #Dashboard (Streamlit-App): http://localhost:8000
+  #Vorher Notebook 37 ausführen, es schreibt die Daten nach outputs/dashboard/app/.
   dashboard:
     <<: *projekt
     ports:
       - "127.0.0.1:8000:8000"
-    command: ["python", "-m", "http.server", "8000", "--directory", "/app/notebooks"]
+    command: ["streamlit", "run", "src/dashboard_app.py", "--server.port", "8000", "--server.address", "0.0.0.0"]
 
   #Dokumentation wie auf Read the Docs: http://localhost:8001
   docs:

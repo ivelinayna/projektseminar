@@ -78,7 +78,7 @@ docker compose run --rm jupyter python -m src.dashboard_daten
 ```
 
 - Danach in Jupyter Notebook 31 (Netz) und Notebook 37 (Dashboard) ausführen.
-- `docker compose up dashboard` und http://localhost:8000/fernwaerme_dashboard_final.html öffnen.
+- `docker compose up dashboard` und http://localhost:8000 öffnen.
 - Die Modellpakete brauchen die LSTM-Gewichte aus den Notebooks 27 und 28 in `notebooks/models/`. Fehlen sie, die
   beiden Notebooks vorher ausführen (auf der CPU mehrere Stunden).
 
@@ -96,7 +96,7 @@ Daten, Ergebnisse und Notebooks bleiben im Projektordner erhalten.
 | Dienst | Befehl | Adresse | Wofür |
 |---|---|---|---|
 | `jupyter` | `docker compose up jupyter` | http://localhost:8888 | Notebooks ausführen |
-| `dashboard` | `docker compose up dashboard` | http://localhost:8000/fernwaerme_dashboard_final.html | fertiges Dashboard aus Notebook 37 ansehen |
+| `dashboard` | `docker compose up dashboard` | http://localhost:8000 | Dashboard (Streamlit) mit den Daten aus Notebook 37 |
 | `docs` | `docker compose up docs` | http://localhost:8001 | diese Doku lokal |
 
 Beenden mit `Strg+C` oder `docker compose down`.
@@ -108,7 +108,7 @@ Beenden mit `Strg+C` oder `docker compose down`.
 | `data/` | Rohdaten und aufbereitete Reihen |
 | `outputs/` | Ergebnisse, Bilder, Dashboard-Daten |
 | `models/` | Modellpakete |
-| `notebooks/` | Notebooks und Dashboard-HTML |
+| `notebooks/` | Notebooks |
 | `src/`, `docs/` | Code und Doku, damit Änderungen sofort wirken |
 
 Alles, was in den Containern in diese Ordner geschrieben wird, liegt danach auch lokal.
@@ -127,7 +127,7 @@ docker compose run --rm jupyter python -m pytest -q
 
 ## Hinweise
 
-- Die Dashboard-HTML enthält Adressen. Sie ist gitignored und nur für den internen Gebrauch.
+- Die Dashboard-Daten in `outputs/dashboard/app/` enthalten Adressen. Sie sind gitignored und nur für den internen Gebrauch.
 - JupyterLab startet ohne Passwort. Die Ports sind deshalb nur auf dem eigenen Rechner erreichbar (`127.0.0.1`). Das
   so lassen und nicht ins Netz freigeben.
 - Das Image wurde für Linux gebaut. Auf Windows und macOS läuft es über Docker Desktop.

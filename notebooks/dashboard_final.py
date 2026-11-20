@@ -7,7 +7,11 @@
 # Die Modellergebnisse kommen fertig aus outputs/dashboard/ (python -m src.dashboard_daten),
 # gelesen über src/dashboard_karte.py. Dieses Skript rechnet keine Modelle.
 #
-# Drei Reiter in einer HTML-Datei:
+# Schreibt die Daten des Dashboards nach outputs/dashboard/app/ (daten.json und messwerte.npy).
+# Angezeigt werden sie von der Streamlit-App: streamlit run src/dashboard_app.py
+# Die alte HTML-Datei entsteht nur noch mit HTML_SCHREIBEN = True.
+#
+# Drei Reiter:
 #   Karte              Färbung nach Dringlichkeit (Start), Maßnahme, Meldungen der Wächter, Potenzial oder
 #                      Messwerten; Hausfenster mit Empfehlung, Verdacht, Stand im Netz, Veränderung, Befund
 #   Handlungsliste     alle Zähler nach Dringlichkeit, Klick zeigt das Haus auf der Karte
@@ -32,6 +36,7 @@ HINTERGRUND = globals().get("HINTERGRUND", "webkarte")
 BG_PUFFER_M = 200               # Rohrplan und Gebäudekanten werden bis zu diesem Abstand um die Häuser mitgezeichnet
 PUNKTE_ZEIGEN = bool(globals().get("PUNKTE_ZEIGEN", False))   # Abzweige und Anschlussstellen als graue Punkte
 MELDUNG_TAGE = 14               # Färbung "Meldungen": Meldungen der letzten so vielen Tage
+HTML_SCHREIBEN = bool(globals().get("HTML_SCHREIBEN", False))  # zusätzlich die alte HTML-Datei schreiben
 
 # ------------------------------------------------------------------ Voraussetzungen prüfen
 fehlt = [n for n in ("serien", "knoten", "G", "pos", "roh") if n not in globals()]
@@ -289,6 +294,18 @@ payload = {"t0": idx[0].strftime("%Y-%m-%dT%H:%M"), "H": H, "M": M, "scale": lis
 daten = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 #wissensstand schreibt "Modell LSTM" in die Ursache, im Dashboard heißt es LSTM-Modell
 daten = daten.replace("Modell LSTM", "LSTM-Modell")
+
+#Daten für die Streamlit-App (src/dashboard_app.py): alles aus payload, die Messreihen als eigene Datei.
+#Enthält wie die HTML-Datei Adressen, liegt deshalb nur in outputs/ (gitignored).
+APP_ORDNER = MODELL_ORDNER / "app"
+APP_ORDNER.mkdir(parents=True, exist_ok=True)
+app_daten = {k: v for k, v in payload.items() if k != "b64"}
+app_daten["erstellt"] = pd.Timestamp.now().isoformat(timespec="seconds")
+(APP_ORDNER / "daten.json").write_text(
+    json.dumps(app_daten, ensure_ascii=False, separators=(",", ":")).replace("Modell LSTM", "LSTM-Modell"),
+    encoding="utf-8")
+np.save(APP_ORDNER / "messwerte.npy", np.frombuffer(raw, dtype="<i2").reshape(M, 4, H))
+print(f"Daten für die Streamlit-App: {APP_ORDNER} | starten mit: streamlit run src/dashboard_app.py")
 
 VORLAGE = r"""<!doctype html>
 <html lang="de">
@@ -1209,10 +1226,10 @@ setH(h);
 </html>
 """
 
-html = VORLAGE.replace("__DATA__", daten)
-Path(AUSGABE).write_text(html, encoding="utf-8")
-
-print(f"Geschrieben: {Path(AUSGABE).resolve()}  ({Path(AUSGABE).stat().st_size / 1e6:.1f} MB)")
+if HTML_SCHREIBEN:
+    html = VORLAGE.replace("__DATA__", daten)
+    Path(AUSGABE).write_text(html, encoding="utf-8")
+    print(f"Geschrieben: {Path(AUSGABE).resolve()}  ({Path(AUSGABE).stat().st_size / 1e6:.1f} MB)")
 print(f"Zeitraum: {idx[0]} bis {idx[-1]} ({H} Stunden)")
 print(f"Häuser mit Zeitreihe: {M} | Nodes: {len(nodes_js)} | Kanten: {len(edges_js)}"
       + (f" ({ohne_pos} ohne Position, nicht gezeigt)" if ohne_pos else ""))
@@ -1225,5 +1242,5 @@ if not ist_dag:
 if clip_count:
     print(f"WARNUNG: {clip_count} Werte lagen außerhalb des Speicherbereichs und wurden gekappt.")
 print("Startzeitpunkt im Dashboard:", idx[start_idx])
-print("Datei im Browser öffnen (Doppelklick). Karte und Hintergrundkacheln brauchen Internet (Leaflet und Webkarte Bayern).")
-print("Achtung: Die Datei enthält Adressen und Zählerdaten. Nicht weitergeben.")
+print("Dashboard starten: streamlit run src/dashboard_app.py (im Repo-Ordner). Die Hintergrundkacheln brauchen Internet.")
+print("Achtung: outputs/dashboard/app/ enthält Adressen und Zählerdaten. Nicht weitergeben.")

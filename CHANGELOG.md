@@ -6,6 +6,16 @@ versioniert wird nicht — Einträge sind datumsbasiert.
 
 ## [Unreleased]
 
+### Geändert (Dashboard als Streamlit-App, 2026-11-20)
+
+- Das Dashboard aus Notebook 37 läuft jetzt in Streamlit: `streamlit run src/dashboard_app.py`. Gleiche drei Reiter,
+  Bedienung und Regeln wie die HTML-Datei. Neue App, hat mit der archivierten Rücklauf-Ampel nur den Dateinamen gemeinsam.
+- `src/dashboard_app_logik.py`: das JavaScript der HTML-Fassung in Python nachgebaut.
+  `tests/test_dashboard_app.py` vergleicht beide Fassungen Zeichen für Zeichen (JavaScript läuft dafür in Node.js).
+- `notebooks/dashboard_final.py` schreibt die Daten nach `outputs/dashboard/app/`. Die HTML-Datei nur noch mit
+  `HTML_SCHREIBEN = True` in Notebook 37.
+- `requirements.txt`: `streamlit`, `streamlit-folium`, `plotly`. Docker-Dienst `dashboard` startet die App auf Port 8000.
+
 ### Entfernt (2026-11-18)
 
 - `src/dashboard_app.py` und `tests/test_dashboard_app.py`: erste Streamlit-App (Rücklauf-Ampel) vom Juli, ersetzt
