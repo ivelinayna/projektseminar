@@ -56,6 +56,12 @@ nicht für eine Entscheidung ohne Prüfung vor Ort.
   optimieren“ trifft keins der beiden.
 - Dämmung: Nur das gelernte Modell findet ein Muster. Der Vorsprung vor der besten Einzelregel (+0,17 [−0,04; +0,38])
   ist knapp nicht gesichert, die Ursache physikalisch ungeklärt. Deshalb nur ein Hinweis mit niedriger Dringlichkeit.
+  Wie das Muster aussieht, zeigt Notebook 36 an der Regression auf den Kennzahlen, weil sich die LSTM-Zahlen nicht
+  deuten lassen: mehrere schwache Hinweise zusammen, ein kälterer Rücklauf im Winter, eine kleine Spreizung in
+  Sommernächten und eine große Streubreite der Betriebspunkte. Keiner trennt allein, deshalb kommt die beste
+  Einzelregel nur auf 0,61. Das Muster ist in allen fünf Prüfteilen gleich und bleibt auch ohne die Ventilstationen und
+  innerhalb von Stationstyp, Größe und Zeitraum der Begehung erhalten. Ein Teil davon beschreibt eher, wo gedämmt
+  wurde, nämlich an gut laufenden Stationen.
 - Kapazität: Dem gelernten Modell fehlt die Auslastung zum alten Vertrag, deshalb bleibt die Regel.
 
 **Lage im Netz.** Netzvergleich und Potenzial beschreiben eine Station, sagen die Wirkung einer Begehung aber kaum

@@ -151,7 +151,7 @@ war um etwa 0,05 zu optimistisch und wird nicht behauptet.
 
 In der inneren Prüfung lagen zwei Kandidaten gleichauf: die Regression nur auf den 16 LSTM-Zahlen und
 die auf Kennzahlen und LSTM-Zahlen. Gewählt ist die Regression nur auf den LSTM-Zahlen, aus zwei Gründen.
-Sie ist einfacher. Und sie vermeidet ein Leck über das Vorwissen: Die 12 Kennzahlen sind physikalisch
+Sie ist einfacher: 16 statt 28 Eingaben bei 53 Stationen, also weniger Gefahr, Zufälle mitzulernen. Und sie vermeidet ein Leck über das Vorwissen: Die 12 Kennzahlen sind physikalisch
 begründet, wurden aber festgelegt, als die Begehungsprotokolle und Fälle wie 68956351 schon bekannt
 waren. Die 16 LSTM-Zahlen hat das Netz dagegen ohne Befund-Labels gelernt. Die Kennzahlen bleiben
 trotzdem wichtig: Mit ihnen wird ein Verdacht im Hausfenster des Dashboards begründet.
