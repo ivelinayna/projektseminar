@@ -39,6 +39,11 @@ Notebooks 01-37 und src-Module
 | `python -m src.main` | Graphen, Karten und Begehungstabelle `inspections_tidy.csv` (für Notebook 08) |
 | `python -m src.main --dashboard` | zusätzlich eine einfache Folium-Karte |
 | `python -m src.aktualisieren` | neue Zählerdaten einspielen: Notebook 00, Wetter, Netzvergleich, Tagesmonitor, Bericht, Dashboard |
+| `python -m src.betrieb liste-sichern` | Handlungsliste mit Datum sichern (läuft in `src.aktualisieren` mit) |
+| `python -m src.betrieb vorlage` | Excel-Vorlage für das Begehungsprotokoll |
+| `python -m src.betrieb protokolle` | ausgefüllte Begehungsprotokolle einlesen und prüfen |
+| `python -m src.betrieb pruefung-planen` | Stichprobe für die Prüfung nach vorn festlegen |
+| `python -m src.betrieb pruefung-auswerten` | Stichprobe mit dem exakten Test auswerten |
 | `python -m src.prognose_waechter --bauen --gegenprobe` | Paket Prognose-LSTM bauen |
 | `python -m src.normalmodell_waechter --bauen` | Paket Tagesmonitor bauen |
 | `python -m src.fehlerklassen --bauen --gegenprobe` | Paket Folie-5-Klassen bauen |
@@ -148,6 +153,7 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 | `dashboard_karte` | Modellergebnisse in die Netzkarte | 37 |
 | `dashboard_map` | einfache Folium-Karte | nur Befehlszeile |
 | `aktualisieren` | neue Daten in einem Schritt einspielen | nur Befehlszeile |
+| `betrieb` | Listenverlauf, Begehungsprotokolle, Prüfung nach vorn | nur Befehlszeile |
 | `main` | Gesamtablauf Netz, Karten, Begehungstabelle | nur Befehlszeile |
 
 ## Modellpakete

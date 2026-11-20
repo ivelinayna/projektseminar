@@ -37,6 +37,7 @@ nav:
       - Start mit Docker: docker.md
       - Lokaler Start ohne Docker: lokal.md
       - Ausführung bis zum Dashboard: ausfuehrung.md
+      - Betrieb bei der ÜZ: betrieb.md
       - Schnellstart: schnellstart.md
       - Befehle und Module: pipeline.md
 
