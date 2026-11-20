@@ -27,10 +27,8 @@ extra_css:
   - stylesheets/extra.css
 
 nav:
-  - Startseite: index.md
-
   - Einleitung:
-      - Ausgangslage: ausgangslage.md
+      - Ausgangslage: index.md
       - Aufgabe und Ziel: aufgabe_und_ziel.md
       - Aufbau der Arbeit: aufbau.md
 
