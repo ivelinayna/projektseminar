@@ -3,11 +3,13 @@
 Diese Seite beschreibt den Weg von den Rohdaten bis zur fertigen Dashboard-Datei. Vorausgesetzt ist, dass die Daten
 der ÜZ in `data/raw/` liegen (siehe [Vorbereitung](vorbereitung.md)) und die Umgebung läuft, mit Docker oder lokal.
 
-Die Befehle stehen hier für den lokalen Start. Mit Docker gilt:
-
-- Befehle bekommen `docker compose run --rm jupyter` davor, also z. B.
+- **Befehle** werden im Terminal im Projektordner eingegeben, einzeln und nacheinander (siehe
+  [Befehle im Terminal ausführen](vorbereitung.md#befehle-im-terminal-ausfuhren)). Sie stehen hier für den lokalen
+  Start. Mit Docker wird jedem Befehl `docker compose run --rm jupyter` vorangestellt, z. B.
   `docker compose run --rm jupyter python -m src.weather`.
-- Notebooks laufen im JupyterLab aus `docker compose up jupyter` (http://localhost:8888).
+- **Notebooks** werden in JupyterLab einzeln geöffnet und über *Run → Run All Cells* ausgeführt. Sie starten sich nicht
+  gegenseitig. Wie JupyterLab gestartet wird, beschreiben [Start mit Docker](docker.md#4-notebooks-ausfuhren) und
+  [Lokaler Start ohne Docker](lokal.md#4-notebooks-ausfuhren).
 
 ## Überblick
 
@@ -59,7 +61,6 @@ python -m src.detect_real    #Winterkennzahlen je Zähler
 - Es liest alle Zählerexporte, korrigiert die bekannten Exportfehler und schreibt je Zähler eine Stundenreihe nach
   `data/processed/real_meters/`.
 - Alle anderen Notebooks und Befehle lesen nur diese Reihen, nie die Rohdateien direkt.
-- Dauer: unter 1 Minute.
 
 ## 3 Notebooks 25 bis 29
 
@@ -121,7 +122,7 @@ python -m src.dashboard_daten
 
 - Wendet die aktuellen Pakete auf die Stundenreihen an, ohne neu zu lernen.
 - Schreibt Wächter-Meldungen, Fehlerklassen, Netzvergleich, Empfehlung und Netzeffizienz nach `outputs/dashboard/`.
-- Nur Zählernummern, keine Adressen. Dauer: wenige Minuten.
+- Die Tabellen enthalten nur Zählernummern, keine Adressen.
 
 ## 7 Notebook 31: Netz
 
@@ -166,25 +167,40 @@ ausgeführt, sind folgende Abhängigkeiten zu beachten:
 | 36 | Notebook 35 (Vorhersagen in `outputs/finalvergleich/`) |
 | 38 | zwei Handtabellen in `data/manual/` (siehe [Vorbereitung](vorbereitung.md)) |
 
-Was jedes Notebook macht und herausfindet, steht unter [Überblick der Notebooks](notebooks.md).
+Fragestellung und Ergebnis der einzelnen Notebooks beschreibt der [Überblick der Notebooks](notebooks.md).
 
 ## Neue Zählerdaten einspielen
 
-Für den Betrieb nach dem Projekt gibt es einen Befehl, der die Überwachung in einem Schritt auf den neuesten Stand
-bringt:
+Liefert die ÜZ neue Zählerexporte, bringt ein einziger Befehl Überwachung und Dashboard auf den neuen Stand. Die
+Modelle lernen dabei nicht neu, die vorhandenen Modellpakete werden auf die neuen Daten angewendet.
+
+**Schritt 1:** Die neuen Exporte nach `data/raw/` kopieren, zusätzlich zu den vorhandenen Dateien.
+
+**Schritt 2:** Im Terminal im Projektordner ausführen:
 
 ```bash
 python -m src.aktualisieren
 ```
 
-1. Neue Exporte der ÜZ nach `data/raw/` legen.
-2. Der Befehl führt Notebook 00 neu aus, holt die Außentemperatur nach und rechnet Netzvergleich, Tagesmonitor und
-   Priorität.
-3. Ergebnis unter `outputs/`: Stationsblätter, `status.csv` und ein Kurzbericht `bericht.txt` mit Priorität, frischen
-   Alarmen und Änderungen seit dem letzten Lauf.
+Der Befehl arbeitet nacheinander folgende Schritte ab und zeigt im Terminal an, bei welchem er gerade ist:
 
-Das Dashboard wird dabei nicht neu gebaut. Dafür danach die Schritte 6 bis 8 wiederholen. Die Modellpakete bleiben
-dieselben, sie werden nur auf die neuen Daten angewendet.
+| Schritt | was passiert |
+|---|---|
+| 1 | Notebook 00 bereitet die Stundenreihen neu auf |
+| 2 | die Außentemperatur wird vom DWD nachgeladen |
+| 3 | Netzvergleich, Tagesmonitor und Priorität werden berechnet, die Stationsblätter und `status.csv` geschrieben |
+| 4 | ein Kurzbericht `bericht.txt` fasst Priorität, aktuelle Alarme und Änderungen seit dem letzten Lauf zusammen |
+| 5 | die Modellpakete werden auf die neuen Daten angewendet (`src.dashboard_daten`) |
+| 6 | Notebook 31 aktualisiert den Netz-Cache mit den neuen Stundenreihen |
+| 7 | Notebook 37 schreibt das Dashboard `notebooks/fernwaerme_dashboard_final.html` neu |
+
+- Die Notebooks laufen dabei im Hintergrund, JupyterLab muss nicht geöffnet sein. Die Notebooks selbst werden nicht
+  verändert, ihre Ausgaben stehen in `outputs/aktualisierung/`.
+- Der Zeitraum der Karte reicht bis zum Ende der Messdaten, sobald die Mehrheit der Zähler neuere Daten hat.
+- Voraussetzung für die Schritte 5 bis 7 sind die Modellpakete in `models/` (siehe Abschnitte 4 und 5
+  oben) und die Handliste mit Koordinaten. Fehlen die Pakete, bricht der Befehl nach Schritt 4 mit einem Hinweis ab. Bericht und
+  Stationsblätter sind dann bereits geschrieben.
+- Mit `python -m src.aktualisieren --ohne-dashboard` laufen nur die Schritte 1 bis 4.
 
 ## Tests
 

@@ -17,25 +17,52 @@ Wege. Danach folgt [Start mit Docker](docker.md) oder [Lokaler Start ohne Docker
   laden die Notebooks sie, statt neu zu lernen.
 - Ohne Gewichte lernen die Notebooks 27 und 28 neu. Mit Grafikkarte dauert das Minuten, auf dem Prozessor mehrere
   Stunden.
-- Auf einem Mac wird die Grafikkarte auch lokal nicht genutzt.
 
 ## Voraussetzungen
 
 - Git oder alternativ der ZIP-Download von GitHub
 - Internetzugang beim ersten Lauf: `python -m src.weather` lädt die Außentemperatur vom DWD, die Karte im Dashboard
   lädt Kartenkacheln.
-- Speicherplatz: Die Rohdaten umfassen gut 400 MB. Nach einem vollständigen Lauf kommen etwa 400 MB aufbereitete Daten
-  und 150 MB Ergebnisse hinzu, mit Docker zusätzlich rund 5 GB für das Image.
+- Speicherplatz: Die Rohdaten umfassen ca. 400 MB. Nach einem vollständigen Lauf kommen ca. 400 MB aufbereitete Daten
+  und ca. 150 MB Ergebnisse hinzu, mit Docker zusätzlich ca. 5 GB für das Image.
 - Für Docker mindestens 4 GB Arbeitsspeicher (siehe [Start mit Docker](docker.md))
 
-## Projekt holen
+## Befehle im Terminal ausführen
+
+Alle Befehle in dieser Dokumentation werden in einem Terminal eingegeben, einem Fenster für Textbefehle.
+
+| Betriebssystem | Programm | so zu finden |
+|---|---|---|
+| Windows | PowerShell | Startmenü, nach „PowerShell“ suchen |
+| macOS | Terminal | Spotlight (Cmd+Leertaste), nach „Terminal“ suchen |
+| Linux | Terminal | Anwendungsmenü |
+
+- Jede Zeile in einem grauen Kasten ist ein eigener Befehl. Die Befehle werden einzeln und nacheinander ausgeführt:
+  Zeile kopieren, im Terminal einfügen, mit Enter bestätigen und warten, bis der Befehl fertig ist. Fertig ist er, wenn
+  wieder die leere Eingabezeile erscheint.
+- Text hinter `#` ist eine Erläuterung. Er kann mitkopiert werden, das Terminal ignoriert ihn.
+- Alle Befehle beziehen sich auf den Projektordner. Ein neu geöffnetes Terminal steht im persönlichen Ordner. Mit `cd`
+  wird in den Projektordner gewechselt, z. B. `cd projektseminar`.
+- Manche Befehle starten ein Programm, das weiterläuft, z. B. JupyterLab. Solange es läuft, nimmt dieses Terminal keine
+  weiteren Befehle an. Weitere Befehle werden dann in einem zweiten Terminalfenster ausgeführt, nach einem erneuten
+  `cd` in den Projektordner. `Strg+C` im ersten Fenster beendet das Programm.
+
+## Repository herunterladen
+
+**Mit Git:** Im Terminal ausführen:
 
 ```bash
 git clone https://github.com/ivelinayna/projektseminar.git
 cd projektseminar
 ```
 
-Alle Befehle in dieser Dokumentation werden in diesem Ordner ausgeführt.
+`git clone` lädt das Repository in einen neuen Ordner `projektseminar`, `cd projektseminar` wechselt in diesen Ordner.
+Unter Windows muss Git vorher installiert werden ([git-scm.com](https://git-scm.com/)).
+
+**Ohne Git:** Auf der GitHub-Seite des Projekts *Code → Download ZIP* wählen, die Datei entpacken und im Terminal mit
+`cd` in den entpackten Ordner wechseln.
+
+Dieser Ordner ist der Projektordner. Alle weiteren Befehle werden dort ausgeführt.
 
 ## Daten der ÜZ ablegen
 
@@ -85,12 +112,13 @@ Lauf nach `data/raw/weather/`. Danach liest das Projekt aus diesem Zwischenspeic
 | `notebooks/daten_cache/` | Netz-Cache | Notebook 31 |
 | `notebooks/fernwaerme_dashboard_final.html` | fertiges Dashboard | Notebook 37 |
 
-Alle diese Ordner und Dateien sind gitignored.
+Diese Ordner und Dateien sind in der Datei `.gitignore` eingetragen. Git übernimmt sie deshalb nicht ins Repository,
+sie bleiben nur auf dem eigenen Rechner.
 
 ## Datenschutz
 
-- Rohdaten, Zwischenergebnisse, Gewichte und Modellpakete werden nie committet. Sie stammen aus Firmendaten der ÜZ und
-  enthalten Zählernummern.
+- Rohdaten, Zwischenergebnisse, Gewichte und Modellpakete werden nie ins Repository übernommen (committet). Sie stammen
+  aus Firmendaten der ÜZ und enthalten Zählernummern.
 - Die Netz-Notebooks 31 bis 33 und die Dashboard-HTML zeigen Adressen. Sie sind nur für den internen Gebrauch bestimmt.
-- Vor jedem Commit `git status` prüfen. Erscheint dort eine Datei aus `data/`, `outputs/` oder `models/`, ist die
-  `.gitignore` unvollständig.
+- Wer am Code mitarbeitet, prüft vor jedem Commit mit `git status`, welche Dateien übernommen werden. Erscheint dort
+  eine Datei aus `data/`, `outputs/` oder `models/`, ist die `.gitignore` unvollständig.

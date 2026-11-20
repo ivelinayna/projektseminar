@@ -1,9 +1,14 @@
 # Start mit Docker
 
-Mit Docker läuft das Projekt ohne eigene Python-Installation. Ein Image enthält Python, alle Pakete, die Notebooks und
-den Code. Die Daten bleiben außerhalb des Images und werden beim Start als Ordner eingehängt. Dadurch arbeiten alle
-Rechner mit denselben Paketständen. Vorher die Schritte unter [Vorbereitung](vorbereitung.md) erledigen: Projekt
-holen, Daten nach `data/raw/` legen.
+Mit Docker läuft das Projekt ohne eigene Python-Installation. Docker baut dafür einmalig ein sogenanntes **Image**: eine
+fertig eingerichtete Umgebung mit Python, allen Paketen, den Notebooks und dem Code. Aus diesem Image startet Docker bei
+Bedarf einen **Container**, in dem die Befehle und JupyterLab laufen. Die Daten bleiben außerhalb des Images im
+Projektordner und werden beim Start in den Container eingebunden. Dadurch arbeiten alle Rechner mit denselben
+Paketständen.
+
+Vorausgesetzt sind die Schritte unter [Vorbereitung](vorbereitung.md): Repository herunterladen, Daten nach
+`data/raw/` legen. Wie Befehle im Terminal eingegeben werden, steht dort unter
+[Befehle im Terminal ausführen](vorbereitung.md#befehle-im-terminal-ausfuhren).
 
 ## 1 Docker installieren
 
@@ -11,66 +16,117 @@ holen, Daten nach `data/raw/` legen.
   Docker Desktop muss laufen, solange mit dem Projekt gearbeitet wird.
 - **Linux:** Docker Engine mit dem Compose-Plugin über die Paketquellen der Distribution installieren.
 - **macOS ohne Administratorrechte:** Alternativ zu Docker Desktop lässt sich Colima verwenden
-  (`brew install colima docker docker-compose`). Gestartet wird es mit
+  (`brew install colima docker docker-compose`), siehe unten.
 
-  ```bash
-  colima start --cpu 4 --memory 4 --mount "$HOME/projektseminar:w"
-  ```
+Colima wird gestartet mit
 
-  Der Pfad hinter `--mount` ist der eigene Projektordner. `colima stop` beendet die Umgebung.
+```bash
+colima start --cpu 4 --memory 4 --mount "$HOME/projektseminar:w"
+```
 
-Ob die Installation vollständig ist, zeigen
+Der Pfad hinter `--mount` ist der eigene Projektordner. `colima stop` beendet die Umgebung.
+
+Ob die Installation vollständig ist, zeigen die folgenden zwei Befehle im Terminal. Beide geben eine Versionsnummer aus:
 
 ```bash
 docker --version
 docker compose version
 ```
 
-Das Image belegt rund 5 GB Speicherplatz. Docker sollte mindestens 4 GB Arbeitsspeicher zur Verfügung haben, in
+Das Image belegt ca. 5 GB Speicherplatz. Docker sollte mindestens 4 GB Arbeitsspeicher zur Verfügung haben, in
 Docker Desktop einstellbar unter Settings → Resources.
 
 ## 2 Image bauen
+
+Im Terminal im Projektordner ausführen:
 
 ```bash
 docker compose build
 ```
 
-- Der erste Bau dauert einige Minuten.
+- Der erste Bau dauert einige Minuten. Am Ende erscheint wieder die Eingabezeile.
 - PyTorch wird ohne Unterstützung für Grafikkarten installiert. Das hält das Image deutlich kleiner.
 - Ein neuer Bau ist nur nötig, wenn sich `requirements.txt` oder das `Dockerfile` ändern. Code und Notebooks werden
-  eingehängt, Änderungen daran wirken sofort.
+  aus dem Projektordner eingebunden, Änderungen daran wirken sofort.
 
-## 3 Vorbereiten und Notebooks ausführen
+## 3 Vorbereitende Befehle
+
+Die folgenden vier Befehle nacheinander im Terminal ausführen und jeweils warten, bis die Eingabezeile wieder
+erscheint:
 
 ```bash
 docker compose run --rm jupyter python -m src.weather         #Außentemperatur vom DWD, braucht Internet
 docker compose run --rm jupyter python -m src.main            #Netzgraph, Karten, Begehungstabelle
 docker compose run --rm jupyter python -m src.meter_quality   #Datenqualität je Zähler (für Notebook 17)
 docker compose run --rm jupyter python -m src.detect_real     #Winterkennzahlen je Zähler (für Notebook 17)
+```
+
+`docker compose run --rm jupyter` startet für jeden Befehl einen Container, führt den Befehl darin aus und entfernt
+den Container danach wieder. Die Ergebnisse landen im Projektordner.
+
+## 4 Notebooks ausführen
+
+**JupyterLab starten:** Im Terminal ausführen:
+
+```bash
 docker compose up jupyter
 ```
 
-- JupyterLab ist danach unter http://localhost:8888 erreichbar.
-- Zuerst `notebooks/1_daten/00_daten.ipynb` ausführen, danach die übrigen Notebooks in Nummernfolge (siehe
-  [Ausführung bis zum Dashboard](ausfuehrung.md)).
-- `Strg+C` im Terminal beendet JupyterLab.
+Das Terminal zeigt danach fortlaufend Meldungen von JupyterLab. Dieses Fenster offen lassen. Solange JupyterLab läuft,
+nimmt es keine weiteren Befehle an.
 
-## 4 Dashboard
+**JupyterLab öffnen:** Im Browser http://localhost:8888 aufrufen. Links erscheint der Projektordner.
+
+**Ein Notebook ausführen:**
+
+1. Links den Ordner `notebooks` und darin `1_daten` öffnen, dann `00_daten.ipynb` per Doppelklick öffnen.
+2. Im Menü *Run → Run All Cells* wählen.
+3. Warten, bis das Notebook durchgelaufen ist. Solange eine Zelle rechnet, steht links neben ihr `[*]`. Ist das
+   Notebook fertig, steht neben jeder Zelle eine Zahl.
+
+Danach die übrigen Notebooks auf dieselbe Weise öffnen und ausführen, in Nummernfolge. Die Notebooks starten sich nicht
+gegenseitig. Welche Notebooks für das Dashboard nötig sind, steht unter [Ausführung bis zum Dashboard](ausfuehrung.md).
+
+**JupyterLab beenden:** Im Terminalfenster `Strg+C` drücken.
+
+## 5 Dashboard erzeugen
+
+Voraussetzung: Die Notebooks 00 und 25 bis 29 sind ausgeführt. Läuft JupyterLab noch, die folgenden Befehle in einem
+zweiten Terminalfenster ausführen. Dort zuerst mit `cd` in den Projektordner wechseln.
+
+**Schritt 1:** Modellpakete bauen, die Befehle wieder einzeln nacheinander:
 
 ```bash
 docker compose run --rm jupyter python -m src.prognose_waechter --bauen --gegenprobe
 docker compose run --rm jupyter python -m src.normalmodell_waechter --bauen
 docker compose run --rm jupyter python -m src.fehlerklassen --bauen --gegenprobe
+```
+
+**Schritt 2:** In JupyterLab Notebook 35 ausführen (empfohlen, siehe
+[Ausführung](ausfuehrung.md#5-notebook-35-endmodell)).
+
+**Schritt 3:** Daten für das Dashboard berechnen:
+
+```bash
 docker compose run --rm jupyter python -m src.dashboard_daten
 ```
 
-- Die Modellpakete setzen die Ausgaben der Notebooks 25 bis 29 voraus, darunter die LSTM-Gewichte aus den Notebooks
-  27 und 28 in `notebooks/models/`. Ohne Grafikkarte lernen diese beiden Notebooks mehrere Stunden.
-- Danach in JupyterLab Notebook 31 (Netz) und Notebook 37 (Dashboard) ausführen. Die vollständige Reihenfolge mit
-  Notebook 35 steht unter [Ausführung bis zum Dashboard](ausfuehrung.md).
-- `docker compose up dashboard` stellt das Ergebnis unter http://localhost:8000/fernwaerme_dashboard_final.html bereit.
+**Schritt 4:** In JupyterLab Notebook 31 und danach Notebook 37 ausführen. Notebook 37 schreibt die Datei
+`notebooks/fernwaerme_dashboard_final.html`.
 
-## 5 Aufräumen
+**Schritt 5:** Dashboard ansehen. Die Datei lässt sich direkt per Doppelklick im Browser öffnen. Alternativ stellt
+Docker sie bereit:
+
+```bash
+docker compose up dashboard
+```
+
+Das Dashboard ist danach unter http://localhost:8000/fernwaerme_dashboard_final.html erreichbar.
+
+Die Modellpakete setzen die LSTM-Gewichte aus den Notebooks 27 und 28 in `notebooks/models/` voraus. Ohne Grafikkarte
+lernen diese beiden Notebooks mehrere Stunden.
+
+## 6 Aufräumen
 
 ```bash
 docker compose down                  #Container stoppen
@@ -81,15 +137,16 @@ Daten, Ergebnisse und Notebooks bleiben im Projektordner erhalten.
 
 ## Dienste
 
-| Dienst | Befehl | Adresse | Zweck |
+Docker stellt drei Dienste bereit. Jeder wird mit einem eigenen Befehl gestartet und läuft, bis er mit `Strg+C` oder
+`docker compose down` beendet wird.
+
+| Dienst | Befehl | Adresse im Browser | Zweck |
 |---|---|---|---|
 | `jupyter` | `docker compose up jupyter` | http://localhost:8888 | Notebooks ausführen |
 | `dashboard` | `docker compose up dashboard` | http://localhost:8000/fernwaerme_dashboard_final.html | fertiges Dashboard aus Notebook 37 ansehen |
 | `docs` | `docker compose up docs` | http://localhost:8001 | diese Dokumentation lokal |
 
-Beendet werden die Dienste mit `Strg+C` oder `docker compose down`.
-
-## Eingehängte Ordner
+## Eingebundene Ordner
 
 | Ordner | Inhalt |
 |---|---|
@@ -103,17 +160,18 @@ Alles, was die Container in diese Ordner schreiben, liegt danach auch im Projekt
 
 ## Einzelne Befehle im Container
 
+Jeder Befehl aus dieser Dokumentation lässt sich in Docker ausführen, indem `docker compose run --rm jupyter`
+vorangestellt wird, z. B.:
+
 ```bash
-docker compose run --rm jupyter python -m src.weather
-docker compose run --rm jupyter python -m src.main
 docker compose run --rm jupyter python -m src.aktualisieren
-docker compose run --rm jupyter python -m src.dashboard_daten
 docker compose run --rm jupyter python -m pytest -q
 ```
 
 ## Hinweise
 
-- Die Dashboard-HTML enthält Adressen. Sie ist gitignored und nur für den internen Gebrauch bestimmt.
-- Die Ports sind nur auf dem eigenen Rechner erreichbar (`127.0.0.1`) und sollten nicht im Netz freigegeben werden.
+- Die Dashboard-HTML enthält Adressen. Sie wird nicht ins Repository übernommen und ist nur für den internen Gebrauch
+  bestimmt.
+- Die Adressen `localhost` sind nur auf dem eigenen Rechner erreichbar und sollten nicht im Netz freigegeben werden.
 - Im Container rechnet PyTorch auf dem Prozessor. Liegen keine Gewichte in `notebooks/models/`, lernen die Notebooks
   27 und 28 neu, was mehrere Stunden dauert.

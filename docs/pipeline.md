@@ -38,7 +38,7 @@ Notebooks 01-37 und src-Module
 | `python -m src.detect_real` | Winterkennzahlen je Zähler (`features_real.csv`, für Notebook 17) |
 | `python -m src.main` | Graphen, Karten und Begehungstabelle `inspections_tidy.csv` (für Notebook 08) |
 | `python -m src.main --dashboard` | zusätzlich eine einfache Folium-Karte |
-| `python -m src.aktualisieren` | neue Zählerdaten einspielen: Notebook 00, Wetter, Netzvergleich, Tagesmonitor, Bericht |
+| `python -m src.aktualisieren` | neue Zählerdaten einspielen: Notebook 00, Wetter, Netzvergleich, Tagesmonitor, Bericht, Dashboard |
 | `python -m src.prognose_waechter --bauen --gegenprobe` | Paket Prognose-LSTM bauen |
 | `python -m src.normalmodell_waechter --bauen` | Paket Tagesmonitor bauen |
 | `python -m src.fehlerklassen --bauen --gegenprobe` | Paket Folie-5-Klassen bauen |
