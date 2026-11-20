@@ -2,8 +2,8 @@
 
 ## Dominik
 
-**Bereich:** lernende Modelle und Modellvergleich (*Vorgehen → Lernende Modelle*, *Modelle vergleichen*, Teile von
-*Was nicht getragen hat*).
+**Bereich:** lernende Modelle und Modellvergleich (*Vorgehen → Lernende Modelle*; *Modelle vergleichen* mit
+Prüfdesign, Erstem Prüfstand, Strengem Vergleich und Modellvergleich im Detail; Teile von *Was nicht getragen hat*).
 
 - **Notebooks:** 25 (Daten, Labels und Messlatte), 26 (Einstufung mit K-Means), 27 (LSTM-Fingerabdruck),
   28 (Prognose-LSTM), 29 (XGBoost und Klassen nach Folie 5), 30 (Wächtervergleich), 34 (Modellvergleich),
