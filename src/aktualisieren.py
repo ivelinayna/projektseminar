@@ -16,9 +16,21 @@ Der Lauf macht nacheinander, was sonst von Hand passiert:
 4. Kurzbericht `bericht.txt`: Priorität und Potenzial im jüngsten
    Kernwinter, Alarme der letzten Tage, Änderungen gegenüber dem letzten
    Lauf.
+5. Dashboard-Daten: die aktuellen Modellpakete auf die neuen Stundenreihen
+   anwenden (`dashboard_daten`), ohne neu zu lernen.
+6. NB 31 ausführen: Der Netz-Cache enthält auch die Stundenreihen, die das
+   Dashboard für die Messwerte auf der Karte nutzt.
+7. NB 37 ausführen: schreibt `notebooks/fernwaerme_dashboard_final.html`.
+   Das Kartenende rückt mit, sobald die Mehrheit der Zähler neuere Daten
+   hat (`karten_ende`).
 
-Netzkarte (NB 24 und NB 33) gehört nicht dazu, die wird bei Bedarf danach
-in Jupyter ausgeführt. Alles ohne Adressen, nur Zählernummern.
+Die Schritte 5 bis 7 entfallen mit ``--ohne-dashboard``. NB 31 und NB 37
+laufen in einem Jupyter-Kernel (`notebook_ausfuehren`), weil sie
+``%run`` nutzen; die Notebooks selbst werden nicht verändert, die Ausgaben
+landen im Log. Die Netzkarte aus NB 24 und NB 33 gehört nicht dazu.
+
+Die Schritte 1 bis 5 arbeiten nur mit Zählernummern. Die Dashboard-Datei
+aus Schritt 7 enthält Adressen und ist nur für den internen Gebrauch.
 """
 
 from __future__ import annotations
@@ -28,6 +40,7 @@ import contextlib
 import io
 import os
 import shutil
+import subprocess
 import warnings
 from datetime import date
 from pathlib import Path
@@ -37,6 +50,12 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 NB00 = ROOT / "notebooks" / "1_daten" / "00_daten.ipynb"
+NB31 = ROOT / "notebooks" / "7_netz" / "31_netz.ipynb"
+NB37 = ROOT / "notebooks" / "9_dashboard" / "37_dashboard.ipynb"
+DASHBOARD_HTML = ROOT / "notebooks" / "fernwaerme_dashboard_final.html"
+#Kartenende in NB 37 im Abgabestand: bis Ende Sommer 2025, damit die
+#Meldungen des LSTM an warmen Tagen drin sind
+KARTE_ENDE_MIN = pd.Timestamp("2025-09-30 23:00")
 LOG_DIR = ROOT / "outputs" / "aktualisierung"
 TAGE_AKTUELL = 14
 #ab so vielen Stationen mit Verschlechterung im selben Zeitraum eher Wetter oder Netz (NB 24)
@@ -111,6 +130,111 @@ def datenende(serien) -> pd.Timestamp:
     """Letzte Stunde mit Messwert über alle Zähler."""
     return max(df.dropna(how="all").index.max() for df in serien.values()
                if len(df))
+
+
+def karten_ende(serien, mindestens: pd.Timestamp = KARTE_ENDE_MIN) -> pd.Timestamp:
+    """Ende des Kartenzeitraums für NB 37.
+
+    Median der letzten Messstunde je Zähler, mindestens ``mindestens``. Die
+    Karte rückt also erst weiter, wenn die Mehrheit der Zähler neuere Daten
+    hat, nicht schon wegen einer Nachlieferung für einzelne Zähler (wie die
+    fünf ODS-Zähler bis Juli 2026).
+    """
+    enden = [df.dropna(how="all").index.max() for df in serien.values() if len(df)]
+    enden = pd.Series(pd.to_datetime(enden)).dropna()
+    if enden.empty:
+        return pd.Timestamp(mindestens)
+    return max(enden.median().floor("h"), pd.Timestamp(mindestens))
+
+
+def notebook_ausfuehren(pfad: Path, log: Optional[Path] = None,
+                        umgebung: Optional[dict] = None) -> int:
+    """Notebook in einem Jupyter-Kernel ausführen, ohne es zu speichern.
+
+    Anders als `nb00_ausfuehren` läuft hier ein echter Kernel, damit auch
+    Zeilen wie ``%run`` funktionieren (NB 31, NB 37). Braucht `nbclient` und
+    `ipykernel`, beide kommen mit JupyterLab. ``umgebung`` setzt
+    Umgebungsvariablen für den Kernel. Textausgaben gehen in ``log``. Bei
+    einem Fehler bricht der Lauf mit der letzten Zeile der Fehlermeldung ab.
+    Rückgabe: Zahl der Codezellen.
+    """
+    try:
+        import nbformat
+        from nbclient import NotebookClient
+        from nbclient.exceptions import CellExecutionError
+    except ImportError as exc:
+        raise SystemExit("Zum Ausführen der Notebooks fehlt nbclient. "
+                         "Installieren mit: pip install jupyterlab") from exc
+
+    pfad = Path(pfad)
+    nb = nbformat.read(pfad, as_version=4)
+    umgebung = {k: str(v) for k, v in (umgebung or {}).items()}
+    vorher = {k: os.environ.get(k) for k in umgebung}
+    os.environ.update(umgebung)
+    try:
+        client = NotebookClient(nb, timeout=None, kernel_name="python3",
+                                resources={"metadata": {"path": str(pfad.parent)}})
+        try:
+            #Kernel-Meldungen (z. B. der Hinweis auf die lokale TCP-Verbindung)
+            #ausblenden; Fehler in Zellen kommen über die Zellausgaben
+            client.execute(stderr=subprocess.DEVNULL)
+        except CellExecutionError as exc:
+            zeilen = [z for z in str(exc).strip().splitlines() if z.strip()]
+            raise RuntimeError(f"{pfad.name}: {zeilen[-1] if zeilen else exc}") from exc
+    finally:
+        for k, v in vorher.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+        if log is not None:
+            Path(log).parent.mkdir(parents=True, exist_ok=True)
+            Path(log).write_text(_ausgaben_text(nb), encoding="utf-8")
+    return sum(1 for z in nb.cells if z.cell_type == "code")
+
+
+def _ausgaben_text(nb) -> str:
+    """Textausgaben eines ausgeführten Notebooks für das Log."""
+    teile = []
+    zellen = [z for z in nb.cells if z.cell_type == "code"]
+    for i, zelle in enumerate(zellen, start=1):
+        teile.append(f"--- Zelle {i}")
+        for aus in zelle.get("outputs", []):
+            art = aus.get("output_type")
+            if art == "stream":
+                teile.append(aus.get("text", "").rstrip())
+            elif art == "error":
+                teile.append("\n".join(aus.get("traceback", [])))
+            elif "text/plain" in aus.get("data", {}):
+                teile.append(aus["data"]["text/plain"].rstrip())
+    return "\n".join(teile) + "\n"
+
+
+def dashboard_aktualisieren(serien, nummer: int = 5, gesamt: int = 7) -> Path:
+    """Schritte 5 bis 7: Dashboard-Daten, Netz-Cache (NB 31), Dashboard (NB 37)."""
+    from . import dashboard_daten
+    from . import modellpaket as mp
+
+    print(f"{nummer}/{gesamt} Dashboard-Daten aus den Modellpaketen ...", flush=True)
+    try:
+        dashboard_daten.rechne(log=lambda s: print("    " + str(s), flush=True))
+    except mp.PaketFehler as exc:
+        raise SystemExit(
+            f"{exc}\nDas Dashboard wurde nicht aktualisiert. Die Modellpakete "
+            "fehlen in models/. Sie entstehen in Notebook 35 oder mit den Befehlen "
+            "unter 'Ausführung bis zum Dashboard', Schritt 4. Stationsblätter, "
+            "status.csv und bericht.txt sind bereits geschrieben.") from exc
+
+    print(f"{nummer + 1}/{gesamt} NB 31: Netz-Cache mit den neuen Stundenreihen ...", flush=True)
+    n = notebook_ausfuehren(NB31, log=LOG_DIR / "nb31.log")
+    print(f"    {n} Zellen ausgeführt, Log in {LOG_DIR / 'nb31.log'}")
+
+    ende = karten_ende(serien)
+    print(f"{nummer + 2}/{gesamt} NB 37: Dashboard, Karte bis {ende:%d.%m.%Y} ...", flush=True)
+    n = notebook_ausfuehren(NB37, log=LOG_DIR / "nb37.log",
+                            umgebung={"DASHBOARD_ENDE": f"{ende:%Y-%m-%d %H:%M}"})
+    print(f"    {n} Zellen ausgeführt, Log in {LOG_DIR / 'nb37.log'}")
+    return DASHBOARD_HTML
 
 
 def _ja(wert) -> bool:
@@ -262,22 +386,25 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     p.add_argument("--tage", type=int, default=TAGE_AKTUELL,
                    help="Zeitraum für 'aktuelle Alarme' in Tagen")
     p.add_argument("--out", type=Path, default=sbl.OUT_DIR)
+    p.add_argument("--ohne-dashboard", action="store_true",
+                   help="Dashboard nicht neu erzeugen (Schritte 5 bis 7)")
     args = p.parse_args(argv)
+    g = 4 if args.ohne_dashboard else 7
 
     if args.ohne_nb00:
-        print("1/4 NB 00 übersprungen")
+        print(f"1/{g} NB 00 übersprungen")
     else:
-        print("1/4 NB 00: Stundenreihen aufbereiten ...", flush=True)
+        print(f"1/{g} NB 00: Stundenreihen aufbereiten ...", flush=True)
         n = nb00_ausfuehren(log=LOG_DIR / "nb00.log")
         print(f"    {n} Zellen ausgeführt, Log in {LOG_DIR / 'nb00.log'}")
 
-    print("2/4 Außentemperatur vom DWD ...", flush=True)
+    print(f"2/{g} Außentemperatur vom DWD ...", flush=True)
     wetter_ende, w_hinweis = wetter_aktualisieren(args.offline)
     hinweise = [w_hinweis] if w_hinweis else []
     if w_hinweis:
         print("    " + w_hinweis)
 
-    print("3/4 Netzvergleich, Tagesmonitor, Stationsblätter ...", flush=True)
+    print(f"3/{g} Netzvergleich, Tagesmonitor, Stationsblätter ...", flush=True)
     e = sbl.eingaben()
     ende = datenende(e["serien"])
     if pd.Timestamp(wetter_ende) < ende - pd.Timedelta(days=2):
@@ -295,7 +422,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         shutil.copy(vorher_pfad, Path(args.out) / "status_vorher.csv")
     status = sbl.exportiere(ergebnis, args.out)
 
-    print("4/4 Bericht ...", flush=True)
+    print(f"4/{g} Bericht ...", flush=True)
     tm_erg = ergebnis.get("tagesmonitor")
     alarme = (ab.bewerte_richtung(tm_erg["alarme"])
               if tm_erg is not None and len(tm_erg["alarme"])
@@ -306,6 +433,12 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     print()
     print(text)
     print(f"Stationsblätter, status.csv und bericht.txt in {args.out}")
+
+    if args.ohne_dashboard:
+        return
+    print()
+    html = dashboard_aktualisieren(e["serien"], nummer=5, gesamt=g)
+    print(f"Dashboard: {html}")
 
 
 if __name__ == "__main__":
