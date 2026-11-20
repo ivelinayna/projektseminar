@@ -1,7 +1,8 @@
-# Pipeline und Module
+# Befehle und Module
 
 Der Code liegt in `src/`, die Auswertungen in `notebooks/`, die Tests in `tests/`. Wiederverwendbare Logik steht in
-`src/`. Die Notebooks rufen sie auf und zeigen die Ergebnisse.
+`src/`. Die Notebooks rufen sie auf und zeigen die Ergebnisse. Diese Seite ist zum Nachschlagen. In welcher
+Reihenfolge was läuft, steht unter [Ausführung bis zum Dashboard](ausfuehrung.md).
 
 ## Datenfluss
 
@@ -16,7 +17,7 @@ data/processed/real_meters/   Stundenreihe je Zähler
    v
 Notebooks 01-37 und src-Module
    |
-   +-- Notebook 10   -> hast_tage            (Tageswerte für 18, 30, 34, 38)
+   +-- Notebook 10   -> hast_tage            (Tageswerte für 18, 30, 34, 39)
    +-- Notebook 18   -> normalmodell_*       (für 30, 34)
    +-- Notebooks 25-29 -> Modelldaten, LSTM-Embedding, Ventil-Modell
    +-- Notebook 24   -> monitor_status       (für 33)
@@ -165,5 +166,4 @@ python -m pytest -q
 - Eine Testdatei je Modul in `tests/`, insgesamt 40 Dateien.
 - Die meisten Tests nutzen kleine künstliche Daten und laufen ohne Rohdaten.
 - Tests, die Begehungen oder echte Reihen brauchen, werden ohne diese Daten übersprungen.
-
-Letzter Lauf am 13.11.2026: 589 Tests bestanden, 1 übersprungen. `pytest.ini` beschränkt die Suche auf `tests/`.
+- `pytest.ini` beschränkt die Suche auf `tests/`.

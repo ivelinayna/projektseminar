@@ -32,11 +32,12 @@ nav:
       - Aufbau der Arbeit: aufbau.md
 
   - Installation und Ausführung:
-      # - Vorbereitung:   # noch leer
-      - Schnellstart: schnellstart.md
+      - Vorbereitung: vorbereitung.md
       - Start mit Docker: docker.md
-      - Ausführung bis zum Dashboard: pipeline.md
-      # - Lokaler Start ohne Docker:   # noch leer
+      - Lokaler Start ohne Docker: lokal.md
+      - Ausführung bis zum Dashboard: ausfuehrung.md
+      - Schnellstart: schnellstart.md
+      - Befehle und Module: pipeline.md
 
   - Datengrundlage:
       - Zählerdaten: daten_zaehlerdaten.md

@@ -1,83 +1,69 @@
 # Schnellstart
 
-Zwei Wege: lokal mit Python oder mit Docker ([Docker](docker.md)). Beide brauchen die Rohdaten der ÜZ. Sie liegen nicht
-im Repo.
+Diese Seite fasst alle Befehle in der Reihenfolge der Ausführung zusammen. Die Schritte im Einzelnen erläutern
+[Vorbereitung](vorbereitung.md), [Start mit Docker](docker.md), [Lokaler Start ohne Docker](lokal.md) und
+[Ausführung bis zum Dashboard](ausfuehrung.md).
 
-## 1 Rohdaten ablegen
+Für beide Wege muss das Projekt geholt sein, die Daten der ÜZ müssen in `data/raw/` und die Handliste mit Koordinaten
+in `data/manual/` liegen (siehe [Vorbereitung](vorbereitung.md)).
 
-- Die Dateien der ÜZ nach `data/raw/` kopieren. Welche Dateien das sind, steht unter [Daten](daten.md).
-- Handgepflegte Listen mit Adressen gehören nach `data/manual/`.
-- Beide Ordner sind gitignored. Nichts davon committen.
+## Mit Docker
 
-## 2 Lokal einrichten
+```bash
+docker compose build
+docker compose run --rm jupyter python -m src.weather
+docker compose run --rm jupyter python -m src.main
+docker compose run --rm jupyter python -m src.meter_quality
+docker compose run --rm jupyter python -m src.detect_real
+docker compose up jupyter        #http://localhost:8888, dann Notebook 00, danach der Reihe nach
+```
 
-Python 3.11 wird empfohlen.
+Dashboard, nachdem die Notebooks 00 und 25 bis 29 gelaufen sind:
+
+```bash
+docker compose run --rm jupyter python -m src.prognose_waechter --bauen --gegenprobe
+docker compose run --rm jupyter python -m src.normalmodell_waechter --bauen
+docker compose run --rm jupyter python -m src.fehlerklassen --bauen --gegenprobe
+#in Jupyter: Notebook 35 (empfohlen)
+docker compose run --rm jupyter python -m src.dashboard_daten
+#in Jupyter: Notebook 31, dann Notebook 37
+docker compose up dashboard      #http://localhost:8000/fernwaerme_dashboard_final.html
+```
+
+## Lokal
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate          # Windows
-source .venv/bin/activate       # Linux, macOS
+.venv\Scripts\activate           #Windows
+source .venv/bin/activate        #Linux, macOS
 pip install -r requirements.txt
-pip install jupyterlab
+pip install jupyterlab pytest
+
+python -m src.weather
+python -m src.main
+python -m src.meter_quality
+python -m src.detect_real
+jupyter lab                      #Notebook 00, danach der Reihe nach
 ```
 
-- `torch` und `xgboost` brauchen nur die Notebooks 27 bis 29, 34 und 35 und die Modellpakete.
-- Ohne Grafikkarte läuft alles auf der CPU, nur langsamer.
-
-## 3 Vorbereitende Befehle
-
-Aus dem Projektordner:
-
-```bash
-python -m src.weather        # Außentemperatur vom DWD holen, Stunden- und Tageswerte (einmal, danach Cache)
-python -m src.main           # Graphen, Karten, Begehungstabelle (inspections_tidy.csv)
-python -m src.meter_quality  # Datenqualität je Zähler (für Notebook 17)
-python -m src.detect_real    # Winterkennzahlen je Zähler (für Notebook 17)
-```
-
-## 4 Notebooks ausführen
-
-- Jupyter im Projektordner starten: `jupyter lab`.
-- Die Notebooks liegen in `notebooks/` und müssen dort bleiben. Viele Zellen suchen den Projektordner relativ dazu.
-- Immer zuerst Notebook 00 ausführen. Es bereitet die Stundenreihen auf. Alle anderen Notebooks lesen dieses Ergebnis.
-- Danach in Nummernfolge. Welche Notebooks voneinander abhängen, steht unter [Notebooks](notebooks.md).
-
-## 5 Modelle und Dashboard
+Dashboard, nachdem die Notebooks 00 und 25 bis 29 gelaufen sind:
 
 ```bash
 python -m src.prognose_waechter --bauen --gegenprobe
 python -m src.normalmodell_waechter --bauen
 python -m src.fehlerklassen --bauen --gegenprobe
-python -m src.dashboard_daten     # Modellergebnisse nach outputs/dashboard/
+#in Jupyter: Notebook 35 (empfohlen)
+python -m src.dashboard_daten
+#in Jupyter: Notebook 31, dann Notebook 37
 ```
 
-- Die Modellpakete landen in `models/` (gitignored). Notebook 35 baut sie ebenfalls.
-- Danach Notebook 31 (Netz-Cache) und Notebook 37 (Dashboard) ausführen. Mehr unter [Dashboard](dashboard.md).
+Ergebnis: `notebooks/fernwaerme_dashboard_final.html`, per Doppelklick im Browser öffnen.
 
-## 6 Neue Zählerdaten einspielen
+## Weitere Befehle
 
-```bash
-python -m src.aktualisieren
-```
-
-- Führt Notebook 00 neu aus, holt die Außentemperatur und rechnet Netzvergleich, Tagesmonitor und Priorität.
-- Ergebnis: Stationsblätter, `status.csv` und ein Kurzbericht unter `outputs/`.
-
-## 7 Tests
-
-```bash
-python -m pytest -q
-```
-
-- Die meisten Tests laufen ohne Rohdaten.
-- Einige Tests brauchen die Begehungstabelle und werden sonst übersprungen.
-
-## 8 Doku lokal ansehen
-
-```bash
-pip install -r docs/requirements.txt
-mkdocs serve
-```
-
-Dann im Browser `http://127.0.0.1:8000` öffnen. Read the Docs baut dieselbe Seite aus `mkdocs.yml` und
-`.readthedocs.yaml`.
+| Zweck | Befehl |
+|---|---|
+| Tests | `python -m pytest -q` |
+| neue Zählerdaten einspielen | `python -m src.aktualisieren` |
+| Doku lokal | `pip install -r docs/requirements.txt`, dann `mkdocs serve` |
+| Doku mit Docker | `docker compose up docs`, dann http://localhost:8001 |

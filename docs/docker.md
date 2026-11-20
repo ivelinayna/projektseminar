@@ -1,74 +1,61 @@
-# Docker
+# Start mit Docker
 
 Mit Docker läuft das Projekt ohne eigene Python-Installation. Ein Image enthält Python, alle Pakete, die Notebooks und
-den Code. Die Daten bleiben außerhalb des Images und werden beim Start eingehängt.
+den Code. Die Daten bleiben außerhalb des Images und werden beim Start als Ordner eingehängt. Dadurch arbeiten alle
+Rechner mit denselben Paketständen. Vorher die Schritte unter [Vorbereitung](vorbereitung.md) erledigen: Projekt
+holen, Daten nach `data/raw/` legen.
 
-## Schritt für Schritt auf dem eigenen Rechner
+## 1 Docker installieren
 
-### 1 Docker installieren
-
-- **Windows und macOS:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) installieren und einmal
-  starten. Es muss laufen (Wal-Symbol in der Taskleiste bzw. Menüleiste), sonst findet `docker` keinen Dienst.
-- **Linux:** Docker Engine mit dem Compose-Plugin über die Paketquellen der Distribution.
-- **macOS ohne Docker Desktop:** Colima geht auch, ohne Admin-Rechte. `colima`, `docker` und `docker compose`
-  installieren (z. B. `brew install colima docker docker-compose`), dann:
+- **Windows und macOS:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) installieren und starten.
+  Docker Desktop muss laufen, solange mit dem Projekt gearbeitet wird.
+- **Linux:** Docker Engine mit dem Compose-Plugin über die Paketquellen der Distribution installieren.
+- **macOS ohne Administratorrechte:** Alternativ zu Docker Desktop lässt sich Colima verwenden
+  (`brew install colima docker docker-compose`). Gestartet wird es mit
 
   ```bash
   colima start --cpu 4 --memory 4 --mount "$HOME/projektseminar:w"
   ```
 
-  Den Pfad hinter `--mount` auf den eigenen Projektordner setzen. `colima stop` beendet es wieder.
-- Prüfen, ob alles da ist:
+  Der Pfad hinter `--mount` ist der eigene Projektordner. `colima stop` beendet die Umgebung.
 
-  ```bash
-  docker --version
-  docker compose version
-  ```
-
-Bedarf: rund 5 GB Platte für das Image, mindestens 4 GB Arbeitsspeicher für Docker (in Docker Desktop unter
-Settings → Resources einstellbar).
-
-### 2 Projekt holen
+Ob die Installation vollständig ist, zeigen
 
 ```bash
-git clone https://github.com/ivelinayna/projektseminar.git
-cd projektseminar
+docker --version
+docker compose version
 ```
 
-Ohne Git geht auch der ZIP-Download auf GitHub (Code → Download ZIP), dann entpacken und in den Ordner wechseln. Alle
-folgenden Befehle laufen in diesem Ordner.
+Das Image belegt rund 5 GB Speicherplatz. Docker sollte mindestens 4 GB Arbeitsspeicher zur Verfügung haben, in
+Docker Desktop einstellbar unter Settings → Resources.
 
-### 3 Rohdaten ablegen
-
-- Die Daten der ÜZ sind vertraulich und nicht im Repo. Ohne sie läuft kein Notebook.
-- Die Dateien nach `data/raw/` kopieren. Welche Dateien es sind, steht in `data/README.md` und unter
-  [Daten](daten.md).
-
-### 4 Image bauen
+## 2 Image bauen
 
 ```bash
 docker compose build
 ```
 
-- Beim ersten Mal einige Minuten (auf einem aktuellen Mac rund 3,5 Minuten). PyTorch wird ohne Grafikkarte installiert,
-  das hält das Image kleiner.
-- Neu bauen nur, wenn sich `requirements.txt` oder das `Dockerfile` ändert. Code und Notebooks werden eingehängt.
+- Der erste Bau dauert einige Minuten.
+- PyTorch wird ohne Unterstützung für Grafikkarten installiert. Das hält das Image deutlich kleiner.
+- Ein neuer Bau ist nur nötig, wenn sich `requirements.txt` oder das `Dockerfile` ändern. Code und Notebooks werden
+  eingehängt, Änderungen daran wirken sofort.
 
-### 5 Vorbereiten und Notebooks ausführen
+## 3 Vorbereiten und Notebooks ausführen
 
 ```bash
-docker compose run --rm jupyter python -m src.weather         # Außentemperatur vom DWD, braucht Internet
-docker compose run --rm jupyter python -m src.main            # Graphen, Karten, Begehungstabelle
-docker compose run --rm jupyter python -m src.meter_quality   # Datenqualität je Zähler (für Notebook 17)
-docker compose run --rm jupyter python -m src.detect_real     # Winterkennzahlen je Zähler (für Notebook 17)
+docker compose run --rm jupyter python -m src.weather         #Außentemperatur vom DWD, braucht Internet
+docker compose run --rm jupyter python -m src.main            #Netzgraph, Karten, Begehungstabelle
+docker compose run --rm jupyter python -m src.meter_quality   #Datenqualität je Zähler (für Notebook 17)
+docker compose run --rm jupyter python -m src.detect_real     #Winterkennzahlen je Zähler (für Notebook 17)
 docker compose up jupyter
 ```
 
-- Im Browser http://localhost:8888 öffnen, ein Passwort gibt es nicht.
-- Zuerst `notebooks/1_daten/00_daten.ipynb` ausführen, danach in Nummernfolge (siehe [Notebooks](notebooks.md)).
-- Beenden mit `Strg+C` im Terminal.
+- JupyterLab ist danach unter http://localhost:8888 erreichbar.
+- Zuerst `notebooks/1_daten/00_daten.ipynb` ausführen, danach die übrigen Notebooks in Nummernfolge (siehe
+  [Ausführung bis zum Dashboard](ausfuehrung.md)).
+- `Strg+C` im Terminal beendet JupyterLab.
 
-### 6 Dashboard
+## 4 Dashboard
 
 ```bash
 docker compose run --rm jupyter python -m src.prognose_waechter --bauen --gegenprobe
@@ -77,29 +64,30 @@ docker compose run --rm jupyter python -m src.fehlerklassen --bauen --gegenprobe
 docker compose run --rm jupyter python -m src.dashboard_daten
 ```
 
-- Danach in Jupyter Notebook 31 (Netz) und Notebook 37 (Dashboard) ausführen.
-- `docker compose up dashboard` und http://localhost:8000/fernwaerme_dashboard_final.html öffnen.
-- Die Modellpakete brauchen die LSTM-Gewichte aus den Notebooks 27 und 28 in `notebooks/models/`. Fehlen sie, die
-  beiden Notebooks vorher ausführen (auf der CPU mehrere Stunden).
+- Die Modellpakete setzen die Ausgaben der Notebooks 25 bis 29 voraus, darunter die LSTM-Gewichte aus den Notebooks
+  27 und 28 in `notebooks/models/`. Ohne Grafikkarte lernen diese beiden Notebooks mehrere Stunden.
+- Danach in JupyterLab Notebook 31 (Netz) und Notebook 37 (Dashboard) ausführen. Die vollständige Reihenfolge mit
+  Notebook 35 steht unter [Ausführung bis zum Dashboard](ausfuehrung.md).
+- `docker compose up dashboard` stellt das Ergebnis unter http://localhost:8000/fernwaerme_dashboard_final.html bereit.
 
-### 7 Aufräumen
+## 5 Aufräumen
 
 ```bash
-docker compose down          # Container stoppen
-docker image rm fernwaerme-projekt   # Image löschen, gibt die 4 GB wieder frei
+docker compose down                  #Container stoppen
+docker image rm fernwaerme-projekt   #Image löschen und Speicherplatz freigeben
 ```
 
 Daten, Ergebnisse und Notebooks bleiben im Projektordner erhalten.
 
 ## Dienste
 
-| Dienst | Befehl | Adresse | Wofür |
+| Dienst | Befehl | Adresse | Zweck |
 |---|---|---|---|
 | `jupyter` | `docker compose up jupyter` | http://localhost:8888 | Notebooks ausführen |
 | `dashboard` | `docker compose up dashboard` | http://localhost:8000/fernwaerme_dashboard_final.html | fertiges Dashboard aus Notebook 37 ansehen |
-| `docs` | `docker compose up docs` | http://localhost:8001 | diese Doku lokal |
+| `docs` | `docker compose up docs` | http://localhost:8001 | diese Dokumentation lokal |
 
-Beenden mit `Strg+C` oder `docker compose down`.
+Beendet werden die Dienste mit `Strg+C` oder `docker compose down`.
 
 ## Eingehängte Ordner
 
@@ -109,13 +97,11 @@ Beenden mit `Strg+C` oder `docker compose down`.
 | `outputs/` | Ergebnisse, Bilder, Dashboard-Daten |
 | `models/` | Modellpakete |
 | `notebooks/` | Notebooks und Dashboard-HTML |
-| `src/`, `docs/` | Code und Doku, damit Änderungen sofort wirken |
+| `src/`, `docs/` | Code und Dokumentation |
 
-Alles, was in den Containern in diese Ordner geschrieben wird, liegt danach auch lokal.
+Alles, was die Container in diese Ordner schreiben, liegt danach auch im Projektordner auf dem eigenen Rechner.
 
-## Befehle im Container
-
-Einzelne Pipeline-Befehle laufen mit `docker compose run`:
+## Einzelne Befehle im Container
 
 ```bash
 docker compose run --rm jupyter python -m src.weather
@@ -127,11 +113,7 @@ docker compose run --rm jupyter python -m pytest -q
 
 ## Hinweise
 
-- Die Dashboard-HTML enthält Adressen. Sie ist gitignored und nur für den internen Gebrauch.
-- JupyterLab startet ohne Passwort. Die Ports sind deshalb nur auf dem eigenen Rechner erreichbar (`127.0.0.1`). Das
-  so lassen und nicht ins Netz freigeben.
-- Das Image wurde für Linux gebaut. Auf Windows und macOS läuft es über Docker Desktop.
-- Im Container rechnet PyTorch nur auf der CPU. Die Notebooks 27 und 28 trainieren die LSTMs neu, wenn keine Gewichte
-  in `notebooks/models/` liegen. Das dauert auf der CPU mehrere Stunden.
-- Getestet am 18.11.2026 auf einem Mac (Apple Silicon) mit Colima: Bau rund 3,5 Minuten, alle Tests grün, Notebooks 00, 01, 07, 21
-  und 37 und `src.dashboard_daten` laufen durch und liefern dieselben Zahlen wie lokal.
+- Die Dashboard-HTML enthält Adressen. Sie ist gitignored und nur für den internen Gebrauch bestimmt.
+- Die Ports sind nur auf dem eigenen Rechner erreichbar (`127.0.0.1`) und sollten nicht im Netz freigegeben werden.
+- Im Container rechnet PyTorch auf dem Prozessor. Liegen keine Gewichte in `notebooks/models/`, lernen die Notebooks
+  27 und 28 neu, was mehrere Stunden dauert.

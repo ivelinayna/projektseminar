@@ -2,8 +2,8 @@
 
 Die Arbeit folgt dem Weg des Projekts: von den Daten über die Verfahren bis zum Ergebnis für die ÜZ.
 
-- **Installation und Ausführung** erklärt, wo die Daten abgelegt werden und wie sich das Projekt mit Docker starten
-  lässt.
+- **Installation und Ausführung** erklärt, wo die Daten abgelegt werden, wie sich das Projekt mit Docker oder lokal
+  starten lässt und in welcher Reihenfolge Notebooks und Befehle bis zum Dashboard laufen.
 - **Datengrundlage** beschreibt die Zählerdaten, die Begehungen, den Leitungsplan und die von Hand gepflegten Tabellen.
 - **Vorgehen** stellt die Arbeitsschritte vor: Daten aufbereiten, Begehungen auswerten, Merkmale und Stationsbilder
   bilden, Fehler erkennen, das Netz einbeziehen und die Modelle vergleichen. Jeder Schritt nennt die beteiligten

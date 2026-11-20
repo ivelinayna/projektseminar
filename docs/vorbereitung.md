@@ -1,0 +1,90 @@
+# Vorbereitung
+
+Das Projekt lässt sich auf zwei Wegen ausführen: mit Docker oder lokal mit Python. Beide setzen dasselbe voraus: den
+Code aus dem Repository, die Daten der ÜZ und ausreichend Speicherplatz auf dem Rechner. Diese Seite gilt für beide
+Wege. Danach folgt [Start mit Docker](docker.md) oder [Lokaler Start ohne Docker](lokal.md).
+
+## Docker oder lokale Installation
+
+| | Docker | lokal |
+|---|---|---|
+| Installation | Docker Desktop | Python 3.11 und die Pakete aus `requirements.txt` |
+| Paketstände | fest im Image, auf jedem Rechner gleich | abhängig von der eigenen Installation |
+| Grafikkarte | wird nicht genutzt, PyTorch rechnet auf dem Prozessor | wird genutzt, sofern vorhanden |
+| geeignet für | Ergebnisse nachvollziehen, Dashboard erzeugen, Tests | LSTMs neu lernen, Änderungen am Code |
+
+- Zum Nachvollziehen der Ergebnisse genügt Docker. Liegen die gespeicherten LSTM-Gewichte unter `notebooks/models/`,
+  laden die Notebooks sie, statt neu zu lernen.
+- Ohne Gewichte lernen die Notebooks 27 und 28 neu. Mit Grafikkarte dauert das Minuten, auf dem Prozessor mehrere
+  Stunden.
+- Auf einem Mac wird die Grafikkarte auch lokal nicht genutzt.
+
+## Voraussetzungen
+
+- Git oder alternativ der ZIP-Download von GitHub
+- Internetzugang beim ersten Lauf: `python -m src.weather` lädt die Außentemperatur vom DWD, die Karte im Dashboard
+  lädt Kartenkacheln.
+- Speicherplatz: Die Rohdaten umfassen gut 400 MB. Nach einem vollständigen Lauf kommen etwa 400 MB aufbereitete Daten
+  und 150 MB Ergebnisse hinzu, mit Docker zusätzlich rund 5 GB für das Image.
+- Für Docker mindestens 4 GB Arbeitsspeicher (siehe [Start mit Docker](docker.md))
+
+## Projekt holen
+
+```bash
+git clone https://github.com/ivelinayna/projektseminar.git
+cd projektseminar
+```
+
+Alle Befehle in dieser Dokumentation werden in diesem Ordner ausgeführt.
+
+## Daten der ÜZ ablegen
+
+Die Daten der ÜZ sind vertraulich und nicht im Repository enthalten. Ohne sie läuft kein Notebook. Sie werden ohne
+Unterordner und mit den Dateinamen der Lieferung nach `data/raw/` kopiert.
+
+| Datei | Inhalt | gebraucht für |
+|---|---|---|
+| `<Zählernummer>__n.csv`, `<Zählernummer>_2025n.csv` | Stundenwerte je Zähler | alle Auswertungen |
+| `<Zählernummer>.ods` | Nachlieferung für fünf Zähler bis Juli 2026 | alle Auswertungen |
+| `*Ergebnis_Optimierung_FW*.xlsx` | Begehungen | Labels, Modelle, Dashboard |
+| `Zuordnung.xlsx` | Zählernummer zu Abnahmestelle, je Jahr ein Blatt | Begehungen, Netz, Dashboard |
+| `Nodes_Edges.ods` | logisches Netz mit Anschlusswert | Netz, Dashboard |
+| `Leitungsverlauf_LineString.*`, `_Point.*`, `_MultiPoint.*` | Rohrverlauf als Shapefile (je `.shp`, `.shx`, `.dbf`, `.prj`, `.cpg`) | Netz, Dashboard |
+| `Leitungsverlauf.kml` | Rohrverlauf als KML | optional, Notebooks 31 und 33 |
+| `zensus/.../Zensus2022_Baujahr_JZ_100m-Gitter.csv` | Gebäude nach Baujahr im 100-m-Gitter (öffentlich, etwa 200 MB) | optional |
+
+Inhalt und Eigenheiten der Dateien beschreiben [Zählerdaten](daten_zaehlerdaten.md), [Begehungen](daten_begehungen.md)
+und [Quellen, Netz und bekannte Probleme](daten.md).
+
+### Handliste mit Koordinaten
+
+- Die Lage der Häuser stammt aus einer von Hand gepflegten Liste `adressen_koordinaten.ods` mit den Spalten `adresse`,
+  `koordinate` und `quelle`. Da sie Adressen enthält, liegt auch sie nicht im Repository.
+- Sie gehört nach `data/manual/adressen_koordinaten.ods`.
+- Ohne diese Liste laufen alle Modelle, nicht aber die Netzkarte und das Dashboard.
+
+### Außentemperatur
+
+Die Außentemperatur der DWD-Station Kitzingen muss nicht abgelegt werden. `python -m src.weather` lädt sie beim ersten
+Lauf nach `data/raw/weather/`. Danach liest das Projekt aus diesem Zwischenspeicher.
+
+## Beim Ausführen erzeugte Dateien
+
+| Ordner | Inhalt | geschrieben von |
+|---|---|---|
+| `data/processed/` | Stundenreihen je Zähler und alle Zwischentabellen | Notebook 00 und die folgenden |
+| `outputs/` | Bilder, Ergebnistabellen, Daten für das Dashboard | Notebooks und Befehle |
+| `notebooks/models/` | Gewichte der LSTMs | Notebooks 27 und 28 |
+| `models/` | Modellpakete für das Dashboard | Notebook 35 oder die Befehle unter [Ausführung](ausfuehrung.md) |
+| `notebooks/daten_cache/` | Netz-Cache | Notebook 31 |
+| `notebooks/fernwaerme_dashboard_final.html` | fertiges Dashboard | Notebook 37 |
+
+Alle diese Ordner und Dateien sind gitignored.
+
+## Datenschutz
+
+- Rohdaten, Zwischenergebnisse, Gewichte und Modellpakete werden nie committet. Sie stammen aus Firmendaten der ÜZ und
+  enthalten Zählernummern.
+- Die Netz-Notebooks 31 bis 33 und die Dashboard-HTML zeigen Adressen. Sie sind nur für den internen Gebrauch bestimmt.
+- Vor jedem Commit `git status` prüfen. Erscheint dort eine Datei aus `data/`, `outputs/` oder `models/`, ist die
+  `.gitignore` unvollständig.

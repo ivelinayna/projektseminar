@@ -31,8 +31,11 @@ Mehr unter [Ergebnisse](ergebnisse.md), [Endmodell](endmodell.md) und [Negativbe
 
 | Seite | Inhalt |
 |---|---|
-| [Schnellstart](schnellstart.md) | Projekt lokal einrichten und ausführen |
-| [Docker](docker.md) | Projekt ohne eigene Python-Installation starten |
+| [Vorbereitung](vorbereitung.md) | was gebraucht wird, wohin die Daten kommen |
+| [Start mit Docker](docker.md) | Projekt ohne eigene Python-Installation starten |
+| [Lokaler Start ohne Docker](lokal.md) | Projekt mit eigener Python-Umgebung einrichten |
+| [Ausführung bis zum Dashboard](ausfuehrung.md) | Reihenfolge der Notebooks und Befehle |
+| [Schnellstart](schnellstart.md) | alle Befehle auf einen Blick |
 | [Daten](daten.md) | Datenquellen, Aufbereitung, bekannte Probleme |
 | [Notebooks](notebooks.md) | alle 40 Notebooks mit Frage, Ergebnis und Reihenfolge |
 | [Ergebnisse](ergebnisse.md) | wichtigste Ergebnisse je Teil |
@@ -41,7 +44,7 @@ Mehr unter [Ergebnisse](ergebnisse.md), [Endmodell](endmodell.md) und [Negativbe
 | [Endmodell](endmodell.md) | gewählte Modelle je Frage, Modellpakete |
 | [Negativbefunde](negativbefunde.md) | was nicht funktioniert hat und warum |
 | [Lernende Modelle](modelle/index.md) | LSTM-Fingerabdruck, Prognose-LSTM, Prüfung und Statistik: was gemacht wurde und warum |
-| [Pipeline und Module](pipeline.md) | Code in `src/`, Datenfluss, Befehle, Tests |
+| [Befehle und Module](pipeline.md) | Code in `src/`, Datenfluss, Befehle, Tests |
 | [Dashboard](dashboard.md) | Aufbau und Erzeugung des Dashboards |
 | [Grenzen und offene Fragen](grenzen.md) | Annahmen, Grenzen, Fragen an die ÜZ |
 | [Begriffe](begriffe.md) | Fachbegriffe kurz erklärt |
