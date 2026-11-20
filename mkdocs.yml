@@ -6,8 +6,10 @@ docs_dir: docs
 theme:
   name: material
   language: de
+  logo: assets/logo/siegel_weiss.png
+  favicon: assets/logo/favicon.png
   palette:
-    primary: blue grey
+    primary: custom
   features:
     - navigation.sections
     - navigation.top
@@ -18,6 +20,7 @@ plugins:
 markdown_extensions:
   - tables
   - admonition
+  - attr_list
   - toc:
       permalink: true
 extra_css:
@@ -43,12 +46,18 @@ nav:
       - Zählerdaten: daten_zaehlerdaten.md
       - Begehungen: daten_begehungen.md
       - Quellen, Netz und bekannte Probleme: daten.md
-      # - Ergänzende Daten:   # noch leer
-      # - Qualität und Einschränkungen:   # noch leer
+      - Netz und Zuordnung: daten_netz_und_zuordnung.md
+      - Ergänzende Daten: daten_ergaenzend.md
+      - Qualität und Einschränkungen: daten_qualiaet.md
 
   - Vorgehen:
       - Überblick der Notebooks: notebooks.md
-      # - Daten aufbereiten:   # noch leer
+      - Daten aufbereiten:
+          - Überblick: aufbereitung/index.md
+          - Die Schritte im Einzelnen: aufbereitung/schritte.md
+          - "Änderungen 1: Rohdaten lesbar machen": aufbereitung/rohdaten.md
+          - "Änderungen 2: Kennzahlen ans Raster anpassen": aufbereitung/kennzahlen.md
+          - "Änderungen 3: Rückmeldung der ÜZ": aufbereitung/uez_rueckmeldung.md
       # - Begehungen auswerten:   # noch leer
       # - Merkmale und Clustering:   # noch leer
       - Stationsbilder und Befunde: stationsbilder.md

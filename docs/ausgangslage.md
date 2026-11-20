@@ -1,3 +1,5 @@
+![Universität Würzburg](assets/logo/uni_wuerzburg_blau.png){ .titel-logo }
+
 # Ausgangslage
 
 Die ÜZ Mainfranken betreibt ein Fernwärmenetz, das Gebäude über Hausanschlussstationen (HAST) mit Wärme versorgt. An

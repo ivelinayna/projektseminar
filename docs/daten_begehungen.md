@@ -95,7 +95,8 @@ Begehungstabelle, nicht auf die Messdaten.
 - Mechanisch heißt: Schmutzfänger, Ventil oder Stellantrieb, Pumpe, Zirkulation oder Hydraulik. Von Hand sind es 14
   Begehungen, 1 ist unklar. Die automatische Kodierung der Freitexte kommt auf 22 und weicht bei 13 Begehungen von der
   Handkodierung ab.
-- Bei 30 Begehungen bleibt eine Rückfrage an die ÜZ offen.
+- 30 Begehungen waren für eine Rückfrage an die ÜZ markiert. Zu einzelnen Fällen kann die ÜZ nachträglich aber
+  nichts mehr sagen.
 
 ## Grenzen der Begehungsdaten
 
