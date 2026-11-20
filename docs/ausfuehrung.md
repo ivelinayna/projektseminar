@@ -73,9 +73,12 @@ Die lernenden Modelle bauen aufeinander auf und laufen der Reihe nach:
 | 28 Prognose-LSTM | `prognose_tage.csv`, Gewichte nach `notebooks/models/` | rund 2 Minuten |
 | 29 XGBoost und Klassen | `fehlerklassen_je_hast.csv` | rund 11 Minuten |
 
-- Ohne Grafikkarte, also auch in Docker, brauchen 27 und 28 mehrere Stunden, wenn sie neu lernen.
+- Ohne Grafikkarte, also auch in Docker, brauchen 27 und 28 mehrere Stunden, wenn sie neu lernen (im Test mit Docker:
+  27 rund 4,5 Stunden, 28 rund 3,5 Stunden).
 - Liegen die Gewichte bereits in `notebooks/models/`, laden 27 und 28 sie, statt neu zu lernen. Da alle Seeds fest
   gesetzt sind, liefern neu gelernte Gewichte auf demselben Rechner dieselben Zahlen.
+- Auf einem anderen Rechner weichen die Zahlen leicht ab. Notebook 28 kann dann z. B. die Schwelle z ≥ 6 statt z ≥ 4
+  wählen. Notebook 30 übernimmt die Schwelle, die Notebook 28 gewählt hat. Die Aussagen bleiben gleich.
 
 ## 4 Modellpakete bauen
 
@@ -107,7 +110,8 @@ setzt es diese Pakete als aktuelle Version.
 - Empfohlen, weil das Dashboard dann genau die Modelle zeigt, die in Notebook 35 am besten abgeschnitten haben (siehe
   [Strenger Vergleich](vergleich/endmodell.md)).
 - Braucht die Pakete aus Schritt 4, weil es das alte Prognose-LSTM zum Vergleich lädt.
-- Dauert deutlich länger als die anderen Notebooks, weil es alle Netze je Prüfteil neu lernt.
+- Dauert deutlich länger als die anderen Notebooks, weil es alle Netze je Prüfteil neu lernt (in Docker rund
+  5 Stunden).
 - Ohne Notebook 35 nutzt das Dashboard die Pakete aus Schritt 4. Die Anzeige ist dieselbe, die Modelle stammen dann
   aus den Notebooks 26 bis 29.
 
@@ -146,8 +150,9 @@ aufgebaut ist und was es zeigt, steht unter [Dashboard](ergebnisse_dashboard.md)
 
 ## Die übrigen Notebooks
 
-Alle Notebooks lassen sich in Nummernfolge von 00 bis 39 ausführen. Werden nur einzelne Notebooks ausgeführt, sind
-folgende Abhängigkeiten zu beachten:
+Alle Notebooks lassen sich in Nummernfolge von 00 bis 39 ausführen. Ein kompletter Lauf in Docker mit neu lernenden
+Netzen dauert rund 15 Stunden, den Großteil davon die Notebooks 27, 28 und 35. Werden nur einzelne Notebooks
+ausgeführt, sind folgende Abhängigkeiten zu beachten:
 
 | Notebook | braucht vorher |
 |---|---|
@@ -155,11 +160,13 @@ folgende Abhängigkeiten zu beachten:
 | 08 | `python -m src.main` |
 | 17 | `python -m src.meter_quality`, `python -m src.detect_real` |
 | 18, 30, 34, 39 | Notebook 10 (Tageswerte `hast_tage`) |
-| 30, 34 | Notebook 18 (Normalverhaltensmodell) |
-| 32, 33 | Notebook 31 (Netz-Cache) |
-| 33 | Notebook 24 (Monitorstatus) |
+| 30, 34, 39 | Notebook 18 (Normalverhaltensmodell) |
+| 30 | Notebook 28 (Prognose-LSTM) |
+| 32, 33, 39 | Notebook 31 (Netz-Cache) |
+| 33 | Notebook 24 (Monitorstatus); die Stationsblätter erzeugt es selbst, wenn sie fehlen |
 | 34, 35 | Notebooks 25 bis 29 |
 | 36 | Notebook 35 (Vorhersagen in `outputs/finalvergleich/`) |
+| 38 | zwei Handtabellen in `data/manual/` (siehe [Vorbereitung](vorbereitung.md)) |
 
 Was jedes Notebook macht und herausfindet, steht unter [Überblick der Notebooks](notebooks.md).
 

@@ -63,6 +63,12 @@ und [Quellen, Netz und bekannte Probleme](daten.md).
 - Sie gehört nach `data/manual/adressen_koordinaten.ods`.
 - Ohne diese Liste laufen alle Modelle, nicht aber die Netzkarte und das Dashboard.
 
+### Handtabellen für Notebook 38
+
+- Notebook 38 (Bayes-Diagnose, Anhang) liest zwei von Hand gepflegte Tabellen:
+  `data/manual/fehler_symptom_matrix_entwurf.xlsx` und `data/manual/pruefliste_begehungsnotizen.xlsx`.
+- Sie liegen nicht im Repository. Ohne sie bricht nur Notebook 38 ab, alle anderen laufen.
+
 ### Außentemperatur
 
 Die Außentemperatur der DWD-Station Kitzingen muss nicht abgelegt werden. `python -m src.weather` lädt sie beim ersten
