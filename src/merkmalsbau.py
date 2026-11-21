@@ -1,6 +1,6 @@
-"""Feature Engineering, Zeitstruktur und Erklärbarkeit (Notebook 41).
+"""Feature Engineering, Zeitstruktur und Erklärbarkeit (Notebook 36).
 
-Notebook 39 hat gezeigt: Bei Filter, Durchfluss und Sollwert findet weder eine Regel
+Notebook 35 hat gezeigt: Bei Filter, Durchfluss und Sollwert findet weder eine Regel
 noch die KI etwas. Bei der Dämmung findet die KI ein Muster, das wir nicht erklären
 können. Liegt das an den Daten, an unseren Kennzahlen oder an den Labels?
 Dieses Modul rechnet vier Bausteine dafür:
@@ -91,7 +91,7 @@ PLAN_ZUSATZ = {
     "ventil": ("d_kopplung", +1,
                "Ventil getauscht: Danach folgt der Durchfluss der Außentemperatur besser (gleitende Korrelation)."),
 }
-# Nachträglich ergänzt, nachdem die Abkühlrate in Notebook 41, Abschnitt 6b, bei der Dämmung in die
+# Nachträglich ergänzt, nachdem die Abkühlrate in Notebook 36, Abschnitt 6b, bei der Dämmung in die
 # erwartete Richtung ging (26.10.2026). Die Richtung folgt eindeutig aus der Physik, die Prüfung ist
 # aber nicht vorab geplant und wird im Notebook so gekennzeichnet.
 PLAN_NACHTRAG = {
@@ -359,7 +359,7 @@ def ruecklauf_schwachlast(hw: pd.DataFrame, min_stunden: int = 100) -> float:
 
 def neue_kennzahlen(stunden: pd.DataFrame, tage_tab: pd.DataFrame, grenze: pd.Series,
                     vertrag: Optional[pd.Series] = None, winter=WINTER, sommer=SOMMER) -> pd.DataFrame:
-    """Die neuen Kennzahlen je Station, nur aus Daten vor ``grenze`` (wie Notebook 27)."""
+    """Die neuen Kennzahlen je Station, nur aus Daten vor ``grenze`` (wie Notebook 25)."""
     s = stunden_bereinigen(stunden)
     s = s[s["timestamp"] < s["zaehler"].map(grenze)]
     t = tage_tab[tage_tab["tag"] < tage_tab["zaehler"].map(grenze)]
@@ -461,7 +461,7 @@ def holm(p: Sequence[float]) -> np.ndarray:
 
 
 def folds_aus_oof(oof: pd.DataFrame, ziel: str) -> Tuple[pd.Series, np.ndarray]:
-    """Folds und Labels je Station für ein Ziel aus den Test-C-Vorhersagen (Notebook 39)."""
+    """Folds und Labels je Station für ein Ziel aus den Test-C-Vorhersagen (Notebook 35)."""
     o = oof[oof["ziel"] == ziel]
     folds = o.groupby("zaehler")["fold"].first()
     y = o.groupby("zaehler")["y"].first().reindex(folds.index).to_numpy().astype(int)
@@ -470,7 +470,7 @@ def folds_aus_oof(oof: pd.DataFrame, ziel: str) -> Tuple[pd.Series, np.ndarray]:
 
 def lr_oof(X: pd.DataFrame, oof: pd.DataFrame, gruppen: pd.Series, ziel: str,
            name: str, spalten: Sequence[str]) -> pd.Series:
-    """Dieselbe logistische Regression wie Notebook 39 (Raster innen), Werte außerhalb des Folds."""
+    """Dieselbe logistische Regression wie Notebook 35 (Raster innen), Werte außerhalb des Folds."""
     from . import finalvergleich as fv
     folds, y = folds_aus_oof(oof, ziel)
     g = gruppen.reindex(folds.index).to_numpy()
@@ -503,7 +503,7 @@ def stationstyp_gruppe(typ) -> str:
 def daemmung_und_gebaeude(zaehler_mit_reihe) -> pd.DataFrame:
     """Je begangenem Zähler: Dämmungs-Kästchen (ja, ausdrücklich nein, leer) und Gebäudeangaben.
 
-    Quelle ist das Begehungsprotokoll, verbunden wie in Notebook 27. Die Adresse wird nur zum
+    Quelle ist das Begehungsprotokoll, verbunden wie in Notebook 25. Die Adresse wird nur zum
     Verbinden gebraucht und nicht zurückgegeben. Je Zähler gilt „ja“, wenn bei einer Begehung das
     Kästchen angekreuzt oder im Freitext ein Dämmungsbefund steht, sonst „nein“, wenn ausdrücklich
     nein eingetragen ist, sonst „leer“.

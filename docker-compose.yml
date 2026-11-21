@@ -19,8 +19,8 @@ services:
     ports:
       - "127.0.0.1:8888:8888"
 
-  #Fertiges Dashboard aus Notebook 40: http://localhost:8000/fernwaerme_dashboard_final.html
-  #Die HTML-Datei muss vorher mit Notebook 40 erzeugt worden sein (liegt in notebooks/).
+  #Fertiges Dashboard aus Notebook 37: http://localhost:8000/fernwaerme_dashboard_final.html
+  #Die HTML-Datei muss vorher mit Notebook 37 erzeugt worden sein (liegt in notebooks/).
   dashboard:
     <<: *projekt
     ports:
@@ -37,10 +37,3 @@ services:
       - ./mkdocs.yml:/app/mkdocs.yml
     command: ["mkdocs", "serve", "-a", "0.0.0.0:8001"]
 
-  #Ältere Streamlit-App (Rücklauf-Ampel): http://localhost:8501
-  app:
-    <<: *projekt
-    profiles: ["extra"]
-    ports:
-      - "127.0.0.1:8501:8501"
-    command: ["streamlit", "run", "src/dashboard_app.py", "--server.address=0.0.0.0", "--server.port=8501"]

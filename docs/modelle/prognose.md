@@ -5,8 +5,8 @@ vergleicht jede Station mit sich selbst: Ein schon immer undichtes Ventil ist f�
 ab morgen offen steht, nicht. Dafür sagt ein LSTM jeden Tag Rücklauf und Durchfluss einer Station
 vorher, aus der letzten Woche, dem Wetter und der Vorlauftemperatur des Netzes. Weicht die Station
 deutlich und anhaltend davon ab, gibt es eine Warnung. Labels braucht er zum Lernen nicht, nur zum
-Prüfen. Gerechnet wird in Notebook 30, zuerst in Vorversuchen (Abschnitt 2 und 3), dann mit dem
-endgültigen Wächter (Abschnitt 4 bis 13). In Notebook 39 wird er für das Endmodell neu gelernt.
+Prüfen. Gerechnet wird in Notebook 28, zuerst in Vorversuchen (Abschnitt 2 und 3), dann mit dem
+endgültigen Wächter (Abschnitt 4 bis 13). In Notebook 35 wird er für das Endmodell neu gelernt.
 
 ## Wie viele Tage Vorgeschichte?
 
@@ -50,7 +50,7 @@ Mittlerer Fehler des Rücklaufs in K.
 - Alle Stationen statt nur der begangenen bringen beim Vorhersagen kaum etwas.
 - Warum sagt die Validierung so wenig über den Test? Die Validierungswochen liegen zwischen
   Trainingswochen. Das Netz kennt die Woche davor und danach und muss nur eine Lücke füllen. Der Test
-  liegt nach dem Training, dort geht es wirklich in die Zukunft. Im Endmodell (Notebook 39) liegt die
+  liegt nach dem Training, dort geht es wirklich in die Zukunft. Im Endmodell (Notebook 35) liegt die
   Probezeit deshalb zeitlich nach dem Lernen.
 - Das Wetter von morgen ändert die Vorhersage kaum. Ohne diesen Eingang oder mit 1,5 K Fehler, etwa so
   gut wie eine Wettervorhersage, ändert sich der Fehler nur um Hundertstel. Die Wettervorhersage reicht
@@ -125,7 +125,7 @@ bei zwei auffälligen Tagen hintereinander.
   eine Schwelle an Heiztagen und an warmen Tagen gleich streng ist. Gewarnt wird bei z ≥ 4 an zwei Tagen
   hintereinander. Die Schwelle ist über die Fehlalarmrate in der Testzeit gewählt.
 
-**Ergebnisse (Notebook 30).**
+**Ergebnisse (Notebook 28).**
 
 - Die Vorhersage des Rücklaufs ist deutlich besser als einfache Regeln: 4,3 K daneben gegen 6,2 K für
   „wie gestern“ (Validierung, begangene Stationen).
@@ -139,7 +139,7 @@ bei zwei auffälligen Tagen hintereinander.
 
 ## Im Endmodell
 
-In Notebook 39 wird der Wächter auf der gemeinsamen Zeitachse neu gelernt, jetzt auf allen Stationen, die
+In Notebook 35 wird der Wächter auf der gemeinsamen Zeitachse neu gelernt, jetzt auf allen Stationen, die
 er überwachen soll. Der Grund: Für eine Vorhersage braucht es keine Labels, und ein Wächter muss jede
 Station kennen, die er überwacht: Stationen, die es nie gesehen hat, sagt das Netz schlechter voraus,
 auf 17 solchen Stationen beim Rücklauf um 0,54 K. Das Training läuft 143 Runden, der beste Stand ist in Runde 128. Statt der Warnung an

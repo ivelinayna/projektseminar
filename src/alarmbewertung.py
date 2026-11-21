@@ -116,7 +116,7 @@ def richtungstest(alarme: pd.DataFrame, faelle: pd.DataFrame,
                   abstand: int = VORLAUF_ABSTAND) -> pd.DataFrame:
     """Treffertest getrennt nach Alarmrichtung und Fenster.
 
-    "um die Begehung" ist das Fenster aus NB 22 (7 Tage vor bis 60 nach).
+    "um die Begehung" ist das Fenster aus NB 20 (7 Tage vor bis 60 nach).
     "davor" reicht von ``vorlauf`` bis ``abstand`` Tage vor der Begehung
     und fragt, ob der CUSUM vorwarnt.
     """
@@ -409,7 +409,7 @@ def baujahr_kontext(labels: pd.DataFrame,
 def lade_baujahr(labels: pd.DataFrame, root: Path = ROOT) -> pd.DataFrame:
     """Baujahrkontext mit Zensus, ohne Zensusdatei nur aus dem Freitext."""
     try:
-        k = koordinaten(root)
+        k = koordinaten(root).dropna(subset=["lat", "lon"])
         gx, gy = gitterzelle(k["lat"], k["lon"])
         rahmen = (gx.min() - 200, gx.max() + 200, gy.min() - 200, gy.max() + 200)
         geb = zensus_gebiet(k, lade_zensus(rahmen=rahmen, root=root))

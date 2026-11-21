@@ -1,34 +1,34 @@
-"""Prognose-LSTM als Wächter im Betrieb (gelernt in Notebook 30).
+"""Prognose-LSTM als Wächter im Betrieb (gelernt in Notebook 28).
 
-Notebook 30 lernt das Netz und prüft es. Was nach dem Lernen zum Anwenden
+Notebook 28 lernt das Netz und prüft es. Was nach dem Lernen zum Anwenden
 gebraucht wird, lag dort nur im Notebook-Speicher: die Skalierung, die
 normale Schwankung je Station, der Faktor je Jahreszeit und die Schwelle.
 Dieses Modul
 
-- rechnet diese Teile genau wie Notebook 30 nach und legt sie mit den
+- rechnet diese Teile genau wie Notebook 28 nach und legt sie mit den
   Gewichten als Modellpaket ab (`paket_bauen`),
 - wendet ein Paket auf beliebige Stundenwerte an, ohne neu zu lernen
   (`anwenden`),
 - prüft, dass das Paket dieselben z-Werte, Warnungen und Alarme liefert
-  wie Notebook 30 (`gegenprobe`).
+  wie Notebook 28 (`gegenprobe`).
 
 Zwei Alarmregeln stehen auf denselben z-Werten zur Wahl:
 
 - ``schwelle``: |z| ≥ Schwelle an zwei Tagen hintereinander, ein Alarm je
   Veränderung (mindestens ``ruhe`` Tage ohne Warnung dazwischen). Das ist
-  die Regel aus Notebook 30.
-- ``cusum``: zweiseitiger CUSUM wie im Normalverhaltensmodell (Notebook 20,
+  die Regel aus Notebook 28.
+- ``cusum``: zweiseitiger CUSUM wie im Normalverhaltensmodell (Notebook 18,
   `tagesmonitor.cusum`), je Kanal, mit der Streuung für die Ähnlichkeit
-  aufeinanderfolgender Tage vergrößert. Notebook 32 hat gezeigt, dass die
+  aufeinanderfolgender Tage vergrößert. Notebook 30 hat gezeigt, dass die
   Alarmregel und nicht das Netz den Unterschied zum Normalverhaltensmodell
-  macht; diese Regel macht das prüfbar (Notebook 38).
+  macht; diese Regel macht das prüfbar (Notebook 34).
 
 Als Vergleich ohne Lernen gibt es dieselbe Kette mit ``erwartung =
 "wochenmittel"``: Jede Stunde des Zieltags ist der Mittelwert dieser Stunde
-über die sieben Vortage (der Vergleich „Mittel der Woche“ aus Notebook 30).
+über die sieben Vortage (der Vergleich „Mittel der Woche“ aus Notebook 28).
 
-    python -m src.prognose_waechter --bauen      # Paket aus Notebook 30 bauen
-    python -m src.prognose_waechter --gegenprobe # Paket gegen NB 30 prüfen
+    python -m src.prognose_waechter --bauen      # Paket aus Notebook 28 bauen
+    python -m src.prognose_waechter --gegenprobe # Paket gegen NB 28 prüfen
 """
 
 from __future__ import annotations
@@ -48,7 +48,7 @@ PROCESSED = ROOT / "data" / "processed"
 NB_MODELLE = ROOT / "notebooks" / "models"
 PAKETNAME = "prognose_lstm"
 
-#Festlegungen aus Notebook 30, Abschnitt 1
+#Festlegungen aus Notebook 28, Abschnitt 1
 STICHTAG = pd.Timestamp("2024-09-01")
 LERNEN_BIS = pd.Timestamp("2024-06-01")
 VORGESCHICHTE = 7
@@ -58,7 +58,7 @@ KANAELE = ["ruecklauf", "durchfluss", "vorlauf", "aussen"]
 RL, FL, VL, AT = range(4)
 NACHT_STUNDEN = 6                 # 0 bis 5 Uhr
 VERSTECKT = 64
-#Kalibrierung (Notebook 30, Abschnitt 6)
+#Kalibrierung (Notebook 28, Abschnitt 6)
 MIN_VAL_TAGE = 10
 MIN_RL_MAD = 0.5
 MIN_FL_MAD = 5.0
@@ -84,7 +84,7 @@ def _torch():
 
 
 def netz(versteckt: int = VERSTECKT):
-    """Encoder–Decoder aus Notebook 30, Abschnitt 3 (gleiche Namen der Gewichte)."""
+    """Encoder–Decoder aus Notebook 28, Abschnitt 3 (gleiche Namen der Gewichte)."""
     torch = _torch()
     nn = torch.nn
 
@@ -107,10 +107,10 @@ def netz(versteckt: int = VERSTECKT):
 
 def stundenwerte(meter_dir: Path = PROCESSED / "real_meters",
                  wetter: Optional[pd.DataFrame] = None) -> pd.DataFrame:
-    """Stundenwerte wie `modell_stunden.parquet` (Notebook 27, Zelle 6 und 15).
+    """Stundenwerte wie `modell_stunden.parquet` (Notebook 25, Zelle 6 und 15).
 
     Liest die Zählerreihen aus Notebook 00 und hängt die DWD-Außentemperatur
-    an. Für den Betrieb, wenn neue Exporte da sind und NB 27 nicht neu
+    an. Für den Betrieb, wenn neue Exporte da sind und NB 25 nicht neu
     laufen soll.
     """
     from .weather import load_outdoor_temperature
@@ -136,7 +136,7 @@ def stundenwerte(meter_dir: Path = PROCESSED / "real_meters",
 
 
 def tagesfeld(stunden: pd.DataFrame) -> Tuple[np.ndarray, pd.DataFrame]:
-    """Vollständige Tage als Feld Tage × 24 × 4 (Notebook 30, Abschnitt 2).
+    """Vollständige Tage als Feld Tage × 24 × 4 (Notebook 28, Abschnitt 2).
 
     Ein Tag zählt nur mit 24 Stunden, in denen alle vier Größen gemessen
     sind. ``tage`` trägt je Eintrag Zähler, Datum, Heiztag und ob die sieben
@@ -161,7 +161,7 @@ def abschnitte(tage: pd.DataFrame, erste_begehung: pd.Series,
                lernen_bis: pd.Timestamp = LERNEN_BIS,
                stichtag: pd.Timestamp = STICHTAG,
                seed: int = SEED) -> Tuple[pd.Series, np.ndarray]:
-    """Training, Validierung, Test und „nach der Begehung“ wie Notebook 30.
+    """Training, Validierung, Test und „nach der Begehung“ wie Notebook 28.
 
     ``erste_begehung`` ist je begangenem Zähler das Datum der ersten
     Begehung (NaT erlaubt). Rückgabe: Abschnitt je Tag und die gezogenen
@@ -297,7 +297,7 @@ def _phi(g: pd.DataFrame, spalte: str) -> Tuple[float, int]:
 def kalibrieren(val: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Normale Lage und Schwankung je Station, Faktor je Jahreszeit.
 
-    Genau wie Notebook 30 (`kalibrieren`), aus Tagen, die das Netz nicht
+    Genau wie Notebook 28 (`kalibrieren`), aus Tagen, die das Netz nicht
     zum Lernen benutzt hat. Zusätzlich je Station die Ähnlichkeit
     aufeinanderfolgender Tage (``phi_rl``, ``phi_fluss``) für die
     CUSUM-Regel; bei zu wenigen Paaren gilt der Median der Stationen.
@@ -323,7 +323,7 @@ def kalibrieren(val: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def warnungen(abw: pd.DataFrame, schwelle: float) -> pd.Series:
-    """Auffällig an zwei direkt aufeinanderfolgenden Tagen (Notebook 30)."""
+    """Auffällig an zwei direkt aufeinanderfolgenden Tagen (Notebook 28)."""
     auff = (abw["z_rl"].abs() >= schwelle) | (abw["z_fluss"].abs() >= schwelle)
     vortag_auff = auff.groupby(abw["zaehler"]).shift(1, fill_value=False)
     vortag_direkt = abw.groupby("zaehler")["tag"].diff().eq(pd.Timedelta(days=1))
@@ -390,7 +390,7 @@ def _lade_gewichte(pfad: Path, geraet: Optional[str] = None):
 def nachrechnen(stunden: pd.DataFrame, labels: pd.DataFrame,
                 gewichte: Path = NB_MODELLE / "prognose_lstm_begangen.pt",
                 geraet: Optional[str] = None) -> dict:
-    """Notebook 30 bis zur Kalibrierung nachrechnen, mit gespeicherten Gewichten."""
+    """Notebook 28 bis zur Kalibrierung nachrechnen, mit gespeicherten Gewichten."""
     werte, tage = tagesfeld(stunden)
     abschnitt, val_wochen = abschnitte(tage, labels["erste_begehung"])
     tage["abschnitt"] = abschnitt
@@ -419,11 +419,11 @@ def paket_bauen(stunden: Optional[pd.DataFrame] = None,
                 alarmregel: str = "schwelle", cusum_h: float = CUSUM_H,
                 kennzahlen: Optional[dict] = None, version: Optional[str] = None,
                 wurzel: Path = mp.MODELS, aktuell: bool = True) -> mp.Paket:
-    """Modellpaket ``prognose_lstm`` aus den Gewichten von Notebook 30.
+    """Modellpaket ``prognose_lstm`` aus den Gewichten von Notebook 28.
 
     Ohne Argumente liest es `modell_stunden.parquet` und `modell_labels.csv`
-    (Notebook 27). Die Gewichte müssen zu diesen Daten passen: Nach einer
-    Änderung von NB 00 erst NB 30 neu trainieren (docs/pipeline.md).
+    (Notebook 25). Die Gewichte müssen zu diesen Daten passen: Nach einer
+    Änderung von NB 00 erst NB 28 neu trainieren (docs/pipeline.md).
     """
     if alarmregel not in ("schwelle", "cusum"):
         raise ValueError("alarmregel muss 'schwelle' oder 'cusum' sein")
@@ -472,7 +472,7 @@ def paket_bauen(stunden: Optional[pd.DataFrame] = None,
         beschreibung=("Encoder–Decoder-LSTM: sagt aus 7 Vortagen, Wetter und "
                       "Vorlauf Rücklauf und Durchfluss des Tages voraus; "
                       "z-Werte je Station, Alarm nach Regel"),
-        quelle="notebooks/30_prognose_lstm.ipynb", version=version,
+        quelle="notebooks/6_lernende_modelle/28_prognose_lstm.ipynb", version=version,
         wurzel=wurzel, aktuell=aktuell)
 
 
@@ -551,29 +551,29 @@ def anwenden(geladen: dict, stunden: pd.DataFrame,
 
 
 def gegenprobe(tab: pd.DataFrame,
-               nb21: Path = PROCESSED / "prognose_tage.csv") -> dict:
-    """Paket gegen die Ausgabe von Notebook 30 halten.
+               nb28: Path = PROCESSED / "prognose_tage.csv") -> dict:
+    """Paket gegen die Ausgabe von Notebook 28 halten.
 
     Vergleicht je Zähler und Tag z-Werte, Warnung und Alarm. Kleine
     Abweichungen bei den z-Werten kommen von Grafikkarte gegen CPU.
     """
-    alt = pd.read_csv(nb21, parse_dates=["tag"])
-    m = alt.merge(tab, on=["zaehler", "tag"], suffixes=("_nb21", "_paket"))
+    alt = pd.read_csv(nb28, parse_dates=["tag"])
+    m = alt.merge(tab, on=["zaehler", "tag"], suffixes=("_nb28", "_paket"))
     return {
-        "zeilen_nb21": len(alt), "zeilen_paket": int(tab["status"].eq("überwacht").sum()),
+        "zeilen_nb28": len(alt), "zeilen_paket": int(tab["status"].eq("überwacht").sum()),
         "gemeinsam": len(m),
-        "max_abw_z_rl": float((m["z_rl_nb21"] - m["z_rl_paket"]).abs().max()),
-        "max_abw_z_fluss": float((m["z_fluss_nb21"] - m["z_fluss_paket"]).abs().max()),
-        "warnung_gleich": float((m["warnung_nb21"] == m["warnung_paket"]).mean()),
-        "alarm_gleich": float((m["alarm_nb21"] == m["alarm_schwelle"]).mean()),
-        "alarme_nb21": int(m["alarm_nb21"].sum()),
+        "max_abw_z_rl": float((m["z_rl_nb28"] - m["z_rl_paket"]).abs().max()),
+        "max_abw_z_fluss": float((m["z_fluss_nb28"] - m["z_fluss_paket"]).abs().max()),
+        "warnung_gleich": float((m["warnung_nb28"] == m["warnung_paket"]).mean()),
+        "alarm_gleich": float((m["alarm_nb28"] == m["alarm_schwelle"]).mean()),
+        "alarme_nb28": int(m["alarm_nb28"].sum()),
         "alarme_paket": int(m["alarm_schwelle"].sum()),
     }
 
 
 def main(argv: Optional[Sequence[str]] = None) -> None:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    p.add_argument("--bauen", action="store_true", help="Paket aus NB 30 bauen")
+    p.add_argument("--bauen", action="store_true", help="Paket aus NB 28 bauen")
     p.add_argument("--gegenprobe", action="store_true",
                    help="Betriebspaket gegen prognose_tage.csv prüfen")
     p.add_argument("--alarmregel", choices=("schwelle", "cusum"), default="schwelle")

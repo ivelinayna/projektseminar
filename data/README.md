@@ -15,10 +15,11 @@ Diese Dateien von der ÜZ hierher kopieren:
 | `Zuordnung.xlsx` | Zählernummer zu Abnahmestelle, je Jahr ein Blatt |
 | `Nodes_Edges.ods` | logisches Netz mit Anschlusswert |
 | `Leitungsverlauf_LineString.*`, `Leitungsverlauf_Point.*`, `Leitungsverlauf_MultiPoint.*` | Rohrverlauf als Shapefile (je `.shp`, `.shx`, `.dbf`, `.prj`, `.cpg`) |
-| `Leitungsverlauf.kml` | Rohrverlauf als KML, optional für die Netz-Notebooks 34 und 36 |
+| `Leitungsverlauf.kml` | Rohrverlauf als KML, optional für die Netz-Notebooks 31 und 33 |
 | `zensus/.../Zensus2022_Baujahr_JZ_100m-Gitter.csv` | Zensus 2022, Gebäude nach Baujahr im 100-m-Gitter, optional (öffentlich, etwa 200 MB) |
 
-- Die Außentemperatur holt `python -m src.weather` selbst. Der Cache liegt in `data/raw/weather/`.
+- Die Außentemperatur holt `python -m src.weather` selbst: Stundenwerte als Cache in `data/raw/weather/`, Tageswerte
+  für die Notebooks 10 und 38 in `data/raw/weather/tageswerte/`.
 - Danach zuerst Notebook 00 ausführen.
 
 ## `data/processed/`
@@ -30,4 +31,7 @@ Diese Dateien von der ÜZ hierher kopieren:
 
 - Von Hand gepflegte Listen mit Adressen.
 - Derzeit `adressen_koordinaten.ods` (Spalten `adresse`, `koordinate`, `quelle`).
-- Wird von Notebook 26 (Teil E) und Notebook 36 benutzt.
+- Wird von den Notebooks 24, 31 und 33 benutzt.
+- `begehungsprotokolle/`: Vorlage und ausgefüllte Begehungsprotokolle für den Betrieb
+  (`python -m src.betrieb vorlage`, `python -m src.betrieb protokolle`, siehe `docs/betrieb.md`).
+- Für Notebook 38 kommen zwei Handtabellen dazu: `fehler_symptom_matrix_entwurf.xlsx` und `pruefliste_begehungsnotizen.xlsx`. Sie liegen nicht im Repo. Ohne sie bricht Notebook 38 gleich am Anfang ab.

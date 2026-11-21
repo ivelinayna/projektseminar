@@ -4,15 +4,15 @@ Im Projekt sind viele Modelle und Regeln entstanden. Fast jedes Notebook hat sic
 eigenen Stationen, eigener Kontrollgruppe und eigener Alarmmenge. Diese Seite zeigt, wie daraus ein fairer Vergleich
 wird, und fasst das Ergebnis zusammen.
 
-- Gerechnet wird in `notebooks/38_modellvergleich.ipynb`.
+- Gerechnet wird in `notebooks/8_modellvergleich/34_modellvergleich.ipynb`.
 - Die Prüfungen stehen in `src/pruefstand.py`.
-- Die Umsetzung als Endmodell steht in `notebooks/39_endmodell.ipynb` (Seite [Endmodell](endmodell.md)).
-- **Neuer Stand:** Notebook 39 wiederholt diesen Vergleich strenger. Der LSTM-Encoder lernt dort ohne die
+- Die Umsetzung als Endmodell steht in `notebooks/8_modellvergleich/35_endmodell.ipynb` (Seite [Endmodell](endmodell.md)).
+- **Neuer Stand:** Notebook 35 wiederholt diesen Vergleich strenger. Der LSTM-Encoder lernt dort ohne die
   Teststationen, die Schwellen kommen nur aus der Probezeit, die Auslastung zum Anschlusswert fehlt, und das Modell für
   die Fehlerart wird nur im Lernteil gewählt. Wo Zahlen abweichen, gilt das [Endmodell](endmodell.md). Beispiel
   Ventil: Die Regression auf Kennzahlen und LSTM-Zahlen kommt hier auf 0,89. Mit Modellwahl im Lernteil kommt die
-  Fehlerart in Notebook 39 auf 0,84, gewählt ist die Regression nur auf den 16 LSTM-Zahlen. Die Gründe stehen in
-  Notebook 39, Abschnitt 16.5.
+  Fehlerart in Notebook 35 auf 0,84, gewählt ist die Regression nur auf den 16 LSTM-Zahlen. Die Gründe stehen in
+  Notebook 35, Abschnitt 16.5.
 
 ## So wird verglichen
 
@@ -32,7 +32,7 @@ Ein Modell ist nicht allgemein „gut“, sondern gut für eine Frage und gemess
     - dieselbe Alarmmenge, denn wer öfter alarmiert, trifft automatisch öfter,
     - nur Daten, die das Modell nicht gelernt hat (Kreuzvalidierung oder Zeit nach dem Lernen).
 5. Unsicherheit angeben und gepaart vergleichen. Bei 11 Ventilfällen streut die AUC um etwa ±0,15. Vertauschte Labels
-   erreichen 0,27 bis 0,73 (Notebook 31). Deshalb steht hinter jeder Zahl ein Intervall. Zwei Kandidaten werden auf
+   erreichen 0,27 bis 0,73 (Notebook 29). Deshalb steht hinter jeder Zahl ein Intervall. Zwei Kandidaten werden auf
    denselben Stationen verglichen (gepaarter Bootstrap, McNemar). Bei vielen Tests wird nach Holm korrigiert.
 6. Bei Gleichstand gewinnt das Einfachere. Eine Regel ist erklärbar und braucht kein Training.
 
@@ -40,10 +40,10 @@ Ein Modell ist nicht allgemein „gut“, sondern gut für eine Frage und gemess
 
 | Aufgabe | Funktion | Was sie misst |
 |---|---|---|
-| Alarm | `trefferpruefung`, `bilanz` | Alarm im Fenster −7 bis +60 Tage um eine Begehung gegen Kontrollstationen im selben Fenster; Hebel, einseitiger Binomialtest (Sebs Verfahren aus Notebook 20, Fall für Fall nachgeprüft) |
+| Alarm | `trefferpruefung`, `bilanz` | Alarm im Fenster −7 bis +60 Tage um eine Begehung gegen Kontrollstationen im selben Fenster; Hebel, einseitiger Binomialtest (Verfahren aus Notebook 18, Fall für Fall nachgeprüft) |
 | Alarm | `gemeinsame_tage`, `auf_tagen` | Schnittmenge der überwachten Stationstage |
 | Alarm | `budget_anpassen` | Schwelle bzw. CUSUM-Grenze, bei der ein Kandidat gleich viele Alarme gibt wie der Bezug |
-| Alarm | `einrechnen` | Bypass, hängender Fühler, verstellter Sollwert in echte Stundenwerte schreiben (Notebook 30) |
+| Alarm | `einrechnen` | Bypass, hängender Fühler, verstellter Sollwert in echte Stundenwerte schreiben (Notebook 28) |
 | Alarm | `mcnemar`, `alarme_je_jahr`, `erster_alarm_nach` | Fall-für-Fall-Vergleich, Alarmlast, Reaktionszeit |
 | Fehler erkennen | `bewerte_scores` | AUC mit Bootstrap-Intervall, P@10, Zufallstest mit Holm, gepaarte Differenz zu einem Bezug |
 | Fehler unterteilen | `vierfelder`, `kappa` | Precision und Trefferquote einer Klasse gegen den Befund; Übereinstimmung zweier Einteilungen |
@@ -67,11 +67,11 @@ Gemeinsame Grundlage:
 | Wächter (Erwartung + Regel) | Begehungen bemerkt | Kontrolle | p | in 14 Tagen |
 |---|---|---|---|---|
 | Tagesmonitor (Kennlinie + CUSUM, h = 4,5) | 33/43 | 53 % | 0,001 | 18/39 gegen 24 %, p = 0,003 |
-| Normalverhaltensmodell, Notebook 20 (Kennlinie + CUSUM, h = 5) | 30/43 | 50 % | 0,008 | 14/39 gegen 22 %, p = 0,033 |
+| Normalverhaltensmodell, Notebook 18 (Kennlinie + CUSUM, h = 5) | 30/43 | 50 % | 0,008 | 14/39 gegen 22 %, p = 0,033 |
 | Wochenmittel + Schwelle (ohne Lernen) | 24/43 | 36 % | 0,006 | 14/39 gegen 17 %, p = 0,003 |
 | Prognose-LSTM + CUSUM | 24/43 | 40 % | 0,022 | 8/39, p = 0,15 |
 | Wochenmittel + CUSUM | 16/43 | 20 % | 0,005 | 7/39, p = 0,13 |
-| Prognose-LSTM + Schwelle (Notebook 30) | 16/43 | 32 % | 0,26 | 7/39, kein Signal |
+| Prognose-LSTM + Schwelle (Notebook 28) | 16/43 | 32 % | 0,26 | 7/39, kein Signal |
 
 Plötzliche Fehler, eingerechnet in den Sommer 2024, bei höchstens 10 % Fehlalarmen in 8 Tagen:
 
@@ -101,33 +101,33 @@ Was das heißt:
 
 Dazu kommen alle übrigen Ansätze, die einen Tagesalarm liefern können:
 
-- Kennlinienmonitor (Notebook 15),
-- Tagesmonitor mit Netzereignis-Filter (Notebook 26),
+- Kennlinienmonitor (Notebook 13),
+- Tagesmonitor mit Netzereignis-Filter (Notebook 24),
 - ARIMA-Wächter: das beste Modell aus Notebook 06 (Tagesrücklauf aus Außentemperatur mit AR(1)), hier als täglicher
   Wächter gebaut,
-- die fünf Detektoren aus Notebook 18.
+- die fünf Detektoren aus Notebook 16.
 
 Alle laufen auf denselben Tagen und Fällen. Die Holm-Korrektur geht über alle 15:
 
 | Wächter | bemerkt (−7 bis +60) | Kontrolle | p | p (Holm) |
 |---|---|---|---|---|
 | Tagesmonitor (Kennlinie + CUSUM) | 33/43 | 53 % | 0,001 | 0,017 |
-| Tagesmonitor ohne Netzereignisse (Notebook 26) | 33/43 | 53 % | 0,001 | 0,017 |
+| Tagesmonitor ohne Netzereignisse (Notebook 24) | 33/43 | 53 % | 0,001 | 0,017 |
 | Wochenmittel + CUSUM / + Schwelle | 16/43 / 24/43 | 20 % / 36 % | 0,005 / 0,006 | 0,07 |
-| Normalverhaltensmodell (Notebook 20) | 30/43 | 50 % | 0,008 | 0,08 |
+| Normalverhaltensmodell (Notebook 18) | 30/43 | 50 % | 0,008 | 0,08 |
 | ARIMA-Wächter + Schwelle | 22/43 | 34 % | 0,016 | 0,16 |
 | Prognose-LSTM + CUSUM | 24/43 | 40 % | 0,022 | 0,20 |
-| Kennlinienmonitor (Notebook 15) | 27/43 | 53 % | 0,14 | 0,94 |
+| Kennlinienmonitor (Notebook 13) | 27/43 | 53 % | 0,14 | 0,94 |
 | ARIMA-Wächter + CUSUM | 20/43 | 40 % | 0,22 | 1 |
-| Prognose-LSTM + Schwelle (Notebook 30) | 16/43 | 32 % | 0,26 | 1 |
-| Notebook 18: Dynamik, Kurzschluss-Zustand, Residuen, Isolation Forest | 6 bis 18 | – | ≥ 0,07 | ≥ 0,57 |
+| Prognose-LSTM + Schwelle (Notebook 28) | 16/43 | 32 % | 0,26 | 1 |
+| Notebook 16: Dynamik, Kurzschluss-Zustand, Residuen, Isolation Forest | 6 bis 18 | – | ≥ 0,07 | ≥ 0,57 |
 
 - Nur Kennlinie mit CUSUM bleibt nach der Korrektur belegt. In den ersten 14 Tagen kommt das Wochenmittel mit Schwelle
   dazu.
-- Der Netzereignis-Filter (Notebook 26) ändert im Prüfzeitraum nichts. Das einzige Netzereignis mit Verschlechterungen
+- Der Netzereignis-Filter (Notebook 24) ändert im Prüfzeitraum nichts. Das einzige Netzereignis mit Verschlechterungen
   liegt im Dezember 2022.
-- Der Kennlinienmonitor (Notebook 15) trifft viel, aber die Kontrollen genauso (Hebel 1,18).
-- Die Detektoren aus Notebook 18 taugen nicht als Alarm. Fall für Fall verliert jeder gegen das Normalverhaltensmodell
+- Der Kennlinienmonitor (Notebook 13) trifft viel, aber die Kontrollen genauso (Hebel 1,18).
+- Die Detektoren aus Notebook 16 taugen nicht als Alarm. Fall für Fall verliert jeder gegen das Normalverhaltensmodell
   (McNemar p ≤ 0,017). Sie sind als Rangliste je Station gebaut und laufen deshalb in Teil B mit.
 
 ## Ergebnis B: Fehler erkennen
@@ -147,25 +147,25 @@ Kreuzvalidierung. „README-Regeln“ sind die ersten Regeln des Projekts aus `s
 | LSTM-Embedding allein | gelernt | 0,84 [0,71; 0,94] | −0,01 |
 | LR Kennzahlen | gelernt | 0,79 [0,58; 0,97] | −0,06 |
 | Netzvergleich-Score Winter 23/24 | Flottenvergleich | 0,73 [0,55; 0,90] | −0,12 |
-| Abkühlung bei 5 °C (Notebook 20) | Normkennzahl | 0,68 [0,47; 0,87] | −0,17 |
+| Abkühlung bei 5 °C (Notebook 18) | Normkennzahl | 0,68 [0,47; 0,87] | −0,17 |
 | K-Means „schlechter“ | Clustering | 0,67 [0,51; 0,83] | −0,18, belegt schlechter |
 
 Fürs Ventil laufen insgesamt 27 Kandidaten mit, darunter:
 
-- Stationsbilder (Notebook 14), Ternär und Fallsammlung (Notebooks 13 und 17),
-- Kurzschluss-Zeitanteil (Notebooks 09, 10 und 18), Persistenzanteile (Notebook 18), Schweregrad (Notebook 19),
-- Tagestypen (Notebook 11), Potenzial (Notebook 24), Vergleichsgruppen (Notebook 25),
-- Random Forest und XGBoost auf allen Merkmalen (Notebook 31).
+- Stationsbilder (Notebook 12), Ternär und Fallsammlung (Notebooks 11 und 15),
+- Kurzschluss-Zeitanteil (Notebooks 09 und 16), Persistenzanteile (Notebook 16), Schweregrad (Notebook 17),
+- Tagestypen (Notebook 10), Potenzial (Notebook 22), Vergleichsgruppen (Notebook 23),
+- Random Forest und XGBoost auf allen Merkmalen (Notebook 29).
 
 Jeder Kandidat wird gepaart mit der Sommernacht-Regel auf den 53 Zählern verglichen, mit Holm über alle 27:
 
 - 15 Kandidaten sind besser als Raten. Vorn liegen Paket-Modell (0,89), Sommer-Nachtdurchfluss (0,88) und die
-  Schweregrad-Punkte aus Notebook 19 (0,87). Keiner ist belegt besser als die Regel.
+  Schweregrad-Punkte aus Notebook 17 (0,87). Keiner ist belegt besser als die Regel.
 - Random Forest (0,77) und XGBoost (0,75) sind auch mit allen Merkmalen nicht besser. XGBoost ist belegt schlechter als
   die Regel.
 - Flottenvergleiche liegen bei 0,67 bis 0,74: Netzvergleich, Vergleichsgruppen, Potenzial, K-Means,
   Kennliniensteigung, Durchflussanteil der Modulation.
-- Eine unruhige Kennlinie (Residuenstreuung, Notebook 14) spricht gegen ein Ventil (0,39). Ein offenes Ventil läuft
+- Eine unruhige Kennlinie (Residuenstreuung, Notebook 12) spricht gegen ein Ventil (0,39). Ein offenes Ventil läuft
   gleichmäßig durch.
 
 ### Dämmung
@@ -179,7 +179,7 @@ Jeder Kandidat wird gepaart mit der Sommernacht-Regel auf den 53 Zählern vergli
   Anteil Rücklauf über 50 °C (0,30) sind belegt schlechter als der Bezug.
 - Ein Dämmungsbefund kommt also eher bei Stationen vor, die im Netz gut aussehen. Der Hinweis „Dämmung prüfen“ ist
   statistisch erkennbar, aber physikalisch nicht erklärt.
-- Die Deutung aus Notebook 31 (ungedämmte Leitungen erhöhen die Nachtspreizung im Sommer) hält nicht: Mit
+- Die Deutung aus Notebook 29 (ungedämmte Leitungen erhöhen die Nachtspreizung im Sommer) hält nicht: Mit
   Dämmungsbefund ist die Nachtspreizung kleiner (AUC 0,29 in der vorab festgelegten Richtung).
 
 ### Überdimensionierung
@@ -244,7 +244,7 @@ Vorschlag für die Dringlichkeit in der Empfehlungsliste:
   Optimierungspotenzial (Abstand zum besten Viertel), dann nach dem Ventilverdacht.
 
 Eine Verschlechterung hebt die Stufe nicht. Im Winter 24/25 hatte fast jede zweite Station eine, und vor Begehungen mit
-Befund gab es nicht mehr davon als bei Kontrollen (Notebook 23). Die Stufen sind gesetzt, nicht gelernt.
+Befund gab es nicht mehr davon als bei Kontrollen (Notebook 21). Die Stufen sind gesetzt, nicht gelernt.
 
 ## Monitoring-Modell gegen LSTM-Kette
 
@@ -252,12 +252,12 @@ Im Projekt gibt es zwei vollständige Systeme:
 
 | | Monitoring-Modell (Kennlinien-Strang) | LSTM-Kette (Modell-Strang) |
 |---|---|---|
-| Notebooks | 15, 21 bis 26, Stationsblatt | 27 bis 32 |
+| Notebooks | 13, 19 bis 24, Stationsblatt | 25 bis 30 |
 | Alarm | Tagesmonitor: Kennlinie + CUSUM | Prognose-LSTM + Schwelle |
 | Fehler erkennen | Netzvergleich je Kernwinter | Kennzahlen + LSTM-Embedding → LR |
 | Unterteilen und Reihenfolge | Fehlerbild, Priorität hoch/mittel/niedrig | Klassen nach Folie 5 |
 
-Kopf an Kopf, gepaart auf denselben Fällen bzw. Stationen (Notebook 38, Abschnitt 4b):
+Kopf an Kopf, gepaart auf denselben Fällen bzw. Stationen (Notebook 34, Abschnitt 4b):
 
 | Aufgabe | Monitoring | LSTM-Kette | gepaart | besser |
 |---|---|---|---|---|
@@ -276,17 +276,17 @@ Was das heißt:
 - Beim Erkennen gewinnt die LSTM-Kette. Der Netzvergleich misst „schlechter als die anderen“, und das ist nur zur
   Hälfte ein Ventil.
 - Die beste Lösung kombiniert beide: Alarm aus dem Tagesmonitor, dazu das LSTM für plötzliche Fehler, Klasse aus der
-  LSTM-Kette, Netzvergleich als Bestätigung. So ist das Endmodell in Notebook 39 gebaut.
+  LSTM-Kette, Netzvergleich als Bestätigung. So ist das Endmodell in Notebook 35 gebaut.
 
 ## Haus oder Netz
 
-Mehrere Notebooks haben das Netz untersucht: 20 (Abschnitt 15), 25, 26, 35, 37 und die Vorarbeit zu 31. Notebook 38
+Mehrere Notebooks haben das Netz untersucht: 18 (Abschnitt 15), 23, 24, 32, 39 und die Vorarbeit zu 29. Notebook 34
 (Abschnitt 3b) prüft das Netz zusätzlich als Kandidat, mit dem logischen Graphen aus `Nodes_Edges.ods` (Nachbarn bis
 zwei Kanten).
 
 | Kandidat | Ergebnis |
 |---|---|
-| Tagesmonitor ohne gemeinsame Nachbar-Alarme (Notebook 26) | 34/43 statt 33/43, Fall für Fall nicht unterscheidbar |
+| Tagesmonitor ohne gemeinsame Nachbar-Alarme (Notebook 24) | 34/43 statt 33/43, Fall für Fall nicht unterscheidbar |
 | Tagesmonitor, Nachbarn abgezogen | 30/43, etwas schlechter |
 | Tagesmonitor, Netzmedian abgezogen | 25/43, belegt schlechter (die Begehungen kamen als Welle, der Abzug nimmt ihre Wirkung heraus) |
 | Nachbarn: Sommer-Durchfluss bzw. Ventilverdacht → eigenes Ventil | AUC 0,44 bzw. 0,42, belegt schlechter als die eigene Regel |
@@ -317,12 +317,12 @@ Monitoring-Modell gewinnt beim Alarm, die LSTM-Kette beim Erkennen. Das Netz ver
 
 | Notebook | Warum nicht | Was stattdessen gilt |
 |---|---|---|
-| 37 GNN | braucht die Kanten- und Positionsdateien aus Notebook 34 in `notebooks/` | eigenes Ergebnis: kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft der Abschnitt „Haus oder Netz“ |
-| 33 Bayes | braucht die Handtabellen unter `data/manual/` | eigenes Ergebnis: Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
+| 39 GNN | braucht die Kanten- und Positionsdateien aus Notebook 31 in `notebooks/` | eigenes Ergebnis: kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft der Abschnitt „Haus oder Netz“ |
+| 38 Bayes | braucht die Handtabellen unter `data/manual/` | eigenes Ergebnis: Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
 | Gesamtpipeline (früher 12) | eigene Aufbereitung im Notebook, Stundenscores ohne Modul | eigenes Ergebnis: AUC 0,51, höchstens 2 von 10 Ereignissen |
-| 07 Stationscluster, 08 Clusterbenchmark | Profile über die ganze Historie, also auch nach der Begehung (Datenleck) | eigenes Ergebnis: kein Cluster trennt die Begehungen; verglichen wird K-Means aus Notebook 28 |
+| 07 Stationscluster, 08 Clusterbenchmark | Profile über die ganze Historie, also auch nach der Begehung (Datenleck) | eigenes Ergebnis: kein Cluster trennt die Begehungen; verglichen wird K-Means aus Notebook 26 |
 | 03 Labels | Label-Vorschlag, kein Erkenner | dieselben Größen stecken in den README- und Kennzahl-Regeln |
-| 34 Netz, 36 Netzkarte | Karte und Graphaufbau, kein Modell je Station | das Netz selbst ist als Kandidat geprüft (Abschnitt „Haus oder Netz“) |
+| 31 Netz, 33 Netzkarte | Karte und Graphaufbau, kein Modell je Station | das Netz selbst ist als Kandidat geprüft (Abschnitt „Haus oder Netz“) |
 | 01, 02, 04, 05 | messen die Wirkung der Begehungen oder bereiten Daten auf | sie liefern den Prüfstein |
 
 ## Grenzen

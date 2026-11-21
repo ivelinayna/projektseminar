@@ -6,8 +6,7 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=utf-8 \
-    PIP_NO_CACHE_DIR=1 \
-    MPLBACKEND=Agg
+    PIP_NO_CACHE_DIR=1
 
 #libgomp1 braucht XGBoost, git nur für den Code-Stand in den Modellpaketen
 RUN apt-get update \
@@ -26,7 +25,7 @@ RUN pip install -r /tmp/requirements.txt -r /tmp/requirements-docs.txt "jupyterl
 
 COPY . .
 
-EXPOSE 8888 8000 8001 8501
+EXPOSE 8888 8000 8001
 
 CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", \
      "--ServerApp.root_dir=/app", "--IdentityProvider.token="]

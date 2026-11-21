@@ -52,7 +52,7 @@ import pandas as pd
 
 REPO = Path(__file__).resolve().parents[1]
 METER_DIR = REPO / "data" / "processed" / "real_meters"
-NB00 = "notebooks/00_daten.ipynb"
+NB00 = "notebooks/1_daten/00_daten.ipynb"
 
 #Spaltennamen in der NB-00-Ausgabe auf das Schema von features.features_for_meter
 SPALTEN_MAP = {

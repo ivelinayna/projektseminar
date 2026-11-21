@@ -141,7 +141,7 @@ def lade_serien(meter_dir: Path,
     """Stundenreihen aus Notebook 00 als Dict Zählernummer → Stundenreihe.
 
     Erwartet den Ordner ``data/processed/real_meters``, den
-    ``notebooks/00_daten.ipynb`` schreibt, und reicht
+    ``notebooks/1_daten/00_daten.ipynb`` schreibt, und reicht
     an `nb00_daten.lade_serien` durch. Rückgabe trägt das Schema von
     `features.features_for_meter` auf einem DatetimeIndex; Stunden, die
     NB 00 nur als leere Rasterzeile führt, fallen heraus.

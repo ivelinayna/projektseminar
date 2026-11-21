@@ -3,7 +3,7 @@ Vom Anomaliescore zur Handlungsempfehlung.
 
 Warum dieses Modul
 ------------------
-Notebook 18 hat zwei Detektoren hinterlassen, die die Begehungs-
+Notebook 16 hat zwei Detektoren hinterlassen, die die Begehungs-
 validierung bestanden haben, und eine Trefferliste von 21 Stationen.
 Ein Score sagt der UEZ aber nur, dass etwas nicht stimmt, nicht was.
 Dieses Modul schliesst die Luecke: es benennt je Station ein Muster,
@@ -55,7 +55,7 @@ kostet. Alle drei werden auf 0 bis 1 normiert, gewichtet und zu Punkten
 verrechnet. Gewichte und Deckel stehen als Konstanten oben im Modul und
 sind Startwerte, keine validierten Groessen.
 
-Der Verbrauch je Heizgradstunde, den Notebook 18 als Plausibilisierung
+Der Verbrauch je Heizgradstunde, den Notebook 16 als Plausibilisierung
 benutzt, taugt als Schweregradkomponente nicht. Er ist nicht auf die
 Gebaeudegroesse normiert, ein grosses Haus liegt dort zwangslaeufig
 oben, und der Versuch, ihn ueber die mittlere Leistung zu normieren,
@@ -82,7 +82,7 @@ from . import anomalie as an
 MIN_EVIDENZ = 0.6
 
 #Persistenzanteil, ab dem eine Station als auffaellig in die
-#Trefferliste kommt. Entspricht der Schwelle aus Notebook 18.
+#Trefferliste kommt. Entspricht der Schwelle aus Notebook 16.
 MIN_PERSISTENZ = 0.10
 
 #Deckel der Schweregradkomponenten: ab diesen Werten zaehlt die
@@ -269,7 +269,7 @@ def kennzahlen(panel: pd.DataFrame,
 def _kurzschluss_spalte(panel: pd.DataFrame) -> Optional[str]:
     """Spalte des Zustands mit Kurzschlussverdacht, falls im Panel.
 
-    Notebook 18 bestimmt den Zustand datengetrieben und gibt ihn an das
+    Notebook 16 bestimmt den Zustand datengetrieben und gibt ihn an das
     Panel weiter. Fehlt diese Information, faellt die Funktion auf None
     zurueck und das zugehoerige Muster verliert eine seiner Kennzahlen,
     ohne auszufallen.
@@ -289,7 +289,7 @@ def effizienz(panel: pd.DataFrame,
 
     `anomalie.effizienz_je_station` liefert den Verbrauch je
     Heizgradstunde. Die Groesse bleibt hier erhalten, weil sie in
-    Notebook 18 als Plausibilisierung dient, taugt aber nicht als
+    Notebook 16 als Plausibilisierung dient, taugt aber nicht als
     absoluter Massstab: sie ist nicht auf die Gebaeudegroesse normiert.
 
     Der Mehrdurchfluss dagegen ist groessenunabhaengig. Liefert eine

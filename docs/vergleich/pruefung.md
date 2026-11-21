@@ -3,7 +3,7 @@
 Mit 53 begangenen Stationen, davon 11 mit Ventil- und 9 mit Vertragsbefund, entscheidet die Prüfung
 mehr über die Aussagekraft als das Modell. Diese Seite beschreibt, wie geprüft wurde und warum so. Die
 Regeln gelten für die [lernenden Modelle](../modelle/index.md) und für beide Vergleiche, den
-[ersten Prüfstand](pruefstand.md) und den [strengen Vergleich](endmodell.md). Gerechnet wird in den Notebooks 27, 29 bis 32, 38 und 39. Die Prüfungen sind dort als feste Funktionen
+[ersten Prüfstand](pruefstand.md) und den [strengen Vergleich](endmodell.md). Gerechnet wird in den Notebooks 25, 27 bis 30, 34 und 35. Die Prüfungen sind dort als feste Funktionen
 hinterlegt, damit jedes Modell genau dieselbe Prüfung durchläuft.
 
 ## Was gemessen wird
@@ -38,16 +38,16 @@ Deshalb wird nach Stationen getrennt:
   dass in jedem zwei bis drei Ventilfälle liegen.
 - **Innen:** Auf den Lernstationen eines Teils wählt eine zweite, vierfache Kreuzvalidierung die
   Einstellungen des Modells: die Stärke der Regularisierung der logistischen Regression aus 0,03, 0,1, 0,3
-  und 1,0, bei XGBoost Tiefe 1 bis 3 und 100 oder 300 Bäume. In Notebook 39 wählt sie auch, welcher
+  und 1,0, bei XGBoost Tiefe 1 bis 3 und 100 oder 300 Bäume. In Notebook 35 wählt sie auch, welcher
   Kandidat gewinnt.
-- **LSTM-Encoder je Teil neu:** In Notebook 39 wird der Fingerabdruck für jeden der fünf Teile ohne die
+- **LSTM-Encoder je Teil neu:** In Notebook 35 wird der Fingerabdruck für jeden der fünf Teile ohne die
   Teststationen neu gelernt. Die Teststation beeinflusst also weder das Netz noch die Regression noch die
   Auswahl.
-- In den früheren Notebooks 27 bis 31 wird mit Leave-one-out geprüft, also jede Station einmal
+- In den früheren Notebooks 25 bis 29 wird mit Leave-one-out geprüft, also jede Station einmal
   ausgelassen, und zusätzlich mit ganzen Straßen ausgelassen. Die Ergebnisse ändern sich dabei kaum.
 
 **Wächter: nach der Zeit.** Ein Wächter wird im Betrieb immer auf die Zukunft angewendet. In Notebook
-39 gilt eine gemeinsame Zeitachse für alle Wächter:
+35 gilt eine gemeinsame Zeitachse für alle Wächter:
 
 | Abschnitt | Zeitraum | wofür |
 |---|---|---|
@@ -57,9 +57,9 @@ Deshalb wird nach Stationen getrennt:
 | Test | ab 08.06.2024 | alle Begehungen, eingerechnete Fehler |
 
 Die 7 Tage Abstand sind das Eingabefenster des Prognose-LSTM. So teilen Lernen und Test keinen
-Rohdatentag. In den Vorversuchen (Notebook 29 und 30) lag die Validierung noch in ganzen
+Rohdatentag. In den Vorversuchen (Notebook 27 und 28) lag die Validierung noch in ganzen
 Kalenderwochen zwischen den Trainingswochen. Das hat sich als zu leicht erwiesen: Das Netz kennt die
-Woche davor und danach und muss nur eine Lücke füllen. Deshalb liegt die Probezeit in Notebook 39
+Woche davor und danach und muss nur eine Lücke füllen. Deshalb liegt die Probezeit in Notebook 35
 zeitlich nach dem Lernen.
 
 ## Gleiche Bedingungen für alle
@@ -104,7 +104,7 @@ berechnet, in welche Richtung jedes Gewicht den Fehler verringert. Der Optimiere
 kleinen Schritt in diese Richtung. Er ist eine Form des Gradientenabstiegs, die die Schrittweite für jedes
 Gewicht selbst anpasst.
 
-| | Fingerabdruck (Notebook 29) | Prognose-LSTM (Notebook 30) |
+| | Fingerabdruck (Notebook 27) | Prognose-LSTM (Notebook 28) |
 |---|---|---|
 | Lernrate zu Beginn | 0,003 | 0,002 |
 | Lernrate halbieren | nach 5 Runden ohne Besserung | nach 4 Runden ohne Besserung |
@@ -114,12 +114,12 @@ Gewicht selbst anpasst.
 **Early Stopping nur auf der Validierung.** Nach jeder Runde wird der Fehler auf Tagen gemessen, die das
 Netz nicht lernt. Der beste Stand wird gemerkt. Wird der Fehler eine feste Zahl von Runden lang nicht
 besser, ist Schluss, und der beste Stand bleibt. Ohne diese Bremse lernt das Netz die Trainingstage
-auswendig. Ein Vorversuch in Notebook 29 zeigt das: Der Validierungsfehler steigt dort wieder, während
+auswendig. Ein Vorversuch in Notebook 27 zeigt das: Der Validierungsfehler steigt dort wieder, während
 der Trainingsfehler weiter fällt. Kein Testwert und kein Befund steuert das Training.
 
-**Wiederholbar.** Alle Seeds sind fest. In den Vorversuchen und in Notebook 39 rechnet die
+**Wiederholbar.** Alle Seeds sind fest. In den Vorversuchen und in Notebook 35 rechnet die
 Grafikkarte zusätzlich im deterministischen Modus, also bei jedem Lauf in derselben Reihenfolge. Ein frischer Lauf der Netze aus Notebook
-29 und 30 ohne gespeicherte Gewichte lieferte dieselben Zahlen wie die gespeicherte Fassung. Die
+27 und 28 ohne gespeicherte Gewichte lieferte dieselben Zahlen wie die gespeicherte Fassung. Die
 Gewichte werden gespeichert und beim nächsten Lauf geladen.
 
 ## Warum keine Hyperparameter-Suche für die Netze
@@ -144,14 +144,14 @@ hängt nur am Vorhersagefehler.
 
 Wer mehrere Modelle prüft und den Sieger nach den Testwerten nimmt, bekommt eine zu gute Zahl. Das
 ist zuerst passiert: Die Regression auf Kennzahlen und LSTM-Zahlen war im Test die beste, mit einer
-Ventil-AUC von 0,88. In Notebook 39, Abschnitt 19, wird die Wahl deshalb in den Lernteil verlegt: In
+Ventil-AUC von 0,88. In Notebook 35, Abschnitt 19, wird die Wahl deshalb in den Lernteil verlegt: In
 jedem der fünf Teile entscheidet nur die innere Prüfung, welcher Kandidat gewinnt, erst danach wird
 getestet. So kommt die Fehlerart auf eine Ventil-AUC von 0,84 und eine Dämmungs-AUC von 0,78. Die 0,88
 war um etwa 0,05 zu optimistisch und wird nicht behauptet.
 
 In der inneren Prüfung lagen zwei Kandidaten gleichauf: die Regression nur auf den 16 LSTM-Zahlen und
 die auf Kennzahlen und LSTM-Zahlen. Gewählt ist die Regression nur auf den LSTM-Zahlen, aus zwei Gründen.
-Sie ist einfacher. Und sie vermeidet ein Leck über das Vorwissen: Die 12 Kennzahlen sind physikalisch
+Sie ist einfacher: 16 statt 28 Eingaben bei 53 Stationen, also weniger Gefahr, Zufälle mitzulernen. Und sie vermeidet ein Leck über das Vorwissen: Die 12 Kennzahlen sind physikalisch
 begründet, wurden aber festgelegt, als die Begehungsprotokolle und Fälle wie 68956351 schon bekannt
 waren. Die 16 LSTM-Zahlen hat das Netz dagegen ohne Befund-Labels gelernt. Die Kennzahlen bleiben
 trotzdem wichtig: Mit ihnen wird ein Verdacht im Hausfenster des Dashboards begründet.

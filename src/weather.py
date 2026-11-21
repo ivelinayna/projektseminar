@@ -30,9 +30,16 @@ Cache
   Netzzugriff
 - ohne Cache und mit ``allow_download=False`` gibt es einen Fehler
 
+Tageswerte
+----------
+- `tageswerte_laden()` holt zusätzlich das historische Archiv der
+  Tageswerte (Produkt ``klima_tag``) nach ``data/raw/weather/tageswerte/``
+- daraus nehmen die Notebooks 10 und 38 das Tagesmittel (TMK)
+- nur das historische Archiv, damit die Zahlen der Notebooks gleich bleiben
+
 CLI:
 
-    python -m src.weather                  # Cache anlegen/aktualisieren
+    python -m src.weather                  # Cache anlegen/aktualisieren, Tageswerte holen
     python -m src.weather --station 1107   # andere DWD-Station
     python -m src.weather --offline        # nur Cache-Status zeigen
 """
@@ -58,6 +65,11 @@ DWD_BASE = ("https://opendata.dwd.de/climate_environment/CDC/"
 DEFAULT_STATION_ID = 2600
 
 CACHE_DIR = Path(__file__).resolve().parents[1] / "data" / "raw" / "weather"
+
+#Tageswerte (Klima) für die Notebooks 10 und 38
+DWD_TAG_BASE = ("https://opendata.dwd.de/climate_environment/CDC/"
+                "observations_germany/climate/daily/kl")
+TAG_DIR = CACHE_DIR / "tageswerte"
 
 LOCAL_TZ = "Europe/Berlin"
 
@@ -141,6 +153,35 @@ def parse_tu_archive(raw: bytes) -> pd.DataFrame:
     out = out.sort_values("timestamp_utc", kind="stable")
     out = out.drop_duplicates(subset="timestamp_utc", keep="last")
     return out.reset_index(drop=True)
+
+
+def tageswerte_laden(station_id: int = DEFAULT_STATION_ID,
+                     ziel: Path = TAG_DIR,
+                     timeout: int = 60) -> list[Path]:
+    """Historisches Archiv der DWD-Tageswerte holen und entpacken.
+
+    Legt die Datei ``produkt_klima_tag_*.txt`` nach ``ziel``. Ist sie schon
+    da, passiert nichts. Der Dateiname des Archivs enthält den Zeitraum und
+    wird deshalb aus dem Verzeichnislisting gelesen.
+    """
+    ziel = Path(ziel)
+    vorhanden = sorted(ziel.glob("produkt_klima_tag_*.txt"))
+    if vorhanden:
+        return vorhanden
+    sid = f"{int(station_id):05d}"
+    listing = _fetch(f"{DWD_TAG_BASE}/historical/", timeout=timeout).decode("latin-1", errors="replace")
+    namen = sorted(set(re.findall(rf"tageswerte_KL_{sid}_\d+_\d+_hist\.zip", listing)))
+    if not namen:
+        raise WeatherDownloadError(f"kein Tageswerte-Archiv für Station {station_id} gefunden")
+    ziel.mkdir(parents=True, exist_ok=True)
+    aus = []
+    for name in namen:
+        with zipfile.ZipFile(io.BytesIO(_fetch(f"{DWD_TAG_BASE}/historical/{name}", timeout=timeout))) as zf:
+            for datei in zf.namelist():
+                if datei.startswith("produkt_klima_tag_"):
+                    (ziel / datei).write_bytes(zf.read(datei))
+                    aus.append(ziel / datei)
+    return aus
 
 
 def refresh_cache(station_id: int = DEFAULT_STATION_ID,
@@ -311,6 +352,13 @@ if __name__ == "__main__":
 
     if not target.exists():
         raise SystemExit(f"kein Cache unter {target}")
+
+    if not args.offline:
+        try:
+            tage = tageswerte_laden(args.station, args.cache_dir / "tageswerte")
+            print("Tageswerte: " + ", ".join(str(t) for t in tage))
+        except WeatherDownloadError as exc:
+            print(f"Tageswerte nicht geladen (nur für die Notebooks 10 und 38 nötig): {exc}")
 
     cached = pd.read_csv(target, parse_dates=["timestamp_utc"])
     print(f"Station {args.station}: {len(cached)} Stundenwerte, "

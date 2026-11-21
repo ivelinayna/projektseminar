@@ -20,7 +20,7 @@ Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`
 
 | Ordner | Inhalt |
 |---|---|
-| `notebooks/` | 41 Notebooks (00 bis 41, ohne 12) in acht Teilen, siehe unten |
+| `notebooks/` | 40 Notebooks (00 bis 39) in neun Teilen und einem Anhang, je ein Ordner, siehe unten |
 | `src/` | wiederverwendbarer Code, eine Datei je Aufgabe |
 | `tests/` | Tests mit pytest |
 | `docs/` | Doku für Read the Docs |
@@ -31,16 +31,18 @@ Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`
 
 ## Notebooks
 
-| Teil | Notebooks | Thema |
-|---|---|---|
-| 1 | 00 bis 01 | Daten laden und Lücken füllen |
-| 2 | 02 bis 06 | Begehungen und ihre Wirkung |
-| 3 | 07 bis 11 | Clustering |
-| 4 | 13 bis 17 | Stationsbilder und Befunde |
-| 5 | 18 bis 26 | Anomalien und Monitoring |
-| 6 | 27 bis 33 | Lernende Modelle |
-| 7 | 34 bis 37 | Netz und Karte |
-| 8 | 38 bis 41 | Modellvergleich, Endmodell, Dashboard, Merkmale und Erklärbarkeit |
+| Teil | Ordner | Notebooks | Thema |
+|---|---|---|---|
+| 1 | `1_daten/` | 00 bis 01 | Daten laden und Lücken füllen |
+| 2 | `2_begehungen/` | 02 bis 06 | Begehungen und ihre Wirkung |
+| 3 | `3_clustering/` | 07 bis 10 | Clustering |
+| 4 | `4_stationsbilder/` | 11 bis 15 | Stationsbilder und Befunde |
+| 5 | `5_monitoring/` | 16 bis 24 | Anomalien und Monitoring |
+| 6 | `6_lernende_modelle/` | 25 bis 30 | Lernende Modelle |
+| 7 | `7_netz/` | 31 bis 33 | Netz und Karte |
+| 8 | `8_modellvergleich/` | 34 bis 36 | Modellvergleich, Endmodell, Merkmale und Erklärbarkeit |
+| 9 | `9_dashboard/` | 37 | Dashboard |
+| Anhang | `weitere_versuche/` | 38 bis 39 | Weitere Versuche (Bayes-Diagnose, GNN) |
 
 Notebook 00 immer zuerst ausführen. Alle anderen lesen dessen Ergebnis. Details in `docs/notebooks.md`.
 
@@ -54,6 +56,8 @@ pip install -r requirements.txt jupyterlab
 #Rohdaten der ÜZ nach data/raw/ kopieren
 python -m src.weather             # Außentemperatur
 python -m src.main                # Netz, Karten, Begehungstabelle
+python -m src.meter_quality       # Datenqualität je Zähler
+python -m src.detect_real         # Winterkennzahlen je Zähler
 jupyter lab                       # dann Notebook 00, danach der Reihe nach
 python -m pytest -q               # Tests
 ```
@@ -67,7 +71,7 @@ docker compose up dashboard       # http://localhost:8000/fernwaerme_dashboard_f
 docker compose up docs            # http://localhost:8001
 ```
 
-Mehr dazu in `docs/docker.md`.
+Schritt-für-Schritt-Anleitung (Docker installieren, Projekt holen, Daten ablegen, ausführen) in `docs/installation/docker.md`.
 
 ## Doku
 
@@ -82,4 +86,4 @@ Read the Docs baut die Seite aus `.readthedocs.yaml` und `mkdocs.yml`.
 
 - Rohdaten, Ergebnisse und Modellpakete werden nie committet.
 - Die Doku nennt Stationen nur über die Zählernummer, nie über die Adresse.
-- Die Dashboard-HTML und die Netz-Notebooks 34 bis 36 zeigen Adressen. Sie sind nur für den internen Gebrauch.
+- Die Dashboard-HTML und die Netz-Notebooks 31 bis 33 zeigen Adressen. Sie sind nur für den internen Gebrauch.

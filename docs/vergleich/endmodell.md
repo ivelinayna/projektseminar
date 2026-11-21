@@ -1,14 +1,14 @@
 # Strenger Vergleich
 
 Der [erste Prüfstand](pruefstand.md) hat gezeigt, welches System welche Aufgabe besser löst, war aber an vier Stellen
-zu optimistisch. Notebook 39 lernt deshalb die beiden fertigen Ansätze des Projekts aus denselben Daten neu und prüft
+zu optimistisch. Notebook 35 lernt deshalb die beiden fertigen Ansätze des Projekts aus denselben Daten neu und prüft
 sie nach den Regeln aus [Prüfdesign und Statistik](pruefung.md):
 
 - **Monitoring-Modell:** Kennlinie je Station mit CUSUM (Tagesmonitor), dazu Netzvergleich und Potenzial.
 - **LSTM-Modell:** das [Prognose-LSTM](../modelle/prognose.md) als Wächter und die
   [Fehlerklassen](../modelle/klassen.md) aus dem [Fingerabdruck](../modelle/lstm.md).
 
-Am Ende speichert Notebook 39 die gewählten Modelle als Pakete für das Dashboard.
+Am Ende speichert Notebook 35 die gewählten Modelle als Pakete für das Dashboard.
 
 ## Wie geprüft wurde
 
@@ -37,7 +37,7 @@ Die Grenzen dieses Vergleichs stehen unter [Grenzen der Modelle](../grenzen_mode
 
 Gelernt wird im Notebook, gespeichert als Paket, angewendet auf die aktuellen Daten, angezeigt im Dashboard. Ein Paket
 enthält nicht nur Gewichte, sondern alles, was zum Anwenden gehört: Merkmalsliste, Skalierung, Kalibrierung,
-Schwellen, Lernzeitraum und Prüfsummen. Notebook 39 speichert drei Pakete:
+Schwellen, Lernzeitraum und Prüfsummen. Notebook 35 speichert drei Pakete:
 
 | Paket für | Inhalt | Rolle im Dashboard |
 |---|---|---|
@@ -47,6 +47,6 @@ Schwellen, Lernzeitraum und Prüfsummen. Notebook 39 speichert drei Pakete:
 
 - Wo mit Befunden gelernt wird (Fehlerart), nur auf begangenen Stationen. Wo Normalverhalten gelernt wird (Wächter),
   auf allen Stationen, die überwacht werden sollen.
-- Nach dem Speichern prüft Notebook 39, dass die geladenen Pakete dasselbe liefern wie die Modelle im Speicher.
+- Nach dem Speichern prüft Notebook 35, dass die geladenen Pakete dasselbe liefern wie die Modelle im Speicher.
 - Wie die Pakete auf aktuelle Daten angewendet werden und was das Dashboard daraus macht, steht unter
   [Dashboard](../ergebnisse_dashboard.md).

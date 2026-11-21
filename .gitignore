@@ -62,13 +62,6 @@ notebooks/*.geojson
 site/
 _build/
 
-#Lokale Assistenz-Einstellungen
-CLAUDE.md
-.claude/
-.agents/
-.skills/
-.ki-lokal/
-
 #Review-Snapshots, können vertrauliche Daten enthalten
 *-review.zip
 

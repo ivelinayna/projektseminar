@@ -72,7 +72,7 @@ from . import nb00_daten as nb00
 #Spaltennamen der NB-00-Ausgabe
 SPALTEN_MAP = nb00.SPALTEN_MAP
 
-#Merkmalsraum aus Notebook 09: Leistung und Durchfluss stationsnormiert,
+#Merkmalsraum der Stundencluster: Leistung und Durchfluss stationsnormiert,
 #die drei Temperaturgroessen in Kelvin bzw. Grad Celsius
 BETRIEBS_FEATURES = ["power_norm", "flow_norm", "dt", "vl", "rt"]
 
@@ -216,7 +216,7 @@ def mit_kontext(panel: pd.DataFrame,
 def fit_minibatch_kmeans(X: np.ndarray, k: int, seed: int = SEED,
                          n_init: int = 10,
                          batch_size: int = 2048) -> np.ndarray:
-    """Labels eines MiniBatchKMeans-Laufs, wie in Notebook 09."""
+    """Labels eines MiniBatchKMeans-Laufs (Stundencluster)."""
     km = MiniBatchKMeans(n_clusters=k, n_init=n_init, random_state=seed,
                          batch_size=batch_size)
     return km.fit_predict(np.asarray(X))
@@ -473,7 +473,7 @@ def gewichtungsvarianten(df: pd.DataFrame,
     """Die Vorverarbeitungswege, die gegeneinander antreten.
 
     `alle gleich`      StandardScaler auf allen Features, der bisherige
-                       Weg aus Notebook 07, 08 und 09
+                       Weg aus Notebook 07 und 08
     `auswahl`          StandardScaler auf der redundanzbereinigten
                        Teilmenge
     `pca`              StandardScaler, danach PCA auf `pca_varianz`

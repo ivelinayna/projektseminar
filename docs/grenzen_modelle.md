@@ -13,7 +13,7 @@ Diese Seite sammelt, wo die Modelle aufhören und was ihre Zahlen nicht aussagen
   das LSTM ohne Labels, und erst eine logistische Regression sieht die Befunde (siehe
   [LSTM-Fingerabdruck](modelle/lstm.md)).
 - Das Modell im Dashboard hängt beim Ventil vom Startwert des LSTM ab: Mit anderen Startwerten liegt die AUC zwischen
-  0,83 und 0,90 (Notebook 39).
+  0,83 und 0,90 (Notebook 35).
 
 ### Labels
 
@@ -25,24 +25,24 @@ Diese Seite sammelt, wo die Modelle aufhören und was ihre Zahlen nicht aussagen
 
 ### Was die Modelle nicht erkennen
 
-- **Regelungsoptimierung:** Kein Modell trifft sie. In Notebook 39 landen 24 bzw. 25 von 31 Fällen in „kein
+- **Regelungsoptimierung:** Kein Modell trifft sie. In Notebook 35 landen 24 bzw. 25 von 31 Fällen in „kein
   Handlungsbedarf“.
 - **Filter, Durchfluss und Sollwert als Ursache:** AUC 0,26 bis 0,57. Nach diesen Maßnahmen bleibt die Station in den
-  Zählerdaten gleich (Notebook 41).
+  Zählerdaten gleich (Notebook 36).
 - **Dämmung:** Das LSTM-Modell findet ein Muster (AUC 0,78), die Ursache ist aber physikalisch nicht erklärt. Ein
-  erster physikalischer Hinweis, die Abkühlrate im Stillstand, ist nicht gesichert (AUC 0,69, Notebook 41).
+  erster physikalischer Hinweis, die Abkühlrate im Stillstand, ist nicht gesichert (AUC 0,69, Notebook 36).
 
 ### Wächter
 
 - **Eingebaute Fehler** zeigen, was ein Wächter grundsätzlich erkennen kann, nicht seine Trefferquote bei echten
   Fehlern.
-- **Das Prognose-LSTM** bemerkt echte Begehungen nicht öfter als Vergleichsstationen, in Notebook 32 16 von 43 gegen
+- **Das Prognose-LSTM** bemerkt echte Begehungen nicht öfter als Vergleichsstationen, in Notebook 30 16 von 43 gegen
   32 %. Es bekommt die letzten 7 Tage als Eingang, eine bleibende Veränderung wird so schnell Teil seiner Erwartung.
-- **Nach einem Eingriff** kennt das Prognose-LSTM die Station nur von vorher. Beim Ventiltausch in Notebook 32 meldet
+- **Nach einem Eingriff** kennt das Prognose-LSTM die Station nur von vorher. Beim Ventiltausch in Notebook 30 meldet
   es die Station nach 7 Tagen und danach noch zweimal, nach 22 und 33 Tagen. Nach einem bekannten Eingriff muss es neu
   kalibriert werden.
 - **Die Referenz des Monitoring-Modells veraltet:** An 43 % der Testtage steht eines seiner Konten am Deckel, dann
-  kann es nicht neu melden (Notebook 39).
+  kann es nicht neu melden (Notebook 35).
 
 ### Empfehlungen
 

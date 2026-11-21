@@ -1,7 +1,7 @@
 # Endmodell
 
 Das Endmodell ist kein einzelnes Modell. Für jede Frage aus der Aufgabenstellung ist das Modell gewählt, das im
-strengen Vergleich in Notebook 39 am besten abgeschnitten hat. Wo zwei Modelle gleichauf lagen, ist das einfachere und
+strengen Vergleich in Notebook 35 am besten abgeschnitten hat. Wo zwei Modelle gleichauf lagen, ist das einfachere und
 erklärbare gewählt. Wie verglichen wurde, steht unter [Strenger Vergleich](vergleich/endmodell.md), die Prüfregeln
 unter [Prüfdesign und Statistik](vergleich/pruefung.md).
 
@@ -13,7 +13,7 @@ Verglichen wurden die beiden fertigen Ansätze des Projekts:
 
 ## Gewähltes Modell je Frage
 
-| Frage | Modell | Ergebnis in Notebook 39 | Urteil |
+| Frage | Modell | Ergebnis in Notebook 35 | Urteil |
 |---|---|---|---|
 | Veränderung in der Heizperiode, Erfolgskontrolle | Monitoring-Modell: Kennlinie + CUSUM, h = 5 | 18 von 43 Begehungen als „besser“ bemerkt, Kontrolle 24 %, p = 0,006 | Pilot mit Einschränkungen |
 | Veränderung an warmen Tagen, plötzlicher Dauerdurchfluss | Prognose-LSTM + CUSUM, h = 10, auf allen Stationen gelernt | 78 % der Dauerdurchflüsse von 150 l/h bei höchstens 5 % Fehlalarmen, Wochenmittel 45 % | Pilot mit Einschränkungen |
@@ -56,6 +56,12 @@ nicht für eine Entscheidung ohne Prüfung vor Ort.
   optimieren“ trifft keins der beiden.
 - Dämmung: Nur das gelernte Modell findet ein Muster. Der Vorsprung vor der besten Einzelregel (+0,17 [−0,04; +0,38])
   ist knapp nicht gesichert, die Ursache physikalisch ungeklärt. Deshalb nur ein Hinweis mit niedriger Dringlichkeit.
+  Wie das Muster aussieht, zeigt Notebook 36 an der Regression auf den Kennzahlen, weil sich die LSTM-Zahlen nicht
+  deuten lassen: mehrere schwache Hinweise zusammen, ein kälterer Rücklauf im Winter, eine kleine Spreizung in
+  Sommernächten und eine große Streubreite der Betriebspunkte. Keiner trennt allein, deshalb kommt die beste
+  Einzelregel nur auf 0,61. Das Muster ist in allen fünf Prüfteilen gleich und bleibt auch ohne die Ventilstationen und
+  innerhalb von Stationstyp, Größe und Zeitraum der Begehung erhalten. Ein Teil davon beschreibt eher, wo gedämmt
+  wurde, nämlich an gut laufenden Stationen.
 - Kapazität: Dem gelernten Modell fehlt die Auslastung zum alten Vertrag, deshalb bleibt die Regel.
 
 **Lage im Netz.** Netzvergleich und Potenzial beschreiben eine Station, sagen die Wirkung einer Begehung aber kaum

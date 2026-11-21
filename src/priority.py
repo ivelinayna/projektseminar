@@ -78,8 +78,10 @@ def compute_scores(today: pd.Timestamp | None = None) -> pd.DataFrame:
     """
     today = pd.Timestamp.today().normalize() if today is None else today
 
-    geo = _load(PROCESSED / "hast_geocoded.csv",
-                "python -m src.main --geocode")
+    #nur die Stationsliste mit Adresse und Anschlusswert; Koordinaten braucht der Score nicht,
+    #deshalb ohne Geocoding (das schickt Adressen an einen externen Dienst)
+    from . import load_data as ld
+    geo = ld.load_logical_nodes()
     quality = _load(PROCESSED / "meter_quality.csv",
                     "python -m src.meter_quality")
     feats = _load(PROCESSED / "features_real.csv",

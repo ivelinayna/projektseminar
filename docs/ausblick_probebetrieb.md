@@ -13,7 +13,7 @@ Notebook 00              saubere Stundenreihen
      │
 Programm dashboard_daten wendet die gespeicherten Pakete an, lernt nichts neu
      │
-Notebook 40              baut die HTML-Datei des Dashboards
+Notebook 37              baut die HTML-Datei des Dashboards
 ```
 
 Gelernt wird dabei nichts. Die Ergebnistabellen halten fest, mit welcher Paketversion und bis zu welchem Datum
@@ -22,19 +22,19 @@ gerechnet wurde.
 ## Regeln für den Betrieb
 
 1. **Nur anwenden, nicht lernen.** Ein Modell, das bei jedem Lauf neu lernt, verschiebt still seine Schwellen. Lernen
-   braucht eine Prüfung wie in Notebook 39.
+   braucht eine Prüfung wie in Notebook 35.
 2. **Skalierung und Kalibrierung bleiben eingefroren.** Neue Daten werden mit den gespeicherten Werten skaliert. Würde
    man die Skalierung aus den neuen Daten rechnen, verschöbe ein lange anhaltender Fehler den Maßstab, an dem er
    gemessen wird.
 3. **Neue Stationen erst einlernen.** Das Monitoring-Modell braucht 60 Heiztage, das Prognose-LSTM rund vier Wochen
-   volle Stundenwerte (Notebook 39). Bis dahin steht die Station als „noch nicht bewertbar“ im Dashboard.
+   volle Stundenwerte (Notebook 35). Bis dahin steht die Station als „noch nicht bewertbar“ im Dashboard.
 4. **Nach einem bekannten Eingriff neu kalibrieren.** Das Prognose-LSTM kennt eine Station nur von vor dem Eingriff
-   und meldet eine Reparatur sonst immer wieder (Notebook 32: nach 7, 22 und 33 Tagen). Die Referenz des
+   und meldet eine Reparatur sonst immer wieder (Notebook 30: nach 7, 22 und 33 Tagen). Die Referenz des
    Monitoring-Modells sollte nach jeder Begehung und zu jeder Heizperiode neu gelernt werden, sonst stehen seine Konten
-   am Deckel (an 43 % der Testtage in Notebook 39).
+   am Deckel (an 43 % der Testtage in Notebook 35).
 5. **Neu lernen nur mit Prüfung.** Ändert sich die Datenbasis deutlich, etwa durch neue Zähler oder einen neuen Winter,
-   werden die Modelle neu gelernt: Notebook 00, dann Notebook 27 für Labels und Kennzahlen, dann Notebook 39. Erst wenn
-   die Zahlen aus Notebook 39 mit dem bisherigen Stand verglichen sind, kommen die neuen Pakete ins Dashboard.
+   werden die Modelle neu gelernt: Notebook 00, dann Notebook 25 für Labels und Kennzahlen, dann Notebook 35. Erst wenn
+   die Zahlen aus Notebook 35 mit dem bisherigen Stand verglichen sind, kommen die neuen Pakete ins Dashboard.
 
 ## Rückmeldung aus dem Probebetrieb
 
@@ -46,4 +46,6 @@ wurde. Dafür sollte jede Begehung festhalten:
 - was getauscht oder eingestellt wurde,
 - ob die Station vorher auf der Handlungsliste stand und mit welcher Dringlichkeit.
 
-Wie daraus eine Prüfung der Modelle wird, steht unter [Prüfung nach vorn](ausblick_pruefung.md).
+Dafür gibt es eine Vorlage für das Begehungsprotokoll und einen Befehl, der die ausgefüllten Protokolle prüft und mit
+dem gesicherten Stand der Handlungsliste vor der Begehung verknüpft (siehe [Betrieb bei der ÜZ](installation/betrieb.md)). Wie daraus
+eine Prüfung der Modelle wird, steht unter [Prüfung nach vorn](ausblick_pruefung.md).

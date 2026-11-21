@@ -1,7 +1,7 @@
 # dashboard_monitor.py
-# Kopie von dashboard_export.py aus Notebook 34 (Netz), erweitert um den Status des
-# Kennlinien-Monitors (Notebooks 22, 23, 25 und 26). Das Original bleibt unverändert.
-# Im Notebook 36 ausführen, dort sind serien, knoten, G, pos, roh und ROOT gesetzt.
+# Kopie von dashboard_export.py aus Notebook 31 (Netz), erweitert um den Status des
+# Kennlinien-Monitors (Notebooks 20, 21, 23 und 24). Das Original bleibt unverändert.
+# Im Notebook 33 ausführen, dort sind serien, knoten, G, pos, roh und ROOT gesetzt.
 #
 # Erzeugt eine eigenständige HTML-Datei: Karte mit Zeitregler (stündlich), Fließanimation entlang
 # der Kanten, Färbung der Häuser nach Spreizung/Vorlauf/Rücklauf/Durchfluss/Leistung und Verläufen.
@@ -541,7 +541,7 @@ function qrange(fn){
 }
 for (const k in MET) MET[k].r = qrange(MET[k].fn);
 
-// ---- Monitor (Kennlinien-Monitor, Notebooks 22, 23, 25 und 26)
+// ---- Monitor (Kennlinien-Monitor, Notebooks 20, 21, 23 und 24)
 const AF = D.afenster, EV = D.ereig;
 const PRIO_NAME = ['kein Status', 'niedrig', 'mittel', 'hoch'];
 const PRIO_FARBE = ['#bbbbbb', '#1a9850', '#fc8d59', '#d73027'];

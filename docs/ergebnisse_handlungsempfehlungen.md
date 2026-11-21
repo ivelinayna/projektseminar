@@ -3,7 +3,7 @@
 Folie 5 der Aufgabenstellung verlangt je Station eine Handlungsempfehlung: Reparatur, Regelungsoptimierung oder
 Kapazitätsanpassung. Diese Seite beschreibt, wie aus den Ausgaben des [Endmodells](ergebnisse_endmodell.md) eine
 Empfehlung wird, was beim aktuellen Datenstand herauskommt und wie verlässlich das ist. Gerechnet wird mit den Paketen
-aus Notebook 39, angewendet vom Programm dashboard_daten. Angezeigt wird die Empfehlung in der Handlungsliste des
+aus Notebook 35, angewendet vom Programm dashboard_daten. Angezeigt wird die Empfehlung in der Handlungsliste des
 [Dashboards](ergebnisse_dashboard.md).
 
 ## Von der Klasse zur Handlung
@@ -33,7 +33,7 @@ Unabhängig von der Klasse kommen zwei Hinweise dazu:
 | niedrig | nur Hinweise: Kapazität prüfen, Dämmung prüfen, Daten prüfen |
 | keine | weder Handlung noch Hinweis |
 
-- Innerhalb einer Stufe wird nach dem Ventil-Score sortiert. Das ist der Teil der Reihenfolge, den Notebook 39 belegt.
+- Innerhalb einer Stufe wird nach dem Ventil-Score sortiert. Das ist der Teil der Reihenfolge, den Notebook 35 belegt.
 - **Sonderfälle** bekommen nur „Daten prüfen“, keine Reparatur. Sonderfall heißt: Mindestens zwei Kennzahlen liegen
   außerhalb dessen, woraus das Modell gelernt hat, oder die Station hat mehr als 10 % des Wintervolumens im Netz und
   ist damit keine typische Hausstation. Für solche Werte ist der Score nicht geprüft.
@@ -41,7 +41,7 @@ Unabhängig von der Klasse kommen zwei Hinweise dazu:
 
 ## Stand der Empfehlungen
 
-Gerechnet mit den Paketen aus Notebook 39 auf den Messdaten bis 20.07.2026. Klasse und Empfehlung gelten für den
+Gerechnet mit den Paketen aus Notebook 35 auf den Messdaten bis 20.07.2026. Klasse und Empfehlung gelten für den
 letzten Winter mit genug Daten, das ist 2024/25, und den Sommer 2025. Für den Winter 2025/26 fehlen die Daten der
 meisten Zähler.
 
@@ -75,7 +75,7 @@ Ventil-Score sinkt nach jeder Begehung, nicht nur nach einem Ventiltausch, und d
 
 ## Wie verlässlich die Empfehlungen sind
 
-Geprüft ist das in Notebook 39 an den begangenen Stationen, mit Kreuzvalidierung über Stationsgruppen.
+Geprüft ist das in Notebook 35 an den begangenen Stationen, mit Kreuzvalidierung über Stationsgruppen.
 
 - **Reihenfolge:** Unter den ersten 10 Stationen nach dem Ventil-Score des LSTM-Modells hatten 7 einen Ventilbefund
   (Test E). Nach der Priorität des Monitoring-Modells waren es 5, Zufall wären etwa 2.
@@ -91,11 +91,11 @@ Begehung nach der Liste (siehe [Prüfung nach vorn](ausblick_pruefung.md)).
 
 ## Was bewusst nicht empfohlen wird
 
-- **Keine Empfehlung „Regelung optimieren“.** Kein Modell erkennt diese Maßnahme. In Notebook 39 landen 24 bzw. 25 von
+- **Keine Empfehlung „Regelung optimieren“.** Kein Modell erkennt diese Maßnahme. In Notebook 35 landen 24 bzw. 25 von
   31 Fällen mit Regelungsoptimierung in „kein Handlungsbedarf“ (Test C).
 - **Kein Sortieren nach Meldungen der Wächter.** Vor Begehungen mit Befund gab es nicht mehr Verschlechterungen als bei
-  Vergleichsstationen (Notebook 23).
+  Vergleichsstationen (Notebook 21).
 - **Kein Sortieren nach Potenzial und keine Einspar-Schätzung in Euro.** Das Potenzial sagt nicht vorher, wo eine
-  Begehung am meisten bringt (Notebook 39, Test D, Rangkorrelation 0,16).
+  Begehung am meisten bringt (Notebook 35, Test D, Rangkorrelation 0,16).
 - **Keine Empfehlung zu Filter, Durchfluss und Sollwert.** Diese Maßnahmen hinterlassen in den Zählerdaten keine Spur
-  (Notebook 41, siehe [Was nicht getragen hat](nicht_getragen.md)).
+  (Notebook 36, siehe [Was nicht getragen hat](nicht_getragen.md)).

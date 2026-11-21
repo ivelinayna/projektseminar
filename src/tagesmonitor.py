@@ -1,9 +1,9 @@
 """Tagesmonitor: wetterbereinigte Tageswerte je Station mit CUSUM-Alarm.
 
-Im finalen Modell ist das der einzige Alarm, der Fensteralarm aus NB 15
+Im finalen Modell ist das der einzige Alarm, der Fensteralarm aus NB 13
 traf Begehungen kaum besser als Zufall und steht nicht mehr im
 Stationsblatt. Die
-Idee stammt aus NB 20 (Normalverhaltensmodell) und ist hier so umgebaut,
+Idee stammt aus NB 18 (Normalverhaltensmodell) und ist hier so umgebaut,
 dass sie auf denselben Daten läuft wie der Rest des finalen Modells, also
 auf den Stundenreihen aus NB 00 über ``nb00_daten.lade_serien``.
 
@@ -19,7 +19,7 @@ trägen Station.
 
 Dazu kommen drei Auswertungen für das Notebook: ein Treffertest gegen
 Kontrollstationen am selben Datum (für jede Alarmtabelle, also auch für
-die Alarme aus NB 15), eine wetterbereinigte Differenz-in-Differenzen um
+die Alarme aus NB 13), eine wetterbereinigte Differenz-in-Differenzen um
 die Begehungen und die Abkühlung bei 5 °C je Kernwinter als Gegenprobe
 zum Netzvergleich. Kein Tag wird gelöscht, jeder Ausschluss steht mit
 Grund in der Tagestabelle.
@@ -37,7 +37,7 @@ from . import fallsammlung as fs
 from . import netzvergleich as nv
 from . import weather
 
-#Tageswerte, Schwellen wie NB 11
+#Tageswerte, Schwellen wie NB 10
 MAX_ABSTAND_H = 2
 AKTIV_FLUSS_LH = 20.0
 MIN_STUNDEN = 12
@@ -502,7 +502,7 @@ def faelle(kodiert: pd.DataFrame,
 
     ``kodiert`` ist die Ausgabe von ``befundcodes.kodiere_begehungen``.
     Mechanisch heißt: der Freitext nennt einen Befund an Schmutzfänger,
-    Ventil, Pumpe, Zirkulation oder Volumenstrom (wie NB 16/17).
+    Ventil, Pumpe, Zirkulation oder Volumenstrom (wie NB 14/15).
     """
     k = kodiert.dropna(subset=["meter", "datum"]).copy()
     k["meter"] = k["meter"].astype(int)

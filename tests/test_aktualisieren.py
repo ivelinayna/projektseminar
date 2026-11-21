@@ -83,3 +83,65 @@ def test_bericht_messstelle_nicht_mitgezaehlt():
     assert "1 Messstelle ohne Übergabestation (nur Temperaturen) nicht bewertet: 3" in text
     assert "nicht aktiv" not in text
     assert "ohne Einstufung" not in text
+
+
+def _reihe(ende):
+    idx = pd.date_range("2025-01-01", ende, freq="1h")
+    return pd.DataFrame({"vor": 70.0}, index=idx)
+
+
+def test_karten_ende_bleibt_beim_abgabestand():
+    from src.aktualisieren import KARTE_ENDE_MIN, karten_ende
+    #die meisten Zähler enden im Juli 2025, einzelne Nachlieferungen bis 2026 zählen nicht
+    serien = {i: _reihe("2025-07-31 23:00") for i in range(5)}
+    serien[99] = _reihe("2026-07-15 23:00")
+    assert karten_ende(serien) == KARTE_ENDE_MIN
+
+
+def test_karten_ende_rueckt_mit_der_mehrheit():
+    from src.aktualisieren import karten_ende
+    serien = {i: _reihe("2026-03-31 23:00") for i in range(4)}
+    serien[9] = _reihe("2025-07-31 23:00")
+    assert karten_ende(serien) == pd.Timestamp("2026-03-31 23:00")
+
+
+def test_karten_ende_ohne_reihen():
+    from src.aktualisieren import KARTE_ENDE_MIN, karten_ende
+    assert karten_ende({}) == KARTE_ENDE_MIN
+
+
+def test_notebook_ausfuehren_mit_magie_und_umgebung(tmp_path):
+    import pytest
+    nbformat = pytest.importorskip("nbformat")
+    pytest.importorskip("nbclient")
+    pytest.importorskip("ipykernel")
+    from src.aktualisieren import notebook_ausfuehren
+
+    nb = nbformat.v4.new_notebook()
+    nb.cells = [
+        nbformat.v4.new_markdown_cell("Test"),
+        nbformat.v4.new_code_cell("import os\nwert = os.environ['TEST_WERT']"),
+        nbformat.v4.new_code_cell("%time zahl = 2\nprint('wert', wert, zahl)"),
+    ]
+    pfad = tmp_path / "test.ipynb"
+    nbformat.write(nb, pfad)
+    log = tmp_path / "test.log"
+    assert notebook_ausfuehren(pfad, log=log, umgebung={"TEST_WERT": "abc"}) == 2
+    assert "wert abc 2" in log.read_text(encoding="utf-8")
+    #das Notebook selbst bleibt unverändert
+    assert nbformat.read(pfad, as_version=4).cells[2].outputs == []
+
+
+def test_notebook_ausfuehren_meldet_fehler(tmp_path):
+    import pytest
+    nbformat = pytest.importorskip("nbformat")
+    pytest.importorskip("nbclient")
+    pytest.importorskip("ipykernel")
+    from src.aktualisieren import notebook_ausfuehren
+
+    nb = nbformat.v4.new_notebook()
+    nb.cells = [nbformat.v4.new_code_cell("raise ValueError('kaputt')")]
+    pfad = tmp_path / "fehler.ipynb"
+    nbformat.write(nb, pfad)
+    with pytest.raises(RuntimeError, match="fehler.ipynb.*kaputt"):
+        notebook_ausfuehren(pfad)

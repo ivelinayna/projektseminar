@@ -4,7 +4,7 @@ Die Kennzahlen aus [Daten, Labels und Messlatte](daten.md) sind von Hand gebaut.
 das, bei der Dämmung trennt die beste einzelne Kennzahl nur schwach (AUC 0,64). Ein LSTM soll aus den
 Stundenwerten selbst lernen, was eine Station ausmacht, und das ganz ohne Labels. Das Ergebnis sind 16
 Zahlen je Station, ihr Fingerabdruck. Darauf lernt eine logistische Regression die Befunde. Gerechnet
-wird in Notebook 29, zuerst in Vorversuchen (Abschnitt 2 bis 5), dann mit dem endgültigen Netz
+wird in Notebook 27, zuerst in Vorversuchen (Abschnitt 2 bis 5), dann mit dem endgültigen Netz
 (Abschnitt 6 bis 11).
 
 ## Warum ein Netz, das vorhersagt
@@ -147,7 +147,7 @@ heute (24 Stunden × 6 Größen) ──► LSTM-Encoder (96) ──► Linear 96
   Station ergibt das Mittel über den Winter 2023/24 und über den Sommer 2024 (jeweils mindestens 30 Tage)
   zusammen 16 Zahlen.
 
-**Ergebnisse des endgültigen Netzes (Notebook 29).**
+**Ergebnisse des endgültigen Netzes (Notebook 27).**
 
 - Wiedererkennung über zwei Winter: 83 % von 41 Stationen. Bei nie begangenen Stationen, die das Netz nie
   gesehen hat, sind es 78 %. Das Netz beschreibt also auch Stationen, auf denen es nicht gelernt hat.
@@ -167,7 +167,7 @@ heute (24 Stunden × 6 Größen) ──► LSTM-Encoder (96) ──► Linear 96
   Nur mit Winterdaten liegen die LSTM-Zahlen vor den Kennzahlen (0,83 gegen 0,68, Differenz +0,15
   [+0,02; +0,32]). Dieser Vorsprung ist knapp: In früheren Läufen war er nicht gesichert, und ein einzelnes
   fragliches Label verschiebt die Winter-AUC um 0,06.
-- Die strengere Prüfung in Notebook 39, mit dem Encoder je Teil ohne die Teststationen neu gelernt und
+- Die strengere Prüfung in Notebook 35, mit dem Encoder je Teil ohne die Teststationen neu gelernt und
   der Modellwahl nur im Lernteil, kommt auf Ventil 0,84 und Dämmung 0,78 (siehe [Endmodell](../ergebnisse_endmodell.md)).
 
 ## Was der Fingerabdruck leistet und was nicht

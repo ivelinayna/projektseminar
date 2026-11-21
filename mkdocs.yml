@@ -3,22 +3,6 @@ site_description: >-
   Projektseminar JMU Würzburg mit der ÜZ Mainfranken: Fehler in
   Hausübergabestationen aus Zählerdaten erkennen.
 docs_dir: docs
-# Alte Seiten aus dem Abgabestand: bleiben im Repo, werden aber nicht gebaut
-exclude_docs: |
-  /anhang.md
-  /begriffe.md
-  /dashboard.md
-  /daten.md
-  /docker.md
-  /endmodell.md
-  /ergebnisse.md
-  /grenzen.md
-  /modellvergleich.md
-  /negativbefunde.md
-  /notebooks.md
-  /pipeline.md
-  /schnellstart.md
-  /stationsbilder.md
 theme:
   name: material
   language: de
@@ -43,35 +27,45 @@ extra_css:
   - stylesheets/extra.css
 
 nav:
-  - Einleitung: 
+  - Einleitung:
       - Ausgangslage: index.md
-      - Aufgabe und Ziel: aufgabe_und_ziel.md
-      - Aufbau der Arbeit: aufbau.md
+      - Aufgabe und Ziel: einleitung/aufgabe_und_ziel.md
+      - Aufbau der Arbeit: einleitung/aufbau.md
 
-  # - Installation und Ausführung:   # noch leer
-      # - Vorbereitung:   # noch leer
-      # - Start mit Docker:   # noch leer
-      # - Ausführung bis zum Dashboard:   # noch leer
-      # - Lokaler Start ohne Docker:   # noch leer
-      
-  - Datengrundlage: 
-      - Zählerdaten: daten_zaehlerdaten.md
-      - Begehungen: daten_begehungen.md
-      - Netz und Zuordnung: daten_netz_und_zuordnung.md
-      - Ergänzende Daten: daten_ergaenzend.md
-      - Qualität und Einschränkungen: daten_qualiaet.md
+  - Installation und Ausführung:
+      - Vorbereitung: installation/vorbereitung.md
+      - Start mit Docker: installation/docker.md
+      - Lokaler Start ohne Docker: installation/lokal.md
+      - Ausführung bis zum Dashboard: installation/ausfuehrung.md
+      - Betrieb bei der ÜZ: installation/betrieb.md
+      - Schnellstart: installation/schnellstart.md
+      - Befehle und Module: installation/pipeline.md
+
+  - Datengrundlage:
+      - Zählerdaten: datengrundlage/zaehlerdaten.md
+      - Begehungen: datengrundlage/begehungen.md
+      - Quellen, Netz und bekannte Probleme: datengrundlage/quellen.md
+      - Netz und Zuordnung: datengrundlage/netz_und_zuordnung.md
+      - Ergänzende Daten: datengrundlage/ergaenzend.md
+      - Qualität und Einschränkungen: datengrundlage/qualitaet.md
 
   - Vorgehen:
-      # - Überblick:   # noch leer
+      - Überblick der Notebooks: notebooks.md
       - Daten aufbereiten:
           - Überblick: aufbereitung/index.md
           - Die Schritte im Einzelnen: aufbereitung/schritte.md
           - "Änderungen 1: Rohdaten lesbar machen": aufbereitung/rohdaten.md
           - "Änderungen 2: Kennzahlen ans Raster anpassen": aufbereitung/kennzahlen.md
           - "Änderungen 3: Rückmeldung der ÜZ": aufbereitung/uez_rueckmeldung.md
-      # - Begehungen auswerten:   # noch leer
+      - Begehungen auswerten:
+          - Überblick: begehungen/index.md
+          - "Wirkung im 21-Tage-Fenster": begehungen/wirkung.md
+          - "Label aus Messdaten": begehungen/labels.md
+          - "Wintervergleich": begehungen/wintervergleich.md
+          - "Performance": begehungen/performance.md
+          - "Prognose mit ARIMA": begehungen/arima.md
       # - Merkmale und Clustering:   # noch leer
-      # - Stationsbilder und Befunde:   # noch leer
+      - Stationsbilder und Befunde: stationsbilder.md
       # - Anomalien und Monitoring:   # noch leer
       - Lernende Modelle:
           - Überblick: modelle/index.md
@@ -84,18 +78,22 @@ nav:
           - Prüfdesign und Statistik: vergleich/pruefung.md
           - Erster Prüfstand: vergleich/pruefstand.md
           - Strenger Vergleich: vergleich/endmodell.md
-      - Was nicht getragen hat: nicht_getragen.md
-     
+          - Modellvergleich im Detail: modellvergleich.md
+          - Endmodell im Detail: endmodell.md
+      - Was nicht getragen hat:
+          - Überblick: nicht_getragen.md
+          - Negativbefunde im Detail: negativbefunde.md
+
   - Ergebnisse:
-      # - Überblick:   # noch leer
+      - Überblick: ergebnisse.md
       # - Datenanalyse:   # noch leer
       - Endmodell: ergebnisse_endmodell.md
       - Handlungsempfehlungen: ergebnisse_handlungsempfehlungen.md
       - Dashboard: ergebnisse_dashboard.md
+      - Dashboard bedienen: dashboard.md
 
   - Grenzen und Erkenntnisse:
-      # - Annahmen:   # noch leer
-      # - Grenzen der Daten:   # noch leer
+      - Annahmen, Grenzen und offene Fragen: grenzen.md
       - Grenzen der Modelle: grenzen_modelle.md
       - Erkenntnisse: erkenntnisse.md
 
@@ -103,8 +101,9 @@ nav:
       - Probebetrieb: ausblick_probebetrieb.md
       - Prüfung nach vorn: ausblick_pruefung.md
       - Weiterentwicklung: ausblick_weiterentwicklung.md
-      # - Offene Fragen an die ÜZ:   # noch leer
+      # - Offene Fragen an die ÜZ:   # noch leer, bisher in grenzen.md
 
   - Aufteilung im Team: aufteilung.md
 
-  # - Anhang:   # noch leer
+  - Anhang:
+      - Begriffe: begriffe.md

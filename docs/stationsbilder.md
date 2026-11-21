@@ -1,17 +1,17 @@
-# Stationsbilder, Kennlinienmonitor und Befunde (Notebooks 13 bis 16)
+# Stationsbilder, Kennlinienmonitor und Befunde (Notebooks 11 bis 14)
 
-Stand 09.10.2026. Vier Schritte, die aufeinander aufbauen. Die Fallsammlung in Notebook 17 ergänzt sie.
+Stand 18.11.2026, 93 HAST. Vier Schritte, die aufeinander aufbauen. Die Fallsammlung in Notebook 15 ergänzt sie.
 
 | Notebook | Frage | Ergebnis | Nutzbar? |
 |---|---|---|---|
-| 13 Ternär | Lässt sich die ÜZ-Folie nachbauen? | ja, aber die Folienaussage hat das falsche Vorzeichen | als Werkzeug nein, als Befund ja |
-| 14 Stationsbilder | Gibt es bessere Darstellungen? | Kennlinie und Carpet sind deutlich besser lesbar | ja, für Menschen |
-| 15 Kennlinienmonitor | Lässt sich das automatisieren? | Prinzip funktioniert, am bekannten Fall sehr klar, über alle Stationen nicht signifikant | Prototyp |
-| 16 Befunde | Liegt es an den Labels? | ja; mit besseren Labels trennt der Monitor | ja |
+| 11 Ternär | Lässt sich die ÜZ-Folie nachbauen? | ja, aber die Folienaussage hat das falsche Vorzeichen | als Werkzeug nein, als Befund ja |
+| 12 Stationsbilder | Gibt es bessere Darstellungen? | Kennlinie und Carpet sind deutlich besser lesbar | ja, für Menschen |
+| 13 Kennlinienmonitor | Lässt sich das automatisieren? | Prinzip funktioniert, am bekannten Fall sehr klar, über alle Stationen nicht signifikant | Prototyp |
+| 14 Befunde | Liegt es an den Labels? | ja; mit besseren Labels trennt der Monitor | ja |
 
 **Testfall für alles ist Zähler 68956351:** Dort stand ein Ventil drei Jahre offen und wurde im September 2024 repariert. Das ist der einzige Fall, bei dem wir aus den Messdaten sicher wissen, was passiert ist.
 
-## 1 Ternärdiagramme (Notebook 13)
+## 1 Ternärdiagramme (Notebook 11)
 
 **Idee:** Eine Station kann ihre Leistung über mehr Wasser (Volumenstrom) oder über mehr Wärmeentzug (Spreizung) anpassen. Das Dreieck zeigt, welcher Weg gerade benutzt wird.
 
@@ -30,17 +30,17 @@ Stand 09.10.2026. Vier Schritte, die aufeinander aufbauen. Die Fallsammlung in N
 
 **Funktioniert:**
 
-- Die Rechnung stimmt, die Kontrollsumme liegt über alle 776 Panels zwischen 0,971 und 1,096.
-- Das Teilnetz ist überwiegend durchflussgeregelt: 74 von 94 Stationen im Winter, nur 12 spreizungsdominiert.
+- Die Rechnung stimmt, die Kontrollsumme liegt über alle 766 belegten Panels zwischen 0,975 und 1,096.
+- Das Teilnetz ist überwiegend durchflussgeregelt: 74 von 92 Stationen im Winter, nur 12 spreizungsdominiert.
 
 **Funktioniert nicht:**
 
-- Stationstypen clustern: drei Gruppen trennen die Effizienz um Faktor 3,7, aber die Silhouette liegt nur bei 0,311. Eher ein Gefälle als echte Typen.
-- Die Regelungsart ändert sich durch die Begehung nicht (41 Stationen, p = 0,51).
+- Stationstypen clustern: drei Gruppen trennen die Effizienz um Faktor 3,7, aber die Silhouette liegt nur bei 0,319. Eher ein Gefälle als echte Typen.
+- Die Regelungsart ändert sich durch die Begehung nicht (p = 0,70 auf Stunden-, 0,34 auf Tagesebene).
 
 **Fazit:** guter Befund zum Vorzeichen, aber zur Fehlererkennung taugt das Dreieck nicht. Es normiert die Leistung weg.
 
-## 2 Kennlinie, Carpet-Plot, Dauerlinie (Notebook 14)
+## 2 Kennlinie, Carpet-Plot, Dauerlinie (Notebook 12)
 
 ### Kennlinie
 
@@ -49,7 +49,7 @@ Stand 09.10.2026. Vier Schritte, die aufeinander aufbauen. Die Fallsammlung in N
 - waagerecht Leistung, senkrecht Volumenstrom, beides logarithmisch. Farbe = Rücklauftemperatur.
 - vor der Begehung: flache rote Wolke. Egal wie viel Leistung, es fließen immer 500 bis 1000 l/h, Rücklauf über 70 °C. So sieht ein offenes Ventil aus.
 - nach der Begehung: saubere Gerade mit Steigung 1,28, Rücklauf blau
-- Die Steigung ist rechnerisch derselbe Wert wie der Durchflussanteil aus dem Dreieck. Zusätzlich sieht man, ob die Punkte überhaupt auf einer Linie liegen (R² im Median 0,012 bei flacher, 0,789 bei steiler Steigung).
+- Die Steigung ist rechnerisch derselbe Wert wie der Durchflussanteil aus dem Dreieck. Zusätzlich sieht man, ob die Punkte überhaupt auf einer Linie liegen (R² im Median 0,02 bei flacher, 0,81 bei steiler Steigung).
 
 ### Carpet-Plot
 
@@ -66,15 +66,15 @@ Stand 09.10.2026. Vier Schritte, die aufeinander aufbauen. Die Fallsammlung in N
 
 - alle Stundenwerte nach Größe sortiert: in wie viel Prozent der Zeit wird ein Wert überschritten
 - vorher liegt der Rücklauf fast durchgehend über 50 °C, nachher nur noch in ca. 40 % der Zeit
-- einzige der drei Darstellungen mit einem Begehungseffekt über alle Stationen: Der Anteil der Stunden über 50 °C sinkt (44 Stationen, p = 0,048). Die Kennliniensteigung zeigt nichts (p = 0,50).
+- einzige der drei Darstellungen, die über alle Stationen einen Begehungseffekt andeutet: Der Anteil der Stunden über 50 °C sinkt um 1,4 Prozentpunkte (47 Stationen, p = 0,096, nicht gesichert). Die Kennliniensteigung zeigt nichts (p = 0,67).
 
 **Funktioniert:** Die Darstellungen messen verschiedene Dinge. Die zehn auffälligsten Stationen nach Kennlinienstreuung und nach warmem Rücklauf überschneiden sich gar nicht.
 
 **Achtung:** Die Performance in kWh/m³ ist auf Stundenebene dasselbe wie die Spreizung (Performance = 1,163 × ΔT). Korrelationen gegen die Performance beweisen deshalb wenig. Unabhängig sind nur Prüfungen gegen die Begehungen.
 
-**Fazit:** gute Diagnosebilder, aber 100 Stationen von Hand anschauen ist keine Automatisierung.
+**Fazit:** gute Diagnosebilder, aber 93 Stationen von Hand anschauen ist keine Automatisierung.
 
-## 3 Kennlinienmonitor (Notebook 15)
+## 3 Kennlinienmonitor (Notebook 13)
 
 **Idee:** Bisher wurden Stationen untereinander verglichen. Das scheitert, weil ein Altbau mit Heizkörpern und ein Neubau mit Fußbodenheizung ganz verschieden aussehen, ohne dass etwas kaputt ist. Der Monitor vergleicht jede Station nur mit sich selbst: Hat sich die Kennlinie gegenüber den Wochen davor plötzlich verschoben? Das braucht keine Labels.
 
@@ -92,12 +92,12 @@ Der erste Entwurf fand ihn nicht: Im Juli und August 2024 läuft die Station nur
 
 **Funktioniert nicht:**
 
-- Über alle 100 Stationen nur ca. 30 % über Zufall, nicht signifikant (p = 0,085 und 0,099)
+- Über alle 93 Stationen nur 25 bis 34 % über Zufall, nicht signifikant (p = 0,10 und 0,077)
 - 16 Einstellungen probiert, keine wird belastbar signifikant
 - Der stärkste Alarm je Station trifft die Begehungen schlechter als Zufall.
-- Die Gruppe ohne dokumentierten Eingriff schneidet besser ab als die mit. Das war der Anlass für Notebook 16.
+- Die Gruppe ohne dokumentierten Eingriff schneidet besser ab als die mit. Das war der Anlass für Notebook 14.
 
-## 4 Begehungsnotizen als Labels (Notebook 16)
+## 4 Begehungsnotizen als Labels (Notebook 14)
 
 **Bisherige Labels:** die Alt-Neu-Spalten der Begehungstabelle (Heizzeit, Rücklaufsollwert). Daneben gibt es eine Freitextspalte des Monteurs, vorhanden bei 57 von 66 Begehungen und bisher ungenutzt. Bei 68956351 steht der Stellmotortausch nur dort.
 
@@ -119,7 +119,7 @@ Der erste Entwurf fand ihn nicht: Im Juli und August 2024 läuft die Station nur
 ![Trefferquote je Gruppe](assets/stationsbilder/befunde_monitor_split.png)
 
 - links Begehungen mit mechanischem Befund, rechts alle anderen. Die gestrichelte Linie ist die Zufallsbasis.
-- mechanisch: 10 von 19 Treffer statt erwarteter 5,5 (p = 0,024)
+- mechanisch: 10 von 19 Treffer statt erwarteter 5,6 (p = 0,030)
 - alle anderen: Zufallsniveau
 
 Das ist die erste Prüfung gegen die Ground Truth, die über den Zufall hinauskommt.
@@ -128,7 +128,7 @@ Das ist die erste Prüfung gegen die Ground Truth, die über den Zufall hinausko
 
 - 19 Termine sind wenig, ein Fall verschiebt die Quote um 5 Prozentpunkte.
 - Die Teilung wurde erst nach dem Nullergebnis gewählt. Sauber wäre: Regel vorher festlegen und an neuen Begehungen prüfen.
-- p-Werte sind einseitig. Zweiseitig 0,038 und 0,076.
+- p-Werte sind einseitig. Zweiseitig 0,041 und 0,086.
 - 58 Termine auf 51 Stationen, also nicht alle unabhängig.
 
 ## Was wir jetzt haben

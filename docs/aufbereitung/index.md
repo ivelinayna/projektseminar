@@ -3,7 +3,7 @@
 Notebook 00 macht aus den 198 Exportdateien der ÜZ je Zähler eine saubere Stundenreihe und daraus eine Tabelle mit
 einer Zeile je Station. Alle weiteren Notebooks bauen darauf auf.
 
-Was in den Rohdaten steckt, steht unter [Zählerdaten](../daten_zaehlerdaten.md). Dieser Abschnitt beschreibt den
+Was in den Rohdaten steckt, steht unter [Zählerdaten](../datengrundlage/zaehlerdaten.md). Dieser Abschnitt beschreibt den
 Ablauf und vor allem, warum die einzelnen Schritte nötig wurden. Viele davon kamen erst im Lauf des Projekts dazu,
 meist weil ein Ergebnis nicht plausibel aussah oder die ÜZ eine Frage beantwortet hat.
 
@@ -26,7 +26,7 @@ Ergebnis sind zwei Ablagen unter `data/processed/`:
 | Ablage | Inhalt | Wer sie nutzt |
 |---|---|---|
 | `real_meters/` | eine CSV je Zähler, 93 Dateien, Stundenraster in deutscher Lokalzeit, Zählerstände bleiben drin | alle Notebooks, die mit Zeitreihen arbeiten |
-| `hast_features.csv` | 93 Zeilen, 20 Spalten | Clustering in Notebook 01 |
+| `hast_features.csv` | 93 Zeilen, 20 Spalten | Clustering in Notebook 07 |
 
 Die Rohdaten bleiben unverändert. Jede Korrektur steht im Code und wird bei jedem Lauf neu angewendet.
 
@@ -65,11 +65,11 @@ Projekts dazu, in drei Runden:
 - **Kurze Reihen:** 7 Zähler haben unter 10.000 Messstunden. Für saisonale Kennzahlen wie Winter-Rücklauf oder
   Sommer-Grundlast sind sie eventuell zu kurz.
 - **Fehlende Kennzahlen:** Der Anschlusswert fehlt bei 6 HAST (6,5 %) und damit auch beide Lastquoten.
-  `dt_mean_loaded` fehlt bei 1 Station, die nie über 0,5 kW lief. Notebook 01 ersetzt diese Lücken durch den Median
+  `dt_mean_loaded` fehlt bei 1 Station, die nie über 0,5 kW lief. Notebook 07 ersetzt diese Lücken durch den Median
   (14 von 930 Zellen, 1,5 %).
 - **Doppelte Gewichtung:** `rt_mean_winter` und `dt_mean_loaded` hängen stark zusammen (Korrelation −0,88). Die
   Auskühlung zählt im Clustering damit doppelt.
 - **58202380:** Für ein Haus sehr groß (bis 329 kW, rund 1,9 GWh im Jahr). Ob das eine HAST ist, ist eine Frage an
   die ÜZ.
 - **Tageswerte:** Durchfluss und Leistung sind Momentaufnahmen zur vollen Stunde. Tagesenergie und Tageswassermenge
-  bildet erst Notebook 11 aus den Zählerständen in `real_meters/`.
+  bildet erst Notebook 10 aus den Zählerständen in `real_meters/`.
