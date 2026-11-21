@@ -57,7 +57,13 @@ nav:
           - "Änderungen 1: Rohdaten lesbar machen": aufbereitung/rohdaten.md
           - "Änderungen 2: Kennzahlen ans Raster anpassen": aufbereitung/kennzahlen.md
           - "Änderungen 3: Rückmeldung der ÜZ": aufbereitung/uez_rueckmeldung.md
-      # - Begehungen auswerten:   # noch leer
+      - Begehungen auswerten:
+          - Überblick: begehungen/index.md
+          - "Wirkung im 21-Tage-Fenster": begehungen/wirkung.md
+          - "Label aus Messdaten": begehungen/labels.md
+          - "Wintervergleich": begehungen/wintervergleich.md
+          - "Performance": begehungen/performance.md
+          - "Prognose mit ARIMA": begehungen/arima.md
       # - Merkmale und Clustering:   # noch leer
       - Stationsbilder und Befunde: stationsbilder.md
       # - Anomalien und Monitoring:   # noch leer
