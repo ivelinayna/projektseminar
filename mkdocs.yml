@@ -29,17 +29,17 @@ extra_css:
 nav:
   - Einleitung:
       - Ausgangslage: index.md
-      - Aufgabe und Ziel: aufgabe_und_ziel.md
-      - Aufbau der Arbeit: aufbau.md
+      - Aufgabe und Ziel: einleitung/aufgabe_und_ziel.md
+      - Aufbau der Arbeit: einleitung/aufbau.md
 
   - Installation und Ausführung:
-      - Vorbereitung: vorbereitung.md
-      - Start mit Docker: docker.md
-      - Lokaler Start ohne Docker: lokal.md
-      - Ausführung bis zum Dashboard: ausfuehrung.md
-      - Betrieb bei der ÜZ: betrieb.md
-      - Schnellstart: schnellstart.md
-      - Befehle und Module: pipeline.md
+      - Vorbereitung: installation/vorbereitung.md
+      - Start mit Docker: installation/docker.md
+      - Lokaler Start ohne Docker: installation/lokal.md
+      - Ausführung bis zum Dashboard: installation/ausfuehrung.md
+      - Betrieb bei der ÜZ: installation/betrieb.md
+      - Schnellstart: installation/schnellstart.md
+      - Befehle und Module: installation/pipeline.md
 
   - Datengrundlage:
       - Zählerdaten: datengrundlage/zaehlerdaten.md

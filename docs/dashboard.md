@@ -25,7 +25,7 @@ Drei Reiter:
 Reihenfolge:
 
 1. Notebook 00 (Stundenreihen) und `python -m src.weather` (Außentemperatur).
-2. Modellpakete bauen: die Befehle und Notebook 35 unter [Ausführung bis zum Dashboard](ausfuehrung.md).
+2. Modellpakete bauen: die Befehle und Notebook 35 unter [Ausführung bis zum Dashboard](installation/ausfuehrung.md).
 3. `python -m src.dashboard_daten` wendet die Pakete auf die aktuellen Daten an und schreibt nach `outputs/dashboard/`.
 4. Notebook 31 ausführen. Es baut den Netz-Cache `notebooks/daten_cache/`.
 5. Notebook 37 ausführen. Es schreibt `notebooks/fernwaerme_dashboard_final.html`.

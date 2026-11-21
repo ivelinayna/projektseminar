@@ -21,7 +21,7 @@ dann begehen.
    Richtung, die vorher festgelegt ist. Genauso für die Hinweise auf Dämmung und Kapazität.
 
 Festlegen und Auswerten der Stichprobe übernehmen die Befehle `python -m src.betrieb pruefung-planen` und
-`python -m src.betrieb pruefung-auswerten` (siehe [Betrieb bei der ÜZ](betrieb.md#4-prufung-nach-vorn)).
+`python -m src.betrieb pruefung-auswerten` (siehe [Betrieb bei der ÜZ](installation/betrieb.md#4-prufung-nach-vorn)).
 
 Mit den Stationen, die die ÜZ in einer Saison begehen kann, bleibt auch dieser Test grob. Er misst aber zum ersten Mal,
 was die Liste im Betrieb bringt, ohne dass die Modelle die Antworten kennen.

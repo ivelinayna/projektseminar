@@ -47,5 +47,5 @@ wurde. Dafür sollte jede Begehung festhalten:
 - ob die Station vorher auf der Handlungsliste stand und mit welcher Dringlichkeit.
 
 Dafür gibt es eine Vorlage für das Begehungsprotokoll und einen Befehl, der die ausgefüllten Protokolle prüft und mit
-dem gesicherten Stand der Handlungsliste vor der Begehung verknüpft (siehe [Betrieb bei der ÜZ](betrieb.md)). Wie daraus
+dem gesicherten Stand der Handlungsliste vor der Begehung verknüpft (siehe [Betrieb bei der ÜZ](installation/betrieb.md)). Wie daraus
 eine Prüfung der Modelle wird, steht unter [Prüfung nach vorn](ausblick_pruefung.md).

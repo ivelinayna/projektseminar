@@ -110,7 +110,7 @@
     - Normalmodell: 313 Alarme, gleich viele wie im Notebook.
     - Fehlerklassen auf 91 Zählern: 61 kein Handlungsbedarf, 25 Regelventil tauschen, 4 Regelparameter optimieren, 1 nicht einstufbar.
 - `python -m src.modellpaket` listet die gespeicherten Pakete.
-- `python -m src.dashboard_daten` wendet die aktiven Pakete auf die aktuellen Daten an und schreibt nach `outputs/dashboard/`. Das Dashboard (Notebook 37) rechnet nichts selbst. Ablauf und Felder stehen unter [Dashboard](dashboard.md) und [Pipeline](pipeline.md).
+- `python -m src.dashboard_daten` wendet die aktiven Pakete auf die aktuellen Daten an und schreibt nach `outputs/dashboard/`. Das Dashboard (Notebook 37) rechnet nichts selbst. Ablauf und Felder stehen unter [Dashboard](dashboard.md) und [Pipeline](installation/pipeline.md).
 - Die Handlungsliste sortiert nach Dringlichkeit, dann nach Ventil-Score.
     - hoch: Reparatur, wenn das Fehlerbild „ventil“ des Monitoring-Modells dazukommt.
     - mittel: Reparatur nach Ventil-Score.

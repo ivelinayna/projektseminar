@@ -71,7 +71,7 @@ docker compose up dashboard       # http://localhost:8000/fernwaerme_dashboard_f
 docker compose up docs            # http://localhost:8001
 ```
 
-Schritt-für-Schritt-Anleitung (Docker installieren, Projekt holen, Daten ablegen, ausführen) in `docs/docker.md`.
+Schritt-für-Schritt-Anleitung (Docker installieren, Projekt holen, Daten ablegen, ausführen) in `docs/installation/docker.md`.
 
 ## Doku
 

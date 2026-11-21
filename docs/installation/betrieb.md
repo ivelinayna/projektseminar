@@ -4,7 +4,7 @@ Im laufenden Betrieb erfüllt das Projekt zwei Aufgaben. Es hält Überwachung u
 (siehe [Neue Zählerdaten einspielen](ausfuehrung.md#neue-zahlerdaten-einspielen)). Außerdem sammelt es, was bei den
 Begehungen tatsächlich gefunden wurde. Daran fehlte es dem Projekt am meisten. Jede Begehung mit sauberem Protokoll ist
 ein neues Label, und erst damit lassen sich die Modelle an Fällen prüfen, deren Ergebnis vorher nicht bekannt war (siehe
-[Probebetrieb](ausblick_probebetrieb.md) und [Prüfung nach vorn](ausblick_pruefung.md)).
+[Probebetrieb](../ausblick_probebetrieb.md) und [Prüfung nach vorn](../ausblick_pruefung.md)).
 
 Der Kreislauf hat vier Schritte:
 
@@ -88,12 +88,12 @@ python -m src.betrieb protokolle
   unklar.
 - Schreibt alles nach `outputs/betrieb/rueckmeldungen.csv`.
 
-Diese Tabelle ist die Grundlage, um die Modelle später nach den Regeln des [Probebetriebs](ausblick_probebetrieb.md)
+Diese Tabelle ist die Grundlage, um die Modelle später nach den Regeln des [Probebetriebs](../ausblick_probebetrieb.md)
 mit mehr Fällen neu zu lernen und zu prüfen.
 
 ## 4 Prüfung nach vorn
 
-Der Test aus [Prüfung nach vorn](ausblick_pruefung.md) prüft, ob die Handlungsliste im Betrieb tatsächlich mehr
+Der Test aus [Prüfung nach vorn](../ausblick_pruefung.md) prüft, ob die Handlungsliste im Betrieb tatsächlich mehr
 Ventilfehler findet als eine zufällige Auswahl. Damit das Ergebnis belastbar ist, wird die Stichprobe vorher
 festgelegt und danach nicht mehr verändert.
 

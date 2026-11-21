@@ -80,8 +80,8 @@ Unterordner und mit den Dateinamen der Lieferung nach `data/raw/` kopiert.
 | `Leitungsverlauf.kml` | Rohrverlauf als KML | optional, Notebooks 31 und 33 |
 | `zensus/.../Zensus2022_Baujahr_JZ_100m-Gitter.csv` | Gebäude nach Baujahr im 100-m-Gitter (öffentlich, etwa 200 MB) | optional |
 
-Inhalt und Eigenheiten der Dateien beschreiben [Zählerdaten](datengrundlage/zaehlerdaten.md), [Begehungen](datengrundlage/begehungen.md)
-und [Quellen, Netz und bekannte Probleme](datengrundlage/quellen.md).
+Inhalt und Eigenheiten der Dateien beschreiben [Zählerdaten](../datengrundlage/zaehlerdaten.md), [Begehungen](../datengrundlage/begehungen.md)
+und [Quellen, Netz und bekannte Probleme](../datengrundlage/quellen.md).
 
 ### Handliste mit Koordinaten
 

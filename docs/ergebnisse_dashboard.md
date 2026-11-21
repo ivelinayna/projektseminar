@@ -4,7 +4,7 @@ Das Dashboard bringt die Ergebnisse des Projekts dorthin, wo die ÜZ sie braucht
 Handlungsbedarf besteht, welche Maßnahme die Modelle vorschlagen und warum. Es ist eine einzelne HTML-Datei mit drei
 Reitern und läuft in jedem Browser, ohne Python und ohne Server. Gebaut wird es in Notebook 37.
 
-Das Dashboard deckt die vier Ziele der Aufgabenstellung ab (siehe [Aufgabe und Ziel](aufgabe_und_ziel.md)):
+Das Dashboard deckt die vier Ziele der Aufgabenstellung ab (siehe [Aufgabe und Ziel](einleitung/aufgabe_und_ziel.md)):
 
 | Ziel | im Dashboard |
 |---|---|

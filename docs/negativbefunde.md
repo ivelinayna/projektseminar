@@ -4,7 +4,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 
 ## 1 Überwachtes Lernen auf Begehungslabels
 
-- Probiert: Klassifikator auf dem Label „Maßnahme ja/nein“ aus der Begehungstabelle, Code in `src/ml_classifier.py`. Läuft nur über die Befehlszeile (siehe [Pipeline](pipeline.md)), nicht in einem Notebook.
+- Probiert: Klassifikator auf dem Label „Maßnahme ja/nein“ aus der Begehungstabelle, Code in `src/ml_classifier.py`. Läuft nur über die Befehlszeile (siehe [Pipeline](installation/pipeline.md)), nicht in einem Notebook.
 - Ergebnis: Balanced Accuracy 0,33 bzw. 0,42 gegen 0,50 für die triviale Vorhersage (Notebook 16).
 - Das Label ist bei 40 von 49 Stationen wahr, es bleiben 9 Negative (Notebook 25 und 29). Notebook 38 nennt dazu Label-Leakage.
 - Das Label ist zu grob: „Maßnahme“ sagt nicht, welcher Fehler vorlag.

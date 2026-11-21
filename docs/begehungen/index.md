@@ -58,7 +58,7 @@ Alle Notebooks liegen unter `notebooks/2_begehungen/` und laufen nach Notebook 0
 
 Was die Monteure in den Freitexten notiert haben, wertet Notebook 14 aus (siehe
 [Stationsbilder und Befunde](../stationsbilder.md)). Wie künftige Begehungen so festgehalten werden, dass sich diese
-Fragen besser beantworten lassen, steht unter [Betrieb bei der ÜZ](../betrieb.md#2-begehungsprotokoll).
+Fragen besser beantworten lassen, steht unter [Betrieb bei der ÜZ](../installation/betrieb.md#2-begehungsprotokoll).
 
 ## Ausgaben
 
