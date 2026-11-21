@@ -64,7 +64,12 @@ nav:
           - "Wintervergleich": begehungen/wintervergleich.md
           - "Performance": begehungen/performance.md
           - "Prognose mit ARIMA": begehungen/arima.md
-      # - Merkmale und Clustering:   # noch leer
+      - Merkmale und Clustering:
+          - Überblick: clustering/index.md
+          - "Stationscluster": clustering/stationscluster.md
+          - "Vier Verfahren im Vergleich": clustering/benchmark.md
+          - "Stundencluster und Validierung": clustering/validierung.md
+          - "Tagescluster": clustering/tagescluster.md
       - Stationsbilder und Befunde: stationsbilder.md
       # - Anomalien und Monitoring:   # noch leer
       - Lernende Modelle:
