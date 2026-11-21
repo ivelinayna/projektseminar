@@ -1,7 +1,7 @@
 # Begehungen auswerten
 
 Zwischen August 2024 und September 2025 hat die ÜZ Stationen begangen und festgehalten, was sie dabei geändert hat.
-Was in der Begehungstabelle steht, beschreibt [Begehungen](../daten_begehungen.md) unter *Datengrundlage*. Die
+Was in der Begehungstabelle steht, beschreibt [Begehungen](../datengrundlage/begehungen.md) unter *Datengrundlage*. Die
 Begehungen sind die einzige unabhängige Auskunft darüber, was an den Stationen tatsächlich los war. Dieser Teil stellt
 deshalb zwei Fragen:
 

@@ -3,7 +3,7 @@
 Notebook 00 macht aus den 198 Exportdateien der ÜZ je Zähler eine saubere Stundenreihe und daraus eine Tabelle mit
 einer Zeile je Station. Alle weiteren Notebooks bauen darauf auf.
 
-Was in den Rohdaten steckt, steht unter [Zählerdaten](../daten_zaehlerdaten.md). Dieser Abschnitt beschreibt den
+Was in den Rohdaten steckt, steht unter [Zählerdaten](../datengrundlage/zaehlerdaten.md). Dieser Abschnitt beschreibt den
 Ablauf und vor allem, warum die einzelnen Schritte nötig wurden. Viele davon kamen erst im Lauf des Projekts dazu,
 meist weil ein Ergebnis nicht plausibel aussah oder die ÜZ eine Frage beantwortet hat.
 

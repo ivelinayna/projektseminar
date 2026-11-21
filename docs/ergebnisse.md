@@ -11,7 +11,7 @@
 - Exportfehler sind erkannt und korrigiert: Faktor 1000 in 5 ODS-Dateien, Minutenversatz mit 17 bis 47 % Dubletten bei 3 Zählern, ein falscher Dateiname (Notebook 00).
 - 80 % der Stunden im Raster sind gemessen. 84 % der ungemessenen Stunden stammen aus der Phase bis 11/2022, in der viele Zähler nur einen Wert je Tag lieferten (Notebook 00).
 - Lücken sind gefüllt: 20,4 % der Stunden sind gerechnet, die Herkunft steht je Stunde dabei (Notebook 01).
-- Schwach: 13 Zähler haben unter 70 % Abdeckung. Bei Lücken über einen Tag liegt der Rücklauffehler der Füllung bei 5 bis 6 K. Tages- und Stundenwerte sind gemischt (Notebook 00, 01). Details unter [Daten](daten.md).
+- Schwach: 13 Zähler haben unter 70 % Abdeckung. Bei Lücken über einen Tag liegt der Rücklauffehler der Füllung bei 5 bis 6 K. Tages- und Stundenwerte sind gemischt (Notebook 00, 01). Details unter [Daten](datengrundlage/quellen.md).
 
 ## Teil 2 Begehungen und Wirkung
 

@@ -26,7 +26,7 @@ Für die Diagnose entsteht ein Fingerabdruck je Station (siehe [LSTM-Fingerabdru
 
 - **Stundenwerte:** 93 Zähler aus Notebook 00 mit Vorlauf, Rücklauf, Spreizung, Durchfluss und
   Leistung, zusammen 2,1 Millionen Stundenzeilen vom November 2021 bis Juli 2026. 80 % der Stunden sind
-  gemessen (siehe [Zählerdaten](../daten_zaehlerdaten.md)).
+  gemessen (siehe [Zählerdaten](../datengrundlage/zaehlerdaten.md)).
 - **Außentemperatur:** stündlich von der DWD-Station Kitzingen. Ohne Wetter hielte ein Modell jeden
   kalten Tag für auffällig.
 - **Nur vollständige Tage:** Ein Tag zählt nur, wenn alle 24 Stunden aller Größen gemessen sind. Das
@@ -39,7 +39,7 @@ Für die Diagnose entsteht ein Fingerabdruck je Station (siehe [LSTM-Fingerabdru
 
 ## Labels aus den Begehungen
 
-Was ein Modell erkennen soll, steht im Begehungsprotokoll (siehe [Begehungen](../daten_begehungen.md)).
+Was ein Modell erkennen soll, steht im Begehungsprotokoll (siehe [Begehungen](../datengrundlage/begehungen.md)).
 Labels gibt es für die 56 Zähler mit datierter Begehung. Je Zähler entstehen sechs Labels aus zwei Quellen, den angekreuzten Kästchen und dem
 Freitext. Viele Befunde stehen nur im Freitext, etwa ein klemmendes Regelventil. Die Kodierung des
 Freitexts stammt aus Notebook 14.

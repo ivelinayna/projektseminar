@@ -42,12 +42,12 @@ nav:
       - Befehle und Module: pipeline.md
 
   - Datengrundlage:
-      - Zählerdaten: daten_zaehlerdaten.md
-      - Begehungen: daten_begehungen.md
-      - Quellen, Netz und bekannte Probleme: daten.md
-      - Netz und Zuordnung: daten_netz_und_zuordnung.md
-      - Ergänzende Daten: daten_ergaenzend.md
-      - Qualität und Einschränkungen: daten_qualiaet.md
+      - Zählerdaten: datengrundlage/zaehlerdaten.md
+      - Begehungen: datengrundlage/begehungen.md
+      - Quellen, Netz und bekannte Probleme: datengrundlage/quellen.md
+      - Netz und Zuordnung: datengrundlage/netz_und_zuordnung.md
+      - Ergänzende Daten: datengrundlage/ergaenzend.md
+      - Qualität und Einschränkungen: datengrundlage/qualitaet.md
 
   - Vorgehen:
       - Überblick der Notebooks: notebooks.md
