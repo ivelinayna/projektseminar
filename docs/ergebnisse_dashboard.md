@@ -37,7 +37,7 @@ Programm dashboard_daten     wendet die Pakete auf die aktuellen Stundenreihen a
 | Wächter für die Heizperiode | 20 | Tagesmonitor des Monitoring-Modells: Kennlinie je Station mit CUSUM |
 | Daten, Labels, Fingerabdruck, Klassen | 25 bis 27, 29 | Labels aus den Begehungen, Kennzahlen, LSTM-Fingerabdruck, Einstufung mit K-Means, Klassen nach Folie 5 (siehe [Lernende Modelle](modelle/index.md)) |
 | Wächter für warme Tage | 28 | Prognose-LSTM, das jeden Tag Rücklauf und Durchfluss vorhersagt |
-| Endmodell | 35 | lernt die gewählten Modelle neu, prüft sie streng und speichert sie als Pakete (siehe [Strenger Vergleich](vergleich/endmodell.md)) |
+| Endmodell | 35 | lernt die gewählten Modelle neu, prüft sie streng und speichert sie als Pakete (siehe [Modellvergleich](modellvergleich.md)) |
 | Anwendung | Programm dashboard_daten | wendet die Pakete auf die aktuellen Daten an, ohne neu zu lernen. Die Ergebnistabellen enthalten nur Zählernummern. |
 | Netz und Rohrbaum | 31, 32 | Leitungsnetz und Lage der Häuser aus einer von Hand gepflegten Koordinatentabelle (siehe *Datengrundlage → Netz und Zuordnung*), dazu der Rohrbaum vom Erzeuger zu jedem Haus |
 | Dashboard | 37 | verbindet die Ergebnistabellen mit dem Rohrbaum und schreibt die HTML-Datei |
@@ -45,6 +45,22 @@ Programm dashboard_daten     wendet die Pakete auf die aktuellen Stundenreihen a
 Das Dashboard rechnet selbst nichts und lernt nichts neu. Es zeigt genau das, was mit einer bestimmten Version der
 Pakete gerechnet wurde. Deshalb ist es schnell und braucht keine Grafikkarte. Wie die Schritte ausgeführt werden,
 steht unter *Installation und Ausführung → Ausführung bis zum Dashboard*.
+
+### Die drei Modellpakete
+
+Gelernt wird im Notebook, gespeichert als Paket, angewendet auf die aktuellen Daten, angezeigt im Dashboard. Ein Paket
+enthält nicht nur Gewichte, sondern alles, was zum Anwenden gehört: Merkmalsliste, Skalierung, Kalibrierung,
+Schwellen, Lernzeitraum und Prüfsummen. Notebook 35 speichert drei Pakete:
+
+| Paket für | Inhalt | Rolle im Dashboard |
+|---|---|---|
+| das Monitoring-Modell | Kennlinie je Station, CUSUM h = 5 | Meldungen in der Heizperiode |
+| das Prognose-LSTM | Netz, Kalibrierung je Station, CUSUM h = 10 | Meldungen an warmen Tagen, Hinweis an Heiztagen |
+| die Fehlerklassen | Regression auf den LSTM-Zahlen für Ventil und Dämmung, K-Means, Regel für die Kapazität | Ventil-Score, Klasse nach Folie 5, Hinweise |
+
+- Wo mit Befunden gelernt wird (Fehlerart), nur auf begangenen Stationen. Wo Normalverhalten gelernt wird (Wächter),
+  auf allen Stationen, die überwacht werden sollen.
+- Nach dem Speichern prüft Notebook 35, dass die geladenen Pakete dasselbe liefern wie die Modelle im Speicher.
 
 ## Was das Dashboard zeigt
 

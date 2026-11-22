@@ -10,7 +10,7 @@ Vorhersage im Prognose-LSTM (siehe [Was nicht getragen hat](nicht_getragen.md)).
 **2. Erst ein strenger Prüfstand zeigt, was ein Modell kann.** Im ersten Prüfstand (Notebook 34) kam die Regression
 auf Kennzahlen und LSTM-Zahlen beim Ventil auf eine AUC von 0,89. Dort hatte der Encoder die Teststationen gesehen,
 und die Schwellen kamen aus den Testfällen. Im strengen Vergleich (Notebook 35), mit Modellwahl nur im Lernteil,
-bleiben für das LSTM-Modell 0,84 (siehe [Erster Prüfstand](vergleich/pruefstand.md)).
+bleiben für das LSTM-Modell 0,84 (siehe [Modellvergleich](modellvergleich.md#was-zuerst-nicht-stimmte)).
 
 **3. Eine einfache Regel ist oft gleich gut.** Beim Ventil liegt das LSTM-Modell mit 0,84 gleichauf mit der
 Sommernacht-Regel (0,85). Bei der Kapazität ist die Regel mit 0,76 klar besser als jedes gelernte Modell (höchstens

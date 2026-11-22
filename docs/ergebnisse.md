@@ -2,7 +2,7 @@
 
 - Diese Seite fasst die wichtigsten Ergebnisse der 40 Notebooks zusammen, geordnet nach den Teilen.
 - Je Teil stehen zuerst die belastbaren Ergebnisse, danach die zentralen Schwächen.
-- Alle Zahlen stammen aus den Ausgaben und Zusammenfassungen der Notebooks. Mehr Tiefe bieten [Stationsbilder und Befunde](stationsbilder.md), [Modellvergleich](modellvergleich.md), [Endmodell](endmodell.md) und [Negativbefunde](negativbefunde.md).
+- Alle Zahlen stammen aus den Ausgaben und Zusammenfassungen der Notebooks. Mehr Tiefe bieten [Stationsbilder und Befunde](stationsbilder.md), [Modellvergleich](modellvergleich.md), [Endmodell](ergebnisse_endmodell.md) und [Negativbefunde](negativbefunde.md).
 - Über alle Teile hinweg gilt: Einfache Regeln und Modelle liegen meist gleichauf mit komplexen. Die größte Grenze sind die Labels: wenige Begehungen, Befunde ohne bekannten Fehlerbeginn, Freitexte statt klarer Fehlerarten.
 
 ## Teil 1 Daten
@@ -64,7 +64,7 @@
 ## Teil 8 Modellvergleich und Ergebnis
 
 - Im Vergleich aller Kandidaten bleibt nach Holm über 15 Wächter nur der Tagesmonitor belegt (33 von 43 Begehungen gegen 53 % Kontrolle, p = 0,017 nach Holm). Beim Ventil ist kein Modell belegt besser als die Sommernacht-Regel. Nachbarn und Lage im Netz verbessern nichts (Notebook 34, [Modellvergleich](modellvergleich.md)).
-- Endmodell auf strengerer Zeitachse: Das Monitoring-Modell übernimmt Heizperiode, Erfolgskontrolle und Netzvergleich (18 von 43 als „besser“ gegen 24 %, p = 0,006). Das LSTM-Modell übernimmt warme Tage (Dauerdurchfluss 150 l/h 78 % bei 5 % Fehlalarmen) und die Fehlerart Ventil (AUC 0,84). Dämmung ist nur ein Hinweis (0,78), Kapazität nur per Regel (0,76) (Notebook 35, [Endmodell](endmodell.md)).
+- Endmodell auf strengerer Zeitachse: Das Monitoring-Modell übernimmt Heizperiode, Erfolgskontrolle und Netzvergleich (18 von 43 als „besser“ gegen 24 %, p = 0,006). Das LSTM-Modell übernimmt warme Tage (Dauerdurchfluss 150 l/h 78 % bei 5 % Fehlalarmen) und die Fehlerart Ventil (AUC 0,84). Dämmung ist nur ein Hinweis (0,78), Kapazität nur per Regel (0,76) (Notebook 35, [Endmodell](ergebnisse_endmodell.md)).
 - Das Dashboard zeigt Karte, Handlungsliste und Erklärungen. Unter den ersten 10 nach Ventil-Score hatten 7 einen Ventilbefund, Zufall wäre etwa 2 (Notebook 35, 37).
 - Warum manche Fehlerarten nicht erkennbar sind: Nur der Ventiltausch hinterlässt eine messbare Spur, der Sommernacht-Durchfluss sinkt danach (AUC 0,81, nach Holm gesichert). Nach Dämmung, Filter und Durchfluss ändert sich nichts Messbares, Sollwert (62 %) und Filter (47 %) sind eher Routine als gefundene Fehler. Erster physikalischer Hinweis zur Dämmung ist die Abkühlrate im Stillstand (0,69, nicht gesichert) (Notebook 36, [Was nicht getragen hat](nicht_getragen.md)).
 - Schwach: 43 Begehungen, 11 Ventil- und 9 Vertragsfälle. Viele Vorsprünge sind nicht gesichert. Regelungsoptimierung und echte Frühwarnung sind nicht erkennbar bzw. nicht prüfbar. Die Referenz des Monitoring-Modells steht an 43 % der Testtage am Deckel und muss neu gelernt werden (Notebook 35).

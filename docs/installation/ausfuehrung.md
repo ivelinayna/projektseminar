@@ -108,7 +108,7 @@ Zeitachse neu, prüft beide streng und speichert das Ergebnis als drei neue Pake
 setzt es diese Pakete als aktuelle Version.
 
 - Empfohlen, weil das Dashboard dann genau die Modelle zeigt, die in Notebook 35 am besten abgeschnitten haben (siehe
-  [Strenger Vergleich](../vergleich/endmodell.md)).
+  [Modellvergleich](../modellvergleich.md)).
 - Braucht die Pakete aus Schritt 4, weil es das alte Prognose-LSTM zum Vergleich lädt.
 - Dauert deutlich länger als die anderen Notebooks, weil es alle Netze je Prüfteil neu lernt.
 - Ohne Notebook 35 nutzt das Dashboard die Pakete aus Schritt 4. Die Anzeige ist dieselbe, die Modelle stammen dann

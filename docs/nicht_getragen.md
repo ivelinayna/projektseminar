@@ -47,7 +47,7 @@ und das Vorhersagen der Abweichung vom 7-Tage-Mittel (nur im Test knapp vorn).
 **Erster Prüfstand zu optimistisch (Notebook 34).** Der erste Vergleich aller Modelle ergab beim Ventil 0,89 für die
 Regression auf Kennzahlen und LSTM-Zahlen. Der Encoder hatte dort aber die Teststationen gesehen, die Schwellen kamen
 von den Testfällen, und die Auslastung zum Anschlusswert war als Merkmal dabei. Notebook 35 hat alles neu und streng
-gerechnet, mit 0,84 als Ergebnis (siehe [Erster Prüfstand](vergleich/pruefstand.md)).
+gerechnet, mit 0,84 als Ergebnis (siehe [Modellvergleich](modellvergleich.md#was-zuerst-nicht-stimmte)).
 
 **Das Leitungsnetz als Merkmal (Notebook 34).** Nachbar-Alarme abziehen, den Netzmedian abziehen oder Merkmale der
 Nachbarn dazunehmen verbessert weder Alarm noch Erkennung. Den Netzmedian abzuziehen macht den Tagesmonitor sogar

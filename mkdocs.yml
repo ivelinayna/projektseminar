@@ -81,10 +81,7 @@ nav:
       # - Netz einbeziehen:   # noch leer
       - Modelle vergleichen:
           - Prüfdesign und Statistik: vergleich/pruefung.md
-          - Erster Prüfstand: vergleich/pruefstand.md
-          - Strenger Vergleich: vergleich/endmodell.md
-          - Modellvergleich im Detail: modellvergleich.md
-          - Endmodell im Detail: endmodell.md
+          - Modellvergleich: modellvergleich.md
       - Was nicht getragen hat:
           - Überblick: nicht_getragen.md
           - Negativbefunde im Detail: negativbefunde.md

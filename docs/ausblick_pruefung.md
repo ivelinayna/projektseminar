@@ -3,7 +3,7 @@
 Alle Zahlen der Modelle sind rückblickend geprüft, an Begehungen, die es schon gab. Diese Begehungen waren nicht
 zufällig ausgewählt, und die Modelle wurden gebaut, nachdem ihre Ergebnisse bekannt waren. Wie stark das die Zahlen
 schönen kann, hat der Schritt vom ersten Prüfstand zum strengen Vergleich gezeigt (0,89 auf 0,84 beim Ventil, siehe
-[Erster Prüfstand](vergleich/pruefstand.md)). Der nächste Schritt ist deshalb ein Test nach vorn: erst vorhersagen,
+[Modellvergleich](modellvergleich.md#was-zuerst-nicht-stimmte)). Der nächste Schritt ist deshalb ein Test nach vorn: erst vorhersagen,
 dann begehen.
 
 ## Vorschlag für den Test
