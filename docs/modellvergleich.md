@@ -157,7 +157,7 @@ Notebook 36 prüft, ob die Maßnahmen der Begehungen überhaupt eine Spur in den
   Fehlerbild „ventil“ ist dafür sehr genau (4 von 4 richtig) und dient im Dashboard als Bestätigung.
 - **Regelparameter optimieren:** trifft keins der beiden Modelle, 24 bzw. 25 von 31 Fällen landen in
   „kein Handlungsbedarf“. K-Means „schlechter“ erkennt das Ventil mit 0,67 gesichert schlechter als die Regel (siehe
-  [Was nicht getragen hat](nicht_getragen.md)).
+  [Was nicht getragen hat](nicht_getragen/index.md)).
 - **Reihenfolge (Test E):** Unter den ersten 10 Stationen nach Ventil-Score hatten 7 einen Ventilbefund, nach der
   Priorität des Monitoring-Modells 5, Zufall wären etwa 2.
 - **Lage im Netz (Test D):** Netzvergleich und Potenzial beschreiben eine Station, sagen die Wirkung einer Begehung aber
@@ -175,8 +175,8 @@ fangen Kennlinie und Tagesmonitor schon ab.
 
 | Ansatz | Warum nicht | Eigenes Ergebnis |
 |---|---|---|
-| GNN (Notebook 39) | braucht die Kanten- und Positionsdateien aus Notebook 31 | kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft „Haus oder Netz“ |
-| Bayes (Notebook 38) | braucht die Handtabellen unter `data/manual/` | Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
+| [GNN (Notebook 39)](nicht_getragen/gnn.md) | braucht die Kanten- und Positionsdateien aus Notebook 31 | kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft „Haus oder Netz“ |
+| [Bayes (Notebook 38)](nicht_getragen/bayes.md) | braucht die Handtabellen unter `data/manual/` | Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
 | Gesamtpipeline (August, nicht mehr im Abgabestand) | eigene Aufbereitung, Stundenscores ohne Modul | AUC 0,51, höchstens 2 von 10 Ereignissen |
 | Stationscluster (Notebooks 07 und 08) | Profile über die ganze Historie, also auch nach der Begehung | kein Cluster trennt die Begehungen; verglichen wird K-Means aus Notebook 26 |
 

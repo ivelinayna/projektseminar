@@ -83,8 +83,10 @@ nav:
           - Prüfdesign und Statistik: vergleich/pruefung.md
           - Modellvergleich: modellvergleich.md
       - Was nicht getragen hat:
-          - Überblick: nicht_getragen.md
-          - Negativbefunde im Detail: negativbefunde.md
+          - Überblick: nicht_getragen/index.md
+          - Negativbefunde im Detail: nicht_getragen/negativbefunde.md
+          - "Bayes-Diagnose": nicht_getragen/bayes.md
+          - "GNN: Hilft das Netz?": nicht_getragen/gnn.md
 
   - Ergebnisse:
       - Überblick: ergebnisse.md

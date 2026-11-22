@@ -72,7 +72,7 @@ Aus dem Vergleich entsteht ein System aus mehreren Teilen, die sich ergänzen:
   wird.
 - **Hinweise auf Dämmung und Kapazität** mit niedriger Dringlichkeit.
 - **Keine Aussage** zu Regelungsoptimierung, Filter, Durchfluss und Sollwert. Warum diese Fehlerarten in den
-  Zählerdaten keine Spur hinterlassen, steht unter [Was nicht getragen hat](nicht_getragen.md).
+  Zählerdaten keine Spur hinterlassen, steht unter [Was nicht getragen hat](nicht_getragen/index.md).
 
 Wie daraus eine Empfehlung je Station wird, steht unter [Handlungsempfehlungen](ergebnisse_handlungsempfehlungen.md),
 wie sie angezeigt wird, unter [Dashboard](ergebnisse_dashboard.md). Wo die Modelle aufhören, steht unter

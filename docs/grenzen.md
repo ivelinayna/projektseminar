@@ -3,7 +3,7 @@
 Diese Seite sammelt, worauf die Ergebnisse beruhen und wo sie aufhören.
 Probleme in den Rohdaten stehen in der Tabelle
 [Bekannte Probleme](datengrundlage/quellen.md#bekannte-probleme) und werden hier nicht wiederholt.
-Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](negativbefunde.md).
+Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getragen/negativbefunde.md).
 
 ## Annahmen
 

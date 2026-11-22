@@ -1,10 +1,10 @@
 # Negativbefunde
 
-Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebnisse und gehören zur Abgabe: Sie zeigen, wo die Daten an Grenzen stoßen und welche Wege sich nicht lohnen. Notebooks sind mit ihrer Nummer im Abgabestand genannt, die Zahlen stammen aus den Notebooks oder aus dem [Modellvergleich](modellvergleich.md).
+Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebnisse und gehören zur Abgabe: Sie zeigen, wo die Daten an Grenzen stoßen und welche Wege sich nicht lohnen. Notebooks sind mit ihrer Nummer im Abgabestand genannt, die Zahlen stammen aus den Notebooks oder aus dem [Modellvergleich](../modellvergleich.md).
 
 ## 1 Überwachtes Lernen auf Begehungslabels
 
-- Probiert: Klassifikator auf dem Label „Maßnahme ja/nein“ aus der Begehungstabelle, Code in `src/ml_classifier.py`. Läuft nur über die Befehlszeile (siehe [Pipeline](installation/pipeline.md)), nicht in einem Notebook.
+- Probiert: Klassifikator auf dem Label „Maßnahme ja/nein“ aus der Begehungstabelle, Code in `src/ml_classifier.py`. Läuft nur über die Befehlszeile (siehe [Pipeline](../installation/pipeline.md)), nicht in einem Notebook.
 - Ergebnis: Balanced Accuracy 0,33 bzw. 0,42 gegen 0,50 für die triviale Vorhersage (Notebook 16).
 - Das Label ist bei 40 von 49 Stationen wahr, es bleiben 9 Negative (Notebook 25 und 29). Notebook 38 nennt dazu Label-Leakage.
 - Das Label ist zu grob: „Maßnahme“ sagt nicht, welcher Fehler vorlag.
@@ -26,7 +26,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Alte Labelverteilung: 44 von 93 Stationen `control_hysteresis`, kein `healthy`. Nach der Kalibrierung auf rund 15 % je Regel: 38 `healthy` und sechs Fehlerbilder. Das Notebook nennt das „bewertbar, nicht richtig“.
 - Im Modellvergleich liegt `oversized_contract` bei AUC 0,51. Ein Grund: Der Anschlusswert ist oft schon der neue Vertrag.
 - Für `control_hysteresis` gibt es kein Befund-Label, die Regel ist nicht prüfbar.
-- Zum Vergleich tragen andere Regeln: `continuous_flow` 0,85 und `excess_rt` 0,84 beim Ventil (siehe [Modellvergleich](modellvergleich.md)).
+- Zum Vergleich tragen andere Regeln: `continuous_flow` 0,85 und `excess_rt` 0,84 beim Ventil (siehe [Modellvergleich](../modellvergleich.md)).
 
 ## 4 Stationsclustering
 
@@ -35,7 +35,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Notebook 08: Ab k=3 liegen alle Silhouetten unter 0,25. HDBSCAN liefert ab Mindestgröße 5 nur Rauschen, bei 3 bleibt rund die Hälfte ohne Cluster.
 - Die Verfahren stimmen kaum überein (paarweiser ARI 0,35 bis 0,48), einig sind sie nur bei den Ausreißern 58202380 und 66761022. Das BHKW 86792512, früher der dritte Ausreißer, ist seit Notebook 00 ausgeschlossen.
 - Gegen die Begehungen trennt kein Cluster: Fisher p ≥ 0,33, Mann-Whitney p ≥ 0,08, Basisrate 77 %. Die Daten sind konsistent mit einem Kontinuum statt mit Gruppen.
-- Notebook 07 und 08 bilden Profile über die ganze Historie und haben damit ein Datenleck. Das Cluster „schlechter“ aus Notebook 26 erreicht AUC 0,67 und ist belegt schlechter als die Sommernacht-Regel (siehe [Modellvergleich](modellvergleich.md)).
+- Notebook 07 und 08 bilden Profile über die ganze Historie und haben damit ein Datenleck. Das Cluster „schlechter“ aus Notebook 26 erreicht AUC 0,67 und ist belegt schlechter als die Sommernacht-Regel (siehe [Modellvergleich](../modellvergleich.md)).
 
 ## 5 Clustering je Leistungsklasse
 
@@ -76,7 +76,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Reines ARIMA ist schlechter als naiv: ARIMA(1,1,0) 2,79 °C, 7-Tage-Mittel 2,66 °C mittlerer Fehler.
 - Am besten ist `arx_100` mit 2,11 °C. Der Gewinn kommt aus der Außentemperatur: Der AR-Term bringt gegenüber der reinen Kennlinie nur 0,02 °C, der Wochenterm nichts.
 - Als Wächter: 16 von 40 Begehungen außerhalb z = ±2 (40 % gegen 19 % Placebo, p = 0,002). Im typischen Fall kein Unterschied (Median −0,55 gegen −0,24 °C, p = 0,23). 13 Begehungen sind nicht auswertbar.
-- Im Wächtervergleich 22 von 43 bei p = 0,016, nach Holm 0,16 (siehe [Modellvergleich](modellvergleich.md)).
+- Im Wächtervergleich 22 von 43 bei p = 0,016, nach Holm 0,16 (siehe [Modellvergleich](../modellvergleich.md)).
 
 ## 10 Modulationsart und Kennlinienparameter als Erfolgsmaß
 
@@ -84,7 +84,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Modulationsart unverändert: p = 0,70 (Stunde) und 0,34 (Tag).
 - Steigung (p = 0,67) und Bestimmtheitsmaß (p = 0,76) der Kennlinie ändern sich ebenfalls nicht. Ausnahme ist 68956351 mit einem Sprung der Steigung von −0,058 auf 1,276.
 - Dauerlinien zeigen nur eine schwache, nicht gesicherte Veränderung: Rücklauf über 50 °C −1,4 Prozentpunkte (n = 47, p = 0,096), Tagesperformance +0,73 kWh/m³ (n = 45, p = 0,069).
-- Ohne Kontrollgruppe nur konsistent mit einer Wirkung der Begehung. Mehr dazu in [Stationsbilder](stationsbilder.md).
+- Ohne Kontrollgruppe nur konsistent mit einer Wirkung der Begehung. Mehr dazu in [Stationsbilder](../stationsbilder.md).
 
 ## 11 Anomaliedetektoren
 
@@ -92,7 +92,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Nicht bestanden: Isolation Forest (+0,001, p = 0,62), Zustandsanteil (Median 0, p = 0,76), Dynamikscore (+0,02, p = 0,89).
 - Der Dynamikscore ordnet sogar umgekehrt (0,19 gegen 0,31 kWh/Kh, p < 0,001). Die zweite Ableitung bei 0,1 K Auflösung ist wohl Quantisierungsrauschen.
 - Die Residuen bestehen (DiD −1,34, p = 0,017 bzw. −0,86, p = 0,041). Der Median des Rücklaufs allein liefert aber dasselbe (−1,74 K, p = 0,009). Das Netzmodell erklärt nur R² = 0,035.
-- Als Alarm treffen die Detektoren 6 bis 18 von 43 Begehungen, p ≥ 0,07, nach Holm ≥ 0,57 (siehe [Modellvergleich](modellvergleich.md)).
+- Als Alarm treffen die Detektoren 6 bis 18 von 43 Begehungen, p ≥ 0,07, nach Holm ≥ 0,57 (siehe [Modellvergleich](../modellvergleich.md)).
 
 ## 12 Restkategorie in der Musterzuordnung
 
@@ -137,6 +137,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Im Ventilfall ist das GNN schlechter (Fehler 0,77 gegen 0,53 bei der Abkühlung). Der eigene Vorlauf ist kein unabhängiges Signal.
 - Im Modellvergleich ist „Netzmedian abziehen“ mit 25 von 43 belegt schlechter, Nachbar-Merkmale bringen beim Ventil +0,004.
 - Nötig wären Rohrdaten (Durchmesser, Länge), Lage der Heizzentrale, Bedeutung der Pfeilrichtung und ein hydraulisches Modell.
+- Ausführlich unter [GNN: Hilft das Netz?](gnn.md).
 
 ## 17 Geocoding und Netzgeometrie
 
@@ -154,7 +155,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Normalverhaltensmodell 30 von 43, Holm 0,08. LSTM mit CUSUM Holm 0,20.
 - Prognose-LSTM mit Schwelle: 16 von 43 gegen 32 %, p = 0,26. Gegen das Normalverhaltensmodell McNemar 15 zu 1, p = 0,001.
 - Notebook 28: Der erste Blick in der vorigen Fassung war zu optimistisch, der Vorsprung ist nicht belegt.
-- Details in [Modellvergleich](modellvergleich.md).
+- Details in [Modellvergleich](../modellvergleich.md).
 
 ## 19 Fehlerarten ohne Messspur
 
@@ -162,7 +163,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Filter, Durchfluss und Temperatur sind nicht erkennbar (AUC 0,24 bis 0,64).
 - Random Forest und XGBoost sind nicht besser als logistische Regression oder Regel. Wechselwirkungen bringen −0,03 bis +0,05, Klassengewichtung nichts.
 - Regler und Einstellung ohne Spur: AUC 0,57, Top-1 0,46 gegen 0,64 für „immer Regler“. Befund ja/nein AUC 0,55, p = 0,34.
-- Dämmung ist ein Artefakt der Matrix: 12-mal Hauptursache, 2 Treffer.
+- Dämmung ist ein Artefakt der Matrix: 12-mal Hauptursache, 2 Treffer. Den Bayes-Ansatz beschreibt [Bayes-Diagnose](bayes.md).
 - In Notebook 26 hält die Ventil-Gegenprobe nach Holm nicht (p = 0,021, Holm 0,13).
 - Notebook 36 prüft mit vorab festgelegter Richtung, ob die Maßnahmen überhaupt eine Spur hinterlassen. Nur der Ventiltausch tut es (Sommernacht-Durchfluss, AUC 0,81, nach Holm gesichert). Dämmung, Filter und Durchfluss ändern nichts Messbares, neue Kennzahlen finden nichts Gesichertes. Bessere Labels würden hier mehr helfen als bessere Modelle.
 
@@ -180,7 +181,7 @@ Diese Versuche liegen nur im lokalen Archiv, nicht im Abgabestand. Ihre Zahlen s
 - Erste Fassung der Stundencluster (früher Notebook 09): ersetzt durch Notebook 09, das dasselbe Clustering über `src/clustervalidierung.py` rechnet und zusätzlich prüft.
 - Gesamtpipeline (August, früher Notebook 12): Ein eigenständiges Notebook las die Rohdaten selbst, clusterte die
   Stationen und verglich unüberwachte Anomaliescores mit Wartungen als Ersatzlabel. Ergebnis: AUC 0,51, höchstens
-  2 von 10 Ereignissen (Zahlen im [Modellvergleich](modellvergleich.md), Notebook 34). Das Notebook ist nicht mehr
+  2 von 10 Ereignissen (Zahlen im [Modellvergleich](../modellvergleich.md), Notebook 34). Das Notebook ist nicht mehr
   im Abgabestand: Es nutzte eine eigene Datenaufbereitung mit 78 statt 93 Stationen, seine Zahlen passen deshalb
   nicht zu den übrigen Notebooks, und kein anderes Notebook baut darauf auf. Es liegt im Verlauf des Repositorys
   (Commit `1b5798b`).

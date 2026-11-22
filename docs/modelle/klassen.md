@@ -109,4 +109,4 @@ Regelparameter optimieren, 61 kein Handlungsbedarf, 1 nicht einstufbar. Das Pake
   diese Klasse deshalb nicht.
 - **Kapazität** bleibt eine Regel, weil das entscheidende Merkmal sauber nur als Regel vorliegt.
 - **Filter, Durchfluss und Temperatur** lassen sich nicht einstufen. Warum, zeigt Notebook 36 (siehe
-  [Was nicht getragen hat](../nicht_getragen.md)).
+  [Was nicht getragen hat](../nicht_getragen/index.md)).

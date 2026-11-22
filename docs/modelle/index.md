@@ -65,7 +65,7 @@ Notebook 37   Dashboard (HTML-Datei)
   Zeitachse neu, wählt das Modell nur im Lernteil und speichert drei Pakete für das Dashboard.
 - **Notebook 37** zeigt das Ergebnis als Karte und Handlungsliste.
 - **Notebook 36** prüft, ob die Maßnahmen bei den Begehungen überhaupt eine Spur in den Daten hinterlassen. Das
-  erklärt, warum manche Fehlerarten nicht erkennbar sind (siehe [Was nicht getragen hat](../nicht_getragen.md)).
+  erklärt, warum manche Fehlerarten nicht erkennbar sind (siehe [Was nicht getragen hat](../nicht_getragen/index.md)).
 
 Den Hauptweg zum Endergebnis bilden die Notebooks 25, 27, 28, 35 und 37. Die Notebooks 26, 29, 30, 34 und 36 sind
 Vergleiche und Gegenproben. Sie begründen, warum das Endmodell so aussieht.

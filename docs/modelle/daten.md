@@ -193,4 +193,4 @@ muss ein Modell mit vielen Gewichten zu viel aus zu wenigen Fällen lernen.
   vom Verhalten einer Station erfasst als eine Handvoll Kennzahlen. Das ist die Idee des
   [LSTM-Fingerabdrucks](lstm.md).
 - Temperatur, Durchfluss und Filter erreicht schon die einfache Kennzahl nicht. Ob überhaupt eine Spur
-  in den Daten steckt, prüft Notebook 36 (siehe [Was nicht getragen hat](../nicht_getragen.md)).
+  in den Daten steckt, prüft Notebook 36 (siehe [Was nicht getragen hat](../nicht_getragen/index.md)).

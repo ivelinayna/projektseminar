@@ -5,7 +5,7 @@
 **1. Ohne Erwartung findet ein Modell keinen Fehler, nur Seltenes.** Die erste Pipeline suchte ohne Labels nach
 ungewöhnlichen Stunden und kam gegen „Maßnahme ja oder nein“ auf eine AUC von 0,49 bis 0,53. Getragen hat erst der
 Vergleich jeder Station mit ihrem eigenen Normalverhalten: mit der Kennlinie im Monitoring-Modell und mit der
-Vorhersage im Prognose-LSTM (siehe [Was nicht getragen hat](nicht_getragen.md)).
+Vorhersage im Prognose-LSTM (siehe [Was nicht getragen hat](nicht_getragen/index.md)).
 
 **2. Erst ein strenger Prüfstand zeigt, was ein Modell kann.** Im ersten Prüfstand (Notebook 34) kam die Regression
 auf Kennzahlen und LSTM-Zahlen beim Ventil auf eine AUC von 0,89. Dort hatte der Encoder die Teststationen gesehen,
