@@ -34,6 +34,29 @@ der ÜZ in `data/raw/` liegen (siehe [Vorbereitung](vorbereitung.md)) und die Um
 Für das Dashboard reichen diese Schritte. Die übrigen Notebooks zeigen den Weg dorthin und sind unter
 [Die übrigen Notebooks](#die-ubrigen-notebooks) beschrieben.
 
+## Gespeicherte Modelle oder selbst lernen
+
+Fünf Notebooks lernen Modelle: 27, 28, 29, 34 und 35. Damit beim Ausführen nicht ungewollt stundenlang gerechnet
+wird, steht in jedem dieser Notebooks oben im Setup der Schalter `SELBST_TRAINIEREN = False`. Neu gelernt wird nur,
+wenn er von Hand auf `True` gesetzt wird.
+
+| Notebook | mit `False` (Vorgabe) | mit `True` |
+|---|---|---|
+| 27 LSTM-Fingerabdruck, 28 Prognose-LSTM | lädt alle Netze aus `notebooks/models/`, auch die der Vorversuche | lernt alle Netze neu und speichert sie dort |
+| 29 XGBoost, 34 Modellvergleich, 35 Endmodell | hält vor der ersten langen Rechnung an, die Ergebnisse stehen in den gespeicherten Ausgaben | rechnet alles neu |
+
+- Gewichte und Modellpakete liegen nicht im Repository, weil sie aus den Zählerdaten der ÜZ gelernt sind. Das
+  Projektteam gibt sie zusammen mit den Daten weiter. Sie gehören nach `notebooks/models/` und `models/`.
+- Fehlt eine Gewichtsdatei, halten 27 und 28 mit einem Hinweis an. Dann die Gewichte einspielen oder den Schalter auf
+  `True` setzen.
+- **Kürzester Weg zum Dashboard:** Liegen die drei Modellpakete in `models/`, reichen `python -m src.weather`,
+  Notebook 00 und die Schritte 6 bis 8. Die Schritte 3 bis 5 braucht es nur, wenn die Modelle neu gelernt werden.
+- **Laufzeit beim Neulernen:** Mit Grafikkarte dauert Notebook 27 rund 7 Minuten, 28 rund 2, 29 und 34 je gut 10 und
+  35 gut 20 Minuten. Ohne Grafikkarte, etwa in Docker, brauchen 27 und 28 rund 4,5 bzw. 3,5 Stunden und 35 rund
+  5 Stunden.
+- Da alle Startwerte fest gesetzt sind, liefern neu gelernte Netze auf demselben Rechner dieselben Zahlen. Auf anderer
+  Hardware können die letzten Stellen abweichen, die Aussagen bleiben gleich.
+
 ## 1 Vorbereitende Befehle
 
 ```bash
@@ -74,11 +97,10 @@ Die lernenden Modelle bauen aufeinander auf und laufen der Reihe nach:
 | 28 Prognose-LSTM | `prognose_tage.csv`, Gewichte nach `notebooks/models/` |
 | 29 XGBoost und Klassen | `fehlerklassen_je_hast.csv` |
 
-- Die meisten Schritte dauern wenige Minuten. Ohne Grafikkarte, etwa in Docker, benötigen die Notebooks 27 und 28
-  beim Neulernen rund 4,5 bzw. 3,5 Stunden, Notebook 35 rund 5 Stunden.
-- Liegen die Gewichte bereits in `notebooks/models/`, laden 27 und 28 sie, und das Neulernen entfällt. Da alle Seeds
-  fest gesetzt sind, liefern neu gelernte Gewichte auf demselben Rechner dieselben Zahlen.
-- Auf anderer Hardware können die Zahlen in den letzten Stellen abweichen. Die Aussagen bleiben gleich.
+- Mit der Vorgabe `SELBST_TRAINIEREN = False` laden 27 und 28 die Gewichte aus `notebooks/models/` und schreiben
+  ihre Tabellen trotzdem neu. Notebook 29 hält vor dem Lernen an und schreibt `fehlerklassen_je_hast.csv` nicht.
+- Gelernt wird nur mit `SELBST_TRAINIEREN = True`, siehe
+  [Gespeicherte Modelle oder selbst lernen](#gespeicherte-modelle-oder-selbst-lernen).
 
 ## 4 Modellpakete bauen
 
@@ -97,7 +119,8 @@ python -m src.modellpaket       #listet die vorhandenen Pakete
 
 - Ein Paket enthält das gelernte Modell und alles zum Anwenden: Skalierung, Schwellen, Zeiträume, Version.
 - `--gegenprobe` wendet das fertige Paket noch einmal an und gibt den Vergleich mit den Zahlen aus Notebook 28 bzw. 29
-  aus, z. B. den Anteil gleicher Klassen. Alle Werte sollten übereinstimmen.
+  aus, z. B. den Anteil gleicher Klassen. Alle Werte sollten übereinstimmen. Für `fehlerklassen` braucht die
+  Gegenprobe `fehlerklassen_je_hast.csv`, also Notebook 29 mit `SELBST_TRAINIEREN = True`.
 - Jedes Paket liegt als eigene Version unter `models/<name>/`. Die Datei `AKTUELL` sagt, welche Version das Dashboard
   nimmt.
 
@@ -111,6 +134,8 @@ setzt es diese Pakete als aktuelle Version.
   [Modellvergleich](../modellvergleich.md)).
 - Braucht die Pakete aus Schritt 4, weil es das alte Prognose-LSTM zum Vergleich lädt.
 - Dauert deutlich länger als die anderen Notebooks, weil es alle Netze je Prüfteil neu lernt.
+- Lernt nur mit `SELBST_TRAINIEREN = True`. Mit der Vorgabe `False` hält es vor Abschnitt 6 an, und die bisherigen
+  Pakete bleiben aktuell.
 - Ohne Notebook 35 nutzt das Dashboard die Pakete aus Schritt 4. Die Anzeige ist dieselbe, die Modelle stammen dann
   aus den Notebooks 26 bis 29.
 
@@ -149,8 +174,9 @@ aufgebaut ist und was es zeigt, steht unter [Dashboard](../ergebnisse_dashboard.
 
 ## Die übrigen Notebooks
 
-Alle Notebooks lassen sich in Nummernfolge von 00 bis 39 ausführen. Ein vollständiger Lauf ohne Grafikkarte
-und mit neu lernenden Netzen dauert rund 15 Stunden, überwiegend in den Notebooks 27, 28 und 35. Werden nur einzelne Notebooks
+Alle Notebooks lassen sich in Nummernfolge von 00 bis 39 ausführen. Ein vollständiger Lauf ohne Grafikkarte, mit
+`SELBST_TRAINIEREN = True` in den Notebooks 27, 28, 29, 34 und 35, dauert rund 15 Stunden, überwiegend in den
+Notebooks 27, 28 und 35. Werden nur einzelne Notebooks
 ausgeführt, sind folgende Abhängigkeiten zu beachten:
 
 | Notebook | braucht vorher |

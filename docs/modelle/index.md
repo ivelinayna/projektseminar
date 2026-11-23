@@ -87,11 +87,12 @@ Die Notebooks laufen in dieser Reihenfolge. Jedes liest, was das vorige geschrie
 | Notebook 37 | `outputs/dashboard/`, Netz-Cache aus Notebook 31 | HTML-Datei des Dashboards | wenige Minuten |
 
 - **Ohne Grafikkarte** rechnen die Netze auf dem Prozessor, nur langsamer.
-- **Gewichte:** Notebook 27 und 28 speichern ihre Gewichte unter `notebooks/models/`, die Vorversuche unter
-  `notebooks/models/vorversuche/`. Beim nächsten Lauf werden sie geladen statt neu gelernt. Auf einem frischen Stand
-  lernen die Notebooks neu. Weil alle Seeds fest sind, kommen dabei dieselben Zahlen heraus. Geprüft ist das auf dem
+- **Selbst lernen nur auf Wunsch:** Die Notebooks 27, 28, 29, 34 und 35 haben im Setup den Schalter
+  `SELBST_TRAINIEREN = False`. Damit laden 27 und 28 ihre Gewichte aus `notebooks/models/`, die Vorversuche aus
+  `notebooks/models/vorversuche/`. 29, 34 und 35 halten vor dem Lernen an, ihre Ergebnisse stehen in den gespeicherten
+  Ausgaben. Mit `True` lernen alle neu. Weil alle Seeds fest sind, kommen dabei dieselben Zahlen heraus. Geprüft ist das auf dem
   Rechner, auf dem die Notebooks laufen. Auf anderer Hardware können die letzten Stellen abweichen.
-- **Modellpakete** für das Dashboard baut Notebook 35 nach `models/`.
+- **Modellpakete** für das Dashboard baut Notebook 35 nach `models/`, wenn es mit `SELBST_TRAINIEREN = True` läuft.
 - **Nicht im Repository:** Rohdaten, aufbereitete Daten, Gewichte und Pakete. Sie sind aus Firmendaten der ÜZ gelernt
   und enthalten Zählernummern. Die Dashboard-Datei enthält zusätzlich Adressen.
 

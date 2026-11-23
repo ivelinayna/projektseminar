@@ -33,8 +33,9 @@ gerechnet wurde.
    Monitoring-Modells sollte nach jeder Begehung und zu jeder Heizperiode neu gelernt werden, sonst stehen seine Konten
    am Deckel (an 43 % der Testtage in Notebook 35).
 5. **Neu lernen nur mit Prüfung.** Ändert sich die Datenbasis deutlich, etwa durch neue Zähler oder einen neuen Winter,
-   werden die Modelle neu gelernt: Notebook 00, dann Notebook 25 für Labels und Kennzahlen, dann Notebook 35. Erst wenn
-   die Zahlen aus Notebook 35 mit dem bisherigen Stand verglichen sind, kommen die neuen Pakete ins Dashboard.
+   werden die Modelle neu gelernt: Notebook 00, dann Notebook 25 für Labels und Kennzahlen, dann Notebook 35 mit
+   `SELBST_TRAINIEREN = True`. Erst wenn die Zahlen aus Notebook 35 mit dem bisherigen Stand verglichen sind, kommen
+   die neuen Pakete ins Dashboard.
 
 ## Rückmeldung aus dem Probebetrieb
 

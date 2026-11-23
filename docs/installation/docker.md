@@ -123,8 +123,8 @@ docker compose up dashboard
 
 Das Dashboard ist danach unter http://localhost:8000/fernwaerme_dashboard_final.html erreichbar.
 
-Die Modellpakete setzen die LSTM-Gewichte aus den Notebooks 27 und 28 in `notebooks/models/` voraus. Ohne Grafikkarte
-lernen diese beiden Notebooks mehrere Stunden.
+Die Modellpakete setzen die LSTM-Gewichte aus den Notebooks 27 und 28 in `notebooks/models/` voraus. Neu lernen
+diese beiden Notebooks nur mit `SELBST_TRAINIEREN = True`, ohne Grafikkarte dauert das mehrere Stunden.
 
 ## 6 Aufräumen
 
@@ -173,5 +173,5 @@ docker compose run --rm jupyter python -m pytest -q
 - Die Dashboard-HTML enthält Adressen. Sie wird nicht ins Repository übernommen und ist nur für den internen Gebrauch
   bestimmt.
 - Die Adressen `localhost` sind nur auf dem eigenen Rechner erreichbar und sollten nicht im Netz freigegeben werden.
-- Im Container rechnet PyTorch auf dem Prozessor. Liegen keine Gewichte in `notebooks/models/`, lernen die Notebooks
-  27 und 28 neu, was mehrere Stunden dauert.
+- Im Container rechnet PyTorch auf dem Prozessor. Die Notebooks 27 und 28 laden deshalb die Gewichte aus
+  `notebooks/models/`. Mit `SELBST_TRAINIEREN = True` lernen sie neu, was im Container mehrere Stunden dauert.

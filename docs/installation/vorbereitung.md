@@ -13,10 +13,11 @@ Wege. Danach folgt [Start mit Docker](docker.md) oder [Lokaler Start ohne Docker
 | Grafikkarte | wird nicht genutzt, PyTorch rechnet auf dem Prozessor | wird genutzt, sofern vorhanden |
 | geeignet für | Ergebnisse nachvollziehen, Dashboard erzeugen, Tests | LSTMs neu lernen, Änderungen am Code |
 
-- Zum Nachvollziehen der Ergebnisse genügt Docker. Liegen die gespeicherten LSTM-Gewichte unter `notebooks/models/`,
-  laden die Notebooks sie, statt neu zu lernen.
-- Ohne Gewichte lernen die Notebooks 27 und 28 neu. Mit Grafikkarte dauert das Minuten, auf dem Prozessor mehrere
-  Stunden.
+- Zum Nachvollziehen der Ergebnisse genügt Docker. Die lernenden Notebooks laden die gespeicherten Gewichte aus
+  `notebooks/models/` oder halten vor dem Lernen an.
+- Neu gelernt wird nur, wenn im Notebook `SELBST_TRAINIEREN = True` gesetzt ist (siehe
+  [Ausführung](ausfuehrung.md#gespeicherte-modelle-oder-selbst-lernen)). Mit Grafikkarte dauert das Minuten, auf dem
+  Prozessor mehrere Stunden.
 
 ## Voraussetzungen
 

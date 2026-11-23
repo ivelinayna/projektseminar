@@ -120,7 +120,7 @@ der Trainingsfehler weiter fällt. Kein Testwert und kein Befund steuert das Tra
 **Wiederholbar.** Alle Seeds sind fest. In den Vorversuchen und in Notebook 35 rechnet die
 Grafikkarte zusätzlich im deterministischen Modus, also bei jedem Lauf in derselben Reihenfolge. Ein frischer Lauf der Netze aus Notebook
 27 und 28 ohne gespeicherte Gewichte lieferte dieselben Zahlen wie die gespeicherte Fassung. Die
-Gewichte werden gespeichert und beim nächsten Lauf geladen.
+Gewichte werden gespeichert, und ohne `SELBST_TRAINIEREN = True` laden die Notebooks sie, statt neu zu lernen.
 
 ## Warum keine Hyperparameter-Suche für die Netze
 
