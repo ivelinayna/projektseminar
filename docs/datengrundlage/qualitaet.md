@@ -1,8 +1,8 @@
 # Qualität und Einschränkungen
 
 Diese Seite fasst zusammen, wie gut die Daten sind und wo sie nicht reichen. Was Notebook 00 an den Exporten
-korrigiert, steht unter *Zählerdaten*. Was die Einschränkungen für die Ergebnisse bedeuten, steht unter
-*Grenzen und Erkenntnisse*.
+korrigiert, steht unter [Zählerdaten](zaehlerdaten.md#eigenheiten-der-exporte). Was die Einschränkungen für die
+Ergebnisse bedeuten, steht unter [Grenzen und Erkenntnisse](../grenzen.md).
 
 ## Auf einen Blick
 
@@ -10,7 +10,7 @@ korrigiert, steht unter *Zählerdaten*. Was die Einschränkungen für die Ergebn
 |---|---|---|
 | Zählerdaten | nach der Bereinigung keine unplausible Messung, Zählerstände fast immer in Ordnung | Stundenwerte sind Momentaufnahmen, die Daten enden meist im Juli 2025 |
 | Begehungen | einzige Rückmeldung aus dem Betrieb, alle Freitexte von Hand geprüft | wenige Fälle, nicht zufällig ausgewählt, Fehlerbeginn unbekannt |
-| Netz und Zuordnung | jede Begehung findet ihren Zähler | Anschlusswert fehlt bei 6 HAST, Fließrichtung und Einspeisung unklar |
+| Netz und Zuordnung | jede Begehung findet ihren Zähler, die Einspeisung ist bekannt | Anschlusswert fehlt bei 6 HAST, Bedeutung der Pfeile unklar, kein hydraulisches Modell |
 | Außentemperatur | lückenlos und geprüft | eine Station für das ganze Netz, endet 2025 |
 
 ## Zählerdaten
@@ -60,18 +60,37 @@ korrigiert, steht unter *Zählerdaten*. Was die Einschränkungen für die Ergebn
 
 ## Netz und Zuordnung
 
+**Was gut ist**
+
+- Jede Begehung findet über ihre Adresse einen Zähler.
+- **Die Einspeisung ist bekannt.** Laut Expertenangabe der ÜZ ist der Knoten „Erzeuger“ die Einspeisung des Netzes.
+  Die Messdaten passen dazu: Eine Schätzung aus dem Vorlauf, der entlang der Leitungen abkühlt, landet beim Erzeuger
+  (Rangkorrelation −0,70, Zufallsgrenze −0,28). Im Rohrbaum ab dem Erzeuger hat das Haus weiter oben im Strang bei
+  36 von 38 Paaren den wärmeren Vorlauf (Notebook 32).
+
+**Einschränkungen**
+
 - **Anschlusswert:** Er fehlt bei 6 HAST. 4 Zähler stehen in keiner Tabelle, vermutlich alte, getauschte Zähler. 2
   Stationen auf einem Grundstück teilen sich einen Vertrag.
 - **Adressen:** Zwei Zähler standen unter der falschen Adresse. Das ist im Code korrigiert (siehe
-  *Ergänzende Daten*).
-- **Netzplan:** 110 Adressen und 110 Kanten. 18 Adressen haben keine Koordinate, deshalb fehlt für 35 Kanten der
-  Rohrweg. Die Rohrdimension am Hausanschluss ist für 81 der 110 Adressen bekannt.
-- **Zähler im Netz:** 84 Zähler mit Tageswerten haben eine Adresse im Netz.
-- **Fließrichtung:** Die Pfeile in `Nodes_Edges.ods` passen zu keiner Quelle. 51 zeigen von der angenommenen
-  Einspeisung weg, 54 zu ihr hin.
-- **Einspeisung:** Die Lage der Heizzentrale ist nur angenommen.
+  [Ergänzende Daten](ergaenzend.md#auskunfte-der-uz)).
+- **Kantendatei:** `Nodes_Edges.ods` verbindet 110 Adressen über 110 Kanten zu einem Netz mit genau einem Ring. Sie
+  verbindet Häuser direkt miteinander, nicht über die echten Leitungen. Sie sagt also, wer nah beieinander hängt,
+  nicht, wo das Wasser fließt.
+- **Zähler im Netz:** 84 Zähler mit Tageswerten haben eine Adresse im Netz, 5 Adressen mit Zähler hängen an keiner
+  Kante. 8 Stationen haben auch über zwei Kanten keinen Nachbarn mit Zähler (Notebook 23).
+- **Pfeile:** Jede Kante hat in der Datei eine Richtung, ihre Bedeutung ist aber offen. Es gibt 7 Knoten ohne Zufluss
+  und 6 mit mehreren, die Pfeile passen also zu keiner einzelnen Quelle. Richtet man alle Kanten vom Erzeuger weg aus,
+  müssen 54 von 111 umgedreht werden. Der Vorlauf bestätigt keine der beiden Richtungen deutlich: Von 48 Kanten
+  mit deutlichem Unterschied sinkt er in Pfeilrichtung an 22, vom Erzeuger weg an 26 (Notebook 32).
+- **Weitere Einspeisepunkte:** Ob es außer dem Erzeuger weitere gibt, ist nicht bekannt. Die Schätzung aus dem
+  Vorlauf könnte mehrere Einspeisepunkte nicht trennen.
+- **Koordinaten:** 18 Adressen haben keine Koordinate, deshalb fehlt für 35 Kanten der Rohrweg. Die Rohrdimension am
+  Hausanschluss ist für 81 der 110 Adressen bekannt.
 - **Rohrdaten:** Nennweite, Länge und Baujahr je Kante gibt es nur teilweise. Das Netz ist damit ein logisches
   Modell, kein hydraulisches.
+- **GNN:** Notebook 39 ist vor der Bestätigung des Erzeugers entstanden und rechnet noch mit einem eigenen Punkt rund
+  50 m daneben (siehe [GNN: Hilft das Netz?](../nicht_getragen/gnn.md)).
 
 ## Außentemperatur
 
@@ -84,7 +103,7 @@ korrigiert, steht unter *Zählerdaten*. Was die Einschränkungen für die Ergebn
 
 | Was | Wofür |
 |---|---|
-| Lage der Heizzentrale und der Einspeisepunkte | Lage im Netz und Rohrweg exakt statt angenommen |
+| Auskunft, ob es außer dem Erzeuger weitere Einspeisepunkte gibt | mehrere Quellen im Netz berücksichtigen |
 | Bedeutung der Pfeile in `Nodes_Edges.ods` | Fließrichtung im Netz |
 | Koordinaten der 18 Adressen ohne Position | Rohrweg für die 35 Kanten ohne Länge |
 | Vorlauftemperatur am Ausgang der Heizzentrale | netzweite Schwankungen direkt erklären |
@@ -92,4 +111,4 @@ korrigiert, steht unter *Zählerdaten*. Was die Einschränkungen für die Ergebn
 | Begehungen nach Juli 2025 mit Zählerständen | neue Prüffälle für die Alarme |
 | Minutenwerte oder Reglerdaten mit Stellsignal | Regelhysterese sichtbar machen |
 
-Die Fragen an die ÜZ dazu stehen unter *Ausblick → Offene Fragen an die ÜZ*.
+Die Fragen an die ÜZ dazu stehen unter [Offene Fragen an die ÜZ](../grenzen.md#offene-fragen-an-die-uz).

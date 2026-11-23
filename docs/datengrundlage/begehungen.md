@@ -23,7 +23,7 @@ Station falsch, und was wurde geändert?
 
 - Fast alle Begehungen fallen also in wenige Wochen im Herbst 2024, kurz vor der Heizperiode.
 - Die Tabelle nennt die Adresse, keine Zählernummer. Der Zähler wird über `Zuordnung.xlsx` gefunden (siehe
-  *Netz und Zuordnung*). So bekommt jede Begehung einen Zähler. Die 58 datierten Begehungen liegen an 56 Zählern.
+  [Netz und Zuordnung](netz_und_zuordnung.md#zahler-und-adresse-zuordnungxlsx)). So bekommt jede Begehung einen Zähler. Die 58 datierten Begehungen liegen an 56 Zählern.
 
 ## Aufbau der Tabelle
 
@@ -67,8 +67,8 @@ Die Tabelle hat 133 Spalten mit zweizeiligem Kopf: oben die Gruppe, darunter `al
 Reparaturen, die in den Spalten fehlen. Beim Ventilfall 68956351 stehen Ventil- und Stellmotortausch zum Beispiel nur
 im Freitext.
 
-Deshalb wurden alle 65 Begehungen von Hand gelesen und kodiert (Prüfliste in `data/manual/`): bis zu zwei Befunde je
-Begehung, die Maßnahme am Termin und ob der Eingriff mechanisch war. Die Kodierung stützt sich nur auf die
+Deshalb wurden alle 65 Begehungen von Hand gelesen und kodiert (Prüfliste
+`data/manual/pruefliste_begehungsnotizen.xlsx`): bis zu zwei Befunde je Begehung, die Maßnahme am Termin und ob der Eingriff mechanisch war. Die Kodierung stützt sich nur auf die
 Begehungstabelle, nicht auf die Messdaten.
 
 | Maßnahme am Termin | Begehungen |
@@ -110,4 +110,4 @@ Begehungstabelle, nicht auf die Messdaten.
   September 2025 haben nur zwei Messwerte danach, beide an ODS-Zählern.
 - **Mehrfach begangen:** Zwei Begehungen an derselben Station sind keine unabhängigen Fälle.
 
-Wie die Begehungen ausgewertet werden, steht unter *Vorgehen → Begehungen auswerten*.
+Wie die Begehungen ausgewertet werden, steht unter [Vorgehen → Begehungen auswerten](../begehungen/index.md).

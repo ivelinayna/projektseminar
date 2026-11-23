@@ -158,5 +158,7 @@ OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand erf
 - Jede Begehung findet über ihre Adresse einen Zähler. Von den 58 datierten Begehungen landen 53 an einem Zähler mit
   Zeitreihe (51 Zähler). Die übrigen 5 liegen an Stationen, für die keine Zählerdaten geliefert wurden.
 
-Was an Netz und Zuordnung unsicher ist und welche Angaben noch fehlen, steht unter *Qualität und Einschränkungen*.
-Wie aus Kantendatei und Leitungsplan ein Netzmodell entsteht, steht unter *Vorgehen → Netz einbeziehen*.
+Was an Netz und Zuordnung unsicher ist und welche Angaben noch fehlen, steht unter
+[Qualität und Einschränkungen](qualitaet.md#netz-und-zuordnung).
+Wie aus Kantendatei und Leitungsplan ein Netzmodell entsteht, zeigen die Notebooks 31 bis 33 (siehe
+[Überblick der Notebooks, Teil 7: Netz](../notebooks.md#teil-7-netz)).

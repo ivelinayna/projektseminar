@@ -44,7 +44,6 @@ nav:
   - Datengrundlage:
       - Zählerdaten: datengrundlage/zaehlerdaten.md
       - Begehungen: datengrundlage/begehungen.md
-      - Quellen, Netz und bekannte Probleme: datengrundlage/quellen.md
       - Netz und Zuordnung: datengrundlage/netz_und_zuordnung.md
       - Ergänzende Daten: datengrundlage/ergaenzend.md
       - Qualität und Einschränkungen: datengrundlage/qualitaet.md
