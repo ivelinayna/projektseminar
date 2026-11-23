@@ -59,17 +59,17 @@ nav:
           - "Änderungen 3: Rückmeldung der ÜZ": aufbereitung/uez_rueckmeldung.md
       - Begehungen auswerten:
           - Überblick: begehungen/index.md
-          - "Wirkung im 21-Tage-Fenster": begehungen/wirkung.md
-          - "Label aus Messdaten": begehungen/labels.md
-          - "Wintervergleich": begehungen/wintervergleich.md
-          - "Performance": begehungen/performance.md
-          - "Prognose mit ARIMA": begehungen/arima.md
+          - Wirkung im 21-Tage-Fenster: begehungen/wirkung.md
+          - Label aus Messdaten: begehungen/labels.md
+          - Wintervergleich: begehungen/wintervergleich.md
+          - Performance: begehungen/performance.md
+          - Prognose mit ARIMA: begehungen/arima.md
       - Merkmale und Clustering:
           - Überblick: clustering/index.md
-          - "Stationscluster": clustering/stationscluster.md
-          - "Vier Verfahren im Vergleich": clustering/benchmark.md
-          - "Stundencluster und Validierung": clustering/validierung.md
-          - "Tagescluster": clustering/tagescluster.md
+          - Stationscluster: clustering/stationscluster.md
+          - Vier Verfahren im Vergleich: clustering/benchmark.md
+          - Stundencluster und Validierung: clustering/validierung.md
+          - Tagescluster: clustering/tagescluster.md
       - Stationsbilder und Befunde: stationsbilder.md
       # - Anomalien und Monitoring:   # noch leer
       - Lernende Modelle:

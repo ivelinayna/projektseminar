@@ -1,120 +1,80 @@
 # GNN: Hilft das Netz?
 
-**Notebook 39:** `notebooks/weitere_versuche/39_gnn.ipynb` · **Code:** im Notebook (numpy, ohne PyTorch und ohne
-`src/`)
+**Notebook 39:** `notebooks/weitere_versuche/39_gnn.ipynb`
 
-Das Normalverhaltensmodell aus Notebook 18 lernt für jede Station eine eigene Kennlinie gegen die Außentemperatur. Für
-jeden Heiztag sagt es, was normal wäre, und meldet die Abweichung z in Streuungen. Jede Station steht dort für sich.
-Dieses Notebook fragt:
+## Die Idee
 
-> Wird die Erwartung besser, wenn ein Modell auch die Nachbarn im Leitungsnetz kennt, und zwar wegen des Netzes?
+Das Normalverhaltensmodell (Notebook 18) lernt für jede Station, wie viel Wasser sie bei welcher Außentemperatur
+normalerweise braucht und wie stark sie es abkühlt. Weicht ein Tag davon ab, kann das ein Fehler in der Station sein.
+Es kann aber auch von außen kommen, zum Beispiel vom Netz: Der Vorlauf kommt kälter an, oder ein Strang zieht gerade
+viel Wärme.
 
-Ein **GNN** (Graph Neural Network) ist ein neuronales Netz, das auf einem Graphen rechnet: Jeder Knoten mischt seine
-eigenen Werte mit denen seiner Nachbarn. Was das GNN an z erklären kann, käme von außen (Netz, Wetter, Vorlauf) und
-wäre kein Fehler der Station.
+Alle Stationen hängen am selben Leitungsnetz. Kommt ein Teil der Abweichung vom Netz, müssten ihn die Nachbarn auch
+sehen. Ein **GNN** (Graph Neural Network) ist ein neuronales Netz, das genau dafür gebaut ist: Es rechnet auf dem
+Leitungsnetz und liest für jede Station die Messwerte ihrer Nachbarn mit. Die Idee war, damit den Teil der Abweichung
+herauszurechnen, der vom Netz kommt. Übrig bliebe, was wirklich in der Station passiert, also ein saubereres
+Fehlersignal.
 
-Erwartet war wenig Gewinn: Schon in Notebook 18 (Abschnitt 15) weichen Nachbarn nicht gemeinsam ab. Hier wird das mit
-einem echten Modell statt mit Korrelationen geprüft.
+## Umsetzung und Hürden
 
-## Aufbau als Ablation
-
-| Modell | Was es weiß |
-|---|---|
-| Notebook 18 allein | Kennlinie der Station gegen die Tagesmitteltemperatur |
-| ohne Netz (MLP) | dazu Temperatur der zwei Vortage, Wochenende, Jahreszeit, eigener Vorlauf und die Lage im Netz als feste Zahlen |
-| GNN (GraphSAGE) | dazu die Messwerte der Nachbarn vom selben Tag, über bis zu zwei Kanten |
-
-„Ohne Netz“ und „GNN“ sind dasselbe Modell, einmal ohne und einmal mit Kanten. Der Unterschied zwischen beiden ist
-genau der Beitrag des Netzes.
-
-## Das Netz
-
-- Die Kanten kommen aus `Nodes_Edges.ods` (über die Netztabellen aus Notebook 31), ohne Richtung. Die Pfeile in der
-  Datei passen zu keiner Quelle: 51 zeigen von der angenommenen Quelle weg, 54 zu ihr hin.
-- Wo die Heizzentrale liegt, ist nicht bekannt. Angenommen ist ein Standort, von dem laut Wärmenetzplan mehrere
-  Hauptleitungen ausgehen. Er liegt nicht genau an dem Erzeuger-Knoten, den Notebook 32 später aus dem Vorlauf
-  schätzt.
-- Ein Knoten je Zähler. Adressen ohne Zähler bleiben als Zwischenknoten, damit die Stränge nicht zerfallen. Zusammen
-  sind es 111 Knoten (84 Zähler, 27 Zwischenknoten) und 113 Kanten.
-- Lage je Adresse: Kanten und Rohrweg bis zur Quelle, „Last dahinter“ (Anschlusswert, der über diese Adresse versorgt
-  wird, groß heißt Hauptstrang), Randlage, Strangende und Rohrdimension am Hausanschluss.
-- Lücken: 18 von 110 Adressen haben keine Koordinate, für 35 Kanten fehlt der Rohrweg (dort gilt der Median von
-  55 m).
-
-## Das Modell
-
-- **GraphSAGE mit zwei Schichten:** Jeder Knoten verbindet seinen eigenen Zustand mit dem Mittel seiner Nachbarn.
-  Zwei Schichten reichen zwei Kanten weit und überbrücken Zwischenknoten.
-- **Ziel:** z für Abkühlung (kWh/m³) und Wassermenge aus Notebook 18, gekappt bei ±8.
-- **Eingaben je Knoten und Tag:** 15 eigene Merkmale und 6 Messwerte (z beider Kanäle und Vorlauf, je mit einer
-  Angabe, ob der Wert vorhanden ist).
-- **Masken:** Die eigenen Messwerte einer Station sind für ihre Vorhersage immer verborgen. Sonst könnte das GNN sie
-  über einen Nachbarn zurückbekommen und einfach abschreiben. Nur der eigene Vorlauf ist erlaubt, weil er von einem
-  anderen Fühler kommt.
-- Gelernt und bewertet wird nur vor der ersten Begehung einer Station. Ab 14 Tage davor gilt sie nicht mehr als
-  normal.
-- **Warum numpy:** Auf dem verwendeten Intel-Mac gab es PyTorch nur bis Version 2.2, und die passt nicht zu numpy 2.
-  Das Modell ist klein, die Rückwärtsrechnung ist von Hand geschrieben und gegen numerische Ableitungen geprüft
-  (größter relativer Fehler 3,3 · 10⁻⁸).
-
-## Prüfung
-
-- **Kreuzvalidierung über die vier Heizperioden** 2021/22 bis 2024/25: Jede ist einmal Prüfzeit, gelernt wird auf den
-  anderen drei. Zufällig gezogene Tage gingen nicht, weil am selben Tag alle Stationen dasselbe Wetter haben. Das
-  Modell sähe dann besser aus, als es ist.
-- Abbruch über 15 % der Trainingswochen, drei Startwerte je Variante und Heizperiode, zusammen 24 Modelle.
-- **Skill** ist der Anteil des Fehlers von Notebook 18, den ein Modell zusätzlich erklärt. **Beitrag des Netzes** =
-  Skill GNN minus Skill ohne Netz.
-- **Hauptfrage, vorab festgelegt:** Ist das GNN je Station besser als ohne Netz? Wilcoxon-Test gepaart über die
-  Stationen, Schwelle 0,025 wegen der zwei Kanäle.
-- Bewertet wird auf Tagen nach der Referenz von Notebook 18. Im Referenzjahr ist Notebook 18 künstlich gut, weil die
-  Kennlinie dort angepasst wurde. Diese Wahl fiel erst nach dem ersten Blick auf die Ergebnisse, deshalb stehen
-  beide Bewertungen in der Tabelle.
+- **Das Netz zusammensetzen.** Welche Station neben welcher hängt, steht in der Kantendatei der ÜZ
+  (`Nodes_Edges.ods`). Sie verbindet Häuser direkt miteinander, nicht über die echten Leitungen. Ihre Pfeile passen zu
+  keiner einzelnen Quelle, was sie bedeuten, ist unklar. Das GNN nutzt die Verbindungen deshalb ohne Richtung.
+- **Lücken im Netz.** 27 von 111 Knoten haben keinen Zähler, etwa Abzweige, Schächte oder Häuser ohne Fernauslesung.
+  Sie bleiben als leere Zwischenstücke drin, damit die Stränge nicht zerfallen. 18 Adressen haben keine Koordinate,
+  35 Verbindungen keine Rohrlänge.
+- **Die Einspeisung.** Das Notebook setzt die Quelle auf einen Punkt aus dem Wärmenetzplan. Parallel dazu hat die ÜZ
+  bestätigt, welcher Knoten der Erzeuger ist (Notebook 32). Der Punkt im GNN liegt rund 50 m daneben, der bestätigte
+  Knoten wurde nicht mehr eingebaut.
+- **Kein fertiges Werkzeug.** Für den verwendeten Intel-Mac gab es keine passende PyTorch-Version. Das Modell ist
+  deshalb von Hand in numpy geschrieben, sein Rechenweg ist gegen Zahlenableitungen geprüft.
+- **Ehrlich prüfen.**
+    - Dasselbe Modell läuft einmal mit und einmal ohne Netz. Der Unterschied ist genau der Beitrag des Netzes.
+    - Gelernt wird auf drei Heizperioden, geprüft auf der vierten. So kennt das Modell die Prüftage nicht.
+    - Die eigenen Messwerte einer Station bleiben für ihre Vorhersage verborgen. Sonst könnte das Modell sie über die
+      Nachbarn einfach abschreiben.
+    - Gelernt und geprüft wird nur vor der ersten Begehung einer Station, damit Eingriffe vor Ort nicht als normal
+      gelten.
 
 ## Ergebnis
 
-| Bewertung | Kanal | ohne Netz | GNN | Beitrag des Netzes |
-|---|---|---|---|---|
-| nach der Referenz (59 Stationen) | Abkühlung | 0,121 | 0,131 | +0,010 |
-| | Wassermenge | 0,185 | 0,176 | −0,009 |
-| alle Tage vor der Begehung (80 Stationen) | Abkühlung | −0,083 | −0,017 | +0,066 |
-| | Wassermenge | −0,051 | 0,011 | +0,062 |
+- **Das Netz bringt nichts Messbares.** Mit Netz erklärt das Modell bei der Abkühlung 1 Prozentpunkt mehr von der
+  Abweichung als ohne, bei der Wassermenge 1 Prozentpunkt weniger. Je Station ist der Unterschied nicht signifikant
+  (p = 0,17 und 0,42).
+- **Geholfen haben die neuen eigenen Merkmale,** etwa die Temperatur der Vortage, der eigene Vorlauf und die
+  Jahreszeit. Schon ohne Netz erklärt das Modell 12,1 % (Abkühlung) und 18,5 % (Wassermenge) der Abweichung, die
+  Notebook 18 übrig lässt. Das wäre eher eine Verbesserung für Notebook 18 selbst.
+- **Im Ventilfall 68956351** ist das GNN sogar schlechter als Notebook 18 allein.
 
-- **Das Netz bringt keinen messbaren Gewinn.** Je Station (58) ist das GNN zwar bei 60 % bzw. 62 % besser als ohne
-  Netz, aber nicht signifikant (p = 0,172 und 0,423).
-- Je Heizperiode wechselt die Reihenfolge: 2023/24 liegt das Modell ohne Netz vorn, 2022/23 und 2024/25 das GNN.
-- Auf allen Tagen vor der Begehung liegt das GNN etwas vor dem Modell ohne Netz. Beide sind dort aber nicht besser als
-  Notebook 18 allein.
-- **Die neuen eigenen Merkmale helfen:** Ohne Netz erklärt das Modell nach der Referenz 12 % (Abkühlung) und 19 %
-  (Wassermenge) des Fehlers von Notebook 18. Ein fester Versatz je Station schafft nur 5 % und −1 %. Welche Merkmale
-  das tragen (Vortage, Vorlauf, Jahreszeit), ist offen.
-- **Ventilfall 68956351:** Vor der Begehung ist das GNN schlechter als Notebook 18 allein, mit einem mittleren Fehler
-  von 0,77 gegen 0,53 (Abkühlung) und 1,62 gegen 1,44 (Wassermenge). Ohne Netz liegt es bei 0,55 und 1,25.
-- Der eigene Vorlauf ist kein ganz unabhängiges Signal. Er ist mengengewichtet und hängt damit am eigenen
-  Durchfluss. Für einen Alarm müsste er heraus oder durch den Vorlauf der Nachbarn ersetzt werden.
+## Warum das Netz nichts gebracht hat
 
-## Warum es nicht weiterverfolgt wird
+1. **Fehler sitzen im Haus, nicht im Netz.** Ein offenes Ventil oder eine falsche Einstellung betrifft eine einzelne
+   Station, ihre Nachbarn merken davon nichts. Das zeigen auch andere Prüfungen: Nachbarn im Rohrbaum weichen nicht
+   stärker gemeinsam ab als zufällig gewählte Häuser (Notebook 32), und im Modellvergleich verbessert das Netz weder
+   Alarm noch Erkennung (siehe [Haus oder Netz](../modellvergleich.md#haus-oder-netz)).
+2. **Nur der Vorlauf verbindet die Häuser.** Das Wasser fließt vom Erzeuger über die Straßenleitung ins Haus und über
+   den Rücklauf zurück zum Erzeuger, nicht zum Nachbarn. Was Nachbarn teilen, ist der Vorlauf. Der fällt tatsächlich
+   entlang der Leitung ab: Das Haus weiter oben im Strang ist bei 36 von 38 Paaren wärmer (Notebook 32). Den Vorlauf
+   misst aber jede Station selbst, er steckt schon im Modell ohne Netz. Abkühlung und Wassermenge, an denen man
+   Fehler sieht, hängen am Rücklauf und am Durchfluss im Haus, und die kommen beim Nachbarn nicht an.
+   Die Vortests in Notebook 18 (Abschnitte 15 und 16) zeigen genau das: Beim Vorlauf hängen direkte Nachbarn
+   zusammen (Korrelation 0,13 gegen 0,04 bei Zufallspaaren), bei Abkühlung und Wassermenge nicht (0,01 und −0,01,
+   wie bei Zufallspaaren).
+3. **Das Netz ist klein und dünn verbunden.** Es gibt 84 Stationen mit Zähler, die meisten haben nur ein bis drei
+   Nachbarn, und die haben oft selbst keinen Zähler. Das Netz ist fast ein Baum mit nur einem Ring. Selbst ein kleiner
+   Netz-Effekt ließe sich damit kaum vom Zufall trennen.
 
-- Das Netz erklärt nichts, also lohnt auch kein Alarm (CUSUM) auf den korrigierten Abweichungen.
-- Das Ergebnis passt zu den übrigen Prüfungen des Netzes: Nachbarn weichen nicht gemeinsam ab (Notebook 18,
-  Abschnitt 15, und Notebooks 23 und 24), und im Modellvergleich verbessert das Netz weder Alarm noch Erkennung (siehe
-  [Haus oder Netz](../modellvergleich.md#haus-oder-netz)). Die Fehler sitzen im einzelnen Haus.
-- Nicht ausprobiert, weil es ohne Netz-Effekt nichts bringt oder Daten fehlen: Pfeilrichtung (gerichtetes GNN),
-  Kantengewichte nach Rohrlänge und Dimension, Stundenwerte, PyTorch Geometric und Attention. Abschnitt 10 des
-  Notebooks nennt für jeden Punkt, wann er sich lohnen würde.
+## Was es gebraucht hätte
 
-## Was es zum Weitermachen bräuchte
-
-| Was | Wofür |
-|---|---|
-| Lage der Heizzentrale und der Einspeisepunkte | Rohrweg und „Last dahinter“ genau statt angenommen |
-| Bedeutung der Pfeile in `Nodes_Edges.ods` | gerichtetes GNN: Der Vorlauf fließt nur stromab |
-| Koordinaten der 18 Adressen ohne Position | Rohrweg für die 35 Kanten ohne Länge |
-| Vorlauftemperatur am Ausgang der Heizzentrale | netzweite Schwankungen direkt erklären statt über den Median der Flotte |
-| Rohrdaten je Kante (Dimension, Länge, Baujahr) | Kantengewichte, hydraulischer Widerstand |
+- **Messgrößen, die wirklich durchs Netz laufen:** Vorlauftemperatur und Druck am Ausgang der Heizzentrale und an
+  den Abzweigen. Dann ließe sich sehen, wann das Netz selbst schwankt.
+- **Ein echtes Leitungsmodell:** Leitungen mit Länge und Durchmesser, der bestätigte Erzeuger als Quelle und die
+  Fließrichtung, statt einer Liste, die Häuser direkt verbindet.
+- **Mehr Stationen mit Fernauslesung,** damit die Nachbarn auch Messwerte haben.
+- **Eine Frage, bei der das Netz zählt,** etwa ob Häuser am Ende eines Strangs zu kaltes Wasser oder zu wenig Druck
+  bekommen. Für Fehler im einzelnen Haus reicht es, jede Station mit sich selbst zu vergleichen.
 
 ## Ausführen
 
-- Vorher Notebook 10, 18 und 31 ausführen. Die Netztabellen aus Notebook 31 müssen in `notebooks/` liegen.
-- Laufzeit rund 15 Minuten, fast alles im Training.
-- Es schreibt nur mit `SPEICHERN = True`, dann die Datei `data/processed/gnn_vorhersagen.csv`.
+- Vorher die Notebooks 10, 18 und 31 ausführen. Die Netztabellen aus Notebook 31 müssen in `notebooks/` liegen.
+- Laufzeit rund 15 Minuten. Die technischen Einzelheiten (Merkmale, Masken, Bewertung) stehen im Notebook.
