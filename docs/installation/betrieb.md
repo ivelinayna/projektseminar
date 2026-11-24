@@ -100,7 +100,7 @@ festgelegt und danach nicht mehr verändert.
 **Stichprobe festlegen:**
 
 ```bash
-python -m src.betrieb pruefung-planen --anzahl 10
+python -m src.betrieb pruefung-planen --anzahl 15
 ```
 
 - Gruppe „hoch“: die nie begangenen Stationen mit dem höchsten Ventil-Score.
@@ -132,8 +132,25 @@ python -m src.betrieb pruefung-auswerten
   haben.
 - Schreibt das Ergebnis nach `auswertung.txt` im Ordner des Plans.
 
-Bei zehn Stationen je Gruppe bleibt der Test grob. Er misst aber zum ersten Mal, was die Liste im Betrieb bringt, ohne
-dass die Modelle die Antworten vorher kannten.
+**Wie groß die Stichprobe sein sollte.** Bei kleinen Gruppen findet der Test einen echten Unterschied oft nicht. Die
+Tabelle zeigt die Teststärke, also die Wahrscheinlichkeit, dass der einseitige Fisher-Test einen Unterschied bei
+p < 0,05 erkennt (Simulation mit je 2.000 Läufen):
+
+| Stationen je Gruppe | Ventilbefund 70 % gegen 20 % | 50 % gegen 20 % | 40 % gegen 20 % |
+|---|---|---|---|
+| 10 | 63 % | 25 % | 13 % |
+| 15 | 81 % | 37 % | 19 % |
+| 21 (Maximum im Stand vom November 2026) | 93 % | 51 % | 29 % |
+
+- 70 % gegen 20 % entspricht dem Ergebnis aus Notebook 35: Unter den ersten 10 nach Ventil-Score hatten 7 einen
+  Ventilbefund, Zufall wären etwa 2 gewesen. Nach vorn geprüft fallen solche Zahlen meist kleiner aus als rückblickend.
+- **Empfehlung: 15 Stationen je Gruppe**, also 30 Begehungen, sofern die ÜZ das in einer Saison leisten kann. Mit 10
+  je Gruppe wäre ein Ergebnis über p = 0,05 auch dann wahrscheinlich, wenn die Liste tatsächlich funktioniert.
+- Ein Ergebnis über 0,05 heißt deshalb nicht, dass die Liste nichts taugt, sondern dass die Fälle für eine Aussage
+  nicht reichen. Die Anzahl wird vor dem Festlegen gewählt und danach nicht mehr geändert.
+
+Auch mit 15 Stationen je Gruppe bleibt der Test grob. Er misst aber zum ersten Mal, was die Liste im Betrieb bringt,
+ohne dass die Modelle die Antworten vorher kannten.
 
 ## Ablage
 
@@ -146,3 +163,19 @@ dass die Modelle die Antworten vorher kannten.
 
 Die Ordner sollten bei der ÜZ regelmäßig gesichert werden, denn sie sind die Grundlage für jede spätere Prüfung der
 Modelle.
+
+## Was noch nicht umgesetzt ist
+
+Zwei Regeln des [Probebetriebs](../ausblick_probebetrieb.md) sind im Code noch offen. Beide ändern das Verhalten der
+Modelle und sollten deshalb im Team und mit der ÜZ abgestimmt werden.
+
+- **Nach einem Eingriff neu kalibrieren (Regel 4).** Das Lernjahr des Tagesmonitors und die Kalibrierung des
+  Prognose-LSTM bleiben nach einer Begehung unverändert. Das Modell meldet eine Reparatur dadurch immer wieder, und
+  die Konten des Tagesmonitors stehen an 43 % der Testtage am Deckel (Notebook 35). Nötig wäre ein Neustart der
+  Referenz je Station nach jeder Begehung aus `rueckmeldungen.csv`.
+- **Neue Labels in die Modelle übernehmen (Regel 5).** Die Rückmeldungen werden gesammelt, die Notebooks 25 und 35
+  lesen aber weiterhin nur die bisherige Begehungstabelle der ÜZ. Bevor die Modelle mit den neuen Fällen neu gelernt
+  werden, müssen beide Quellen zusammengeführt werden.
+
+Außerdem enthält die Begehungsliste der Prüfung nach vorn aus Datenschutzgründen nur Zählernummern. Die Adressen für
+das Team vor Ort ergänzt die ÜZ aus ihrer eigenen Zuordnung oder aus dem Dashboard.
