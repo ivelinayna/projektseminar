@@ -90,9 +90,9 @@ Herkunft des Anschlusswerts bei den 93 HAST (Notebook 00):
   nicht von Haus zu Haus. Die Kantendatei sagt also, welche Stationen im Netz nah beieinander hängen, nicht, wo die
   Rohre liegen.
 - **Pfeile:** Jede Kante hat eine Richtung. Es gibt aber 7 Nodes ohne Zufluss und 6 mit mehreren Zuflüssen, also
-  keinen einzelnen Startpunkt. Etwa die Hälfte der Pfeile zeigt zur angenommenen Heizzentrale hin statt von ihr weg.
-  Auch der Vorlauf sinkt in Pfeilrichtung nicht häufiger, als er steigt (22 gegen 25 bewertbare Kanten, Notebook 31).
-  Was die Pfeile bedeuten, ist offen.
+  keinen einzelnen Startpunkt. Etwa die Hälfte der Pfeile zeigt zum Erzeuger hin statt von ihm weg (Notebook 31 und
+  32). Auch der Vorlauf sinkt in Pfeilrichtung nicht häufiger, als er steigt: An 22 von 56 bewertbaren Kanten sinkt
+  er, an 26 steigt er, 8 sind unklar. Was die Pfeile bedeuten, ist offen.
 
 ## Leitungsplan
 
@@ -117,8 +117,8 @@ Herkunft des Anschlusswerts bei den 93 HAST (Notebook 00):
 
 - `Wärmenetzplan[38].pdf` ist ein Übersichtsplan. Er zeigt ungefähr, wo der Erzeuger liegt und wo Hauptleitungen
   abgehen.
-- Die genaue Lage der Heizzentrale und der Einspeisepunkte fehlt. Die Lage aus dem Plan ist deshalb eine Annahme.
-  Eine Schätzung aus den Vorlauftemperaturen (Notebook 32) landet in ihrer Nähe.
+- Welcher Knoten der Erzeuger ist, hat die ÜZ bestätigt (Notebook 32). Eine Schätzung aus den Vorlauftemperaturen
+  landet ebenfalls dort. Ob es weitere Einspeisepunkte gibt, ist offen.
 - Nennweite, Länge und Baujahr je Kante gibt es nur teilweise. Das Netz bleibt damit ein logisches Modell, kein
   hydraulisches.
 

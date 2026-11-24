@@ -57,19 +57,3 @@ Projekts dazu, in drei Runden:
    Kennzahlentabelle, Wirkung auf die Regelhysterese, Jahreswerte normiert.
 3. **[Rückmeldung der ÜZ](uez_rueckmeldung.md):** Temperaturfühler im Heizhaus, falscher Dateiname,
    Adresskorrektur, Zeilen ohne Messwerte, Filtertrend, Anschlusswert über die Adresse.
-
-## Was offen bleibt
-
-- **Jahresgang im Filtertrend:** Die Gerade über alle Monate bleibt vom Jahresgang beeinflusst (Beginn im Winter, Ende
-  im Sommer). Das löst die 200-Stunden-Regel nicht.
-- **Kurze Reihen:** 7 Zähler haben unter 10.000 Messstunden. Für saisonale Kennzahlen wie Winter-Rücklauf oder
-  Sommer-Grundlast sind sie eventuell zu kurz.
-- **Fehlende Kennzahlen:** Der Anschlusswert fehlt bei 6 HAST (6,5 %) und damit auch beide Lastquoten.
-  `dt_mean_loaded` fehlt bei 1 Station, die nie über 0,5 kW lief. Notebook 07 ersetzt diese Lücken durch den Median
-  (14 von 930 Zellen, 1,5 %).
-- **Doppelte Gewichtung:** `rt_mean_winter` und `dt_mean_loaded` hängen stark zusammen (Korrelation −0,88). Die
-  Auskühlung zählt im Clustering damit doppelt.
-- **58202380:** Für ein Haus sehr groß (bis 329 kW, rund 1,9 GWh im Jahr). Ob das eine HAST ist, ist eine Frage an
-  die ÜZ.
-- **Tageswerte:** Durchfluss und Leistung sind Momentaufnahmen zur vollen Stunde. Tagesenergie und Tageswassermenge
-  bildet erst Notebook 10 aus den Zählerständen in `real_meters/`.

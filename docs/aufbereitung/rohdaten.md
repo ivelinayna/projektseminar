@@ -32,7 +32,14 @@ Die ersten Änderungen machen die Exporte überhaupt erst nutzbar. Die Zahlen ze
 
 - Getestet, weil die Zeitachse in Lokalzeit nicht eindeutig ist (im Oktober gibt es 02:00 zweimal, im März gar
   nicht).
-- Verworfen, weil jede Variante Messstunden kostet (siehe [Schritt 3](schritte.md#3-je-zahler-zusammenfuhren)).
+- Verworfen: Die doppelte Stunde im Oktober enthält in den Exporten nur eine Ablesung, es gibt also keine zweite
+  Stunde zu retten. Jede Variante hat Messstunden gekostet:
+
+| Variante | Ergebnis |
+|---|---|
+| Doppelte Stunde automatisch erkennen | scheitert bei 166 von 198 Dateien |
+| Doppelte Stunde als leer setzen | 405 Messstunden verloren |
+| Doppelte Stunde als Winterzeit lesen | 240 Messstunden verloren, weil durch die Verschiebung mehr Zeilen der Exporte in dieselbe Stunde fallen |
 
 ## Erzeuger und Kessel ausschließen
 
