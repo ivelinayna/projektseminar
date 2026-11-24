@@ -207,7 +207,7 @@ eine Größe mit Strang-Signal gefunden wird.
 
 | Annahme oder Grenze | Folge |
 |---|---|
-| Lage des Erzeugers von der ÜZ nachgeliefert, die Vorlauf-Schätzung passt dazu | offen bleibt, ob es weitere Einspeisepunkte gibt: Die Schätzung findet den Punkt, an dem die gemessenen Häuser „anfangen“, und trennt mehrere Einspeisepunkte nicht |
+| Lage des Erzeugers von der ÜZ nachgeliefert, die Vorlauf-Schätzung passt dazu | Die Schätzung findet den Punkt, an dem die gemessenen Häuser „anfangen“, und trennt mehrere Einspeisepunkte nicht |
 | Richtungen der Kanten | der Rohrbaum ist ein Kürzeste-Wege-Baum und kein hydraulisches Modell; Durchmesser, Drücke und Ringschlüsse fehlen |
 | unechte Abzweige durch parallele Vor- und Rücklaufleitungen | die Zahl der Abzweige ist zu hoch; Tests je Abzweig sind davon betroffen |
 | 30 Nodes ohne Zähler | sie fehlen im Rohrbaum und in den Tests |
@@ -218,11 +218,3 @@ eine Größe mit Strang-Signal gefunden wird.
 Die Tests gelten für Tagesmittel der Spreizung und die genannten Nachbarschaften. Sie sagen nichts über die Idee
 insgesamt.
 
-## Offen
-
-- Andere Größen mit möglichem Strang-Signal: Rücklauf, Vorlauf, Wärmeverlust pro 100 m, kurze Ereignisse in
-  Stundenwerten ohne vorherigen Netzabzug.
-- Unechte Abzweige durch parallele Vor- und Rücklaufleitungen zusammenführen und die Tests je Abzweig wiederholen.
-- Die Hubs des gelernten Graphen gegen die Begehungslabels prüfen.
-- Bedeutung der Pfeile in der Kantendatei und mögliche weitere Einspeisepunkte mit der ÜZ klären.
-- Mehr Begehungen als Labels, damit kleine Unterschiede sichtbar werden.

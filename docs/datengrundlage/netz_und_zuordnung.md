@@ -45,6 +45,8 @@ Die ÜZ führt je Jahr ein Blatt, welcher Zähler an welcher Abnahmestelle häng
 - **Falsche Adresse:** Zwei Zähler standen im Blatt 2024 und in `Nodes_Edges.ods` unter der Hausnummer eines anderen
   Hauses desselben Eigentümers. Ab Blatt 2025 stimmt es. Notebook 00 korrigiert das, die Rohdaten bleiben unverändert.
 - **Begehung zu Zähler:** Hat eine Adresse mehrere Zähler, wird der Zähler mit Zeitreihe genommen.
+- **Mehrere Zähler an einem Haus:** Für die Netzauswertung zählt das Haus. Durchfluss und Leistung werden addiert,
+  Temperaturen gemittelt (nur ab 5 l/h).
 
 ### Adressen vergleichbar machen
 
@@ -126,7 +128,7 @@ Herkunft des Anschlusswerts bei den 93 HAST (Notebook 00):
 
 Um Stationen auf die Karte und an das Rohrnetz zu bringen, braucht jede Adresse eine Koordinate. Die automatische
 Adresssuche über OpenStreetMap (Nominatim) fand meist nur die Straße, nicht das Haus. Im Neubaugebiet kennt
-OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand erfasst.
+OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand in Google Maps herausgesucht, durch klicken auf das Haus erfasst und ansließend in die Tabelle übertragen.
 
 | | |
 |---|---|
@@ -136,13 +138,34 @@ OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand erf
 | `koordinate` | Breite und Länge als Text, z. B. `49.81, 10.34` |
 | `quelle` | Hinweis, nur in 4 Zeilen gefüllt |
 
-- In 2 Zeilen stammt die Koordinate aus Nominatim und sollte auf der Karte geprüft werden. In 2 weiteren zeigt die
-  Karte für zwei Hausnummern dasselbe Haus.
+- Die Koordinaten stammen fast alle aus Google Maps. In 2 Zeilen stammt die Koordinate aus Nominatim und wurden auf der
+  Karte geprüft. In 2 weiteren zeigt die Karte für zwei Hausnummern dasselbe Haus.
 - Jeder Zähler der Zuordnung mit Zeitreihe hat eine Koordinate. Ohne Koordinate sind vor allem Nodes der
   Kantendatei ohne Zähler, etwa Abzweige und Schächte. Ihre Lage wird aus den Nachbarn im Netz geschätzt.
 - Adressen ohne Koordinate schreibt Notebook 31 in eine Liste zum Nachtragen
   (`fehlende_koordinaten_<Zeitpunkt>.ods`).
 - Die Tabelle enthält Adressen und bleibt deshalb lokal.
+
+## Einspeisung und Rohrbaum
+
+Die Kantendatei verbindet Häuser, der Leitungsplan zeigt die Rohre. Aus beidem entsteht in den Notebooks 31 und 32 ein
+physisches Netz.
+
+- **Einspeisung:** Die Lage des Erzeugers hat die ÜZ nachgeliefert. Sie passt zu den Messdaten. Der Vorlauf kühlt
+  entlang der Rohre ab, und die Schätzung aus dem Vorlauf landet beim Erzeuger-Knoten (Rangkorrelation −0,70 bei einer
+  Zufallsgrenze von −0,28, Notebook 32).
+- **Pfeile der Kantendatei:** Sie passen nicht zu den Messdaten. Der Vorlauf sinkt an 22 von 56 bewertbaren Kanten in
+  Pfeilrichtung und steigt an 26. Zeigen alle Pfeile vom Erzeuger weg, sind es 26 und 22. Auf Ebene der Hauskanten
+  bleibt die Richtung unsicher.
+- **Rohrbaum:** Für jedes Haus mit Zähler wird der kürzeste Rohrweg vom Erzeuger genommen. Zusammen ergeben die Wege
+  einen Baum aus 79 Häusern und 3804 m Rohr. Das Haus weiter oben im Strang hat bei 36 von 38 Paaren den wärmeren
+  Vorlauf. Der Rohrbaum passt damit deutlich besser zu den Messdaten als die Kantendatei.
+- **Grenzen:** Der Baum ist ein Kürzeste-Wege-Baum, kein hydraulisches Modell. Ein Teil der Abzweige ist unecht, weil
+  Vor- und Rücklauf parallel liegen. Die 30 Nodes ohne Zähler fehlen im Baum.
+
+Ob das Netz Abweichungen einzelner Stationen erklärt, ist eine eigene Frage. Das Ergebnis: Das Netz wirkt auf alle
+Häuser gemeinsam, ein Effekt je Strang ist nicht nachweisbar. Die Tests dazu stehen unter
+[Netz einbeziehen](../netz_einbeziehen.md).
 
 ## Was die Verknüpfung ergibt
 
