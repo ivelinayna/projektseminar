@@ -37,10 +37,10 @@ notebooks/models/
 notebooks/outputs/
 notebooks/*_EXECUTED.ipynb
 
-#Dashboard-HTML aus Notebook 34, 36 und 40 enthält Adressen, nie hochladen
+#Dashboard-HTML aus Notebook 31, 33 und 37 enthält Adressen, nie hochladen
 notebooks/fernwaerme_dashboard*.html
 
-#Arbeitsdateien der Netz-Notebooks 34 bis 36 (Adressen, Koordinaten, Cache)
+#Arbeitsdateien der Netz-Notebooks 31 bis 33 (Adressen, Koordinaten, Cache)
 notebooks/*.csv
 notebooks/*.ods
 notebooks/*.png

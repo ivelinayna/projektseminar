@@ -1,7 +1,7 @@
 # Daten (gitignored)
 
 Hier liegen die Daten der ÜZ Mainfranken. Sie sind vertraulich und werden nie committet. Ausführliche Beschreibung:
-`docs/daten.md`.
+`docs/datengrundlage/`.
 
 ## `data/raw/`
 

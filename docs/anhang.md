@@ -1,3 +1,0 @@
-# Anhang
-
-Folgt.

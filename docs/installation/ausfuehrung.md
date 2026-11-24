@@ -182,15 +182,21 @@ ausgeführt, sind folgende Abhängigkeiten zu beachten:
 | Notebook | braucht vorher |
 |---|---|
 | alle | Notebook 00, `python -m src.weather` |
+| 06 | Notebook 02 |
 | 08 | `python -m src.main` |
-| 17 | `python -m src.meter_quality`, `python -m src.detect_real` |
+| 17 | Notebook 04, `python -m src.meter_quality`, `python -m src.detect_real` |
 | 18, 30, 34, 39 | Notebook 10 (Tageswerte `hast_tage`) |
 | 30, 34, 39 | Notebook 18 (Normalverhaltensmodell) |
 | 30 | Notebook 28 (Prognose-LSTM) |
 | 32, 33, 39 | Notebook 31 (Netz-Cache) |
 | 33 | Notebook 24 (Monitorstatus); die Stationsblätter erzeugt es selbst, wenn sie fehlen |
-| 34, 35 | Notebooks 25 bis 29 |
-| 36 | Notebook 35 (Vorhersagen in `outputs/finalvergleich/`) |
+| 26, 27 | Notebook 25 |
+| 28 | Notebooks 25 und 27 |
+| 29 | Notebooks 25 bis 28 |
+| 32 | Notebook 25 (Labels) |
+| 34 | Notebooks 25 und 27 bis 29 |
+| 35 | Notebooks 25 und 28, dazu die Modellpakete aus Schritt 4 |
+| 36 | Notebooks 25 und 35 (Vorhersagen in `outputs/finalvergleich/`) |
 | 38 | zwei Handtabellen in `data/manual/` (siehe [Vorbereitung](vorbereitung.md)) |
 
 Fragestellung und Ergebnis der einzelnen Notebooks beschreibt der [Überblick der Notebooks](../notebooks.md).
@@ -234,6 +240,6 @@ Der Befehl arbeitet nacheinander folgende Schritte ab und zeigt im Terminal an, 
 python -m pytest -q
 ```
 
-- Eine Testdatei je Modul in `tests/`. Die meisten Tests laufen ohne Rohdaten.
+- 40 Testdateien in `tests/`, meist eine je Modul. Die meisten Tests laufen ohne Rohdaten.
 - Tests, die Begehungen oder echte Reihen brauchen, werden ohne diese Daten übersprungen.
 - Welche Befehle und Module es gibt, steht unter [Befehle und Module](pipeline.md).
