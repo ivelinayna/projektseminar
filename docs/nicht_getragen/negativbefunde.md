@@ -17,7 +17,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Notebook 03: Das Label taugt nur als Detektor für Dauerzustände, die Stichwortsuche im Freitext besteht die Prüfung nicht.
 - Notebook 14: 6 von 66 Begehungen mit Fehler ohne Sollwertänderung, 57 Notizen.
 - Notebook 25: „leer heißt nein“ ist eine Annahme, ausdrücklich „nein“ steht nur 4- bis 8-mal da.
-- Nötig wäre ein festes Protokollfeld für Befund und Reparatur, auch wenn nichts gefunden wurde. Eine Vorlage dafür liegt jetzt bereit (siehe [Betrieb bei der ÜZ](../installation/betrieb.md#2-begehungsprotokoll)).
+- Nötig wäre ein festes Protokollfeld für Befund und Reparatur, auch wenn nichts gefunden wurde.
 
 ## 3 Regel-Baseline mit festen Schwellen
 

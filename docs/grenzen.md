@@ -120,7 +120,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getr
     - Was steckt hinter den Stationen 72135442, 80912173 und 68956359, die nach der Begehung mehr Wasser brauchen?
     - Was ist bei Zähler 72167783 passiert? Der Rücklauf stieg nach der Begehung von 18,6 auf 71,0 °C.
     - Was erklärt die großen Sprünge im Herbst 2024 ohne Begehung (72167777, 69513891, 80956410, NB 06)?
-    - Kann das Protokoll künftig festhalten, ob etwas kaputt war, und nicht nur, was gemacht wurde? Sollwert und Filter wurden bei 62 % und 47 % der Begehungen gemacht, eine Spur im Zähler hinterlassen sie nicht (NB 36). Eine Vorlage für ein solches Protokoll liegt bereit (siehe [Betrieb bei der ÜZ](installation/betrieb.md#2-begehungsprotokoll)).
+    - Kann das Protokoll künftig festhalten, ob etwas kaputt war, und nicht nur, was gemacht wurde? Sollwert und Filter wurden bei 62 % und 47 % der Begehungen gemacht, eine Spur im Zähler hinterlassen sie nicht (NB 36).
 - Betrieb
     - Welche Alarmlast ist im Betrieb tragbar?
     - Soll die CUSUM-Schwelle bei h = 5 bleiben oder auf h = 8 steigen? h = 8 bringt etwa ein Drittel weniger Alarme.

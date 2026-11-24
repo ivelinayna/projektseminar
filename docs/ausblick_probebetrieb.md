@@ -14,7 +14,6 @@ python -m src.aktualisieren
      ├── Außentemperatur (DWD)    nachladen
      ├── Monitoring-Modell        Netzvergleich, Tagesmonitor, Priorität, Bericht
      ├── dashboard_daten          wendet die gespeicherten Pakete an, lernt nichts neu
-     │                            Handlungsliste wird mit Datum gesichert
      ├── Notebook 31              Netz-Cache mit den neuen Stundenreihen
      └── Notebook 37              baut die HTML-Datei des Dashboards
 ```
@@ -41,9 +40,6 @@ gerechnet wurde. Wie der Befehl ausgeführt wird, steht unter
    `SELBST_TRAINIEREN = True`. Erst wenn die Zahlen aus Notebook 35 mit dem bisherigen Stand verglichen sind, kommen
    die neuen Pakete ins Dashboard.
 
-Die Regeln 1 bis 3 setzt der Code bereits um. Regel 4 und 5 sind im Code noch nicht umgesetzt, siehe
-[Betrieb bei der ÜZ](installation/betrieb.md#was-noch-nicht-umgesetzt-ist).
-
 ## Rückmeldung aus dem Probebetrieb
 
 Der Probebetrieb bringt das, was dem Projekt am meisten gefehlt hat: Begehungen, deren Ergebnis vorher vorhergesagt
@@ -54,6 +50,4 @@ wurde. Dafür sollte jede Begehung festhalten:
 - was getauscht oder eingestellt wurde,
 - ob die Station vorher auf der Handlungsliste stand und mit welcher Dringlichkeit.
 
-Dafür gibt es eine Vorlage für das Begehungsprotokoll und einen Befehl, der die ausgefüllten Protokolle prüft und mit
-dem gesicherten Stand der Handlungsliste vor der Begehung verknüpft (siehe [Betrieb bei der ÜZ](installation/betrieb.md)). Wie daraus
-eine Prüfung der Modelle wird, steht unter [Prüfung nach vorn](ausblick_pruefung.md).
+Wie daraus eine Prüfung der Modelle wird, steht unter [Prüfung nach vorn](ausblick_pruefung.md).

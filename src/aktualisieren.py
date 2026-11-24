@@ -17,8 +17,7 @@ Der Lauf macht nacheinander, was sonst von Hand passiert:
    Kernwinter, Alarme der letzten Tage, Änderungen gegenüber dem letzten
    Lauf.
 5. Dashboard-Daten: die aktuellen Modellpakete auf die neuen Stundenreihen
-   anwenden (`dashboard_daten`), ohne neu zu lernen. Die Handlungsliste wird
-   mit Datum unter `outputs/betrieb/listen/` gesichert (`betrieb`).
+   anwenden (`dashboard_daten`), ohne neu zu lernen.
 6. NB 31 ausführen: Der Netz-Cache enthält auch die Stundenreihen, die das
    Dashboard für die Messwerte auf der Karte nutzt.
 7. NB 37 ausführen: schreibt `notebooks/fernwaerme_dashboard_final.html`.
@@ -225,8 +224,6 @@ def dashboard_aktualisieren(serien, nummer: int = 5, gesamt: int = 7) -> Path:
             "fehlen in models/. Sie entstehen in Notebook 35 oder mit den Befehlen "
             "unter 'Ausführung bis zum Dashboard', Schritt 4. Stationsblätter, "
             "status.csv und bericht.txt sind bereits geschrieben.") from exc
-    from . import betrieb
-    print(f"    Handlungsliste gesichert: {betrieb.liste_sichern()}")
 
     print(f"{nummer + 1}/{gesamt} NB 31: Netz-Cache mit den neuen Stundenreihen ...", flush=True)
     n = notebook_ausfuehren(NB31, log=LOG_DIR / "nb31.log")

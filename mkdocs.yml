@@ -37,7 +37,6 @@ nav:
       - Start mit Docker: installation/docker.md
       - Lokaler Start ohne Docker: installation/lokal.md
       - Ausführung bis zum Dashboard: installation/ausfuehrung.md
-      - Betrieb bei der ÜZ: installation/betrieb.md
       - Schnellstart: installation/schnellstart.md
       - Befehle und Module: installation/pipeline.md
 

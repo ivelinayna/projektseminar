@@ -216,7 +216,7 @@ Der Befehl arbeitet nacheinander folgende Schritte ab und zeigt im Terminal an, 
 | 2 | die Außentemperatur wird vom DWD nachgeladen |
 | 3 | Netzvergleich, Tagesmonitor und Priorität werden berechnet, die Stationsblätter und `status.csv` geschrieben |
 | 4 | ein Kurzbericht `bericht.txt` fasst Priorität, aktuelle Alarme und Änderungen seit dem letzten Lauf zusammen |
-| 5 | die Modellpakete werden auf die neuen Daten angewendet (`src.dashboard_daten`), die Handlungsliste wird mit Datum gesichert |
+| 5 | die Modellpakete werden auf die neuen Daten angewendet (`src.dashboard_daten`) |
 | 6 | Notebook 31 aktualisiert den Netz-Cache mit den neuen Stundenreihen |
 | 7 | Notebook 37 schreibt das Dashboard `notebooks/fernwaerme_dashboard_final.html` neu |
 
@@ -227,8 +227,6 @@ Der Befehl arbeitet nacheinander folgende Schritte ab und zeigt im Terminal an, 
   oben) und die Handliste mit Koordinaten. Fehlen die Pakete, bricht der Befehl nach Schritt 4 mit einem Hinweis ab. Bericht und
   Stationsblätter sind dann bereits geschrieben.
 - Mit `python -m src.aktualisieren --ohne-dashboard` laufen nur die Schritte 1 bis 4.
-- Wie Begehungen zurückgemeldet und die Modelle im Betrieb geprüft werden, beschreibt
-  [Betrieb bei der ÜZ](betrieb.md).
 
 ## Tests
 
