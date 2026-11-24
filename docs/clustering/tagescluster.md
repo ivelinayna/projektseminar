@@ -150,7 +150,7 @@ acht Probleme geprüft. Gelöscht wird nichts: Markierte Tage bleiben in der Tab
 - **Die Station prägt ihre Tage.** Die Typen beschreiben zu einem großen Teil die Station selbst, Stationsprofile sind
   deshalb sinnvoll.
 - An milden Heiztagen (10 bis 15 °C) wechseln die HAST am häufigsten, nur 30 % bleiben bei einem Typ.
-- Interessant sind die HAST, die zwischen Typen wechseln. Nach der ÜZ-Folie 5 deutet ein Wechseln eher auf ein
+- Interessant sind die HAST, die zwischen Typen wechseln. Laut Aufgabenstellung der ÜZ deutet ein Wechseln eher auf ein
   Regelproblem, gleichbleibend schlechte Tage eher auf einen Defekt.
 
 ## Zeitverlauf
@@ -186,7 +186,7 @@ geändert, jeweils mit Grund aus dem ersten:
 
 - `data/processed/hast_tage.csv`: alle 85.983 Tageszeilen mit Merkmalen, Markierungen und Tagestyp.
 - `data/processed/hast_tage_clusteranteile.csv`: je HAST und Gruppe der Anteil ihrer Tage je Typ. Das ist die
-  Grundlage für Stationsprofile nach Folie 5.
+  Grundlage für Stationsprofile nach den drei Handlungsklassen der Aufgabenstellung.
 - `data/processed/hast_tage.json`: Parameter, K, Silhouette und Zeilenzahlen des Laufs.
 
 Die Tageszeilen nutzen später das Normalverhaltensmodell (Notebook 18) und die Notebooks 30, 34 und 39. Alle Dateien

@@ -10,7 +10,29 @@ zu trennen, nicht große von kleinen.
 
 ## Merkmale
 
-Geclustert wird auf **10 der 14 Kennzahlen**. Bewusst weggelassen sind:
+Notebook 00 verdichtet jede Stundenreihe auf 14 Kennzahlen. Geclustert wird auf **10** davon.
+
+| Kennzahl | Rechnung | im Clustering |
+|---|---|---|
+| `rt_mean_winter` | Mittel der Rücklauftemperatur im Winter (Dezember bis März) | ja |
+| `rt_p95` | 95.-Perzentil der Rücklauftemperatur | nein |
+| `rt_above_50_share_loaded` | Anteil der Stunden unter Last mit Rücklauf über 50 °C | nein |
+| `dt_mean_loaded` | Mittel der Spreizung unter Last | ja |
+| `dt_std_loaded` | Streuung der Spreizung unter Last | ja |
+| `summer_flow_baseline` | Median des Durchflusses im Sommer (Juni bis August), Hinweis auf Dauerdurchfluss | ja |
+| `summer_flow_share` | Anteil der Sommerstunden mit Durchfluss über 5 l/h | nein |
+| `flow_ceiling_slope_per_month` | Trend des oberen Durchflusses (95.-Perzentil je Monat, nur Monate mit mindestens 200 Messstunden), Hinweis auf einen zusetzenden Filter | ja |
+| `flow_short_cycle_power` | Anteil der 4- bis 12-Stunden-Schwingung im Durchfluss (FFT), Hinweis auf Regelhysterese | ja |
+| `idle_share` | Anteil der Stunden mit weniger als 0,2 kW | ja |
+| `peak_load_share` | Spitzenlast geteilt durch den Anschlusswert | ja |
+| `p95_load_share` | 95.-Perzentil der Leistung geteilt durch den Anschlusswert | ja |
+| `energy_kwh_year` | Wärme aus den Zählerständen, auf ein Jahr hochgerechnet | nein |
+| `full_load_hours` | Volllaststunden: Jahreswärme geteilt durch die Spitzenlast | ja |
+
+- Unter Last heißt über 0,5 kW.
+- Anteile zählen nur die gemessenen Stunden (siehe [Änderungen 2](../aufbereitung/kennzahlen.md)).
+
+Bewusst weggelassen sind:
 
 - `rt_p95` und `rt_above_50_share_loaded`, weil sie dasselbe messen wie `rt_mean_winter`,
 - `summer_flow_share`, der Zwilling von `summer_flow_baseline`,

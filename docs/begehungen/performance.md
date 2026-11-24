@@ -79,7 +79,7 @@ enthalten, obwohl Abschnitt 9 sie als nicht aussagekräftig einstuft.
 - **Ergebnis: +0,8 bis +1,0 kWh/m³ (3,7 bis 4,6 %)**, in keinem Zeitraum signifikant (p 0,21 bis 0,26), aber stabil:
   Der Zeitraum verschiebt den Wert kaum.
 - Der kleinere Wert liegt nicht an anderen Stationen vorher und nachher. 46 der 51 Stationen haben Tage in beiden
-  Phasen, und nur mit diesen 46 steigt der Abstand nach der Rechnung oben sogar auf 9,1 % (p ≈ 0,03).
+  Phasen, und nur mit diesen 46 steigt der Abstand nach der Rechnung oben sogar auf 9,1 % bei 8,8 °C (p ≈ 0,03).
 - Er liegt an der Gewichtung: Stationen, die schon vor der Begehung überdurchschnittlich gut waren, haben anteilig
   mehr Nachher-Tage (Rangkorrelation +0,48). Sie heben die Nachher-Gerade an, ohne dass sich eine Station verändert
   hat.
@@ -89,8 +89,8 @@ enthalten, obwohl Abschnitt 9 sie als nicht aussagekräftig einstuft.
 - **Die Richtung ist stabil, die Höhe unsicher.** Je nach Rechnung sind es 4 bis 9 %, deutlich weniger als die
   13,4 % der Folie.
 - Am ehesten vergleichbar mit der Folie ist die Fassung bis zum Exportende bei 8,8 °C: **8,3 %**, knapp signifikant.
-- Station für Station bleiben rund 4,5 %, nicht signifikant. Ein Teil des Abstands kommt aus der Zusammensetzung der
-  Stationstage, nicht aus einer Veränderung der Stationen.
+- Station für Station bleiben rund 4 bis 4,5 %, nicht signifikant. Ein Teil des Abstands kommt aus der
+  Zusammensetzung der Stationstage, nicht aus einer Veränderung der Stationen.
 - Eine Kontrollgruppe ohne Begehung fehlt hier. Die hat erst der [Wintervergleich](wintervergleich.md).
 
 ## Ausgaben

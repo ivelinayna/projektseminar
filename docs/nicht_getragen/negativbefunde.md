@@ -48,8 +48,8 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 
 ## 6 Begehungswirkung im Diff-in-Diff
 
-- Probiert in Notebook 02: 21-Tage-Fenster vor und nach der Begehung, 50 nie begangene Stationen als Kontrolle. Auswertbar sind 44 von 58 Begehungen.
-- Der DiD fällt mit der Zahl der Maßnahmen: +6,95, +3,10, −1,45 und −2,51 K je Kategorie. Die Reihenfolge passt, signifikant ist es nicht (Wilcoxon p = 0,30 bei „mittlere“ mit n = 25, p = 0,46 bei „viele“ mit n = 14).
+- Probiert in Notebook 02: 21-Tage-Fenster vor und nach der Begehung, 37 nie begangene Stationen als Kontrolle. Auswertbar sind 44 von 58 Begehungen.
+- Der DiD fällt mit der Zahl der Maßnahmen: +6,95, +3,10, −1,56 und −3,05 K je Kategorie. Die Reihenfolge passt, signifikant ist es nicht (Wilcoxon p = 0,25 bei „mittlere“ mit n = 24, p = 0,19 bei „viele“ mit n = 13).
 - Vierfeldertafel: 11 von 44 Begehungen bleiben schlecht.
 - Andere Notebooks finden einen Effekt: Wintervergleich DiD −2,0 K, p ≈ 0,008 bei 45 Begehungen (Notebook 04), Abkühlung +2,2 kWh/m³ bei p = 0,046 mit 24 Fällen (Notebook 20).
 - Gegen 29 Kontrollstationen in Notebook 19 Teil B dagegen p 0,30 bis 0,92. Die Wirkung hängt damit an Fenster und Kontrollgruppe.

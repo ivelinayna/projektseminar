@@ -39,7 +39,8 @@ Alle Notebooks liegen unter `notebooks/2_begehungen/` und laufen nach Notebook 0
 ## Gesamtbild
 
 - **Die Richtung stimmt überall.** Nach der Begehung sinkt der Rücklauf, und die Performance steigt. Je mehr laut
-  Begehungstabelle geändert wurde, desto deutlicher (02, 04).
+  Begehungstabelle geändert wurde, desto deutlicher (02). Im Wintervergleich (04) sind die Kategorien dafür zu dünn
+  besetzt.
 - **Abgesichert ist sie nur über ganze Winter mit Kontrollgruppe.** Der Wintervergleich (04) ist mit −2,0 K
   (p ≈ 0,008) das belastbarste Ergebnis. Die kurzen Fenster (02) und die Performance (05) bleiben ohne gesicherten
   Effekt, außer in der saubersten Fassung der Performance (p ≈ 0,04).
@@ -49,10 +50,11 @@ Alle Notebooks liegen unter `notebooks/2_begehungen/` und laufen nach Notebook 0
     - 34 der 58 datierten Begehungen liegen im September 2024. Es gibt praktisch nur ein Winterpaar, und der Winter
       danach war rund 21 % kälter.
     - Die Begehungstabelle hält fest, was eingestellt wurde, aber nicht, ob vorher ein Fehler vorlag.
-- **Ein Fall zieht sich durch alle Notebooks: Zähler 68956351.** Ein Ventil stand drei Jahre offen und wurde am
-  09.09.2024 geschlossen. Der Durchfluss fiel über Nacht von 499 auf 0 l/h. 02 findet ihn als größten Ausschlag, das
-  Label aus 03 kippt genau in diesem Monat, und 06 findet ihn ohne Vorwissen als stärkste Abweichung. In der
-  Begehungstabelle steht dazu keine Maßnahme.
+- **Ein Fall zieht sich durch alle Notebooks: Zähler 68956351.** Ein Ventil stand fast drei Jahre offen und wurde am
+  09.09.2024 getauscht. Noch am selben Tag fiel der Durchfluss von rund 500 auf nahezu 0 l/h. 02 findet ihn als
+  größten Ausschlag im Durchfluss, das Label aus 03 kippt genau in diesem Monat, und 06 findet ihn ohne Vorwissen als
+  stärkste Abweichung. Der Tausch steht nur im Freitext der Begehungstabelle, in den Maßnahmen-Spalten ist nichts
+  angekreuzt.
 - **Stationen ändern ihren Zustand meist ohne Begehung.** Nur 2 von 36 Beginnen und 2 von 37 Enden eines auffälligen
   Zustands fallen in einen Begehungsmonat (03).
 
@@ -67,7 +69,7 @@ Alle Tabellen landen unter `data/processed/` und bleiben lokal, der Ordner ist v
 | Notebook | Datei | Inhalt |
 |---|---|---|
 | 02 | `begehungen_aufbereitet.csv` | Begehungstabelle mit Zählernummer, 66 Zeilen × 26 Spalten, **enthält Adressen** |
-| 02 | `begehungs_wirkung.csv`, `.json` | Änderung je Begehung im 21-Tage-Fenster, mit Kontrollwert |
+| 02 | `begehungs_wirkung.csv`, `.json` | Änderung je Begehung im 21-Tage-Fenster, mit Kontrollwert, **enthält Adressen** |
 | 03 | `station_monat_label.csv`, `.json` | Label je Station und Monat, 2.300 Zeilen |
 | 04 | `wintervergleich_kernwinter.csv`, `wintervergleich_erweitert.csv` | Winter davor gegen Winter danach je Begehung |
 | 06 | `arima_begehungen.csv`, `arima_modellvergleich.csv` | Abweichung von der Prognose je Begehung, Fehler je Modell |

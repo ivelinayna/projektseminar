@@ -128,7 +128,8 @@ Herkunft des Anschlusswerts bei den 93 HAST (Notebook 00):
 
 Um Stationen auf die Karte und an das Rohrnetz zu bringen, braucht jede Adresse eine Koordinate. Die automatische
 Adresssuche über OpenStreetMap (Nominatim) fand meist nur die Straße, nicht das Haus. Im Neubaugebiet kennt
-OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand in Google Maps herausgesucht, durch klicken auf das Haus erfasst und ansließend in die Tabelle übertragen.
+OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand aus Google Maps übernommen, per Klick
+auf das jeweilige Haus.
 
 | | |
 |---|---|
@@ -138,8 +139,8 @@ OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand in 
 | `koordinate` | Breite und Länge als Text, z. B. `49.81, 10.34` |
 | `quelle` | Hinweis, nur in 4 Zeilen gefüllt |
 
-- Die Koordinaten stammen fast alle aus Google Maps. In 2 Zeilen stammt die Koordinate aus Nominatim und wurden auf der
-  Karte geprüft. In 2 weiteren zeigt die Karte für zwei Hausnummern dasselbe Haus.
+- Nur 2 Koordinaten stammen aus Nominatim, sie wurden auf der Karte geprüft. In 2 weiteren Zeilen zeigt die Karte für
+  zwei Hausnummern dasselbe Haus.
 - Jeder Zähler der Zuordnung mit Zeitreihe hat eine Koordinate. Ohne Koordinate sind vor allem Nodes der
   Kantendatei ohne Zähler, etwa Abzweige und Schächte. Ihre Lage wird aus den Nachbarn im Netz geschätzt.
 - Adressen ohne Koordinate schreibt Notebook 31 in eine Liste zum Nachtragen
