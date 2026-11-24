@@ -8,7 +8,7 @@ in `src/pruefstand.py` und `src/finalvergleich.py`.
 
 ## Ergebnis auf einen Blick
 
-Die Aufgaben kommen aus Folie 5 der Aufgabenstellung: Alarm, Fehler erkennen, Fehler unterteilen. Alle Zahlen stammen
+Die Aufgaben hat der Projektpartner vorgegeben: Alarm, Fehler erkennen, Fehler unterteilen. Alle Zahlen stammen
 aus dem strengen Vergleich in Notebook 35.
 
 | Aufgabe | gewählt | Ergebnis | einfachste Alternative | gesichert? |

@@ -51,7 +51,7 @@ nicht für eine Entscheidung ohne Prüfung vor Ort.
   [Prüfdesign und Statistik](vergleich/pruefung.md#warum-das-modell-im-lernteil-gewahlt-wird).
 - Reihenfolge (Test E): Unter den ersten 10 Stationen nach Ventil-Score hatten 7 einen Ventilbefund. Nach der
   Priorität des Monitoring-Modells sind es 5, Zufall wären etwa 2.
-- Folie 5: Die Klasse „Regelventil tauschen“ trifft das LSTM-Modell bei 8 von 11 Ventilfällen, das Monitoring-Modell bei 4
+- Klassen: Die Klasse „Regelventil tauschen“ trifft das LSTM-Modell bei 8 von 11 Ventilfällen, das Monitoring-Modell bei 4
   von 11. Dessen Fehlerbild „ventil“ ist dafür sehr genau (4 von 4 richtig) und dient als Bestätigung. „Regelparameter
   optimieren“ trifft keins der beiden.
 - Dämmung: Nur das gelernte Modell findet ein Muster. Der Vorsprung vor der besten Einzelregel (+0,17 [−0,04; +0,38])

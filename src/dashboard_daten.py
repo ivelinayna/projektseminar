@@ -504,7 +504,7 @@ def rechne(ausgabe: Path = AUSGABE, stunden: Optional[pd.DataFrame] = None,
     tm_teil = alarme["quelle"] == "Tagesmonitor"
     alarme.loc[tm_teil, "netzereignis"] = netzereignisse(alarme[tm_teil]).to_numpy()
 
-    log("3/5 Folie 5: letzte Heizperiode und Stand vor den Begehungen ...")
+    log("3/5 Klassen: letzte Heizperiode und Stand vor den Begehungen ...")
     fk_paket = fk.lade()
     winter, sommer = letzte_saison(stunden)
     aktuell = fk.saison_bewerten(fk_paket, stunden, winter, sommer)

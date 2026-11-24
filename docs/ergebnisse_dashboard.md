@@ -35,7 +35,7 @@ Programm dashboard_daten     wendet die Pakete auf die aktuellen Stundenreihen a
 | Stundenreihen | 00 | saubere Stundenreihen für alle 93 Hausstationen, die Grundlage für jedes Modell |
 | Stand im Netz und Potenzial | 19 | Netzvergleich je Kernwinter: Rang im Netz, Fehlerbild, Abstand zum besten Viertel |
 | Wächter für die Heizperiode | 20 | Tagesmonitor des Monitoring-Modells: Kennlinie je Station mit CUSUM |
-| Daten, Labels, Fingerabdruck, Klassen | 25 bis 27, 29 | Labels aus den Begehungen, Kennzahlen, LSTM-Fingerabdruck, Einstufung mit K-Means, Klassen nach Folie 5 (siehe [Lernende Modelle](modelle/index.md)) |
+| Daten, Labels, Fingerabdruck, Klassen | 25 bis 27, 29 | Labels aus den Begehungen, Kennzahlen, LSTM-Fingerabdruck, Einstufung mit K-Means, drei Klassen (siehe [Lernende Modelle](modelle/index.md)) |
 | Wächter für warme Tage | 28 | Prognose-LSTM, das jeden Tag Rücklauf und Durchfluss vorhersagt |
 | Endmodell | 35 | lernt die gewählten Modelle neu, prüft sie streng und speichert sie als Pakete (siehe [Modellvergleich](modellvergleich.md)) |
 | Anwendung | Programm dashboard_daten | wendet die Pakete auf die aktuellen Daten an, ohne neu zu lernen. Die Ergebnistabellen enthalten nur Zählernummern. |
@@ -56,7 +56,7 @@ Schwellen, Lernzeitraum und Prüfsummen. Notebook 35 speichert drei Pakete:
 |---|---|---|
 | das Monitoring-Modell | Kennlinie je Station, CUSUM h = 5 | Meldungen in der Heizperiode |
 | das Prognose-LSTM | Netz, Kalibrierung je Station, CUSUM h = 10 | Meldungen an warmen Tagen, Hinweis an Heiztagen |
-| die Fehlerklassen | Regression auf den LSTM-Zahlen für Ventil und Dämmung, K-Means, Regel für die Kapazität | Ventil-Score, Klasse nach Folie 5, Hinweise |
+| die Fehlerklassen | Regression auf den LSTM-Zahlen für Ventil und Dämmung, K-Means, Regel für die Kapazität | Ventil-Score, Klasse, Hinweise |
 
 - Wo mit Befunden gelernt wird (Fehlerart), nur auf begangenen Stationen. Wo Normalverhalten gelernt wird (Wächter),
   auf allen Stationen, die überwacht werden sollen.

@@ -1,6 +1,6 @@
 # Fehlerart und Klasse je Station
 
-Folie 5 der Aufgabenstellung teilt jede Station in eine von drei Klassen mit je einer Handlung ein:
+Der Projektpartner hat vorgegeben, jede Station in eine von drei Klassen mit je einer Handlung einzuteilen:
 
 | Klasse | Handlung |
 |---|---|
@@ -57,7 +57,7 @@ Grenze wird über den Youden-Index auf den begangenen Stationen gewählt.
 
 ## Optimum oder schlechter: K-Means
 
-Für die Stationen ohne Ventilverdacht bleibt die Frage aus Folie 5: Läuft die Station gut oder schlechter als
+Für die Stationen ohne Ventilverdacht bleibt die Frage: Läuft die Station gut oder schlechter als
 möglich? Dafür gibt es kein Label, kein Monteur hat „läuft schlechter als möglich“ notiert. Notebook 26 gruppiert die
 Stationen deshalb ohne Label mit K-Means.
 
