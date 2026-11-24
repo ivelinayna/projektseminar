@@ -538,7 +538,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
             <td>LSTM-Modell: logistische Regression nur auf der LSTM-Zusammenfassung (16 Zahlen), nur auf begangenen Stationen gelernt.
               Bestätigung durch das Fehlerbild „ventil“ aus dem Monitoring-Modell.</td>
             <td>Test C (Kreuzvalidierung über Stationsgruppen): AUC 0,83, findet 8 von 11 Ventilfällen bei 4 Fehlalarmen
-              (Notebook 35). Mit der Wahl des Modells ohne die Teststationen kommt dasselbe heraus (0,84, Abschnitt 16). Die
+              (Notebook 35). Mit der Wahl des Modells ohne die Teststationen kommt dasselbe heraus (0,84, Abschnitt 15). Die
               einfache Regel „nachts im Sommer fließt Wasser“ ist genauso gut (0,85). Das Fehlerbild aus dem Monitoring-Modell ist 4 von 4 richtig,
               findet aber nur 4. Es ist dasselbe Modell wie auf der Folie. Weil die Regel genauso gut und leicht verständlich
               ist, steht der Sommernacht-Anteil als Erklärung daneben.</td>
@@ -548,7 +548,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
             <td>LSTM-Modell: eigenes Dämmungsmodell, Hinweis ab Score <span class="g-daemmung"></span></td>
             <td>Keine einzelne Regel kommt über AUC 0,61, auch wenn man sie an den Befunden einstellt. Die KI findet ein Muster
               in der LSTM-Zusammenfassung, Test C 0,79 (findet 15 von 22 bei 7 Fehlalarmen). Der Vorsprung (+0,18) ist knapp nicht gesichert
-              (Notebook 35, Abschnitt 16b).</td>
+              (Notebook 35, Abschnitt 14.1).</td>
             <td>Nur Hinweis: Was das Muster physikalisch bedeutet, ist offen, gedämmt wurde eher an Stationen, die im Winter gut
               laufen. Dämmung ist bei 41 % der begangenen Stationen eingetragen, entsprechend oft erscheint der Hinweis.</td></tr>
           <tr><td><b>Ist der Anschluss zu groß?</b><br><span class="muted">Klassifizierung → Kapazitätsanpassung</span></td>

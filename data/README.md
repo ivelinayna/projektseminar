@@ -32,6 +32,4 @@ Diese Dateien von der ÜZ hierher kopieren:
 - Von Hand gepflegte Listen mit Adressen.
 - Derzeit `adressen_koordinaten.ods` (Spalten `adresse`, `koordinate`, `quelle`).
 - Wird von den Notebooks 24, 31 und 33 benutzt.
-- `begehungsprotokolle/`: Vorlage und ausgefüllte Begehungsprotokolle für den Betrieb
-  (`python -m src.betrieb vorlage`, `python -m src.betrieb protokolle`, siehe `docs/betrieb.md`).
 - Für Notebook 38 kommen zwei Handtabellen dazu: `fehler_symptom_matrix_entwurf.xlsx` und `pruefliste_begehungsnotizen.xlsx`. Sie liegen nicht im Repo. Ohne sie bricht Notebook 38 gleich am Anfang ab.

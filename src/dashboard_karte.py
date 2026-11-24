@@ -13,7 +13,7 @@ Je Zähler:
 - **Stand im Netz** und **Potenzial** (Stationsleistung, Netzvergleich des Monitoring-Modells)
 - **Meldungen** der Wächter, je Tag mit dem Hauptkanal
 
-Hauptkanal (Notebook 35, Abschnitt 13): An einem Tag, an dem der
+Hauptkanal (Notebook 35, Abschnitt 17): An einem Tag, an dem der
 Tagesmonitor des Monitoring-Modells rechnet (Heiztag, Referenz vorhanden), zählt seine Meldung. Sonst
 zählt das Prognose-LSTM (warme Tage, Stationen ohne Referenz). LSTM-Meldungen an
 Tagen des Tagesmonitors bleiben als Hinweis in der Liste, färben die Karte aber

@@ -8,13 +8,13 @@ Wie diese Modelle geprüft und mit den übrigen Modellen des Projekts verglichen
 
 ## Die Aufgabe
 
-Folie 5 der Aufgabenstellung verlangt drei Dinge:
+Die Aufgabenstellung verlangt drei Dinge:
 
 | Aufgabe | Frage | Antwort in diesem Abschnitt |
 |---|---|---|
 | Alarm | Verändert sich eine Station gerade? | Prognose-LSTM als Wächter |
 | Fehler erkennen | Hat eine Station einen Dauerfehler, etwa ein Ventil, das nicht schließt? | LSTM-Fingerabdruck mit logistischer Regression |
-| Fehler unterteilen | Welche Handlung ist nötig: Regelventil tauschen, Regelung optimieren oder nichts? | Klasse je Station nach Folie 5 |
+| Fehler unterteilen | Welche Handlung ist nötig: Regelventil tauschen, Regelung optimieren oder nichts? | Klasse je Station |
 
 Die erste und die zweite Aufgabe brauchen verschiedene Modelle. Ein Alarm vergleicht eine Station mit sich selbst und
 braucht keine Labels. Ein Dauerfehler zeigt sich dagegen nur im Vergleich mit anderen Stationen, und dafür braucht es
@@ -31,7 +31,7 @@ die Befunde der Begehungen.
 3. **[Prognose-LSTM als Wächter](prognose.md):** Ein zweites LSTM sagt jeden Tag Rücklauf und Durchfluss aus den
    letzten 7 Tagen vorher. Weicht die Station anhaltend davon ab, gibt es einen Alarm.
 4. **[Fehlerart und Klasse je Station](klassen.md):** Eine logistische Regression je Fehlerart, K-Means für
-   „Optimum oder schlechter“ und eine Regel für die Kapazität ergeben die Klasse nach Folie 5.
+   „Optimum oder schlechter“ und eine Regel für die Kapazität ergeben die Klasse.
 
 ## Wie es zusammenläuft
 
@@ -44,7 +44,7 @@ Notebook 25   Stundenwerte + Außentemperatur, Labels aus den Begehungen, Kennza
      ├──► Notebook 27   LSTM-Fingerabdruck: 8 Zahlen je Tag, 16 je Station
      ├──► Notebook 28   Prognose-LSTM: Vorhersage je Tag, Abweichung, Warnung
      │
-Notebook 29   Fehlerart je Station, Klassen nach Folie 5
+Notebook 29   Fehlerart je Station, drei Klassen
      │
 Notebook 30, 34   Vergleich mit den übrigen Modellen des Projekts
      │
@@ -60,7 +60,7 @@ Notebook 37   Dashboard (HTML-Datei)
 - **Notebook 26** stuft die Stationen ohne Label nach ihrem Regelverhalten ein.
 - **Notebook 27 und 28** enthalten zuerst die Vorversuche, die zu den endgültigen Netzen geführt haben, danach die
   Netze selbst.
-- **Notebook 29** vergleicht verschiedene Verfahren je Fehlerart und bildet die Klassen nach Folie 5.
+- **Notebook 29** vergleicht verschiedene Verfahren je Fehlerart und bildet die drei Klassen.
 - **Notebook 30, 34 und 35** gehören zu *Modelle vergleichen*. Notebook 35 lernt das Endmodell auf einer gemeinsamen
   Zeitachse neu, wählt das Modell nur im Lernteil und speichert drei Pakete für das Dashboard.
 - **Notebook 37** zeigt das Ergebnis als Karte und Handlungsliste.
@@ -82,7 +82,7 @@ Die Notebooks laufen in dieser Reihenfolge. Jedes liest, was das vorige geschrie
 | Notebook 27 | Dateien aus 25 | `data/processed/lstm_embedding.csv`, `lstm_scores.csv`, Gewichte nach `notebooks/models/` | rund 7 Minuten, davon die meiste Zeit Vorversuche |
 | Notebook 28 | Dateien aus 25, Gewichte der Vorversuche aus 27 | `data/processed/prognose_tage.csv`, Gewichte nach `notebooks/models/` | rund 2 Minuten |
 | Notebook 29 | Dateien aus 25 bis 28 | `data/processed/fehlerklassen_je_hast.csv` | rund 11 Minuten |
-| Notebook 35 | Stundenreihen, Labels | Tabellen nach `outputs/finalvergleich/`, Modellpakete nach `models/` | länger, das Endmodell lernt alle Netze je Prüfteil neu |
+| Notebook 35 | Stundenreihen, Labels | Tabellen nach `outputs/finalvergleich/`, Modellpakete nach `models/` | gut 20 Minuten, das Endmodell lernt alle Netze je Prüfteil neu |
 | `python -m src.dashboard_daten` | Modellpakete, aktuelle Stundenreihen | `outputs/dashboard/` | wenige Minuten |
 | Notebook 37 | `outputs/dashboard/`, Netz-Cache aus Notebook 31 | HTML-Datei des Dashboards | wenige Minuten |
 

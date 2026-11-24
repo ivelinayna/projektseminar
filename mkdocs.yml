@@ -37,7 +37,6 @@ nav:
       - Start mit Docker: installation/docker.md
       - Lokaler Start ohne Docker: installation/lokal.md
       - Ausführung bis zum Dashboard: installation/ausfuehrung.md
-      - Betrieb bei der ÜZ: installation/betrieb.md
       - Schnellstart: installation/schnellstart.md
       - Befehle und Module: installation/pipeline.md
 
@@ -70,7 +69,17 @@ nav:
           - Stundencluster und Validierung: clustering/validierung.md
           - Tagescluster: clustering/tagescluster.md
       - Stationsbilder und Befunde: stationsbilder.md
-      # - Anomalien und Monitoring:   # noch leer
+      - Anomalien und Monitoring:
+          - Überblick: monitoring/index.md
+          - Anomalieerkennung ohne Labels: monitoring/anomalie.md
+          - Von der Anomalie zur Empfehlung: monitoring/empfehlung.md
+          - Normalverhaltensmodell: monitoring/normalverhalten.md
+          - Netzvergleich und Wintervergleich: monitoring/netzvergleich.md
+          - Tagesmonitor: monitoring/tagesmonitor.md
+          - Alarme bewerten: monitoring/alarme.md
+          - Bestes Viertel als Maßstab: monitoring/bestwert.md
+          - Vergleichsgruppen und Nachbarn: monitoring/nachbarn.md
+          - Netzereignisse: monitoring/netzereignisse.md
       - Lernende Modelle:
           - Überblick: modelle/index.md
           - Daten, Labels und Messlatte: modelle/daten.md

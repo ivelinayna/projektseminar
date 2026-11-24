@@ -1,6 +1,6 @@
 # Handlungsempfehlungen
 
-Folie 5 der Aufgabenstellung verlangt je Station eine Handlungsempfehlung: Reparatur, Regelungsoptimierung oder
+Die Aufgabenstellung verlangt je Station eine Handlungsempfehlung: Reparatur, Regelungsoptimierung oder
 Kapazitätsanpassung. Diese Seite beschreibt, wie aus den Ausgaben des [Endmodells](ergebnisse_endmodell.md) eine
 Empfehlung wird, was beim aktuellen Datenstand herauskommt und wie verlässlich das ist. Gerechnet wird mit den Paketen
 aus Notebook 35, angewendet vom Programm dashboard_daten. Angezeigt wird die Empfehlung in der Handlungsliste des
@@ -8,7 +8,7 @@ aus Notebook 35, angewendet vom Programm dashboard_daten. Angezeigt wird die Emp
 
 ## Von der Klasse zur Handlung
 
-Jede Station bekommt zuerst eine Klasse nach Folie 5 (siehe [Fehlerart und Klasse je Station](modelle/klassen.md)).
+Jede Station bekommt zuerst eine der drei Klassen (siehe [Fehlerart und Klasse je Station](modelle/klassen.md)).
 Daraus wird die Handlung:
 
 | Klasse | wann | Handlung |

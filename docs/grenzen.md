@@ -147,7 +147,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getr
 ## Mögliche nächste Schritte
 
 - Die Referenz je Station nach jeder Begehung und zu jeder Heizperiode neu lernen.
-- Einen Test vorab festlegen: auffällige Stationen und gleich viele zufällig gewählte begehen, ohne dass das Team vor Ort weiß, welche welche ist.
+- Einen Test vorab festlegen: die nie begangenen Stationen mit dem höchsten Ventil-Score und gleich viele zufällig gewählte begehen, ohne dass das Team vor Ort weiß, welche welche ist (siehe [Prüfung nach vorn](ausblick_pruefung.md)).
 - Die Fehler-Symptom-Matrix mit der ÜZ abstimmen. Je Befund den geschätzten Beginn des Fehlers erfassen.
 - Die Außentemperatur über 2 bis 3 Tage glätten, damit Kälteeinbrüche weniger Alarme auslösen.
 - Den Nachtdurchfluss im Sommer als Kennzahl in den Netzvergleich aufnehmen.

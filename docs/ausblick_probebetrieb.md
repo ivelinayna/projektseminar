@@ -7,17 +7,20 @@ bleiben, gelten ein paar Regeln.
 ## Ablauf mit neuen Daten
 
 ```
-neue Zählerexporte
+neue Zählerexporte in data/raw/
      │
-Notebook 00              saubere Stundenreihen
-     │
-Programm dashboard_daten wendet die gespeicherten Pakete an, lernt nichts neu
-     │
-Notebook 37              baut die HTML-Datei des Dashboards
+python -m src.aktualisieren
+     ├── Notebook 00              saubere Stundenreihen
+     ├── Außentemperatur (DWD)    nachladen
+     ├── Monitoring-Modell        Netzvergleich, Tagesmonitor, Priorität, Bericht
+     ├── dashboard_daten          wendet die gespeicherten Pakete an, lernt nichts neu
+     ├── Notebook 31              Netz-Cache mit den neuen Stundenreihen
+     └── Notebook 37              baut die HTML-Datei des Dashboards
 ```
 
 Gelernt wird dabei nichts. Die Ergebnistabellen halten fest, mit welcher Paketversion und bis zu welchem Datum
-gerechnet wurde.
+gerechnet wurde. Wie der Befehl ausgeführt wird, steht unter
+[Neue Zählerdaten einspielen](installation/ausfuehrung.md#neue-zahlerdaten-einspielen).
 
 ## Regeln für den Betrieb
 
@@ -47,6 +50,4 @@ wurde. Dafür sollte jede Begehung festhalten:
 - was getauscht oder eingestellt wurde,
 - ob die Station vorher auf der Handlungsliste stand und mit welcher Dringlichkeit.
 
-Dafür gibt es eine Vorlage für das Begehungsprotokoll und einen Befehl, der die ausgefüllten Protokolle prüft und mit
-dem gesicherten Stand der Handlungsliste vor der Begehung verknüpft (siehe [Betrieb bei der ÜZ](installation/betrieb.md)). Wie daraus
-eine Prüfung der Modelle wird, steht unter [Prüfung nach vorn](ausblick_pruefung.md).
+Wie daraus eine Prüfung der Modelle wird, steht unter [Prüfung nach vorn](ausblick_pruefung.md).

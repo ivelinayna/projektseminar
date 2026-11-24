@@ -165,8 +165,8 @@ heute (24 Stunden × 6 Größen) ──► LSTM-Encoder (96) ──► Linear 96
 - Fehlerart, erster Stand mit Leave-one-out: Die Regression auf Kennzahlen und LSTM-Zahlen kommt beim
   Ventil auf 0,89 [0,78; 0,97], die Sommernacht-Regel auf 0,85. Der Unterschied ist nicht gesichert.
   Nur mit Winterdaten liegen die LSTM-Zahlen vor den Kennzahlen (0,83 gegen 0,68, Differenz +0,15
-  [+0,02; +0,32]). Dieser Vorsprung ist knapp: In früheren Läufen war er nicht gesichert, und ein einzelnes
-  fragliches Label verschiebt die Winter-AUC um 0,06.
+  [+0,02; +0,32]). Dieser Vorsprung ist knapp: Bei 11 Fällen hängt seine untere Grenze am Zufall des
+  Trainings, und ein einzelnes fragliches Label verschiebt die Winter-AUC um 0,06.
 - Die strengere Prüfung in Notebook 35, mit dem Encoder je Teil ohne die Teststationen neu gelernt und
   der Modellwahl nur im Lernteil, kommt auf Ventil 0,84 und Dämmung 0,78 (siehe [Endmodell](../ergebnisse_endmodell.md)).
 
