@@ -130,19 +130,25 @@ An eingebauten Fehlern im Winter (Test B, höchstens 10 % Fehlalarme):
 
 **Strenger Vergleich (Test C).**
 
-| Fehlerart | gelerntes Modell | beste Regel | Unterschied |
-|---|---|---|---|
-| Ventil | 0,84 | Sommernacht-Regel 0,85 | −0,01 [−0,14; +0,12], gleichauf |
-| Dämmung | 0,78 | beste Einzelregel 0,61 | +0,17 [−0,04; +0,38], knapp nicht gesichert |
-| Kapazität | höchstens 0,53 | Spitzenlast zum alten Vertrag 0,76 [0,58; 0,93] | die Regel gewinnt |
-| Filter, Durchfluss, Sollwert | alle Verfahren 0,26 bis 0,57 | – | nicht erkennbar |
+Bei den Regeln gibt es zwei Arten. Die **feste Regel** steht vorher fest und kommt aus der Physik, etwa die
+Sommernacht-Regel. Die **angepasste Regel** sucht sich in jedem Lernteil die eine Kennzahl aus, die dort die
+Befunde am besten trennt.
+
+| Fehlerart | KI | feste Regel | angepasste Regel | Ergebnis |
+|---|---|---|---|---|
+| Ventil | 0,84 | Sommernacht-Regel 0,85 | 0,79 | gegen die feste Regel gleichauf, −0,01 [−0,14; +0,12] |
+| Dämmung | 0,78 | – | 0,61 | KI vorn, +0,17 [−0,04; +0,38], knapp nicht gesichert |
+| Kapazität | höchstens 0,53 | Spitzenlast zum alten Vertrag 0,76 [0,58; 0,93] | – | die feste Regel gewinnt |
+| Filter, Durchfluss, Sollwert | 0,37 bis 0,39 | – | 0,38 bis 0,51 | nicht erkennbar |
 
 Die Werte in eckigen Klammern sind 95-%-Intervalle über Stationen.
 
-![Test C: KI mit Modellwahl im Lernteil gegen die beste an den Befunden angepasste Regel](assets/vergleich/35_ki_gegen_regel.png)
+![Test C: KI mit Modellwahl im Lernteil gegen die angepasste Regel](assets/vergleich/35_ki_gegen_regel.png)
 
-Das Bild stellt die KI der besten an den Befunden angepassten Regel gegenüber. Beim Ventil ist die feste
-Sommernacht-Regel aus der Tabelle (0,85) noch etwas stärker als die angepasste (0,79).
+Das Bild zeigt die KI gegen die **angepasste** Regel, also die vorletzte Spalte. Beim Ventil ist diese Regel
+schwächer (0,79) als die feste Sommernacht-Regel (0,85). Sie sucht sich ihre Kennzahl nach rund 9 Ventilfällen je
+Lernteil aus und lässt sich dabei leicht vom Zufall leiten. Gegen die feste Regel liegt die KI beim Ventil
+gleichauf, bei der Dämmung gibt es keine feste Regel, die etwas findet.
 
 ### Warum das so ausgeht
 
