@@ -97,7 +97,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getr
 
 - Der Netzgraph ist logisch, nicht hydraulisch. Leitungslängen, Durchmesser und Drücke fehlen (NB 23).
 - 35 von 110 Kanten haben keinen Rohrweg (NB 39).
-- Die Pfeile in `Nodes_Edges.ods` passen zu keiner Quelle. Gegen die angenommene Einspeisung zeigen etwa gleich viele hin wie weg (NB 39).
+- Die Kantenrichtungen in `Nodes_Edges.ods` passen zu keiner Quelle. Gegen die angenommene Einspeisung zeigen etwa gleich viele hin wie weg (NB 39).
 - Ein Einfluss des Strangs auf die Fehler ist nicht nachweisbar (NB 23, NB 32, NB 34).
 
 ### Vergleichbarkeit und Übertragbarkeit
@@ -136,7 +136,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getr
     - Was sind die Zähler 58202380 und 66761022? Sie fallen in allen Clusterverfahren als Ausreißer auf (NB 07, NB 08).
 - Netz und Hydraulik
     - Wo liegen die Heizzentrale und die Einspeisepunkte?
-    - Was bedeuten die Pfeile in `Nodes_Edges.ods`?
+    - Was bedeuten die Kantenrichtungen in `Nodes_Edges.ods`?
     - Gibt es ein hydraulisches Netzmodell, Rohrdaten (Nennweite, Länge) oder Differenzdrücke?
     - Gibt es die Vorlauftemperatur am Ausgang der Heizzentrale?
     - Wie sollen Übergabestationen ohne Kante im Netz behandelt werden?

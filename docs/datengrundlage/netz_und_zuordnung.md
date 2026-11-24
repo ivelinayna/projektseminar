@@ -1,7 +1,7 @@
 # Netz und Zuordnung
 
-Die Quellen des Projekts haben verschiedene Schlüssel. Die Zählerdaten kennen nur die Zählernummer, die
-Begehungstabelle nur die Adresse und der Leitungsplan nur Linien auf der Karte. Um eine Begehung mit den Messwerten
+Die Quellen des Projekts haben verschiedene Schlüssel. Das heißt die Zählerdaten kennen nur die Zählernummer, die
+Begehungstabelle nur die Adresse und der Leitungsplan nur die Linien auf der Karte. Um eine Begehung mit den Messwerten
 ihrer Station zu verbinden oder eine Station im Netz zu verorten, braucht es Zuordnungstabellen. Diese Seite
 beschreibt sie und zeigt, wie weit die Verknüpfung reicht.
 
@@ -85,16 +85,17 @@ Herkunft des Anschlusswerts bei den 93 HAST (Notebook 00):
 
 ### Kantendatei
 
-- 110 Kanten verbinden 110 Nodes zu einem zusammenhängenden Netz mit genau einem Ring.
+- 110 Kanten verbinden 99 Nodes zu einem zusammenhängenden Netz mit genau einem Ring.
 - Die Nodes sind Adressen. 17 davon finden keine Station mit Zähler: Heizwerk, Abzweige, Schächte oder Adressen in
   abweichender Schreibweise.
 - Die Kanten verbinden Häuser direkt miteinander. Das Wasser fließt aber von der Straßenleitung ins Haus und zurück,
   nicht von Haus zu Haus. Die Kantendatei sagt also, welche Stationen im Netz nah beieinander hängen, nicht, wo die
   Rohre liegen.
-- **Pfeile:** Jede Kante hat eine Richtung. Es gibt aber 7 Nodes ohne Zufluss und 6 mit mehreren Zuflüssen, also
-  keinen einzelnen Startpunkt. Etwa die Hälfte der Pfeile zeigt zum Erzeuger hin statt von ihm weg (Notebook 31 und
-  32). Auch der Vorlauf sinkt in Pfeilrichtung nicht häufiger, als er steigt: An 22 von 56 bewertbaren Kanten sinkt
-  er, an 26 steigt er, 8 sind unklar. Was die Pfeile bedeuten, ist offen.
+- **Gerichtete Kanten:** Jede Kante hat eine Richtung. Es gibt aber 7 Nodes ohne Zufluss und 6 mit mehreren Zuflüssen, also
+  keinen einzelnen Startpunkt. Etwa die Hälfte der gerichteten Kanten zeigt zum Erzeuger hin statt von ihm weg (Notebook 31 und
+  32). Auch der Vorlauf sinkt in Kantenrichtung nicht häufiger, als er steigt: An 22 von 56 bewertbaren Kanten sinkt
+  er, an 26 steigt er, 8 sind unklar. Nur ein Blick auf die Karte gibt einen Hinweis zu Bedeutung der Richtung der Kanten.
+  Es sieht so aus, als geben die Kanten nur die Anschlussreihenfolge der Häuser entlang einer Straße an. Eine hunderprozentige Erklärung bleibt jedoch offen. 
 
 ## Leitungsplan
 
@@ -128,7 +129,7 @@ Herkunft des Anschlusswerts bei den 93 HAST (Notebook 00):
 
 Um Stationen auf die Karte und an das Rohrnetz zu bringen, braucht jede Adresse eine Koordinate. Die automatische
 Adresssuche über OpenStreetMap (Nominatim) fand meist nur die Straße, nicht das Haus. Im Neubaugebiet kennt
-OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand in Google Maps herausgesucht, durch klicken auf das Haus erfasst und ansließend in die Tabelle übertragen.
+OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand in Google Maps herausgesucht, durch klicken auf das Haus erfasst und anschließend in die Tabelle übertragen.
 
 | | |
 |---|---|
@@ -146,26 +147,6 @@ OpenStreetMap zu wenige Hausnummern. Die Koordinaten wurden deshalb von Hand in 
   (`fehlende_koordinaten_<Zeitpunkt>.ods`).
 - Die Tabelle enthält Adressen und bleibt deshalb lokal.
 
-## Einspeisung und Rohrbaum
-
-Die Kantendatei verbindet Häuser, der Leitungsplan zeigt die Rohre. Aus beidem entsteht in den Notebooks 31 und 32 ein
-physisches Netz.
-
-- **Einspeisung:** Die Lage des Erzeugers hat die ÜZ nachgeliefert. Sie passt zu den Messdaten. Der Vorlauf kühlt
-  entlang der Rohre ab, und die Schätzung aus dem Vorlauf landet beim Erzeuger-Knoten (Rangkorrelation −0,70 bei einer
-  Zufallsgrenze von −0,28, Notebook 32).
-- **Pfeile der Kantendatei:** Sie passen nicht zu den Messdaten. Der Vorlauf sinkt an 22 von 56 bewertbaren Kanten in
-  Pfeilrichtung und steigt an 26. Zeigen alle Pfeile vom Erzeuger weg, sind es 26 und 22. Auf Ebene der Hauskanten
-  bleibt die Richtung unsicher.
-- **Rohrbaum:** Für jedes Haus mit Zähler wird der kürzeste Rohrweg vom Erzeuger genommen. Zusammen ergeben die Wege
-  einen Baum aus 79 Häusern und 3804 m Rohr. Das Haus weiter oben im Strang hat bei 36 von 38 Paaren den wärmeren
-  Vorlauf. Der Rohrbaum passt damit deutlich besser zu den Messdaten als die Kantendatei.
-- **Grenzen:** Der Baum ist ein Kürzeste-Wege-Baum, kein hydraulisches Modell. Ein Teil der Abzweige ist unecht, weil
-  Vor- und Rücklauf parallel liegen. Die 30 Nodes ohne Zähler fehlen im Baum.
-
-Ob das Netz Abweichungen einzelner Stationen erklärt, ist eine eigene Frage. Das Ergebnis: Das Netz wirkt auf alle
-Häuser gemeinsam, ein Effekt je Strang ist nicht nachweisbar. Die Tests dazu stehen unter
-[Netz einbeziehen](../netz_einbeziehen.md).
 
 ## Was die Verknüpfung ergibt
 

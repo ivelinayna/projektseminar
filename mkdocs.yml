@@ -77,7 +77,11 @@ nav:
           - LSTM-Fingerabdruck: modelle/lstm.md
           - Prognose-LSTM als Wächter: modelle/prognose.md
           - Fehlerart und Klasse je Station: modelle/klassen.md
-          - Netz einbeziehen: netz_einbeziehen.md
+      - Netz einbeziehen:
+          - Überblick: netz_einbeziehen/index.md
+          - Vom Haus-Graph zum Rohrbaum: netz_einbeziehen/rohrbaum.md
+          - Haus oder Netz: netz_einbeziehen/haus_oder_netz.md
+          - Fehlererkennung mit Netz-Merkmalen: netz_einbeziehen/fehlererkennung.md
       - Modelle vergleichen:
           - Prüfdesign und Statistik: vergleich/pruefung.md
           - Modellvergleich: modellvergleich.md

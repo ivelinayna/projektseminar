@@ -18,7 +18,7 @@ Fehlersignal.
 ## Umsetzung und Hürden
 
 - **Das Netz zusammensetzen.** Welche Station neben welcher hängt, steht in der Kantendatei der ÜZ
-  (`Nodes_Edges.ods`). Sie verbindet Häuser direkt miteinander, nicht über die echten Leitungen. Ihre Pfeile passen zu
+  (`Nodes_Edges.ods`). Sie verbindet Häuser direkt miteinander, nicht über die echten Leitungen. Ihre Richtungen passen zu
   keiner einzelnen Quelle, was sie bedeuten, ist unklar. Das GNN nutzt die Verbindungen deshalb ohne Richtung.
 - **Lücken im Netz.** 27 von 111 Knoten haben keinen Zähler, etwa Abzweige, Schächte oder Häuser ohne Fernauslesung.
   Sie bleiben als leere Zwischenstücke drin, damit die Stränge nicht zerfallen. 18 Adressen haben keine Koordinate,
