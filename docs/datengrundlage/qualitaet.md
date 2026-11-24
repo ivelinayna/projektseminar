@@ -2,7 +2,7 @@
 
 Diese Seite fasst zusammen, wie gut die Daten sind und wo sie nicht reichen. Was Notebook 00 an den Exporten
 korrigiert, steht unter [Zählerdaten](zaehlerdaten.md#eigenheiten-der-exporte). Was die Einschränkungen für die
-Ergebnisse bedeuten, steht unter [Grenzen und Erkenntnisse](../grenzen.md).
+Ergebnisse bedeuten, steht unter [Grenzen und Erkenntnisse](../grenzen/index.md).
 
 ## Auf einen Blick
 
@@ -111,4 +111,4 @@ Ergebnisse bedeuten, steht unter [Grenzen und Erkenntnisse](../grenzen.md).
 | Begehungen nach Juli 2025 mit Zählerständen | neue Prüffälle für die Alarme |
 | Minutenwerte oder Reglerdaten mit Stellsignal | Regelhysterese sichtbar machen |
 
-Die Fragen an die ÜZ dazu stehen unter [Offene Fragen an die ÜZ](../grenzen.md#offene-fragen-an-die-uz).
+Die Fragen an die ÜZ dazu stehen unter [Offene Fragen an die ÜZ](../grenzen/index.md#offene-fragen-an-die-uz).

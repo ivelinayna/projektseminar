@@ -4,7 +4,7 @@ Das Dashboard bringt die Ergebnisse des Projekts dorthin, wo die ÜZ sie braucht
 Handlungsbedarf besteht, welche Maßnahme die Modelle vorschlagen und warum. Es ist eine einzelne HTML-Datei mit drei
 Reitern und läuft in jedem Browser, ohne Python und ohne Server. Gebaut wird es in Notebook 37.
 
-Das Dashboard deckt die vier Ziele der Aufgabenstellung ab (siehe [Aufgabe und Ziel](einleitung/aufgabe_und_ziel.md)):
+Das Dashboard deckt die vier Ziele der Aufgabenstellung ab (siehe [Aufgabe und Ziel](../einleitung/aufgabe_und_ziel.md)):
 
 | Ziel | im Dashboard |
 |---|---|
@@ -35,9 +35,9 @@ Programm dashboard_daten     wendet die Pakete auf die aktuellen Stundenreihen a
 | Stundenreihen | 00 | saubere Stundenreihen für alle 93 Hausstationen, die Grundlage für jedes Modell |
 | Stand im Netz und Potenzial | 19 | Netzvergleich je Kernwinter: Rang im Netz, Fehlerbild, Abstand zum besten Viertel |
 | Wächter für die Heizperiode | 20 | Tagesmonitor des Monitoring-Modells: Kennlinie je Station mit CUSUM |
-| Daten, Labels, Fingerabdruck, Klassen | 25 bis 27, 29 | Labels aus den Begehungen, Kennzahlen, LSTM-Fingerabdruck, Einstufung mit K-Means, drei Klassen (siehe [Lernende Modelle](modelle/index.md)) |
+| Daten, Labels, Fingerabdruck, Klassen | 25 bis 27, 29 | Labels aus den Begehungen, Kennzahlen, LSTM-Fingerabdruck, Einstufung mit K-Means, drei Klassen (siehe [Lernende Modelle](../modelle/index.md)) |
 | Wächter für warme Tage | 28 | Prognose-LSTM, das jeden Tag Rücklauf und Durchfluss vorhersagt |
-| Endmodell | 35 | lernt die gewählten Modelle neu, prüft sie streng und speichert sie als Pakete (siehe [Modellvergleich](modellvergleich.md)) |
+| Endmodell | 35 | lernt die gewählten Modelle neu, prüft sie streng und speichert sie als Pakete (siehe [Modellvergleich](../vergleich/modellvergleich.md)) |
 | Anwendung | Programm dashboard_daten | wendet die Pakete auf die aktuellen Daten an, ohne neu zu lernen. Die Ergebnistabellen enthalten nur Zählernummern. |
 | Netz und Rohrbaum | 31, 32 | Leitungsnetz und Lage der Häuser aus einer von Hand gepflegten Koordinatentabelle (siehe *Datengrundlage → Netz und Zuordnung*), dazu der Rohrbaum vom Erzeuger zu jedem Haus |
 | Dashboard | 37 | verbindet die Ergebnistabellen mit dem Rohrbaum und schreibt die HTML-Datei |
@@ -98,7 +98,7 @@ schon.
 
 Die Handlungsliste ordnet alle Zähler nach Dringlichkeit und innerhalb einer Stufe nach dem Ventil-Score. Wie Handlung
 und Dringlichkeit entstehen, was beim aktuellen Datenstand herauskommt und was bewusst nicht empfohlen wird, steht unter
-[Handlungsempfehlungen](ergebnisse_handlungsempfehlungen.md).
+[Handlungsempfehlungen](handlungsempfehlungen.md).
 
 ## Keine Meldung heißt nicht „in Ordnung“
 

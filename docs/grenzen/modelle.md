@@ -11,7 +11,7 @@ Diese Seite sammelt, wo die Modelle aufhören und was ihre Zahlen nicht aussagen
   es keinen Unterschied gibt.
 - Ein Netz, das direkt auf die Befunde lernt, würde bei 11 Ventilfällen jede Station auswendig lernen. Deshalb lernt
   das LSTM ohne Labels, und erst eine logistische Regression sieht die Befunde (siehe
-  [LSTM-Fingerabdruck](modelle/lstm.md)).
+  [LSTM-Fingerabdruck](../modelle/lstm.md)).
 - Das Modell im Dashboard hängt beim Ventil vom Startwert des LSTM ab: Mit anderen Startwerten liegt die AUC zwischen
   0,83 und 0,90 (Notebook 35).
 
@@ -51,6 +51,6 @@ Diese Seite sammelt, wo die Modelle aufhören und was ihre Zahlen nicht aussagen
 - **Grenzen und Stufen sind gesetzt:** Ventil- und Dämmungs-Score ab 0,5, die Dringlichkeitsstufen nach festen Regeln.
   Nur die Grenze für die Kapazität ist aus den Daten gewählt.
 - **Rückblickend geprüft:** Alle Zahlen stammen aus vorhandenen Daten. Ob die Liste im Betrieb trägt, zeigt erst ein
-  Test nach vorn (siehe [Prüfung nach vorn](ausblick_pruefung.md)).
+  Test nach vorn (siehe [Prüfung nach vorn](../ausblick/pruefung.md)).
 - **Ein Teilnetz:** Alle Modelle sind auf einem Teilnetz gelernt und geprüft. Ob sie auf andere Teilnetze passen, ist
   offen.

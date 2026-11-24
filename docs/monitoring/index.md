@@ -10,7 +10,7 @@ zwei Vergleiche:
 
 Aus beiden Vergleichen ist das **Monitoring-Modell** entstanden: der Netzvergleich (Notebook 19) und der Tagesmonitor
 mit CUSUM (Notebook 20), ergänzt um das Potenzial gegenüber dem besten Viertel (Notebook 22). Es ist eines der beiden
-Modelle, die unter [Modelle vergleichen](../modellvergleich.md) gegen das LSTM-Modell antreten, und liefert im
+Modelle, die unter [Modelle vergleichen](../vergleich/modellvergleich.md) gegen das LSTM-Modell antreten, und liefert im
 Dashboard Priorität, Meldungen und Potenzial.
 
 Alle Notebooks liegen unter `notebooks/5_monitoring/` und laufen nach Notebook 00. Notebook 18 braucht zusätzlich die

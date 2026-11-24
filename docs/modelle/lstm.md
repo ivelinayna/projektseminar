@@ -168,7 +168,7 @@ heute (24 Stunden × 6 Größen) ──► LSTM-Encoder (96) ──► Linear 96
   [+0,02; +0,32]). Dieser Vorsprung ist knapp: Bei 11 Fällen hängt seine untere Grenze am Zufall des
   Trainings, und ein einzelnes fragliches Label verschiebt die Winter-AUC um 0,06.
 - Die strengere Prüfung in Notebook 35, mit dem Encoder je Teil ohne die Teststationen neu gelernt und
-  der Modellwahl nur im Lernteil, kommt auf Ventil 0,84 und Dämmung 0,78 (siehe [Endmodell](../ergebnisse_endmodell.md)).
+  der Modellwahl nur im Lernteil, kommt auf Ventil 0,84 und Dämmung 0,78 (siehe [Endmodell](../ergebnisse/endmodell.md)).
 
 ## Was der Fingerabdruck leistet und was nicht
 

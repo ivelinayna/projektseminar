@@ -32,7 +32,7 @@ verschachtelt geprüft, mit ausgelassenen Stationen und mit ausgelassenen Straß
 
 Das ist der erste Stand. Die strengere Prüfung in Notebook 35 kommt beim Ventil auf 0,84 und bei der Dämmung auf
 0,78, mit der Regression nur auf den 16 LSTM-Zahlen (siehe
-[Endmodell](../ergebnisse_endmodell.md)).
+[Endmodell](../ergebnisse/endmodell.md)).
 
 **Warum eine logistische Regression.** Bei 11 Ventil- und 9 Vertragsfällen kann ein Modell nur wenige Gewichte
 sicher lernen. Die logistische Regression hat je Merkmal ein Gewicht, ihre Regularisierung wird in der inneren

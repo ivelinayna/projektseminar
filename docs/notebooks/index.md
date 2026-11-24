@@ -92,7 +92,7 @@ Die Notebooks liegen in `notebooks/`, je Teil in einem eigenen Ordner (`1_daten/
 
 ## Anhang: Weitere Versuche
 
-Eigene Ansätze, die sich nicht durchgesetzt haben und auf denen nichts aufbaut. Sie stehen hinter dem Dashboard, damit die Hauptkette 00 bis 37 durchgeht. Die Befunde aller Versuche fasst [Negativbefunde](nicht_getragen/negativbefunde.md) zusammen.
+Eigene Ansätze, die sich nicht durchgesetzt haben und auf denen nichts aufbaut. Sie stehen hinter dem Dashboard, damit die Hauptkette 00 bis 37 durchgeht. Die Befunde aller Versuche fasst [Negativbefunde](../nicht_getragen/negativbefunde.md) zusammen.
 
 | Nr. | Notebook | Worum es geht | Ergebnis | vorher |
 |---|---|---|---|---|

@@ -15,13 +15,13 @@ Stand 18.11.2026, 93 HAST. Vier Schritte, die aufeinander aufbauen. Die Fallsamm
 
 **Idee:** Eine Station kann ihre Leistung über mehr Wasser (Volumenstrom) oder über mehr Wärmeentzug (Spreizung) anpassen. Das Dreieck zeigt, welcher Weg gerade benutzt wird.
 
-![Ternärdiagramme](assets/stationsbilder/ueberblick_ternaer.png)
+![Ternärdiagramme](../assets/stationsbilder/ueberblick_ternaer.png)
 
 - sechs Dreiecke für dieselbe Station: oben vor / während / nach der Begehung, unten die drei Jahreszeiten
 - jeder Punkt ist eine Betriebsstunde, Farbe = Effizienz (gelb gut, blau schlecht)
 - vorher Median 3,4 kWh/m³, nachher 36,4, also Faktor zehn
 
-![Spreizung gegen Performance](assets/stationsbilder/ueberblick_modulation.png)
+![Spreizung gegen Performance](../assets/stationsbilder/ueberblick_modulation.png)
 
 - jeder Punkt eine Station im Winter: waagerecht der Anteil Spreizungsregelung, senkrecht die Effizienz
 - je mehr Spreizungsregelung, desto schlechter (Rangkorrelation −0,48)
@@ -44,7 +44,7 @@ Stand 18.11.2026, 93 HAST. Vier Schritte, die aufeinander aufbauen. Die Fallsamm
 
 ### Kennlinie
 
-![Kennlinie](assets/stationsbilder/ueberblick_kennlinie.png)
+![Kennlinie](../assets/stationsbilder/ueberblick_kennlinie.png)
 
 - waagerecht Leistung, senkrecht Volumenstrom, beides logarithmisch. Farbe = Rücklauftemperatur.
 - vor der Begehung: flache rote Wolke. Egal wie viel Leistung, es fließen immer 500 bis 1000 l/h, Rücklauf über 70 °C. So sieht ein offenes Ventil aus.
@@ -53,7 +53,7 @@ Stand 18.11.2026, 93 HAST. Vier Schritte, die aufeinander aufbauen. Die Fallsamm
 
 ### Carpet-Plot
 
-![Carpet-Plot](assets/stationsbilder/ueberblick_carpet.png)
+![Carpet-Plot](../assets/stationsbilder/ueberblick_carpet.png)
 
 - waagerecht die Kalenderzeit, senkrecht die Tagesstunde. Oben Rücklauf, unten Volumenstrom.
 - Ende 2022 bis September 2024: durchgehend rot, Tag und Nacht, Sommer wie Winter
@@ -62,7 +62,7 @@ Stand 18.11.2026, 93 HAST. Vier Schritte, die aufeinander aufbauen. Die Fallsamm
 
 ### Dauerlinie
 
-![Dauerlinie](assets/stationsbilder/ueberblick_dauerlinie.png)
+![Dauerlinie](../assets/stationsbilder/ueberblick_dauerlinie.png)
 
 - alle Stundenwerte nach Größe sortiert: in wie viel Prozent der Zeit wird ein Wert überschritten
 - vorher liegt der Rücklauf fast durchgehend über 50 °C, nachher nur noch in ca. 40 % der Zeit
@@ -78,7 +78,7 @@ Stand 18.11.2026, 93 HAST. Vier Schritte, die aufeinander aufbauen. Die Fallsamm
 
 **Idee:** Bisher wurden Stationen untereinander verglichen. Das scheitert, weil ein Altbau mit Heizkörpern und ein Neubau mit Fußbodenheizung ganz verschieden aussehen, ohne dass etwas kaputt ist. Der Monitor vergleicht jede Station nur mit sich selbst: Hat sich die Kennlinie gegenüber den Wochen davor plötzlich verschoben? Das braucht keine Labels.
 
-![Monitorverlauf](assets/stationsbilder/ueberblick_monitor_verlauf.png)
+![Monitorverlauf](../assets/stationsbilder/ueberblick_monitor_verlauf.png)
 
 - oben: Steigung der Kennlinie. Zwei Jahre flach bei null (offenes Ventil), am Begehungstermin Sprung auf 1,4.
 - Mitte: Abweichung vom gewohnten Arbeitspunkt. Vorher konstant bei ca. +0,8, danach im Minus.
@@ -103,12 +103,12 @@ Der erste Entwurf fand ihn nicht: Im Juli und August 2024 läuft die Station nur
 
 **Vorgehen:** Die 57 Notizen werden regelbasiert in neun Fehlerkategorien kodiert, abgesichert mit 37 Tests. Knifflig sind Verneinungen: „Schmutzfänger stark voll" ist ein Fehler, „fast leer" nicht.
 
-![Fehlerrangliste](assets/stationsbilder/befunde_rangliste.png)
+![Fehlerrangliste](../assets/stationsbilder/befunde_rangliste.png)
 
 - Häufigkeit der Fehlerarten in den 57 Notizen, rot = mechanische Eingriffe
 - Das ist die Häufigkeit in den Notizen, nicht im Netz.
 
-![Vierfeldertafel](assets/stationsbilder/befunde_vierfelder.png)
+![Vierfeldertafel](../assets/stationsbilder/befunde_vierfelder.png)
 
 - 6 Begehungen nennen im Text einen Fehler, ohne dass sich ein Sollwert geändert hat. Die galten bisher als „nichts passiert".
 - 18 Fälle mit Sollwertänderung, aber ohne Befund im Text
@@ -116,7 +116,7 @@ Der erste Entwurf fand ihn nicht: Im Juli und August 2024 läuft die Station nur
 
 **Gegenprobe:** Der Monitor sieht nur hydraulische Änderungen. Ein getauschtes Ventil ändert die Kennlinie, eine verschobene Heizzeit nicht. Bei mechanischen Eingriffen müsste er also besser treffen.
 
-![Trefferquote je Gruppe](assets/stationsbilder/befunde_monitor_split.png)
+![Trefferquote je Gruppe](../assets/stationsbilder/befunde_monitor_split.png)
 
 - links Begehungen mit mechanischem Befund, rechts alle anderen. Die gestrichelte Linie ist die Zufallsbasis.
 - mechanisch: 10 von 19 Treffer statt erwarteter 5,6 (p = 0,030)

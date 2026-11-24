@@ -51,7 +51,7 @@ Fehlersignal.
 1. **Fehler sitzen im Haus, nicht im Netz.** Ein offenes Ventil oder eine falsche Einstellung betrifft eine einzelne
    Station, ihre Nachbarn merken davon nichts. Das zeigen auch andere Prüfungen: Nachbarn im Rohrbaum weichen nicht
    stärker gemeinsam ab als zufällig gewählte Häuser (Notebook 32), und im Modellvergleich verbessert das Netz weder
-   Alarm noch Erkennung (siehe [Haus oder Netz](../modellvergleich.md#haus-oder-netz)).
+   Alarm noch Erkennung (siehe [Haus oder Netz](../vergleich/modellvergleich.md#haus-oder-netz)).
 2. **Nur der Vorlauf verbindet die Häuser.** Das Wasser fließt vom Erzeuger über die Straßenleitung ins Haus und über
    den Rücklauf zurück zum Erzeuger, nicht zum Nachbarn. Was Nachbarn teilen, ist der Vorlauf. Der fällt tatsächlich
    entlang der Leitung ab: Das Haus weiter oben im Strang ist bei 36 von 38 Paaren wärmer (Notebook 32). Den Vorlauf

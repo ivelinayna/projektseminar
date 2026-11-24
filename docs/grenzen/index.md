@@ -2,8 +2,8 @@
 
 Diese Seite sammelt, worauf die Ergebnisse beruhen und wo sie aufhören.
 Probleme in den Rohdaten stehen unter
-[Qualität und Einschränkungen](datengrundlage/qualitaet.md) und werden hier nicht wiederholt.
-Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getragen/negativbefunde.md).
+[Qualität und Einschränkungen](../datengrundlage/qualitaet.md) und werden hier nicht wiederholt.
+Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](../nicht_getragen/negativbefunde.md).
 
 ## Annahmen
 
@@ -103,7 +103,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getr
 ### Vergleichbarkeit und Übertragbarkeit
 
 - Alle Modelle sind nur auf einem Teilnetz gelernt und geprüft. Ob sie auf andere Teilnetze passen, ist offen.
-- Das GNN (NB 39) und das Bayes-Modell (NB 38) lassen sich nicht mit den übrigen Modellen vergleichen, weil ihnen Eingaben fehlen. Details unter [Modellvergleich](modellvergleich.md).
+- Das GNN (NB 39) und das Bayes-Modell (NB 38) lassen sich nicht mit den übrigen Modellen vergleichen, weil ihnen Eingaben fehlen. Details unter [Modellvergleich](../vergleich/modellvergleich.md).
 - Die Stationscluster (NB 07, NB 08) nutzen die ganze Historie, also auch die Zeit nach der Begehung. Für einen Vergleich mit Labels sind sie deshalb ungeeignet.
 - Auf Stationsebene gibt es keine klaren Typen. Die Silhouette bleibt unter 0,25, die Flotte ist eher ein Kontinuum (NB 07, NB 08).
 
@@ -147,7 +147,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getr
 ## Mögliche nächste Schritte
 
 - Die Referenz je Station nach jeder Begehung und zu jeder Heizperiode neu lernen.
-- Einen Test vorab festlegen: die nie begangenen Stationen mit dem höchsten Ventil-Score und gleich viele zufällig gewählte begehen, ohne dass das Team vor Ort weiß, welche welche ist (siehe [Prüfung nach vorn](ausblick_pruefung.md)).
+- Einen Test vorab festlegen: die nie begangenen Stationen mit dem höchsten Ventil-Score und gleich viele zufällig gewählte begehen, ohne dass das Team vor Ort weiß, welche welche ist (siehe [Prüfung nach vorn](../ausblick/pruefung.md)).
 - Die Fehler-Symptom-Matrix mit der ÜZ abstimmen. Je Befund den geschätzten Beginn des Fehlers erfassen.
 - Die Außentemperatur über 2 bis 3 Tage glätten, damit Kälteeinbrüche weniger Alarme auslösen.
 - Den Nachtdurchfluss im Sommer als Kennzahl in den Netzvergleich aufnehmen.

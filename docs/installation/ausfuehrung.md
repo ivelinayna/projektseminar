@@ -131,7 +131,7 @@ Zeitachse neu, prüft beide streng und speichert das Ergebnis als drei neue Pake
 setzt es diese Pakete als aktuelle Version.
 
 - Empfohlen, weil das Dashboard dann genau die Modelle zeigt, die in Notebook 35 am besten abgeschnitten haben (siehe
-  [Modellvergleich](../modellvergleich.md)).
+  [Modellvergleich](../vergleich/modellvergleich.md)).
 - Braucht die Pakete aus Schritt 4, weil es das alte Prognose-LSTM zum Vergleich lädt.
 - Dauert deutlich länger als die anderen Notebooks, weil es alle Netze je Prüfteil neu lernt.
 - Lernt nur mit `SELBST_TRAINIEREN = True`. Mit der Vorgabe `False` hält es vor Abschnitt 6 an, und die bisherigen
@@ -170,7 +170,7 @@ Ansehen:
   http://localhost:8000/fernwaerme_dashboard_final.html.
 
 Die Karte lädt Kartenkacheln und Leaflet aus dem Internet. Ohne Netz bleibt der Hintergrund leer. Wie das Dashboard
-aufgebaut ist und was es zeigt, steht unter [Dashboard](../ergebnisse_dashboard.md).
+aufgebaut ist und was es zeigt, steht unter [Dashboard](../ergebnisse/dashboard.md).
 
 ## Die übrigen Notebooks
 
@@ -199,7 +199,7 @@ ausgeführt, sind folgende Abhängigkeiten zu beachten:
 | 36 | Notebooks 25 und 35 (Vorhersagen in `outputs/finalvergleich/`) |
 | 38 | zwei Handtabellen in `data/manual/` (siehe [Vorbereitung](vorbereitung.md)) |
 
-Fragestellung und Ergebnis der einzelnen Notebooks beschreibt der [Überblick der Notebooks](../notebooks.md).
+Fragestellung und Ergebnis der einzelnen Notebooks beschreibt der [Überblick der Notebooks](../notebooks/index.md).
 
 ## Neue Zählerdaten einspielen
 

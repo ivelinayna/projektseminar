@@ -3,7 +3,7 @@
 Mit 53 begangenen Stationen, davon 11 mit Ventil- und 9 mit Vertragsbefund, entscheidet die Prüfung
 mehr über die Aussagekraft als das Modell. Diese Seite beschreibt, wie geprüft wurde und warum so. Die
 Regeln gelten für die [lernenden Modelle](../modelle/index.md) und für beide Vergleiche, den
-ersten Prüfstand und den strengen Vergleich (siehe [Modellvergleich](../modellvergleich.md)). Gerechnet wird in den Notebooks 25, 27 bis 30, 34 und 35. Die Prüfungen sind dort als feste Funktionen
+ersten Prüfstand und den strengen Vergleich (siehe [Modellvergleich](modellvergleich.md)). Gerechnet wird in den Notebooks 25, 27 bis 30, 34 und 35. Die Prüfungen sind dort als feste Funktionen
 hinterlegt, damit jedes Modell genau dieselbe Prüfung durchläuft.
 
 ## Was gemessen wird

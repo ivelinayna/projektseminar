@@ -33,5 +33,5 @@
 | Logischer Graph | Netz aus `Nodes_Edges.ods`: wer hängt an wem, ohne Geometrie. |
 | Räumlicher Graph | Netz aus den Shapefiles: echter Rohrverlauf mit Längen. |
 | GNN | Graph Neural Network. Lernendes Modell, das die Netzstruktur nutzt. Hier nur als Entwurf. |
-| BHKW | Blockheizkraftwerk. Zähler 86792512 ist eines und wird als Sonderfall behandelt. |
+| BHKW | Blockheizkraftwerk. Zähler 86792512 ist beispielsweise eines. Er ist keine Übergabestation und fällt deshalb seit Notebook 00 aus der Auswertung heraus. |
 | Modellpaket | Gespeichertes, fertig gelerntes Modell in `models/`, damit das Dashboard nichts neu lernen muss. |

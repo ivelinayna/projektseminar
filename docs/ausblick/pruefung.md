@@ -3,7 +3,7 @@
 Alle Zahlen der Modelle sind rückblickend geprüft, an Begehungen, die es schon gab. Diese Begehungen waren nicht
 zufällig ausgewählt, und die Modelle wurden gebaut, nachdem ihre Ergebnisse bekannt waren. Wie stark das die Zahlen
 schönen kann, hat der Schritt vom ersten Prüfstand zum strengen Vergleich gezeigt (0,89 auf 0,84 beim Ventil, siehe
-[Modellvergleich](modellvergleich.md#was-zuerst-nicht-stimmte)). Der nächste Schritt ist deshalb ein Test nach vorn: erst vorhersagen,
+[Modellvergleich](../vergleich/modellvergleich.md#was-zuerst-nicht-stimmte)). Der nächste Schritt ist deshalb ein Test nach vorn: erst vorhersagen,
 dann begehen.
 
 ## Vorschlag für den Test
@@ -15,7 +15,7 @@ dann begehen.
 3. **Erwartung:** In der Gruppe mit hohem Ventil-Score haben mehr Stationen einen Ventilbefund als in der zufälligen
    Gruppe. In Notebook 35 hatten unter den ersten 10 nach Ventil-Score 7 einen Ventilbefund, Zufall wären etwa 2
    gewesen.
-4. **Protokoll** wie im [Probebetrieb](ausblick_probebetrieb.md): ob etwas kaputt war, was gemacht wurde und an
+4. **Protokoll** wie im [Probebetrieb](probebetrieb.md): ob etwas kaputt war, was gemacht wurde und an
    welchem Tag.
 5. **Auswertung:** der Anteil der Ventilbefunde in beiden Gruppen, verglichen mit einem exakten Test und mit der
    Richtung, die vorher festgelegt ist. Genauso für die Hinweise auf Dämmung und Kapazität.

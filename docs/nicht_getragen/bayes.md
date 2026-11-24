@@ -144,7 +144,7 @@ Gerechnet für das Jahr 10.07.2024 bis 10.07.2025, 83 Stationen mit genug Daten 
   Einstellungsfehler. Das passt zu Notebook 36: Nur der Ventiltausch hinterlässt eine messbare Spur (siehe
   [Überblick](index.md)).
 - Für das Ventil gibt es im Endmodell schon Erkenner, die ohne Handtabelle auskommen. Mit ihnen verglichen wurde die
-  Bayes-Diagnose nicht, weil der [Modellvergleich](../modellvergleich.md#was-sich-nicht-vergleichen-lasst) die
+  Bayes-Diagnose nicht, weil der [Modellvergleich](../vergleich/modellvergleich.md#was-sich-nicht-vergleichen-lasst) die
   Handtabellen nicht hat.
 - Die Matrix ist nicht mit der ÜZ abgestimmt, und das Ergebnis ist genau so gut wie sie.
 - Mehrere Symptome beschreiben dasselbe Bild „Wasser läuft durch, ohne abzukühlen“ (AB und RW hängen mit 0,75

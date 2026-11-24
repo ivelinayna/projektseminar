@@ -59,8 +59,8 @@ Alle Notebooks liegen unter `notebooks/2_begehungen/` und laufen nach Notebook 0
   Zustands fallen in einen Begehungsmonat (03).
 
 Was die Monteure in den Freitexten notiert haben, wertet Notebook 14 aus (siehe
-[Stationsbilder und Befunde](../stationsbilder.md)). Wie künftige Begehungen so festgehalten werden, dass sich diese
-Fragen besser beantworten lassen, steht unter [Rückmeldung aus dem Probebetrieb](../ausblick_probebetrieb.md#ruckmeldung-aus-dem-probebetrieb).
+[Stationsbilder und Befunde](../stationsbilder/index.md)). Wie künftige Begehungen so festgehalten werden, dass sich diese
+Fragen besser beantworten lassen, steht unter [Rückmeldung aus dem Probebetrieb](../ausblick/probebetrieb.md#ruckmeldung-aus-dem-probebetrieb).
 
 ## Ausgaben
 

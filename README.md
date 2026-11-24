@@ -44,7 +44,7 @@ Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`
 | 9 | `9_dashboard/` | 37 | Dashboard |
 | Anhang | `weitere_versuche/` | 38 bis 39 | Weitere Versuche (Bayes-Diagnose, GNN) |
 
-Notebook 00 immer zuerst ausführen. Alle anderen lesen dessen Ergebnis. Details in `docs/notebooks.md`.
+Notebook 00 immer zuerst ausführen. Alle anderen lesen dessen Ergebnis. Details in `docs/notebooks/index.md`.
 
 ## Schnellstart lokal
 

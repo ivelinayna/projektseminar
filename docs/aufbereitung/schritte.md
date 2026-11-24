@@ -47,7 +47,7 @@ Die Grenzen sind bewusst weit. Sie fangen kaputte Dateien ab, keine ungewöhnlic
 
 - Jede Stunde zwischen erster und letzter Messung bekommt eine Zeile, nicht gemessene Stunden bleiben leer. Damit gilt
   „eine Zeile ist eine Stunde“, was die Frequenzanalyse (FFT) für die Regelhysterese voraussetzt.
-- [Notebook 01](../notebooks.md) kann die Lücken füllen, die gefüllten Reihen nutzt aber kein späteres Notebook. Alle
+- [Notebook 01](../notebooks/index.md) kann die Lücken füllen, die gefüllten Reihen nutzt aber kein späteres Notebook. Alle
   Modelle rechnen mit den ungefüllten Reihen aus Notebook 00.
 - Je Zähler stehen gemessene Stunden, Rasterlänge und Abdeckung in der Übersicht (Zahlen unter
   [Zeitraum und Abdeckung](../datengrundlage/zaehlerdaten.md#zeitraum-und-abdeckung)).

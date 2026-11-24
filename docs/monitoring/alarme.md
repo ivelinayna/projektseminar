@@ -115,7 +115,7 @@ ein Muster und womit es vereinbar ist, sie nennen keine Ursache und keine Maßna
   Ventilbefunden nur über den Netzanteil und mit drei Fällen. Fehlerbilder sind beschreibend, keine geprüfte Diagnose.
 - **Offen:** Die Labels blockieren eine bessere Prüfung: 50 Stationswinter mit Begehung danach, davon nur 3 im Netz
   auffällig. Der nächste Schritt wäre ein vorab geplanter Test mit auffälligen und zufällig gezogenen Stationen, ohne
-  dass das Team vor Ort weiß, welche welche ist (siehe [Prüfung nach vorn](../ausblick_pruefung.md)). Ebenso offen
+  dass das Team vor Ort weiß, welche welche ist (siehe [Prüfung nach vorn](../ausblick/pruefung.md)). Ebenso offen
   sind die Zuordnung von Fehlerbild zu Maßnahme und das Baujahr je Haus aus den Kundendaten der ÜZ.
 
 ## Ausgaben

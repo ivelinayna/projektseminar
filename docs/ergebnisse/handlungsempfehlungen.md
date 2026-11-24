@@ -1,14 +1,14 @@
 # Handlungsempfehlungen
 
 Die Aufgabenstellung verlangt je Station eine Handlungsempfehlung: Reparatur, Regelungsoptimierung oder
-Kapazitätsanpassung. Diese Seite beschreibt, wie aus den Ausgaben des [Endmodells](ergebnisse_endmodell.md) eine
+Kapazitätsanpassung. Diese Seite beschreibt, wie aus den Ausgaben des [Endmodells](endmodell.md) eine
 Empfehlung wird, was beim aktuellen Datenstand herauskommt und wie verlässlich das ist. Gerechnet wird mit den Paketen
 aus Notebook 35, angewendet vom Programm dashboard_daten. Angezeigt wird die Empfehlung in der Handlungsliste des
-[Dashboards](ergebnisse_dashboard.md).
+[Dashboards](dashboard.md).
 
 ## Von der Klasse zur Handlung
 
-Jede Station bekommt zuerst eine der drei Klassen (siehe [Fehlerart und Klasse je Station](modelle/klassen.md)).
+Jede Station bekommt zuerst eine der drei Klassen (siehe [Fehlerart und Klasse je Station](../modelle/klassen.md)).
 Daraus wird die Handlung:
 
 | Klasse | wann | Handlung |
@@ -87,7 +87,7 @@ Geprüft ist das in Notebook 35 an den begangenen Stationen, mit Kreuzvalidierun
 - **Kapazität:** Die Regel findet 5 von 9 Fällen bei 1 Fehlalarm (AUC 0,76).
 
 Alle Zahlen sind rückblickend an vorhandenen Begehungen geprüft. Ob die Reihenfolge im Betrieb trägt, zeigt erst eine
-Begehung nach der Liste (siehe [Prüfung nach vorn](ausblick_pruefung.md)).
+Begehung nach der Liste (siehe [Prüfung nach vorn](../ausblick/pruefung.md)).
 
 ## Was bewusst nicht empfohlen wird
 
@@ -98,4 +98,4 @@ Begehung nach der Liste (siehe [Prüfung nach vorn](ausblick_pruefung.md)).
 - **Kein Sortieren nach Potenzial und keine Einspar-Schätzung in Euro.** Das Potenzial sagt nicht vorher, wo eine
   Begehung am meisten bringt (Notebook 35, Test D, Rangkorrelation 0,16).
 - **Keine Empfehlung zu Filter, Durchfluss und Sollwert.** Diese Maßnahmen hinterlassen in den Zählerdaten keine Spur
-  (Notebook 36, siehe [Was nicht getragen hat](nicht_getragen/index.md)).
+  (Notebook 36, siehe [Was nicht getragen hat](../nicht_getragen/index.md)).

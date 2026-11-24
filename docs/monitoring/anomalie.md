@@ -128,7 +128,7 @@ keine.
 - Mit den alten Schwellen erhielten 44 Stationen das Label `control_hysteresis` und keine das Label `healthy`. Nach der
   Kalibrierung sind 38 Stationen `healthy`, der Rest verteilt sich auf sechs Fehlerbilder.
 - Das macht die Regeln bewertbar, nicht richtig. Wie die kalibrierte Baseline im Modellvergleich abschneidet, steht
-  unter [Modellvergleich](../modellvergleich.md).
+  unter [Modellvergleich](../vergleich/modellvergleich.md).
 
 ## Einordnung
 

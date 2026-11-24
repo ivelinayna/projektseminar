@@ -103,7 +103,7 @@ Wassermenge meldet um die Begehung nichts. Vor der Reparatur ist die Station nic
 Der Fall wird also gefunden, aber nur in einem Kanal.
 
 **Alle Stationen:** 89 Stationen mit zusammen 133 Stationsjahren erzeugen 479 Alarme, also 3,6 je Station und Jahr. Das
-ist weniger als beim Kennlinienmonitor aus [Notebook 13](../stationsbilder.md) mit knapp 5, aber deutlich mehr als die
+ist weniger als beim Kennlinienmonitor aus [Notebook 13](../stationsbilder/index.md) mit knapp 5, aber deutlich mehr als die
 Theorie für unabhängige Tage erwarten lässt (etwa einer alle zwei bis drei Jahre je Kanal). Bis zum Alarm vergehen im
 Median 6,5 bis 10 Heiztage.
 

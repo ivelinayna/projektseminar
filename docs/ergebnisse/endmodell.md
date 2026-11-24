@@ -2,14 +2,14 @@
 
 Das Endmodell ist kein einzelnes Modell. Für jede Frage aus der Aufgabenstellung ist das Modell gewählt, das im
 strengen Vergleich in Notebook 35 am besten abgeschnitten hat. Wo zwei Modelle gleichauf lagen, ist das einfachere und
-erklärbare gewählt. Wie verglichen wurde, steht unter [Modellvergleich](modellvergleich.md), die Prüfregeln
-unter [Prüfdesign und Statistik](vergleich/pruefung.md).
+erklärbare gewählt. Wie verglichen wurde, steht unter [Modellvergleich](../vergleich/modellvergleich.md), die Prüfregeln
+unter [Prüfdesign und Statistik](../vergleich/pruefung.md).
 
 Verglichen wurden die beiden fertigen Ansätze des Projekts:
 
 - **Monitoring-Modell:** Kennlinie je Station mit CUSUM (Tagesmonitor), dazu Netzvergleich und Potenzial.
-- **LSTM-Modell:** das [Prognose-LSTM](modelle/prognose.md) als Wächter und die
-  [Fehlerklassen](modelle/klassen.md) aus dem [Fingerabdruck](modelle/lstm.md).
+- **LSTM-Modell:** das [Prognose-LSTM](../modelle/prognose.md) als Wächter und die
+  [Fehlerklassen](../modelle/klassen.md) aus dem [Fingerabdruck](../modelle/lstm.md).
 
 ## Gewähltes Modell je Frage
 
@@ -48,7 +48,7 @@ nicht für eine Entscheidung ohne Prüfung vor Ort.
   (Unterschied −0,01 [−0,14; +0,12]). Besser ist es nicht belegt. Im Hausfenster des Dashboards wird ein Verdacht
   deshalb mit der Sommernacht-Regel begründet, die ein Techniker nachvollziehen kann.
 - Warum die Regression nur auf den LSTM-Zahlen gewählt ist und die zuerst genannten 0,88 nicht gelten, steht unter
-  [Prüfdesign und Statistik](vergleich/pruefung.md#warum-das-modell-im-lernteil-gewahlt-wird).
+  [Prüfdesign und Statistik](../vergleich/pruefung.md#warum-das-modell-im-lernteil-gewahlt-wird).
 - Reihenfolge (Test E): Unter den ersten 10 Stationen nach Ventil-Score hatten 7 einen Ventilbefund. Nach der
   Priorität des Monitoring-Modells sind es 5, Zufall wären etwa 2.
 - Klassen: Die Klasse „Regelventil tauschen“ trifft das LSTM-Modell bei 8 von 11 Ventilfällen, das Monitoring-Modell bei 4
@@ -56,7 +56,7 @@ nicht für eine Entscheidung ohne Prüfung vor Ort.
   optimieren“ trifft keins der beiden.
 - Dämmung: Nur das gelernte Modell findet ein Muster. Der Vorsprung vor der besten Einzelregel (+0,17 [−0,04; +0,38])
   ist knapp nicht gesichert, die Ursache physikalisch ungeklärt. Deshalb nur ein Hinweis mit niedriger Dringlichkeit.
-  Wie das Muster aussieht, steht unter [Modellvergleich](modellvergleich.md#warum-das-so-ausgeht).
+  Wie das Muster aussieht, steht unter [Modellvergleich](../vergleich/modellvergleich.md#warum-das-so-ausgeht).
 - Kapazität: Dem gelernten Modell fehlt die Auslastung zum alten Vertrag, deshalb bleibt die Regel.
 
 **Lage im Netz.** Netzvergleich und Potenzial beschreiben eine Station, sagen die Wirkung einer Begehung aber kaum
@@ -72,8 +72,8 @@ Aus dem Vergleich entsteht ein System aus mehreren Teilen, die sich ergänzen:
   wird.
 - **Hinweise auf Dämmung und Kapazität** mit niedriger Dringlichkeit.
 - **Keine Aussage** zu Regelungsoptimierung, Filter, Durchfluss und Sollwert. Warum diese Fehlerarten in den
-  Zählerdaten keine Spur hinterlassen, steht unter [Was nicht getragen hat](nicht_getragen/index.md).
+  Zählerdaten keine Spur hinterlassen, steht unter [Was nicht getragen hat](../nicht_getragen/index.md).
 
-Wie daraus eine Empfehlung je Station wird, steht unter [Handlungsempfehlungen](ergebnisse_handlungsempfehlungen.md),
-wie sie angezeigt wird, unter [Dashboard](ergebnisse_dashboard.md). Wo die Modelle aufhören, steht unter
-[Grenzen der Modelle](grenzen_modelle.md).
+Wie daraus eine Empfehlung je Station wird, steht unter [Handlungsempfehlungen](handlungsempfehlungen.md),
+wie sie angezeigt wird, unter [Dashboard](dashboard.md). Wo die Modelle aufhören, steht unter
+[Grenzen der Modelle](../grenzen/modelle.md).

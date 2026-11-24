@@ -115,7 +115,7 @@ wenn sie dort selten ausgeschrieben sind.
 - Der Faktor ist das k aus der Leistungsformel. In den Notebooks steht er je nach Stelle als 1,15, 1,16 oder 1,163.
   Gemeint ist immer derselbe Zusammenhang.
 - Auf Stundenebene ist die Abkühlung praktisch nur die Spreizung mal k. Ein Zusammenhang zwischen beiden ist deshalb
-  kein Befund, sondern Rechnung (siehe [Stationsbilder und Befunde](../stationsbilder.md)).
+  kein Befund, sondern Rechnung (siehe [Stationsbilder und Befunde](../stationsbilder/index.md)).
 
 ### Mengengewichtete Temperatur
 

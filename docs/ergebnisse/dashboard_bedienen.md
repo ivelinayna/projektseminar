@@ -25,13 +25,13 @@ Drei Reiter:
 Reihenfolge:
 
 1. Notebook 00 (Stundenreihen) und `python -m src.weather` (Außentemperatur).
-2. Modellpakete bauen: die Befehle und Notebook 35 unter [Ausführung bis zum Dashboard](installation/ausfuehrung.md).
+2. Modellpakete bauen: die Befehle und Notebook 35 unter [Ausführung bis zum Dashboard](../installation/ausfuehrung.md).
 3. `python -m src.dashboard_daten` wendet die Pakete auf die aktuellen Daten an und schreibt nach `outputs/dashboard/`.
 4. Notebook 31 ausführen. Es baut den Netz-Cache `notebooks/daten_cache/`.
 5. Notebook 37 ausführen. Es schreibt `notebooks/fernwaerme_dashboard_final.html`.
 
 Bei neuen Zählerdaten erledigt `python -m src.aktualisieren` die Schritte 1, 3, 4 und 5 in einem Durchlauf (siehe
-[Neue Zählerdaten einspielen](installation/ausfuehrung.md#neue-zahlerdaten-einspielen)). Die Modellpakete aus Schritt 2
+[Neue Zählerdaten einspielen](../installation/ausfuehrung.md#neue-zahlerdaten-einspielen)). Die Modellpakete aus Schritt 2
 bleiben dabei unverändert.
 
 Ansehen:

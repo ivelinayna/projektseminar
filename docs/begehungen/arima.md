@@ -19,13 +19,13 @@ Nachweis.
 
 ## Welches Modell prognostiziert am besten?
 
-- Rollende Fenster je Zähler ohne Begehung: 56 Tage anpassen, 14 Tage vorhersagen, Außentemperatur als bekannt
-  angenommen. 87 Zähler, 1.695 Fenster.
+- Rollende Fenster ohne Begehung, nur Zähler mit mindestens 120 Heiztagen: 56 Tage anpassen, 14 Tage vorhersagen,
+  Außentemperatur als bekannt angenommen. 87 Zähler, 1.695 Fenster.
 - **Am besten ist Außentemperatur plus AR(1)** (`arx_100`): mittlerer Fehler 2,11 °C gegen 2,66 °C beim
   7-Tage-Mittel.
 - Reines ARIMA ist schlechter als das 7-Tage-Mittel, ohne Wetter schreibt es nur den letzten Stand fort.
-- Der Wochenterm bringt nichts, der AR-Term gegenüber der reinen Kennlinie nur 0,02 °C. Der Gewinn kommt aus der
-  Außentemperatur.
+- Der Wochenterm bringt nichts, der AR-Term gegenüber der reinen Kennlinie je Zähler im Median nur 0,02 °C. Der
+  Gewinn kommt aus der Außentemperatur.
 
 ## Prognose über die Begehung
 
@@ -42,9 +42,14 @@ Nachweis.
 |---|---|
 | Begehungen | 16 von 40 (40 %) |
 | Fenster ohne Begehung (Placebo) | 138 von 710 (19 %) |
-| Stationen ohne Begehung mit Pseudodatum (Kontrolle) | 21 von 97 (22 %) |
+| davon nur August bis November | 48 von 251 (19 %) |
+| Stationen ohne datierte Begehung mit Pseudodatum (Kontrolle) | 21 von 97 (22 %) |
 
+- **Kontrolle:** 36 Stationen ohne datierte Begehung, 5 davon wurden ohne Datum begangen. Je Station gibt es bis zu
+  3 Pseudotermine aus den echten Begehungsterminen.
 - Nach Begehungen gibt es häufiger einen deutlichen Sprung: gegen Placebo p = 0,002, gegen Kontrolle p = 0,035.
+- Die Placebo-Fenster von August bis November, der Zeit der meisten Begehungen, liefern denselben Anteil (p = 0,002).
+  Der Unterschied ist also kein Effekt der Jahreszeit.
 - 11 der 16 auffälligen Begehungen haben danach einen niedrigeren Rücklauf, 5 einen höheren.
 - **Der typische Fall ändert sich kaum:** Median −0,55 °C gegen −0,24 °C bei der Kontrolle (p = 0,23).
 - Die Abweichung hängt mit der Rücklaufänderung aus Notebook 02 zusammen (Spearman 0,54), ist aber kein unabhängiger
@@ -53,17 +58,20 @@ Nachweis.
 ## Einzelfall 68956351
 
 Vorher 70,5 °C, danach 37,7 °C, das Vorher-Modell erwartet 71,9 °C. Das ist die größte Abweichung unter allen
-Begehungen (z = −19,7), gefunden ohne Wissen über die Reparatur.
+Begehungen (z = −19,7), gefunden ohne Wissen über die Reparatur. Was bei der Begehung passiert ist, steht beim
+[Einzelfall in Notebook 02](wirkung.md#einzelfall-68956351).
 
 ## Einordnung
 
 - **Belastbar:** Die Außentemperatur lohnt sich als Erklärungsgröße. Nach Begehungen gibt es häufiger einen deutlichen
   Sprung als bei Stationen ohne Begehung.
-- **Schwach:** Für eine Zeitreihenstruktur in den Tagesmitteln gibt es keinen Beleg. Der typische Fall ändert sich
-  wenig, und die Ziehungen je Kontrollstation sind nicht unabhängig.
+- **Schwach:** Die Zeitreihenstruktur bringt kaum etwas: Der AR-Term ist zwar messbar besser als die reine Kennlinie,
+  aber nur um 0,02 °C. Der typische Fall ändert sich wenig, und die Ziehungen je Kontrollstation sind nicht
+  unabhängig.
 - **Offen:** Große Sprünge im Herbst 2024 ohne Begehung (69513891 rund −21 °C, 72167777 −14 °C, 80956410 +19 °C)
-  lassen sich nur über eine Rückfrage bei der ÜZ klären. Die Außentemperatur stammt aus Kitzingen statt aus
-  Wiesentheid.
+  lassen sich nur über eine Rückfrage bei der ÜZ klären (siehe
+  [Offene Fragen an die ÜZ](../grenzen/index.md#offene-fragen-an-die-uz)). Die Außentemperatur stammt aus Kitzingen
+  statt aus Wiesentheid (siehe [Ergänzende Daten](../datengrundlage/ergaenzend.md#auentemperatur)).
 
 ## Ausgaben
 

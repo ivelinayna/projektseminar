@@ -123,7 +123,7 @@ Bei 8 Stationen steht in der Begehungstabelle, wie die Heizzeit vorher und nachh
 
 - **Zähler 72167783:** Nach der Begehung im September 2025 stieg der Rücklauf von 18,6 auf 71,0 °C und der Durchfluss
   von 0 auf 134 l/h, ohne dass die Station Wärme abnimmt. Was dabei passiert ist, kann nur die ÜZ klären (siehe
-  [Offene Fragen an die ÜZ](../grenzen.md#offene-fragen-an-die-uz)). Was über die Station bekannt ist, steht unter
+  [Offene Fragen an die ÜZ](../grenzen/index.md#offene-fragen-an-die-uz)). Was über die Station bekannt ist, steht unter
   [Qualität und Einschränkungen](../datengrundlage/qualitaet.md#zahlerdaten).
 - **Freitexte:** 57 der 65 Begehungen haben eine Notiz des Monteurs. Damit lassen sich Fälle erklären, in denen
   Kategorie und Messung auseinandergehen. Wie die Notizen kodiert sind, steht unter

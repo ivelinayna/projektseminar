@@ -48,7 +48,7 @@ nav:
       - Qualität und Einschränkungen: datengrundlage/qualitaet.md
 
   - Vorgehen:
-      - Überblick der Notebooks: notebooks.md
+      - Überblick der Notebooks: notebooks/index.md
       - Daten aufbereiten:
           - Überblick: aufbereitung/index.md
           - Die Schritte im Einzelnen: aufbereitung/schritte.md
@@ -68,7 +68,7 @@ nav:
           - Vier Verfahren im Vergleich: clustering/benchmark.md
           - Stundencluster und Validierung: clustering/validierung.md
           - Tagescluster: clustering/tagescluster.md
-      - Stationsbilder und Befunde: stationsbilder.md
+      - Stationsbilder und Befunde: stationsbilder/index.md
       - Anomalien und Monitoring:
           - Überblick: monitoring/index.md
           - Anomalieerkennung ohne Labels: monitoring/anomalie.md
@@ -93,7 +93,7 @@ nav:
           - Fehlererkennung mit Netz-Merkmalen: netz_einbeziehen/fehlererkennung.md
       - Modelle vergleichen:
           - Prüfdesign und Statistik: vergleich/pruefung.md
-          - Modellvergleich: modellvergleich.md
+          - Modellvergleich: vergleich/modellvergleich.md
       - Was nicht getragen hat:
           - Überblick: nicht_getragen/index.md
           - Negativbefunde im Detail: nicht_getragen/negativbefunde.md
@@ -101,25 +101,25 @@ nav:
           - "GNN: Hilft das Netz?": nicht_getragen/gnn.md
 
   - Ergebnisse:
-      - Überblick: ergebnisse.md
+      - Überblick: ergebnisse/index.md
       # - Datenanalyse:   # noch leer
-      - Endmodell: ergebnisse_endmodell.md
-      - Handlungsempfehlungen: ergebnisse_handlungsempfehlungen.md
-      - Dashboard: ergebnisse_dashboard.md
-      - Dashboard bedienen: dashboard.md
+      - Endmodell: ergebnisse/endmodell.md
+      - Handlungsempfehlungen: ergebnisse/handlungsempfehlungen.md
+      - Dashboard: ergebnisse/dashboard.md
+      - Dashboard bedienen: ergebnisse/dashboard_bedienen.md
 
   - Grenzen und Erkenntnisse:
-      - Annahmen, Grenzen und offene Fragen: grenzen.md
-      - Grenzen der Modelle: grenzen_modelle.md
-      - Erkenntnisse: erkenntnisse.md
+      - Annahmen, Grenzen und offene Fragen: grenzen/index.md
+      - Grenzen der Modelle: grenzen/modelle.md
+      - Erkenntnisse: grenzen/erkenntnisse.md
 
   - Ausblick:
-      - Probebetrieb: ausblick_probebetrieb.md
-      - Prüfung nach vorn: ausblick_pruefung.md
-      - Weiterentwicklung: ausblick_weiterentwicklung.md
+      - Probebetrieb: ausblick/probebetrieb.md
+      - Prüfung nach vorn: ausblick/pruefung.md
+      - Weiterentwicklung: ausblick/weiterentwicklung.md
       # - Offene Fragen an die ÜZ:   # noch leer, bisher in grenzen.md
 
-  - Aufteilung im Team: aufteilung.md
+  - Aufteilung im Team: aufteilung/index.md
 
   - Anhang:
-      - Begriffe: begriffe.md
+      - Begriffe: anhang/begriffe.md

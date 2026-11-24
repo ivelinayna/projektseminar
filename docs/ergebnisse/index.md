@@ -2,7 +2,7 @@
 
 - Diese Seite fasst die wichtigsten Ergebnisse der 40 Notebooks zusammen, geordnet nach den Teilen.
 - Je Teil stehen zuerst die belastbaren Ergebnisse, danach die zentralen Schwächen.
-- Alle Zahlen stammen aus den Ausgaben und Zusammenfassungen der Notebooks. Mehr Tiefe bieten [Stationsbilder und Befunde](stationsbilder.md), [Modellvergleich](modellvergleich.md), [Endmodell](ergebnisse_endmodell.md) und [Negativbefunde](nicht_getragen/negativbefunde.md).
+- Alle Zahlen stammen aus den Ausgaben und Zusammenfassungen der Notebooks. Mehr Tiefe bieten [Stationsbilder und Befunde](../stationsbilder/index.md), [Modellvergleich](../vergleich/modellvergleich.md), [Endmodell](endmodell.md) und [Negativbefunde](../nicht_getragen/negativbefunde.md).
 - Über alle Teile hinweg gilt: Einfache Regeln und Modelle liegen meist gleichauf mit komplexen. Die größte Grenze sind die Labels: wenige Begehungen, Befunde ohne bekannten Fehlerbeginn, Freitexte statt klarer Fehlerarten.
 
 ## Teil 1 Daten
@@ -11,7 +11,7 @@
 - Exportfehler sind erkannt und korrigiert: Faktor 1000 in 5 ODS-Dateien, Minutenversatz mit 17 bis 47 % Dubletten bei 3 Zählern, ein falscher Dateiname (Notebook 00).
 - 80 % der Stunden im Raster sind gemessen. 84 % der ungemessenen Stunden stammen aus der Phase bis 11/2022, in der viele Zähler nur einen Wert je Tag lieferten (Notebook 00).
 - Lücken sind gefüllt: 20,4 % der Stunden sind gerechnet, die Herkunft steht je Stunde dabei (Notebook 01).
-- Schwach: 13 Zähler haben unter 70 % Abdeckung. Bei Lücken über einen Tag liegt der Rücklauffehler der Füllung bei 5 bis 6 K. Tages- und Stundenwerte sind gemischt (Notebook 00, 01). Details unter [Qualität und Einschränkungen](datengrundlage/qualitaet.md#zahlerdaten).
+- Schwach: 13 Zähler haben unter 70 % Abdeckung. Bei Lücken über einen Tag liegt der Rücklauffehler der Füllung bei 5 bis 6 K. Tages- und Stundenwerte sind gemischt (Notebook 00, 01). Details unter [Qualität und Einschränkungen](../datengrundlage/qualitaet.md#zahlerdaten).
 
 ## Teil 2 Begehungen und Wirkung
 
@@ -35,7 +35,7 @@
 - Der Anteil der Stunden mit Rücklauf über 50 °C deutet nach den Begehungen eine Verbesserung an (nicht gesichert, p = 0,096), Modulationsart und Kennlinienparameter ändern sich nicht. Als Erfolgsmaß eignet er sich eher als die Kennlinie (Notebook 12).
 - Der Kennlinienmonitor liegt gegen alle Begehungen nur 25 bis 34 % über Zufall (p = 0,10 und 0,077). Mit kodierten Freitexten trifft er mechanische Eingriffe in 10 von 19 Fällen (0,526 gegen 0,296, p = 0,030) (Notebook 13, 14).
 - Die Fallsammlung zeigt: Ein saisongleicher Vergleich dreht das naive Ergebnis um. Daraus entstehen sieben Vorschläge für nie begangene Stationen (Notebook 15).
-- Schwach: nur 19 mechanische Termine, die Einteilung wurde nach dem Nullergebnis gewählt. Die Schwelle von 50 °C ist gesetzt. Ausführlich unter [Stationsbilder und Befunde](stationsbilder.md).
+- Schwach: nur 19 mechanische Termine, die Einteilung wurde nach dem Nullergebnis gewählt. Die Schwelle von 50 °C ist gesetzt. Ausführlich unter [Stationsbilder und Befunde](../stationsbilder/index.md).
 
 ## Teil 5 Anomalien und Monitoring
 
@@ -43,7 +43,7 @@
 - Das Normalverhaltensmodell bemerkt 30 von 43 Begehungen gegen eine Kontrollquote von 0,53 (p = 0,017). Die Wassermenge ist der brauchbare Kanal (Notebook 18).
 - Der Netzvergleich findet 8 chronisch auffällige Stationen, 4 davon nie begangen. Die Rangliste ist über die Winter stabil (Spearman 0,81 und 0,74) (Notebook 19).
 - Der Tagesmonitor (Kennlinie mit CUSUM) bemerkt in der Abkühlung 22 von 43 Begehungen (Hebel 1,87, p = 0,001). Die Treffer kommen aus „besser“-Alarmen nach der Begehung: Erfolgskontrolle, keine Frühwarnung (Notebook 20, 21).
-- Schwach: Die Residuen bringen gegenüber dem rohen Tagesmedian keinen Gewinn. Fehler, die schon im Lernjahr bestanden, sieht der Tagesmonitor nicht. Die Welle von Verschlechterungsalarmen im Dezember 2022 fällt auf einen Kälteeinbruch. Nachbarn häufen sich nicht, und der Bestwert-Maßstab sagt keine Befunde vorher (Notebook 16, 20, 22 bis 24). Ausführlich unter [Anomalien und Monitoring](monitoring/index.md).
+- Schwach: Die Residuen bringen gegenüber dem rohen Tagesmedian keinen Gewinn. Fehler, die schon im Lernjahr bestanden, sieht der Tagesmonitor nicht. Die Welle von Verschlechterungsalarmen im Dezember 2022 fällt auf einen Kälteeinbruch. Nachbarn häufen sich nicht, und der Bestwert-Maßstab sagt keine Befunde vorher (Notebook 16, 20, 22 bis 24). Ausführlich unter [Anomalien und Monitoring](../monitoring/index.md).
 
 ## Teil 6 Lernende Modelle
 
@@ -63,16 +63,16 @@
 
 ## Teil 8 Modellvergleich und Ergebnis
 
-- Im Vergleich aller Kandidaten bleibt nach Holm über 15 Wächter nur der Tagesmonitor belegt (33 von 43 Begehungen gegen 53 % Kontrolle, p = 0,017 nach Holm). Beim Ventil ist kein Modell belegt besser als die Sommernacht-Regel. Nachbarn und Lage im Netz verbessern nichts (Notebook 34, [Modellvergleich](modellvergleich.md)).
-- Endmodell auf strengerer Zeitachse: Das Monitoring-Modell übernimmt Heizperiode, Erfolgskontrolle und Netzvergleich (18 von 43 als „besser“ gegen 24 %, p = 0,006). Das LSTM-Modell übernimmt warme Tage (Dauerdurchfluss 150 l/h 78 % bei 5 % Fehlalarmen) und die Fehlerart Ventil (AUC 0,84). Dämmung ist nur ein Hinweis (0,78), Kapazität nur per Regel (0,76) (Notebook 35, [Endmodell](ergebnisse_endmodell.md)).
+- Im Vergleich aller Kandidaten bleibt nach Holm über 15 Wächter nur der Tagesmonitor belegt (33 von 43 Begehungen gegen 53 % Kontrolle, p = 0,017 nach Holm). Beim Ventil ist kein Modell belegt besser als die Sommernacht-Regel. Nachbarn und Lage im Netz verbessern nichts (Notebook 34, [Modellvergleich](../vergleich/modellvergleich.md)).
+- Endmodell auf strengerer Zeitachse: Das Monitoring-Modell übernimmt Heizperiode, Erfolgskontrolle und Netzvergleich (18 von 43 als „besser“ gegen 24 %, p = 0,006). Das LSTM-Modell übernimmt warme Tage (Dauerdurchfluss 150 l/h 78 % bei 5 % Fehlalarmen) und die Fehlerart Ventil (AUC 0,84). Dämmung ist nur ein Hinweis (0,78), Kapazität nur per Regel (0,76) (Notebook 35, [Endmodell](endmodell.md)).
 - Das Dashboard zeigt Karte, Handlungsliste und Erklärungen. Unter den ersten 10 nach Ventil-Score hatten 7 einen Ventilbefund, Zufall wäre etwa 2 (Notebook 35, 37).
-- Warum manche Fehlerarten nicht erkennbar sind: Nur der Ventiltausch hinterlässt eine messbare Spur, der Sommernacht-Durchfluss sinkt danach (AUC 0,81, nach Holm gesichert). Nach Dämmung, Filter und Durchfluss ändert sich nichts Messbares, Sollwert (62 %) und Filter (47 %) sind eher Routine als gefundene Fehler. Erster physikalischer Hinweis zur Dämmung ist die Abkühlrate im Stillstand (0,69, nicht gesichert) (Notebook 36, [Was nicht getragen hat](nicht_getragen/index.md)).
+- Warum manche Fehlerarten nicht erkennbar sind: Nur der Ventiltausch hinterlässt eine messbare Spur, der Sommernacht-Durchfluss sinkt danach (AUC 0,81, nach Holm gesichert). Nach Dämmung, Filter und Durchfluss ändert sich nichts Messbares, Sollwert (62 %) und Filter (47 %) sind eher Routine als gefundene Fehler. Erster physikalischer Hinweis zur Dämmung ist die Abkühlrate im Stillstand (0,69, nicht gesichert) (Notebook 36, [Was nicht getragen hat](../nicht_getragen/index.md)).
 - Schwach: 43 Begehungen, 11 Ventil- und 9 Vertragsfälle. Viele Vorsprünge sind nicht gesichert. Regelungsoptimierung und echte Frühwarnung sind nicht erkennbar bzw. nicht prüfbar. Die Referenz des Monitoring-Modells steht an 43 % der Testtage am Deckel und muss neu gelernt werden (Notebook 35).
 
 ## Was die ÜZ nutzen kann
 
-- Das [Dashboard](dashboard.md) mit Karte, Handlungsliste und Reiter „So funktioniert's“. Es wendet nur geprüfte Modellpakete an und wird mit neuen Zählerdaten über `python -m src.aktualisieren` in einem Schritt neu erzeugt.
+- Das [Dashboard](dashboard_bedienen.md) mit Karte, Handlungsliste und Reiter „So funktioniert's“. Es wendet nur geprüfte Modellpakete an und wird mit neuen Zählerdaten über `python -m src.aktualisieren` in einem Schritt neu erzeugt.
 - Den Tagesmonitor als Alarm in der Heizperiode und zur Erfolgskontrolle nach einer Begehung. Ein Alarm heißt „Veränderung“, nicht „Fehler“.
 - Die Handlungsliste als Prüfreihenfolge: zuerst Verdacht auf Ventil, sortiert nach Ventil-Score. Sie ersetzt keine Prüfung vor Ort.
 - Kandidaten für die nächsten Begehungen: 4 chronisch auffällige, nie begangene Stationen (Notebook 19) und 7 Vorschläge aus der Fallsammlung (Notebook 15).
-- Was nicht funktioniert hat, steht unter [Negativbefunde](nicht_getragen/negativbefunde.md), offene Punkte unter [Grenzen und offene Fragen](grenzen.md).
+- Was nicht funktioniert hat, steht unter [Negativbefunde](../nicht_getragen/negativbefunde.md), offene Punkte unter [Grenzen und offene Fragen](../grenzen/index.md).

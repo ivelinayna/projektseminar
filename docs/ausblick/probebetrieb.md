@@ -1,6 +1,6 @@
 # Probebetrieb
 
-Das [Endmodell](ergebnisse_endmodell.md) ist für einen Probebetrieb gedacht: Die Modelle laufen auf neuen Zählerdaten,
+Das [Endmodell](../ergebnisse/endmodell.md) ist für einen Probebetrieb gedacht: Die Modelle laufen auf neuen Zählerdaten,
 die ÜZ nutzt die Handlungsliste für Begehungen und meldet zurück, was vor Ort war. Damit die Zahlen dabei vergleichbar
 bleiben, gelten ein paar Regeln.
 
@@ -20,7 +20,7 @@ python -m src.aktualisieren
 
 Gelernt wird dabei nichts. Die Ergebnistabellen halten fest, mit welcher Paketversion und bis zu welchem Datum
 gerechnet wurde. Wie der Befehl ausgeführt wird, steht unter
-[Neue Zählerdaten einspielen](installation/ausfuehrung.md#neue-zahlerdaten-einspielen).
+[Neue Zählerdaten einspielen](../installation/ausfuehrung.md#neue-zahlerdaten-einspielen).
 
 ## Regeln für den Betrieb
 
@@ -50,4 +50,4 @@ wurde. Dafür sollte jede Begehung festhalten:
 - was getauscht oder eingestellt wurde,
 - ob die Station vorher auf der Handlungsliste stand und mit welcher Dringlichkeit.
 
-Wie daraus eine Prüfung der Modelle wird, steht unter [Prüfung nach vorn](ausblick_pruefung.md).
+Wie daraus eine Prüfung der Modelle wird, steht unter [Prüfung nach vorn](pruefung.md).

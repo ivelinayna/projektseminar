@@ -166,4 +166,4 @@ auf das jeweilige Haus.
 Was an Netz und Zuordnung unsicher ist und welche Angaben noch fehlen, steht unter
 [Qualität und Einschränkungen](qualitaet.md#netz-und-zuordnung).
 Wie aus Kantendatei und Leitungsplan ein Netzmodell entsteht, zeigen die Notebooks 31 bis 33 (siehe
-[Überblick der Notebooks, Teil 7: Netz](../notebooks.md#teil-7-netz)).
+[Überblick der Notebooks, Teil 7: Netz](../notebooks/index.md#teil-7-netz)).

@@ -7,10 +7,10 @@ Der Tagesmonitor fragt: **Läuft die Station schlechter als früher?** Jede Stat
 verglichen. Er ist das Gegenstück zum [Netzvergleich](netzvergleich.md), der jede Station mit allen anderen vergleicht.
 Die Idee stammt aus dem [Normalverhaltensmodell](normalverhalten.md). Notebook 20 setzt sie als Modul um, das im
 Betrieb auf neuen Daten läuft, und ersetzt damit den Fensteralarm des Kennlinienmonitors aus
-[Notebook 13](../stationsbilder.md).
+[Notebook 13](../stationsbilder/index.md).
 
 Im Endmodell ist der Tagesmonitor der Alarmkanal des Monitoring-Modells, als Paket `normalmodell` (siehe
-[Modellvergleich](../modellvergleich.md)).
+[Modellvergleich](../vergleich/modellvergleich.md)).
 
 ## Funktionsweise
 
@@ -151,7 +151,7 @@ abgelesen. So werden alle Stationen bei derselben Temperatur verglichen.
   8 K Spanne, Heizgrenze 15 °C, Toleranz ±2 Stunden um Mitternacht, Treffer-Fenster, 30 Heiztage, Normtemperatur 5 °C.
 - **Offen:** Temperatur über mehrere Tage mitteln oder verzögern, die Wassermenge über die kälteste gelernte Temperatur
   hinaus fortschreiben, das Lernjahr nach einem bekannten Eingriff neu starten (siehe
-  [Probebetrieb](../ausblick_probebetrieb.md)).
+  [Probebetrieb](../ausblick/probebetrieb.md)).
 
 ## Ausgaben
 

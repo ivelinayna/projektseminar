@@ -21,11 +21,14 @@ Begehung.
 
 - Je Station und Monat ein typischer Wert für Durchfluss, Spreizung, Rücklauf und Leistung, jeweils als Median über
   die Stunden. Einzelne Ausreißer wie eine kurze heiße Zapfung verziehen ihn nicht.
-- Monate mit weniger als **400 Messstunden** fallen heraus. Die Abdeckung schwankt je Station stark (siehe
-  [Daten aufbereiten](../aufbereitung/index.md)), ein Monatswert aus 30 Stunden wäre wertlos.
-- Ergebnis: **2.300 Station-Monate** an 93 Stationen, November 2022 bis Juli 2026.
-- Die Spalten werden über ihren Namen umbenannt, nicht über ihre Position. Beim Vorbereiten waren Spreizung und
-  Leistung über die Position vertauscht, das hat das Ergebnis vervierfacht.
+- Monate mit weniger als **400 Messstunden** fallen heraus. Die Abdeckung schwankt je Station zwischen 46 % und 100 %
+  (siehe [Zählerdaten](../datengrundlage/zaehlerdaten.md#zeitraum-und-abdeckung)), ein Monatswert aus 30 Stunden wäre
+  wertlos.
+- Ergebnis: **2.300 Station-Monate** an 93 Stationen, November 2022 bis Juli 2026. Die Daten beginnen zwar im
+  November 2021, bis Oktober 2022 liefern 45 Zähler aber nur einen Wert pro Tag. Diese Monate haben rund 30 Werte und
+  bleiben unter der 400-Stunden-Grenze.
+- Die Spalten werden über ihren Namen zugeordnet, nicht über ihre Position. Beim Vorbereiten waren sie einmal über die
+  Position zugeordnet, dabei wurden Spreizung und Leistung vertauscht.
 
 ## Die Regel
 
@@ -37,7 +40,7 @@ kommt fast so heiß zurück, wie es angekommen ist. Die Station wälzt um, ohne 
 - **266 von 2.300** Station-Monaten sind auffällig (11,6 %), an **24 von 93** Stationen.
 - Die beiden Schwellen sind eine Setzung, kein Messergebnis. Ob sie tragen, prüfen die nächsten Abschnitte.
 
-**Gegenprobe am bekannten Reparaturfall:** Bei Zähler 68956351 wurde am 09.09.2024 ein Ventil geschlossen
+**Gegenprobe am bekannten Reparaturfall:** Bei Zähler 68956351 wurden am 09.09.2024 Ventil und Stellmotor getauscht
 ([Notebook 02](wirkung.md#einzelfall-68956351)). Die Regel weiß davon nichts, sie sieht nur Zahlen. Trotzdem kippt sie
 genau in diesem Monat:
 
@@ -65,9 +68,9 @@ Regel mit neun Schwellenpaaren durchgerechnet. Zahl der betroffenen Stationen:
 - Die Zahl der auffälligen Monate liegt über alle neun Varianten zwischen 234 und 322.
 - Entscheidend ist, **welche** Stationen getroffen werden: Die 21 der strengsten Variante (60 l/h, 6 K) stecken alle in
   der Menge der Regel, die lockerste Variante (40 l/h, 10 K) enthält alle 24 und fügt 6 hinzu.
-- Es gibt also einen stabilen Kern, der unabhängig von der genauen Schwelle auffällt. Das ist der Unterschied zur
-  frühen Regel in `src/fault_detection.py`, deren Schwellen auf synthetischen Daten kalibriert wurden und bei fast
-  allen echten Zählern anschlagen.
+- Es gibt also einen stabilen Kern, der unabhängig von der genauen Schwelle auffällt. Das ist der Unterschied zu den
+  frühen Regeln in `src/fault_detection.py`. Ihre Schwellen wurden auf synthetischen Daten kalibriert, eine davon
+  schlägt bei 83 von 93 echten Zählern an.
 
 ## Wann wechselt der Zustand?
 
@@ -76,20 +79,21 @@ Regel mit neun Schwellenpaaren durchgerechnet. Zahl der betroffenen Stationen:
 - Der Zustand ändert sich selten. Ein Modell, das stur „wie im Vormonat“ sagt, liegt zu **96,7 %** richtig, „immer
   unauffällig“ zu 88,3 %, ohne etwas verstanden zu haben.
 - **Folge für jedes spätere Modell:** Es muss auf den wenigen Wechseln bewertet werden, nicht auf allen Monaten. Auf
-  allen Zeilen gewinnt immer das triviale Modell.
+  allen Zeilen sieht schon das triviale Modell sehr gut aus.
 
 ## Passt das Label zu den Begehungen?
 
 Bisher prüft sich die Regel nur an sich selbst. Die einzige unabhängige Quelle sind die Notizen der Monteure.
 
-**Stichwortsuche in den Freitexten:** Nennt eine Notiz ein hydraulisches Thema (Ventil, Zirkulation, Schmutzfänger),
-ist die Station in 29 % der Fälle auffällig (n = 21), sonst in 18 % (n = 45). Der Unterschied ist nicht gesichert
-(Fisher-Test p = 0,35).
+**Stichwortsuche in den Freitexten:** Nennt eine Notiz ein hydraulisches Thema (etwa Ventil, Zirkulation,
+Schmutzfänger, Filter oder Pumpe), war die Station in 29 % der Fälle irgendwann auffällig (n = 21 Begehungen), sonst
+in 18 % (n = 45). Der Unterschied ist nicht gesichert (Fisher-Test p = 0,35).
 
 **Lösen Begehungen die Wechsel aus?** Fast nie. Nur 2 von 36 Beginnen und 2 von 37 Enden fallen in einen Monat mit
 Begehung. Die wenigen Fälle passen aber zu [Notebook 02](wirkung.md): Zustände, die in einem Begehungsmonat enden,
-gehören zu den Stationen mit der stärksten gemessenen Verbesserung, darunter der Ventilfall. Ein Beginn fällt auf
-72167783, deren Rücklauf nach der Begehung von 18,6 auf 71,0 °C stieg. Beide Notebooks kommen unabhängig voneinander
+gehören zu den Stationen mit der stärksten gemessenen Verbesserung, darunter der Ventilfall. Die beiden Beginne
+fallen auf 72167783 und 80912173. Bei beiden stieg der Rücklauf nach der Begehung, von 18,6 auf 71,0 °C und von 54,0
+auf 67,3 °C. Beide Notebooks kommen unabhängig voneinander
 auf dieselben Einzelfälle.
 
 Die Stationen ändern ihren Zustand also überwiegend **ohne** erkennbaren äußeren Anlass. Das ist ein eigener Befund und
@@ -102,7 +106,7 @@ Die Stichwortsuche ist grob. Deshalb wurden alle 57 Freitextnotizen zusätzlich 
 Regel als auffällig einstuft. Je Notiz steht dort, ob sie zur Regel passt (ja, nein, unklar), welche Art von Befund sie
 beschreibt und eine Anmerkung.
 
-| Notiz passt zur Regel | Notizen | Stationen mit Monatswerten | davon laut Regel auffällig |
+| Notiz passt zur Regel | Notizen | davon mit Monatswerten | davon laut Regel auffällig |
 |---|---|---|---|
 | ja | 14 | 12 | 4 (33 %) |
 | nein | 13 | 12 | 1 (8 %) |
@@ -111,8 +115,8 @@ beschreibt und eine Anmerkung.
 **Insgesamt stimmt nur die Richtung.** Die Regel findet bei „ja“ deutlich mehr als bei „nein“, gesichert ist das bei
 so wenigen Fällen nicht (Fisher-Test p = 0,32). Über die Hälfte der Notizen sagt zur Frage nichts.
 
-**Die Regel übersieht viele dokumentierte Mängel.** 8 der 14 mit „ja“ kodierten Stationen haben keinen einzigen
-auffälligen Monat. Zwei Erklärungen liegen nahe:
+**Die Regel übersieht viele dokumentierte Mängel.** 8 der 12 mit „ja“ kodierten Stationen mit Monatswerten haben
+keinen einzigen auffälligen Monat. Zwei Erklärungen liegen nahe:
 
 - **Zeitweise Fehler** verschwinden im Monatsmedian, etwa ein Ventil, das nur hin und wieder hängt.
 - **Fehler auf der Hausseite**, etwa an der Heizkreispumpe, zeigen sich auf der Netzseite nicht zwangsläufig als
@@ -139,20 +143,23 @@ Prüfliste, die Notebook 38 braucht.
 | Handkodierung, schwere Fälle | keine einzige mit „nein“ kodiert | bestanden |
 
 Das Label ist ein **Detektor für schwere, monatelang anhaltende Zustände**, kein allgemeiner Defektdetektor. In dieser
-engeren Rolle ist es belastbar, und so sollte es auch benannt werden. Ließe es sich gar nicht bestätigen, wäre auch
-das ein Ergebnis: „defekt“ wäre aus diesen Daten nicht eindeutig zu definieren. Das würde erklären, warum das
-Clustering und die frühen Klassifikationsversuche kein Signal fanden.
+engeren Rolle ist es belastbar, und so sollte es auch benannt werden.
 
-## Was als Nächstes sinnvoll ist
+## Wie es weiterging
 
-- Die Schwellen in `src/fault_detection.py` nachjustieren. Die Label-Tabelle liefert dafür erstmals einen Maßstab aus
-  echten Daten.
-- Die auffälligen Stationen mit ihrem Zeitraum als Wartungsliste an die ÜZ geben.
-- Die Wechsel einzeln ansehen: Gibt es in den Monaten davor ein Vorzeichen, etwa einen langsam steigenden Rücklauf?
-  Ohne Vorzeichen gibt es nichts vorherzusagen.
+- **Schwellen der frühen Regeln:** Die Regeln in `src/fault_detection.py` wurden in Notebook 16 nachkalibriert, jede
+  auf rund 15 % der Stationen (siehe
+  [Anomalieerkennung ohne Labels](../monitoring/anomalie.md#nachkalibrierung-der-regel-baseline)). Die Label-Tabelle
+  aus diesem Notebook wurde dafür nicht genutzt.
+- **Frühe Vorzeichen:** Ob sich eine Veränderung früh erkennen lässt, prüft das
+  [Normalverhaltensmodell](../monitoring/normalverhalten.md) (Notebook 18). Es kommt ohne Label aus und vergleicht
+  jede Station mit ihrem eigenen Normalverhalten bei gleichem Wetter.
+- **Liste für die ÜZ:** Statt einer Wartungsliste aus diesem Label gibt das [Dashboard](../ergebnisse/dashboard.md)
+  eine Handlungsliste mit Maßnahme, Dringlichkeit und Begründung je Zähler aus.
+- Kein späteres Notebook nutzt die Label-Tabelle `station_monat_label.csv`.
 
 ## Ausgabe
 
 - `data/processed/station_monat_label.csv`: eine Zeile je Station und Monat mit allen Messwerten und dem Urteil,
-  2.300 Zeilen. Enthält Zählernummern, bleibt lokal.
+  2.300 Zeilen. Liegt wie alle Ausgaben unter `data/processed/` nicht im Repository.
 - `data/processed/station_monat_label.json`: Regel, Schwellen und die wichtigsten Zahlen des Laufs.

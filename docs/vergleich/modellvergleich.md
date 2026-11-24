@@ -3,7 +3,7 @@
 Im Projekt sind viele Modelle und Regeln entstanden. Diese Seite zeigt, welches davon welche Aufgabe am besten löst
 und wie der Vergleich zustande kam: Der erste Prüfstand war an mehreren Stellen zu großzügig, erst der strenge
 Vergleich in Notebook 35 liefert die Zahlen, die gelten. Wie gemessen und gezählt wird, steht unter
-[Prüfdesign und Statistik](vergleich/pruefung.md). Gerechnet wird in den Notebooks 30, 34 und 35, die Prüfungen liegen
+[Prüfdesign und Statistik](pruefung.md). Gerechnet wird in den Notebooks 30, 34 und 35, die Prüfungen liegen
 in `src/pruefstand.py` und `src/finalvergleich.py`.
 
 ## Ergebnis auf einen Blick
@@ -13,7 +13,7 @@ aus dem strengen Vergleich in Notebook 35.
 
 | Aufgabe | gewählt | Ergebnis | einfachste Alternative | gesichert? |
 |---|---|---|---|---|
-| Alarm in der Heizperiode | [Monitoring-Modell](monitoring/index.md): Kennlinie + CUSUM | 18 von 43 Begehungen als „besser“ bemerkt, Kontrolle 24 % | – | ja (p = 0,006) |
+| Alarm in der Heizperiode | [Monitoring-Modell](../monitoring/index.md): Kennlinie + CUSUM | 18 von 43 Begehungen als „besser“ bemerkt, Kontrolle 24 % | – | ja (p = 0,006) |
 | Alarm an warmen Tagen | Prognose-LSTM + CUSUM | 78 % der Dauerdurchflüsse von 150 l/h bei höchstens 5 % Fehlalarmen | Wochenmittel 45 % | nur an eingebauten Fehlern |
 | Fehlerart Ventil | Regression auf den 16 LSTM-Zahlen | AUC 0,84 | Sommernacht-Regel 0,85 | gleichauf |
 | Fehlerart Dämmung | dasselbe Modell | AUC 0,78 | beste Einzelregel 0,61 | knapp nicht gesichert |
@@ -30,7 +30,7 @@ Wo eine einfache Regel gleich gut ist, begründet sie im Dashboard den Verdacht.
 ### Jedes Notebook prüfte sich selbst
 
 Zuerst hatte fast jedes Notebook seine eigene Prüfung, mit eigenem Zeitraum, eigenen Stationen, eigener
-Kontrollgruppe und eigener Alarmmenge. Das [Normalverhaltensmodell](monitoring/normalverhalten.md) bemerkte in Notebook 18 70 % der Begehungen gegen
+Kontrollgruppe und eigener Alarmmenge. Das [Normalverhaltensmodell](../monitoring/normalverhalten.md) bemerkte in Notebook 18 70 % der Begehungen gegen
 53 % bei Kontrollstationen, das Prognose-LSTM in Notebook 28 11 bis 17 % gegen 13 %. Welcher Wächter besser ist, folgt
 daraus nicht.
 
@@ -66,7 +66,7 @@ aus Notebook 35.
   einstellen, Test ab 08.06.2024. Teststationen und Testtage sind nie im Lernen.
 - **Labels nur aus Begehungen:** Die nie begangenen Stationen gelten als unbekannt, nicht als gesund.
 
-![Zeitachse für beide Modelle: Lernen, Kalibrieren, Alarmlast einstellen, Test mit allen Begehungen](assets/vergleich/35_zeitachse.png)
+![Zeitachse für beide Modelle: Lernen, Kalibrieren, Alarmlast einstellen, Test mit allen Begehungen](../assets/vergleich/35_zeitachse.png)
 
 | Test | Frage | Grundlage |
 |---|---|---|
@@ -82,20 +82,20 @@ aus Notebook 35.
 
 | Wächter (Erwartung + Regel) | bemerkt | Kontrolle | p nach Holm |
 |---|---|---|---|
-| [Tagesmonitor](monitoring/tagesmonitor.md) (Kennlinie + CUSUM, Notebook 20) | 33 von 43 | 53 % | 0,017 |
-| [Normalverhaltensmodell](monitoring/normalverhalten.md) (Notebook 18) | 30 von 43 | 50 % | 0,08 |
+| [Tagesmonitor](../monitoring/tagesmonitor.md) (Kennlinie + CUSUM, Notebook 20) | 33 von 43 | 53 % | 0,017 |
+| [Normalverhaltensmodell](../monitoring/normalverhalten.md) (Notebook 18) | 30 von 43 | 50 % | 0,08 |
 | Wochenmittel + Schwelle (ohne Lernen) | 24 von 43 | 36 % | 0,07 |
 | Prognose-LSTM + CUSUM | 24 von 43 | 40 % | 0,20 |
-| [Kennlinienmonitor](stationsbilder.md) (Notebook 13) | 27 von 43 | 53 % | 0,94 |
+| [Kennlinienmonitor](../stationsbilder/index.md) (Notebook 13) | 27 von 43 | 53 % | 0,94 |
 | Prognose-LSTM + Schwelle (Notebook 28) | 16 von 43 | 32 % | 1 |
 
-Der Tagesmonitor mit [Netzereignis-Filter](monitoring/netzereignisse.md) (Notebook 24) kommt auf dasselbe Ergebnis. Die übrigen Wächter, etwa der
-ARIMA-Wächter aus Notebook 06 und die [Detektoren aus Notebook 16](monitoring/anomalie.md), bleiben nach Holm ungesichert.
+Der Tagesmonitor mit [Netzereignis-Filter](../monitoring/netzereignisse.md) (Notebook 24) kommt auf dasselbe Ergebnis. Die übrigen Wächter, etwa der
+ARIMA-Wächter aus Notebook 06 und die [Detektoren aus Notebook 16](../monitoring/anomalie.md), bleiben nach Holm ungesichert.
 
 **Strenger Vergleich.** An echten Begehungen (Test A) bemerkt das Monitoring-Modell 18 von 43 als „besser“ gegen 24 %
 bei Kontrollstationen. Das Prognose-LSTM liegt auf Höhe der Kontrolle (10 von 43 gegen 26 %).
 
-![Test A: Wie oft melden die Wächter „besser“ an Begehungen und an Vergleichsstationen?](assets/vergleich/35_test_a.png)
+![Test A: Wie oft melden die Wächter „besser“ an Begehungen und an Vergleichsstationen?](../assets/vergleich/35_test_a.png)
 
 An eingebauten Fehlern im Winter (Test B, höchstens 10 % Fehlalarme):
 
@@ -115,7 +115,7 @@ An eingebauten Fehlern im Winter (Test B, höchstens 10 % Fehlalarme):
   ohne mehr Fehlalarme. An echten Begehungen meldet das Prognose-LSTM aber nicht öfter als an Vergleichsstationen. An
   Heiztagen bleibt es deshalb ein Hinweis.
 
-![Alarm im Winter: Monitoring-Modell, Prognose-LSTM und beide zusammen](assets/vergleich/35_waechter_zusammen.png)
+![Alarm im Winter: Monitoring-Modell, Prognose-LSTM und beide zusammen](../assets/vergleich/35_waechter_zusammen.png)
 
 Das Bild zeigt die sechs eingebauten Fehler im Winter im Mittel, mit den gewählten Einstellungen der Wächter. Allein
 findet das Monitoring-Modell mehr, das Prognose-LSTM meldet dafür kaum Fehlalarme. Zusammen finden beide 60 % der Fehler
@@ -127,19 +127,19 @@ Fehlalarmquote von höchstens 10 %.
 **Erster Prüfstand.**
 
 - **Ventil:** 27 Kandidaten laufen gepaart gegen die Sommernacht-Regel. Vorn liegen die Regression auf Kennzahlen und
-  LSTM-Zahlen (0,89), der Sommer-Nachtdurchfluss (0,88) und die [Schweregrad-Punkte aus Notebook 17](monitoring/empfehlung.md#schweregrad) (0,87). Keiner ist
+  LSTM-Zahlen (0,89), der Sommer-Nachtdurchfluss (0,88) und die [Schweregrad-Punkte aus Notebook 17](../monitoring/empfehlung.md#schweregrad) (0,87). Keiner ist
   gesichert besser als die Regel. Random Forest (0,77) und XGBoost (0,75) sind nicht besser, XGBoost ist gesichert
-  schlechter. Flottenvergleiche wie [Netzvergleich](monitoring/netzvergleich.md), [Potenzial](monitoring/bestwert.md) und K-Means liegen bei 0,67 bis 0,74: Sie messen
+  schlechter. Flottenvergleiche wie [Netzvergleich](../monitoring/netzvergleich.md), [Potenzial](../monitoring/bestwert.md) und K-Means liegen bei 0,67 bis 0,74: Sie messen
   „schlechter als andere“, und das ist nur zur Hälfte ein Ventil.
 - **Dämmung:** Nur die Regression auf Kennzahlen und LSTM-Zahlen ist besser als Raten (0,75). Netzvergleich,
-  [Vergleichsgruppen](monitoring/nachbarn.md), Potenzial und Rücklaufmaße zeigen in die umgekehrte Richtung (0,30 bis 0,39): Ein Dämmungsbefund
+  [Vergleichsgruppen](../monitoring/nachbarn.md), Potenzial und Rücklaufmaße zeigen in die umgekehrte Richtung (0,30 bis 0,39): Ein Dämmungsbefund
   kommt eher bei Stationen vor, die im Netz gut aussehen.
 
 **Strenger Vergleich (Test C).** Hier treten alle drei Ansätze gegeneinander an: das Monitoring-Modell mit seinem
 Netzvergleich, die beste Regel ohne Lernen und die KI, also die Regression auf den 16 LSTM-Zahlen, die im Dashboard
 läuft. Geprüft wird nur an Stationen, die das Modell beim Lernen nie gesehen hat.
 
-![Test C: Monitoring-Modell, beste Regel und KI je Fehlerart](assets/vergleich/35_fehlerart_drei_ansaetze.png)
+![Test C: Monitoring-Modell, beste Regel und KI je Fehlerart](../assets/vergleich/35_fehlerart_drei_ansaetze.png)
 
 | Fehlerart | Monitoring-Modell | beste Regel | KI | Ergebnis |
 |---|---|---|---|---|
@@ -178,12 +178,12 @@ Notebook 36 prüft, ob die Maßnahmen der Begehungen überhaupt eine Spur in den
 ## Fehler unterteilen und Reihenfolge
 
 - **Regelventil tauschen:** Das LSTM-Modell trifft 8 von 11 Ventilfällen, das Monitoring-Modell 4 von 11. Dessen
-  [Fehlerbild „ventil“](monitoring/alarme.md#fehlerbild-aus-dem-muster-der-schlechten-kennzahlen) ist dafür sehr genau (4 von 4 richtig) und dient im Dashboard als Bestätigung.
+  [Fehlerbild „ventil“](../monitoring/alarme.md#fehlerbild-aus-dem-muster-der-schlechten-kennzahlen) ist dafür sehr genau (4 von 4 richtig) und dient im Dashboard als Bestätigung.
 - **Regelparameter optimieren:** trifft keins der beiden Modelle, 24 bzw. 25 von 31 Fällen landen in
   „kein Handlungsbedarf“. K-Means „schlechter“ erkennt das Ventil mit 0,67 gesichert schlechter als die Regel (siehe
-  [Was nicht getragen hat](nicht_getragen/index.md)).
+  [Was nicht getragen hat](../nicht_getragen/index.md)).
 - **Reihenfolge (Test E):** Unter den ersten 10 Stationen nach Ventil-Score hatten 7 einen Ventilbefund, nach der
-  [Priorität des Monitoring-Modells](monitoring/alarme.md#prioritat-aus-netzvergleich-und-verschlechterungsalarm) 5, Zufall wären etwa 2.
+  [Priorität des Monitoring-Modells](../monitoring/alarme.md#prioritat-aus-netzvergleich-und-verschlechterungsalarm) 5, Zufall wären etwa 2.
 - **Lage im Netz (Test D):** Netzvergleich und Potenzial beschreiben eine Station, sagen die Wirkung einer Begehung aber
   kaum vorher (Rangkorrelation 0,16, p = 0,30). Das Dashboard zeigt deshalb Rang und Potenzial, aber keine
   Einspar-Schätzung.
@@ -194,14 +194,14 @@ Notebook 34 prüft auch, ob das Leitungsnetz hilft: Nachbar-Alarme abziehen, den
 Nachbarn bis zwei Kanten. Keine Variante verbessert Alarm oder Erkennung. Offene Ventile häufen sich nicht in Strängen,
 die Fehler sitzen im einzelnen Haus. Das Netz zählt nur als Ganzes, über Wetter, Vorlauf und Begehungswellen, und das
 fangen Kennlinie und Tagesmonitor schon ab. Dasselbe Bild zeigen die Notebooks 23 und 24 für das Monitoring-Modell
-(siehe [Vergleichsgruppen und Nachbarn](monitoring/nachbarn.md) und [Netzereignisse](monitoring/netzereignisse.md)).
+(siehe [Vergleichsgruppen und Nachbarn](../monitoring/nachbarn.md) und [Netzereignisse](../monitoring/netzereignisse.md)).
 
 ## Was sich nicht vergleichen lässt
 
 | Ansatz | Warum nicht | Eigenes Ergebnis |
 |---|---|---|
-| [GNN (Notebook 39)](nicht_getragen/gnn.md) | braucht die Kanten- und Positionsdateien aus Notebook 31 | kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft „Haus oder Netz“ |
-| [Bayes (Notebook 38)](nicht_getragen/bayes.md) | braucht die Handtabellen unter `data/manual/` | Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
+| [GNN (Notebook 39)](../nicht_getragen/gnn.md) | braucht die Kanten- und Positionsdateien aus Notebook 31 | kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft „Haus oder Netz“ |
+| [Bayes (Notebook 38)](../nicht_getragen/bayes.md) | braucht die Handtabellen unter `data/manual/` | Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
 | Stationscluster (Notebooks 07 und 08) | Profile über die ganze Historie, also auch nach der Begehung | kein Cluster trennt die Begehungen; verglichen wird K-Means aus Notebook 26 |
 
 Die Notebooks 01 bis 05 messen die Wirkung der Begehungen oder bereiten Daten auf. Sie liefern den Prüfstein und sind
@@ -212,6 +212,6 @@ selbst keine Kandidaten.
 - 43 Begehungen und 11 Ventilfälle: Unterschiede unter etwa 0,1 AUC oder unter etwa 5 Fällen sind nicht zu sehen.
 - Das Prognose-LSTM ist nur an eingebauten Fehlern belegt, an echten Begehungen nicht.
 - Die Dringlichkeitsstufen sind gesetzt, nicht getestet. Dafür braucht es einen Test nach vorn (siehe
-  [Prüfung nach vorn](ausblick_pruefung.md)).
+  [Prüfung nach vorn](../ausblick/pruefung.md)).
 
-Weitere Grenzen stehen unter [Grenzen der Modelle](grenzen_modelle.md).
+Weitere Grenzen stehen unter [Grenzen der Modelle](../grenzen/modelle.md).

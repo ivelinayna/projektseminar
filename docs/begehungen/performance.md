@@ -19,7 +19,10 @@ Hoch ist gut, das Wasser kühlt in der Station stärker ab.
 - **Gegenprobe:** Die Kennzahl in Kelvin stimmt im Median auf 0,5 K mit der gemessenen Spreizung überein. 10 von 93
   Zählern weichen um mehr als 3 K ab, einer um mehr als 15 K (58202380). Sie sind Kandidaten für eine Prüfung.
 - **Zwei Varianten:** A mit dem festen Stichtag der Folie (30.09.2024), B mit dem eigenen Begehungsdatum je Station
-  und ±7 Tagen Puffer. Beide nur mit den 51 Stationen, die eine Begehung haben.
+  und ±7 Tagen Puffer. Beide nur mit den 51 Stationen, die eine Begehung und gültige Tage haben.
+- **Schwäche von Variante A:** Der Stichtag zählt alle Tage ab dem 30.09.2024 als „optimiert“, auch bei Stationen, die
+  erst später begangen wurden. 22 der 58 Begehungen liegen nach dem Stichtag, zwei davon im September 2025 ohne jede
+  Nachher-Phase. Deshalb gibt es Variante B.
 - **Je Gruppe eine Gerade** gegen die Außentemperatur, Abstand am Bezugspunkt, clusterrobuste Fehler je Zähler.
 
 | | Variante A | Variante B | Folie |
@@ -31,13 +34,14 @@ Hoch ist gut, das Wasser kühlt in der Station stärker ab.
 
 - Gleiche Richtung wie auf der Folie, aber kleiner und nicht von null unterscheidbar.
 - Die flachere Gerade der optimierten Stationen ist nur angedeutet (p 0,16 bis 0,26).
+- **Mit Tagesvolumen gewichtet** bleibt der Abstand und wächst auf 3,5 bis 3,8 kWh/m³. Die flachere Gerade wird dabei
+  kleiner, sie hängt also an der Gewichtung.
 - Der Bezugspunkt ist in beiden Gruppen dicht belegt, es wird nichts extrapoliert. „Optimiert“ ist im Mittel 2,3 bis
   2,7 K kälter.
 - Das absolute Niveau liegt rund 6 kWh/m³ über der Folie, die Ursache ist nicht geklärt.
 - **Nachlieferung (Abschnitt 9):** Ab dem vierten Quartal 2025 tragen nur noch drei bis vier Nachlieferungszähler die
-  Nachher-Phase,
-  mit Zählerständen, die aus Leistung und Durchfluss hochgerechnet sind. Das trifft das Niveau über Monate, einzelne
-  Tage weichen ab. Vier Stationen, eine davon dominiert: keine Aussage zur Wirkung.
+  Nachher-Phase, mit Zählerständen, die aus Leistung und Durchfluss aufsummiert sind. Das trifft das Niveau über
+  Monate, einzelne Tage weichen ab. Vier Stationen, eine davon dominiert: keine Aussage zur Wirkung.
 
 ## Wie belastbar ist der Abstand? (Abschnitt 10)
 
@@ -47,7 +51,7 @@ Variante A, denselben gültigen Tagen und clusterrobusten Fehlern.
 ### Zeitraum
 
 Nach dem 11.07.2025 liefern nur noch die fünf Nachlieferungszähler Daten. Bis dahin sind ihre Zählerstände gemessen,
-danach ist praktisch jede Stunde hochgerechnet (rund 8.950 Stunden je Zähler). In Abschnitt 5 sind diese Tage
+danach ist praktisch jede Stunde aufsummiert (rund 8.950 Stunden je Zähler). In Abschnitt 5 sind diese Tage
 enthalten, obwohl Abschnitt 9 sie als nicht aussagekräftig einstuft.
 
 | Fassung | Abstand | p |
