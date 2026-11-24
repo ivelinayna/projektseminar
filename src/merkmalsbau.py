@@ -91,7 +91,7 @@ PLAN_ZUSATZ = {
     "ventil": ("d_kopplung", +1,
                "Ventil getauscht: Danach folgt der Durchfluss der Außentemperatur besser (gleitende Korrelation)."),
 }
-# Nachträglich ergänzt, nachdem die Abkühlrate in Notebook 36, Abschnitt 6b, bei der Dämmung in die
+# Nachträglich ergänzt, nachdem die Abkühlrate in Notebook 36, Abschnitt 6.2, bei der Dämmung in die
 # erwartete Richtung ging (26.10.2026). Die Richtung folgt eindeutig aus der Physik, die Prüfung ist
 # aber nicht vorab geplant und wird im Notebook so gekennzeichnet.
 PLAN_NACHTRAG = {

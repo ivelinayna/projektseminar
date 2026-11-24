@@ -66,6 +66,8 @@ aus Notebook 35.
   einstellen, Test ab 08.06.2024. Teststationen und Testtage sind nie im Lernen.
 - **Labels nur aus Begehungen:** Die nie begangenen Stationen gelten als unbekannt, nicht als gesund.
 
+![Zeitachse für beide Modelle: Lernen, Kalibrieren, Alarmlast einstellen, Test mit allen Begehungen](assets/vergleich/35_zeitachse.png)
+
 | Test | Frage | Grundlage |
 |---|---|---|
 | A | Bemerkt der Wächter echte Begehungen? | 43 Begehungen, Fenster −7 bis +60 Tage, Kontrollstationen |
@@ -91,8 +93,11 @@ Der Tagesmonitor mit Netzereignis-Filter (Notebook 24) kommt auf dasselbe Ergebn
 ARIMA-Wächter aus Notebook 06 und die Detektoren aus Notebook 16, bleiben nach Holm ungesichert.
 
 **Strenger Vergleich.** An echten Begehungen (Test A) bemerkt das Monitoring-Modell 18 von 43 als „besser“ gegen 24 %
-bei Kontrollstationen. Das Prognose-LSTM liegt auf Höhe der Kontrolle (10 von 43 gegen 26 %). An eingebauten Fehlern
-im Winter (Test B, höchstens 10 % Fehlalarme):
+bei Kontrollstationen. Das Prognose-LSTM liegt auf Höhe der Kontrolle (10 von 43 gegen 26 %).
+
+![Test A: Wie oft melden die Wächter „besser“ an Begehungen und an Vergleichsstationen?](assets/vergleich/35_test_a.png)
+
+An eingebauten Fehlern im Winter (Test B, höchstens 10 % Fehlalarme):
 
 | eingebauter Fehler im Winter | Monitoring-Modell | LSTM mit fester Referenz | Prognose-LSTM |
 |---|---|---|---|
@@ -133,6 +138,11 @@ im Winter (Test B, höchstens 10 % Fehlalarme):
 | Filter, Durchfluss, Sollwert | alle Verfahren 0,26 bis 0,57 | – | nicht erkennbar |
 
 Die Werte in eckigen Klammern sind 95-%-Intervalle über Stationen.
+
+![Test C: KI mit Modellwahl im Lernteil gegen die beste an den Befunden angepasste Regel](assets/vergleich/35_ki_gegen_regel.png)
+
+Das Bild stellt die KI der besten an den Befunden angepassten Regel gegenüber. Beim Ventil ist die feste
+Sommernacht-Regel aus der Tabelle (0,85) noch etwas stärker als die angepasste (0,79).
 
 ### Warum das so ausgeht
 
