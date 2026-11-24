@@ -1919,7 +1919,7 @@ def sommer_lstm_pruefen(w: dict, e: dict, st: dict, log=print) -> dict:
             "pruef_ziele": gs["val_ziele"], "kalibriert": int(len(kal))}
 
 
-# --- Mehrwert der KI gegenüber Regeln (Abschnitt 15) ------------------------
+# --- Mehrwert der KI gegenüber Regeln (Notebook 35, Abschnitt 14) -----------
 
 REGEL_ANGEPASST = "Regel angepasst (beste Kennzahl im Lernteil)"
 
@@ -2044,7 +2044,7 @@ def merkmalssaetze_vergleich(X: pd.DataFrame, oof: pd.DataFrame, gruppen: pd.Ser
     return pd.DataFrame(zeilen)
 
 
-# --- Modellwahl im Lernteil (Notebook 35, Abschnitt 16) -------------------------
+# --- Modellwahl im Lernteil (Notebook 35, Abschnitt 15) -------------------------
 
 #bei gleicher AUC im Lernteil gewinnt der einfachere Kandidat
 EINFACHHEIT = ["LR Kennzahlen", "LR nur LSTM-Embedding", "LR Kennzahlen + LSTM",

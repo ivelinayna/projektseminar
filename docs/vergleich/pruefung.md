@@ -144,7 +144,7 @@ hängt nur am Vorhersagefehler.
 
 Wer mehrere Modelle prüft und den Sieger nach den Testwerten nimmt, bekommt eine zu gute Zahl. Das
 ist zuerst passiert: Die Regression auf Kennzahlen und LSTM-Zahlen war im Test die beste, mit einer
-Ventil-AUC von 0,88. In Notebook 35, Abschnitt 19, wird die Wahl deshalb in den Lernteil verlegt: In
+Ventil-AUC von 0,88. In Notebook 35, Abschnitt 15, wird die Wahl deshalb in den Lernteil verlegt: In
 jedem der fünf Teile entscheidet nur die innere Prüfung, welcher Kandidat gewinnt, erst danach wird
 getestet. So kommt die Fehlerart auf eine Ventil-AUC von 0,84 und eine Dämmungs-AUC von 0,78. Die 0,88
 war um etwa 0,05 zu optimistisch und wird nicht behauptet.

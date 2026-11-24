@@ -227,7 +227,8 @@ def empfehlungen(st: pd.DataFrame) -> pd.DataFrame:
             if netz_ventil:
                 gruende.append("Netzvergleich bestätigt (Fehlerbild Ventil)")
         if HANDLUNGEN[2] in h:
-            gruende.append(f"Spitzenlast nur {z.get('auslastung', np.nan):.0%} des Anschlusswerts")
+            #Bezug ist der Vertrag vor der Begehung, ohne Vertrag der Anschlusswert (fehlerklassen.bewerten)
+            gruende.append(f"Spitzenlast nur {z.get('auslastung', np.nan):.0%} der vereinbarten Leistung")
         if HANDLUNGEN[3] in h:
             gruende.append("Dämmungsmodell über der Grenze (Hinweis)")
         if _ja(z.get("sonderfall")):
@@ -314,7 +315,7 @@ DECKEL_ANTEIL = 0.5
 
 def wissensstand(st: pd.DataFrame, labels: Optional[pd.DataFrame] = None,
                  termine: Optional[dict] = None) -> pd.DataFrame:
-    """Fünf getrennte Aussagen je Station (Notebook 35, Abschnitt 13).
+    """Fünf getrennte Aussagen je Station (Notebook 35, Abschnitt 17).
 
     - ``symptom``: was die Messwerte jetzt zeigen (Netzvergleich, Sommernächte)
     - ``veraenderung``: was die Wächter gemeldet haben, oder warum sie nicht bewerten
@@ -647,7 +648,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     try:
         rechne(args.out)
     except mp.PaketFehler as exc:
-        raise SystemExit(f"{exc}\nPakete bauen: Notebook 35, Abschnitt 14") from exc
+        raise SystemExit(f"{exc}\nPakete bauen: Notebook 35, Abschnitt 13") from exc
 
 
 if __name__ == "__main__":
