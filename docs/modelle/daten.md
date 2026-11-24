@@ -30,7 +30,7 @@ Für die Diagnose entsteht ein Fingerabdruck je Station (siehe [LSTM-Fingerabdru
 - **Außentemperatur:** stündlich von der DWD-Station Kitzingen. Ohne Wetter hielte ein Modell jeden
   kalten Tag für auffällig.
 - **Nur vollständige Tage:** Ein Tag zählt nur, wenn alle 24 Stunden aller Größen gemessen sind. Das
-  sind 67.840 von 88.792 Zähler-Tagen. Bis Ende Oktober 2022 lieferten viele Zähler nur einen Wert je
+  sind knapp 68.000 von knapp 89.000 Zähler-Tagen. Bis Ende Oktober 2022 lieferten viele Zähler nur einen Wert je
   Tag, immer um 23 Uhr. Diese Lücken zu füllen, hieße 23 von 24 Stunden zu erfinden. Deshalb werden
   Lücken nicht gefüllt.
 - **Zeiträume:** Gelernt wird aus dem Winter 2023/24 (Oktober bis März) und dem Sommer 2024 (Juni bis

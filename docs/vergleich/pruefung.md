@@ -43,7 +43,7 @@ Deshalb wird nach Stationen getrennt:
 - **LSTM-Encoder je Teil neu:** In Notebook 35 wird der Fingerabdruck für jeden der fünf Teile ohne die
   Teststationen neu gelernt. Die Teststation beeinflusst also weder das Netz noch die Regression noch die
   Auswahl.
-- In den früheren Notebooks 25 bis 29 wird mit Leave-one-out geprüft, also jede Station einmal
+- In den Notebooks 25 bis 29 wird mit Leave-one-out geprüft, also jede Station einmal
   ausgelassen, und zusätzlich mit ganzen Straßen ausgelassen. Die Ergebnisse ändern sich dabei kaum.
 
 **Wächter: nach der Zeit.** Ein Wächter wird im Betrieb immer auf die Zukunft angewendet. In Notebook
@@ -91,7 +91,7 @@ zeitlich nach dem Lernen.
 | Binomial- und Fisher-Test | Alarmquote gegen Kontrollgruppe | Begehungen gegen nie begangene Stationen im selben Zeitraum |
 | Holm-Korrektur | viele Tests auf einmal | Bei 15 Wächtern ist ein kleiner p-Wert leicht Zufall. Holm hebt die Schwelle schrittweise an. |
 
-Bei 11 Ventilfällen ist das 95-%-Intervall einer AUC rund ±0,13 breit. Unterschiede zwischen Modellen
+Bei 11 Ventilfällen ist das 95-%-Intervall einer AUC rund ±0,15 breit. Unterschiede zwischen Modellen
 unter etwa 0,1 sind mit diesen Fallzahlen nicht zu sehen. „Nicht gesichert“ heißt deshalb meistens: Die
 Daten reichen nicht, nicht: Es gibt keinen Unterschied.
 
@@ -119,7 +119,7 @@ der Trainingsfehler weiter fällt. Kein Testwert und kein Befund steuert das Tra
 
 **Wiederholbar.** Alle Seeds sind fest. In den Vorversuchen und in Notebook 35 rechnet die
 Grafikkarte zusätzlich im deterministischen Modus, also bei jedem Lauf in derselben Reihenfolge. Ein frischer Lauf der Netze aus Notebook
-27 und 28 ohne gespeicherte Gewichte lieferte dieselben Zahlen wie die gespeicherte Fassung. Die
+27 und 28 ohne gespeicherte Gewichte ergibt bitgenau dieselben Gewichte, ebenso die Pakete aus Notebook 35. Die
 Gewichte werden gespeichert, und ohne `SELBST_TRAINIEREN = True` laden die Notebooks sie, statt neu zu lernen.
 
 ## Warum keine Hyperparameter-Suche für die Netze

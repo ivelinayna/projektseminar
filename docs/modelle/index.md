@@ -82,7 +82,7 @@ Die Notebooks laufen in dieser Reihenfolge. Jedes liest, was das vorige geschrie
 | Notebook 27 | Dateien aus 25 | `data/processed/lstm_embedding.csv`, `lstm_scores.csv`, Gewichte nach `notebooks/models/` | rund 7 Minuten, davon die meiste Zeit Vorversuche |
 | Notebook 28 | Dateien aus 25, Gewichte der Vorversuche aus 27 | `data/processed/prognose_tage.csv`, Gewichte nach `notebooks/models/` | rund 2 Minuten |
 | Notebook 29 | Dateien aus 25 bis 28 | `data/processed/fehlerklassen_je_hast.csv` | rund 11 Minuten |
-| Notebook 35 | Stundenreihen, Labels | Tabellen nach `outputs/finalvergleich/`, Modellpakete nach `models/` | länger, das Endmodell lernt alle Netze je Prüfteil neu |
+| Notebook 35 | Stundenreihen, Labels | Tabellen nach `outputs/finalvergleich/`, Modellpakete nach `models/` | gut 20 Minuten, das Endmodell lernt alle Netze je Prüfteil neu |
 | `python -m src.dashboard_daten` | Modellpakete, aktuelle Stundenreihen | `outputs/dashboard/` | wenige Minuten |
 | Notebook 37 | `outputs/dashboard/`, Netz-Cache aus Notebook 31 | HTML-Datei des Dashboards | wenige Minuten |
 

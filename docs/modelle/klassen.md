@@ -72,9 +72,8 @@ Stationen deshalb ohne Label mit K-Means.
 - **Stabilität:** Über 20 Startwerte ist die Einteilung identisch, im Bootstrap stimmt sie im Median zu 98 %
   überein. Im schlechtesten Zwanzigstel der Ziehungen sind es nur 70 %. Grenzfälle wechseln also die Gruppe.
 
-**Warum K-Means hier trägt.** Im Projekt wurde K-Means vorher viermal eingesetzt: Stationscluster (Notebook 07),
-Betriebszustände auf Stundenwerten (Notebook 09), Tagestypen (Notebook 10) und Stationsprofile in der Gesamtpipeline
-aus dem August. Gruppen fand es jedes Mal, aber „weit weg vom Zentrum“ hieß nicht „defekt“. Hier soll K-Means keinen
+**Warum K-Means hier trägt.** Im Projekt wurde K-Means vorher dreimal eingesetzt: Stationscluster (Notebook 07),
+Betriebszustände auf Stundenwerten (Notebook 09) und Tagestypen (Notebook 10). Gruppen fand es jedes Mal, aber „weit weg vom Zentrum“ hieß nicht „defekt“. Hier soll K-Means keinen
 Fehler finden, sondern nur das Regelverhalten beschreiben. Das kann es.
 
 **Gegenprobe.** In der Gruppe „schlechter“ hatten 50 % der begangenen Stationen einen Ventilbefund, im Optimum 14 %
@@ -93,9 +92,9 @@ Jede Station durchläuft dieselbe Reihenfolge:
 Unabhängig von der Klasse kommen die Hinweise Dämmung (Dämmungs-Score ab 0,5, im Paket aus Notebook 35 fest wie beim Ventil) und Kapazität
 (Auslastung zum Vertrag unter der Grenze).
 
-**Warum die Ventil-Grenze fest bei 0,5 liegt.** Eine Grenze nach dem Youden-Index sprang nach dem Neuaufbau der
-Datenbasis von 0,54 auf 0,17. Die Klasse wäre dadurch von 21 auf 57 Zähler gewachsen, ohne dass sich an den
-Stationen etwas geändert hätte. Die feste Grenze steht vorher fest und hängt nicht an einzelnen Fällen.
+**Warum die Ventil-Grenze fest bei 0,5 liegt.** Der Youden-Index läge bei 0,17. Bei 11 Ventilfällen hat die Kurve
+aber mehrere fast gleich hohe Spitzen, und welche vorne liegt, kippt schon bei kleinen Änderungen der Daten. Die feste
+Grenze steht vorher fest und hängt nicht an einzelnen Fällen.
 
 Notebook 29 stuft alle 91 Zähler mit Kennzahlen ein, auch die 37 nie begangenen: 24 Regelventil tauschen, 5
 Regelparameter optimieren, 61 kein Handlungsbedarf, 1 nicht einstufbar. Das Paket aus Notebook 35 kommt auf 25, 4,

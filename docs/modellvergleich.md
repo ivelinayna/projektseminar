@@ -36,8 +36,8 @@ daraus nicht.
 
 ### Erster Prüfstand (Notebooks 30 und 34)
 
-Notebook 30 und 34 schicken deshalb alle Kandidaten über dieselbe Prüfung: dieselben 79 Stationen mit 15.142
-Heiztagen, dieselben 43 Begehungen, dasselbe Budget von 204 Alarmen, Regeln als Modelle ohne Lernen, Holm über alle
+Notebook 30 vergleicht deshalb zuerst die beiden Wächter unter gleichen Bedingungen. Notebook 34 schickt dann alle
+Kandidaten über dieselbe Prüfung: dieselben 79 Stationen mit 15.142 Heiztagen, dieselben 43 Begehungen, dasselbe Budget von 204 Alarmen, Regeln als Modelle ohne Lernen, Holm über alle
 Tests. Geprüft wurden 15 Wächter und 27 Kandidaten für das Ventil. Die Rollen waren schon hier klar: Beim Alarm
 gewinnt die Kennlinie, beim Erkennen die LSTM-Kette.
 
@@ -177,7 +177,6 @@ fangen Kennlinie und Tagesmonitor schon ab.
 |---|---|---|
 | [GNN (Notebook 39)](nicht_getragen/gnn.md) | braucht die Kanten- und Positionsdateien aus Notebook 31 | kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft „Haus oder Netz“ |
 | [Bayes (Notebook 38)](nicht_getragen/bayes.md) | braucht die Handtabellen unter `data/manual/` | Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
-| Gesamtpipeline (August, nicht mehr im Abgabestand) | eigene Aufbereitung, Stundenscores ohne Modul | AUC 0,51, höchstens 2 von 10 Ereignissen |
 | Stationscluster (Notebooks 07 und 08) | Profile über die ganze Historie, also auch nach der Begehung | kein Cluster trennt die Begehungen; verglichen wird K-Means aus Notebook 26 |
 
 Die Notebooks 01 bis 05 messen die Wirkung der Begehungen oder bereiten Daten auf. Sie liefern den Prüfstein und sind
