@@ -43,7 +43,7 @@
 - Das Normalverhaltensmodell bemerkt 30 von 43 Begehungen gegen eine Kontrollquote von 0,53 (p = 0,017). Die Wassermenge ist der brauchbare Kanal (Notebook 18).
 - Der Netzvergleich findet 8 chronisch auffällige Stationen, 4 davon nie begangen. Die Rangliste ist über die Winter stabil (Spearman 0,81 und 0,74) (Notebook 19).
 - Der Tagesmonitor (Kennlinie mit CUSUM) bemerkt in der Abkühlung 22 von 43 Begehungen (Hebel 1,87, p = 0,001). Die Treffer kommen aus „besser“-Alarmen nach der Begehung: Erfolgskontrolle, keine Frühwarnung (Notebook 20, 21).
-- Schwach: Die Residuen bringen gegenüber dem rohen Tagesmedian keinen Gewinn. Fehler, die schon im Lernjahr bestanden, sieht der Tagesmonitor nicht. Die Welle von Verschlechterungsalarmen im Dezember 2022 fällt auf einen Kälteeinbruch. Nachbarn häufen sich nicht, und der Bestwert-Maßstab sagt keine Befunde vorher (Notebook 16, 20, 22 bis 24).
+- Schwach: Die Residuen bringen gegenüber dem rohen Tagesmedian keinen Gewinn. Fehler, die schon im Lernjahr bestanden, sieht der Tagesmonitor nicht. Die Welle von Verschlechterungsalarmen im Dezember 2022 fällt auf einen Kälteeinbruch. Nachbarn häufen sich nicht, und der Bestwert-Maßstab sagt keine Befunde vorher (Notebook 16, 20, 22 bis 24). Ausführlich unter [Anomalien und Monitoring](monitoring/index.md).
 
 ## Teil 6 Lernende Modelle
 
@@ -71,7 +71,7 @@
 
 ## Was die ÜZ nutzen kann
 
-- Das [Dashboard](dashboard.md) mit Karte, Handlungsliste und Reiter „So funktioniert's“. Es wendet nur geprüfte Modellpakete an und wird mit `python -m src.dashboard_daten` aktualisiert.
+- Das [Dashboard](dashboard.md) mit Karte, Handlungsliste und Reiter „So funktioniert's“. Es wendet nur geprüfte Modellpakete an und wird mit neuen Zählerdaten über `python -m src.aktualisieren` in einem Schritt neu erzeugt.
 - Den Tagesmonitor als Alarm in der Heizperiode und zur Erfolgskontrolle nach einer Begehung. Ein Alarm heißt „Veränderung“, nicht „Fehler“.
 - Die Handlungsliste als Prüfreihenfolge: zuerst Verdacht auf Ventil, sortiert nach Ventil-Score. Sie ersetzt keine Prüfung vor Ort.
 - Kandidaten für die nächsten Begehungen: 4 chronisch auffällige, nie begangene Stationen (Notebook 19) und 7 Vorschläge aus der Fallsammlung (Notebook 15).
