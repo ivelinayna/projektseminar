@@ -13,7 +13,7 @@ aus dem strengen Vergleich in Notebook 35.
 
 | Aufgabe | gewählt | Ergebnis | einfachste Alternative | gesichert? |
 |---|---|---|---|---|
-| Alarm in der Heizperiode | Monitoring-Modell: Kennlinie + CUSUM | 18 von 43 Begehungen als „besser“ bemerkt, Kontrolle 24 % | – | ja (p = 0,006) |
+| Alarm in der Heizperiode | [Monitoring-Modell](monitoring/index.md): Kennlinie + CUSUM | 18 von 43 Begehungen als „besser“ bemerkt, Kontrolle 24 % | – | ja (p = 0,006) |
 | Alarm an warmen Tagen | Prognose-LSTM + CUSUM | 78 % der Dauerdurchflüsse von 150 l/h bei höchstens 5 % Fehlalarmen | Wochenmittel 45 % | nur an eingebauten Fehlern |
 | Fehlerart Ventil | Regression auf den 16 LSTM-Zahlen | AUC 0,84 | Sommernacht-Regel 0,85 | gleichauf |
 | Fehlerart Dämmung | dasselbe Modell | AUC 0,78 | beste Einzelregel 0,61 | knapp nicht gesichert |
@@ -30,7 +30,7 @@ Wo eine einfache Regel gleich gut ist, begründet sie im Dashboard den Verdacht.
 ### Jedes Notebook prüfte sich selbst
 
 Zuerst hatte fast jedes Notebook seine eigene Prüfung, mit eigenem Zeitraum, eigenen Stationen, eigener
-Kontrollgruppe und eigener Alarmmenge. Das Normalverhaltensmodell bemerkte in Notebook 18 70 % der Begehungen gegen
+Kontrollgruppe und eigener Alarmmenge. Das [Normalverhaltensmodell](monitoring/normalverhalten.md) bemerkte in Notebook 18 70 % der Begehungen gegen
 53 % bei Kontrollstationen, das Prognose-LSTM in Notebook 28 11 bis 17 % gegen 13 %. Welcher Wächter besser ist, folgt
 daraus nicht.
 
@@ -82,15 +82,15 @@ aus Notebook 35.
 
 | Wächter (Erwartung + Regel) | bemerkt | Kontrolle | p nach Holm |
 |---|---|---|---|
-| Tagesmonitor (Kennlinie + CUSUM, Notebook 20) | 33 von 43 | 53 % | 0,017 |
-| Normalverhaltensmodell (Notebook 18) | 30 von 43 | 50 % | 0,08 |
+| [Tagesmonitor](monitoring/tagesmonitor.md) (Kennlinie + CUSUM, Notebook 20) | 33 von 43 | 53 % | 0,017 |
+| [Normalverhaltensmodell](monitoring/normalverhalten.md) (Notebook 18) | 30 von 43 | 50 % | 0,08 |
 | Wochenmittel + Schwelle (ohne Lernen) | 24 von 43 | 36 % | 0,07 |
 | Prognose-LSTM + CUSUM | 24 von 43 | 40 % | 0,20 |
-| Kennlinienmonitor (Notebook 13) | 27 von 43 | 53 % | 0,94 |
+| [Kennlinienmonitor](stationsbilder.md) (Notebook 13) | 27 von 43 | 53 % | 0,94 |
 | Prognose-LSTM + Schwelle (Notebook 28) | 16 von 43 | 32 % | 1 |
 
-Der Tagesmonitor mit Netzereignis-Filter (Notebook 24) kommt auf dasselbe Ergebnis. Die übrigen Wächter, etwa der
-ARIMA-Wächter aus Notebook 06 und die Detektoren aus Notebook 16, bleiben nach Holm ungesichert.
+Der Tagesmonitor mit [Netzereignis-Filter](monitoring/netzereignisse.md) (Notebook 24) kommt auf dasselbe Ergebnis. Die übrigen Wächter, etwa der
+ARIMA-Wächter aus Notebook 06 und die [Detektoren aus Notebook 16](monitoring/anomalie.md), bleiben nach Holm ungesichert.
 
 **Strenger Vergleich.** An echten Begehungen (Test A) bemerkt das Monitoring-Modell 18 von 43 als „besser“ gegen 24 %
 bei Kontrollstationen. Das Prognose-LSTM liegt auf Höhe der Kontrolle (10 von 43 gegen 26 %).
@@ -127,12 +127,12 @@ Fehlalarmquote von höchstens 10 %.
 **Erster Prüfstand.**
 
 - **Ventil:** 27 Kandidaten laufen gepaart gegen die Sommernacht-Regel. Vorn liegen die Regression auf Kennzahlen und
-  LSTM-Zahlen (0,89), der Sommer-Nachtdurchfluss (0,88) und die Schweregrad-Punkte aus Notebook 17 (0,87). Keiner ist
+  LSTM-Zahlen (0,89), der Sommer-Nachtdurchfluss (0,88) und die [Schweregrad-Punkte aus Notebook 17](monitoring/empfehlung.md#schweregrad) (0,87). Keiner ist
   gesichert besser als die Regel. Random Forest (0,77) und XGBoost (0,75) sind nicht besser, XGBoost ist gesichert
-  schlechter. Flottenvergleiche wie Netzvergleich, Potenzial und K-Means liegen bei 0,67 bis 0,74: Sie messen
+  schlechter. Flottenvergleiche wie [Netzvergleich](monitoring/netzvergleich.md), [Potenzial](monitoring/bestwert.md) und K-Means liegen bei 0,67 bis 0,74: Sie messen
   „schlechter als andere“, und das ist nur zur Hälfte ein Ventil.
 - **Dämmung:** Nur die Regression auf Kennzahlen und LSTM-Zahlen ist besser als Raten (0,75). Netzvergleich,
-  Vergleichsgruppen, Potenzial und Rücklaufmaße zeigen in die umgekehrte Richtung (0,30 bis 0,39): Ein Dämmungsbefund
+  [Vergleichsgruppen](monitoring/nachbarn.md), Potenzial und Rücklaufmaße zeigen in die umgekehrte Richtung (0,30 bis 0,39): Ein Dämmungsbefund
   kommt eher bei Stationen vor, die im Netz gut aussehen.
 
 **Strenger Vergleich (Test C).** Hier treten alle drei Ansätze gegeneinander an: das Monitoring-Modell mit seinem
@@ -178,12 +178,12 @@ Notebook 36 prüft, ob die Maßnahmen der Begehungen überhaupt eine Spur in den
 ## Fehler unterteilen und Reihenfolge
 
 - **Regelventil tauschen:** Das LSTM-Modell trifft 8 von 11 Ventilfällen, das Monitoring-Modell 4 von 11. Dessen
-  Fehlerbild „ventil“ ist dafür sehr genau (4 von 4 richtig) und dient im Dashboard als Bestätigung.
+  [Fehlerbild „ventil“](monitoring/alarme.md#fehlerbild-aus-dem-muster-der-schlechten-kennzahlen) ist dafür sehr genau (4 von 4 richtig) und dient im Dashboard als Bestätigung.
 - **Regelparameter optimieren:** trifft keins der beiden Modelle, 24 bzw. 25 von 31 Fällen landen in
   „kein Handlungsbedarf“. K-Means „schlechter“ erkennt das Ventil mit 0,67 gesichert schlechter als die Regel (siehe
   [Was nicht getragen hat](nicht_getragen/index.md)).
 - **Reihenfolge (Test E):** Unter den ersten 10 Stationen nach Ventil-Score hatten 7 einen Ventilbefund, nach der
-  Priorität des Monitoring-Modells 5, Zufall wären etwa 2.
+  [Priorität des Monitoring-Modells](monitoring/alarme.md#prioritat-aus-netzvergleich-und-verschlechterungsalarm) 5, Zufall wären etwa 2.
 - **Lage im Netz (Test D):** Netzvergleich und Potenzial beschreiben eine Station, sagen die Wirkung einer Begehung aber
   kaum vorher (Rangkorrelation 0,16, p = 0,30). Das Dashboard zeigt deshalb Rang und Potenzial, aber keine
   Einspar-Schätzung.
@@ -193,7 +193,8 @@ Notebook 36 prüft, ob die Maßnahmen der Begehungen überhaupt eine Spur in den
 Notebook 34 prüft auch, ob das Leitungsnetz hilft: Nachbar-Alarme abziehen, den Netzmedian abziehen, Merkmale der
 Nachbarn bis zwei Kanten. Keine Variante verbessert Alarm oder Erkennung. Offene Ventile häufen sich nicht in Strängen,
 die Fehler sitzen im einzelnen Haus. Das Netz zählt nur als Ganzes, über Wetter, Vorlauf und Begehungswellen, und das
-fangen Kennlinie und Tagesmonitor schon ab.
+fangen Kennlinie und Tagesmonitor schon ab. Dasselbe Bild zeigen die Notebooks 23 und 24 für das Monitoring-Modell
+(siehe [Vergleichsgruppen und Nachbarn](monitoring/nachbarn.md) und [Netzereignisse](monitoring/netzereignisse.md)).
 
 ## Was sich nicht vergleichen lässt
 
