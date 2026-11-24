@@ -7,17 +7,21 @@ bleiben, gelten ein paar Regeln.
 ## Ablauf mit neuen Daten
 
 ```
-neue Zählerexporte
+neue Zählerexporte in data/raw/
      │
-Notebook 00              saubere Stundenreihen
-     │
-Programm dashboard_daten wendet die gespeicherten Pakete an, lernt nichts neu
-     │
-Notebook 37              baut die HTML-Datei des Dashboards
+python -m src.aktualisieren
+     ├── Notebook 00              saubere Stundenreihen
+     ├── Außentemperatur (DWD)    nachladen
+     ├── Monitoring-Modell        Netzvergleich, Tagesmonitor, Priorität, Bericht
+     ├── dashboard_daten          wendet die gespeicherten Pakete an, lernt nichts neu
+     │                            Handlungsliste wird mit Datum gesichert
+     ├── Notebook 31              Netz-Cache mit den neuen Stundenreihen
+     └── Notebook 37              baut die HTML-Datei des Dashboards
 ```
 
 Gelernt wird dabei nichts. Die Ergebnistabellen halten fest, mit welcher Paketversion und bis zu welchem Datum
-gerechnet wurde.
+gerechnet wurde. Wie der Befehl ausgeführt wird, steht unter
+[Neue Zählerdaten einspielen](installation/ausfuehrung.md#neue-zahlerdaten-einspielen).
 
 ## Regeln für den Betrieb
 
@@ -36,6 +40,9 @@ gerechnet wurde.
    werden die Modelle neu gelernt: Notebook 00, dann Notebook 25 für Labels und Kennzahlen, dann Notebook 35 mit
    `SELBST_TRAINIEREN = True`. Erst wenn die Zahlen aus Notebook 35 mit dem bisherigen Stand verglichen sind, kommen
    die neuen Pakete ins Dashboard.
+
+Die Regeln 1 bis 3 setzt der Code bereits um. Regel 4 und 5 sind im Code noch nicht umgesetzt, siehe
+[Betrieb bei der ÜZ](installation/betrieb.md#was-noch-nicht-umgesetzt-ist).
 
 ## Rückmeldung aus dem Probebetrieb
 
