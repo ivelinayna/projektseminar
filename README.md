@@ -1,6 +1,6 @@
 # Fehlererkennung im Fernwärmenetz
 
-Projektseminar der Julius-Maximilians-Universität Würzburg mit der ÜZ Mainfranken, SS 2026 und WS 2026.
+Projektseminar der Julius-Maximilians-Universität Würzburg mit der ÜZ Mainfranken, Sommersemester 2026 und Wintersemester 2026/27.
 
 Ziel: Fehler an Hausanschlussstationen (HAST) aus den stündlichen Zählerdaten erkennen und eine Maßnahme vorschlagen.
 Grundlage sind etwa 100 Zähler eines Teilnetzes, 66 Begehungen durch Monteure und das Leitungsnetz.
@@ -51,7 +51,7 @@ Notebook 00 immer zuerst ausführen. Alle anderen lesen dessen Ergebnis. Details
 ```bash
 python -m venv .venv
 .venv\Scripts\activate            # Windows, sonst: source .venv/bin/activate
-pip install -r requirements.txt jupyterlab
+pip install -r requirements.txt jupyterlab pytest
 
 #Rohdaten der ÜZ nach data/raw/ kopieren
 python -m src.weather             # Außentemperatur
@@ -61,6 +61,10 @@ python -m src.detect_real         # Winterkennzahlen je Zähler
 jupyter lab                       # dann Notebook 00, danach der Reihe nach
 python -m pytest -q               # Tests
 ```
+
+Neue Zählerdaten der ÜZ: Exporte nach `data/raw/` legen, dann `python -m src.aktualisieren`. Der Befehl bereitet die
+Stundenreihen neu auf, rechnet Monitoring und Bericht und erzeugt das Dashboard neu
+(`docs/installation/ausfuehrung.md`).
 
 ## Schnellstart mit Docker
 

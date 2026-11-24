@@ -39,11 +39,7 @@ Notebooks 01-37 und src-Module
 | `python -m src.main` | Graphen, Karten und Begehungstabelle `inspections_tidy.csv` (für Notebook 08) |
 | `python -m src.main --dashboard` | zusätzlich eine einfache Folium-Karte |
 | `python -m src.aktualisieren` | neue Zählerdaten einspielen: Notebook 00, Wetter, Netzvergleich, Tagesmonitor, Bericht, Dashboard |
-| `python -m src.betrieb liste-sichern` | Handlungsliste mit Datum sichern (läuft in `src.aktualisieren` mit) |
-| `python -m src.betrieb vorlage` | Excel-Vorlage für das Begehungsprotokoll |
-| `python -m src.betrieb protokolle` | ausgefüllte Begehungsprotokolle einlesen und prüfen |
-| `python -m src.betrieb pruefung-planen` | Stichprobe für die Prüfung nach vorn festlegen |
-| `python -m src.betrieb pruefung-auswerten` | Stichprobe mit dem exakten Test auswerten |
+| `python -m src.stationsblatt` | Stationsblätter und `status.csv` für alle Stationen nach `outputs/stationsblatt/` |
 | `python -m src.prognose_waechter --bauen --gegenprobe` | Paket Prognose-LSTM bauen |
 | `python -m src.normalmodell_waechter --bauen` | Paket Tagesmonitor bauen |
 | `python -m src.fehlerklassen --bauen --gegenprobe` | Paket Folie-5-Klassen bauen |
@@ -115,7 +111,7 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 | `netzvergleich` | Station im Vergleich zum Netz im Winter | 19, 21 bis 23, 34 |
 | `tagesmonitor` | wetterbereinigte Tageswerte mit CUSUM-Alarm | 20, 21, 24, 34, 35 |
 | `alarmbewertung` | Schwelle, Richtung und Priorität der Alarme | 21, 23, 24, 34 |
-| `stationsblatt` | Monitorbild je Station, `status.csv` | 19 bis 24, 34 |
+| `stationsblatt` | Monitorbild je Station, `status.csv` | 19 bis 24, 33, 34 |
 | `vergleichsgruppen` | Vergleichsgruppen nach Wärmemenge | 23, 34 |
 | `nachbarschaft` | häufen sich auffällige Stationen im Netz? | 23, 24, 34 |
 | `netzereignisse` | gleichzeitige Alarme: Netz oder Einzelstation? | 24, 34 |
@@ -133,7 +129,7 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 | `fehlerklassen` | Folie-5-Klassen als Paket | 34 bis 36 |
 | `finalvergleich` | Monitoring-Modell gegen LSTM-Modell, Endmodell | 35, 36 |
 | `merkmalsbau` | Wirkung der Maßnahmen, Zeitstruktur und neue Kennzahlen je Befund | 36 |
-| `modellpaket` | Pakete speichern und laden | 34 bis 37 |
+| `modellpaket` | Pakete speichern und laden | 34, 35, 37 |
 
 ### Netz und Karte
 
@@ -153,7 +149,6 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 | `dashboard_karte` | Modellergebnisse in die Netzkarte | 37 |
 | `dashboard_map` | einfache Folium-Karte | nur Befehlszeile |
 | `aktualisieren` | neue Daten in einem Schritt einspielen | nur Befehlszeile |
-| `betrieb` | Listenverlauf, Begehungsprotokolle, Prüfung nach vorn | nur Befehlszeile |
 | `main` | Gesamtablauf Netz, Karten, Begehungstabelle | nur Befehlszeile |
 
 ## Modellpakete
@@ -169,7 +164,8 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 python -m pytest -q
 ```
 
-- Eine Testdatei je Modul in `tests/`, insgesamt 40 Dateien.
+- 40 Testdateien in `tests/`, meist eine je Modul. 20 Module haben keine eigene Testdatei, darunter ältere
+  Hilfsmodule aus dem Projektaufbau und einige Paketmodule, die über andere Tests mitgeprüft werden.
 - Die meisten Tests nutzen kleine künstliche Daten und laufen ohne Rohdaten.
 - Tests, die Begehungen oder echte Reihen brauchen, werden ohne diese Daten übersprungen.
 - `pytest.ini` beschränkt die Suche auf `tests/`.

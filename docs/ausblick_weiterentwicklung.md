@@ -4,8 +4,7 @@
 
 - **Bessere Begehungsprotokolle.** Der größte Hebel liegt vor dem Modell. Festhalten, ob etwas kaputt war und nicht nur,
   was gemacht wurde, und wann der Fehler vermutlich begonnen hat. Erst dann lassen sich Filter, Durchfluss und
-  Sollwert als Fehlerart prüfen und eine Frühwarnung überhaupt testen (Notebook 36). Eine Vorlage und ein Befehl zum
-  Einlesen liegen bereit (siehe [Betrieb bei der ÜZ](installation/betrieb.md#2-begehungsprotokoll)).
+  Sollwert als Fehlerart prüfen und eine Frühwarnung überhaupt testen (Notebook 36).
 - **Mehr Fälle.** Jede protokollierte Begehung ist ein neues Label. Bei 11 Ventilfällen sind Unterschiede unter etwa
   0,1 AUC nicht sichtbar. Mit mehr Fällen lassen sich auch die Hinweise auf Dämmung und Kapazität sicherer prüfen.
 - **Dämmung physikalisch erklären.** Die Abkühlrate im Stillstand ist ein erster Hinweis (AUC 0,69, nicht gesichert,

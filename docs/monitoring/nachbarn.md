@@ -64,7 +64,7 @@ Es ist eine reine Analyse, das Stationsblatt bleibt unverändert.
 - **Offen:** ob die Vergleichsgruppe als zweite Sicht ins Stationsblatt kommt. Belastbarer wäre ein Test mit dem
   hydraulischen Netzmodell der ÜZ oder mit Differenzdruckmessungen.
 
-Wie das Netz an anderer Stelle einbezogen wurde, beschreibt [Netz einbeziehen](../netz_einbeziehen.md).
+Wie das Netz an anderer Stelle einbezogen wurde, beschreibt [Netz einbeziehen](../netz_einbeziehen/index.md).
 
 ## Ausgaben
 

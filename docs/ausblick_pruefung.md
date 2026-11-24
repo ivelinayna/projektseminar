@@ -20,8 +20,22 @@ dann begehen.
 5. **Auswertung:** der Anteil der Ventilbefunde in beiden Gruppen, verglichen mit einem exakten Test und mit der
    Richtung, die vorher festgelegt ist. Genauso für die Hinweise auf Dämmung und Kapazität.
 
-Festlegen und Auswerten der Stichprobe übernehmen die Befehle `python -m src.betrieb pruefung-planen` und
-`python -m src.betrieb pruefung-auswerten` (siehe [Betrieb bei der ÜZ](installation/betrieb.md#4-prufung-nach-vorn)).
+**Wie groß die Stichprobe sein sollte.** Bei kleinen Gruppen findet der Test einen echten Unterschied oft nicht. Die
+Tabelle zeigt die Teststärke, also die Wahrscheinlichkeit, dass ein einseitiger exakter Test nach Fisher einen
+Unterschied bei p < 0,05 erkennt (Simulation mit je 2.000 Läufen):
+
+| Stationen je Gruppe | Ventilbefund 70 % gegen 20 % | 50 % gegen 20 % | 40 % gegen 20 % |
+|---|---|---|---|
+| 10 | 63 % | 25 % | 13 % |
+| 15 | 81 % | 37 % | 19 % |
+| 21 | 93 % | 51 % | 29 % |
+
+- 70 % gegen 20 % entspricht dem Ergebnis aus Notebook 35 (7 von 10 gegen etwa 2 bei Zufall). Nach vorn geprüft
+  fallen solche Zahlen meist kleiner aus als rückblickend.
+- Mit 15 Stationen je Gruppe, also 30 Begehungen, ist der Test deutlich aussagekräftiger als mit 10. Im Stand vom
+  November 2026 gibt es 42 nie begangene Stationen mit Ventil-Score, also höchstens 21 je Gruppe.
+- Ein Ergebnis über p = 0,05 heißt bei diesen Gruppengrößen nicht, dass die Liste nichts taugt, sondern dass die Fälle
+  für eine Aussage nicht reichen.
 
 Mit den Stationen, die die ÜZ in einer Saison begehen kann, bleibt auch dieser Test grob. Er misst aber zum ersten Mal,
 was die Liste im Betrieb bringt, ohne dass die Modelle die Antworten kennen.

@@ -34,8 +34,7 @@ Tagesmonitor; Teile von *Was nicht getragen hat*), dazu Projektaufbau, Abgabesta
   `synth_data.py`, `dashboard_map.py`, `ml_classifier.py`, `snap_hast.py`, `network_graph.py`, `window_features.py`).
   Sie werden im Abgabestand nicht mehr genutzt.
 - **Abgabestand:** Zusammenführung der Stränge, Nummerierung der Notebooks 00 bis 39 in Teil-Ordnern, Docker,
-  Read-the-Docs-Konfiguration, *Installation und Ausführung*, `python -m src.aktualisieren` für neue Zählerdaten
-  und *Betrieb bei der ÜZ* mit Listenverlauf, Begehungsprotokoll und Prüfung nach vorn.
+  Read-the-Docs-Konfiguration, *Installation und Ausführung* und `python -m src.aktualisieren` für neue Zählerdaten.
 - **Code in `src/`:**
     - Monitoring: `kennlinien_monitor.py`, `netzvergleich.py`, `tagesmonitor.py`, `alarmbewertung.py`,
       `stationsblatt.py`, `vergleichsgruppen.py`, `nachbarschaft.py`, `netzereignisse.py`
@@ -48,4 +47,4 @@ Tagesmonitor; Teile von *Was nicht getragen hat*), dazu Projektaufbau, Abgabesta
     - Datenladen und Netz: `load_data.py`, `build_graph.py`, `inspections.py`
     - Vorbereitende Befehle: `main.py` mit `visualize.py` (Begehungstabelle für Notebook 08), `meter_quality.py`,
       `detect_real.py` und `profile_timeseries.py` (Tabellen für Notebook 17)
-    - Betrieb: `aktualisieren.py`, `betrieb.py`
+    - Betrieb: `aktualisieren.py`

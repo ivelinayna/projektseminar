@@ -17,7 +17,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Notebook 03: Das Label taugt nur als Detektor für Dauerzustände, die Stichwortsuche im Freitext besteht die Prüfung nicht.
 - Notebook 14: 6 von 66 Begehungen mit Fehler ohne Sollwertänderung, 57 Notizen.
 - Notebook 25: „leer heißt nein“ ist eine Annahme, ausdrücklich „nein“ steht nur 4- bis 8-mal da.
-- Nötig wäre ein festes Protokollfeld für Befund und Reparatur, auch wenn nichts gefunden wurde. Eine Vorlage dafür liegt jetzt bereit (siehe [Betrieb bei der ÜZ](../installation/betrieb.md#2-begehungsprotokoll)).
+- Nötig wäre ein festes Protokollfeld für Befund und Reparatur, auch wenn nichts gefunden wurde.
 
 ## 3 Regel-Baseline mit festen Schwellen
 
@@ -136,7 +136,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Je Station (58) nicht signifikant: Wilcoxon p = 0,172 bzw. 0,423 bei Schwelle 0,025.
 - Im Ventilfall ist das GNN schlechter (Fehler 0,77 gegen 0,53 bei der Abkühlung). Der eigene Vorlauf ist kein unabhängiges Signal.
 - Im Modellvergleich ist „Netzmedian abziehen“ mit 25 von 43 belegt schlechter, Nachbar-Merkmale bringen beim Ventil +0,004.
-- Nötig wären Rohrdaten (Durchmesser, Länge), Lage der Heizzentrale, Bedeutung der Pfeilrichtung und ein hydraulisches Modell.
+- Nötig wären Rohrdaten (Durchmesser, Länge), Lage der Heizzentrale, Bedeutung der Kantenrichtung und ein hydraulisches Modell.
 - Ausführlich unter [GNN: Hilft das Netz?](gnn.md).
 
 ## 17 Geocoding und Netzgeometrie
@@ -145,7 +145,7 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Positionen kommen jetzt aus einer Handliste mit 101 Einträgen, die nicht im Repository liegt.
 - Notebook 31: 93 von 100 Adressen einem Rohrende zugeordnet (höchstens 40 m), 7 ohne. Im Netz verankert sind 93 von 110 Knoten.
 - Notebook 32: Anschlussabstand im Median 6 m, höchstens 36 m (109 Häuser).
-- Notebook 39: 35 von 110 Kanten ohne Rohrweg, 18 Einträge ohne Position, die Pfeilrichtung passt zu keiner Quelle.
+- Notebook 39: 35 von 110 Kanten ohne Rohrweg, 18 Einträge ohne Position, die Kantenrichtung passt zu keiner Quelle.
 - Nötig wären Koordinaten der Hausanschlüsse aus dem GIS der ÜZ.
 
 ## 18 Wächtervergleich

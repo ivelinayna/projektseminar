@@ -4,7 +4,7 @@ Anomalieerkennung ohne Fehlerlabels.
 Ausgangslage
 ------------
 Der ueberwachte Weg ist im Projekt gescheitert und als Negativbefund
-dokumentiert (`docs/ml-klassifikator.md`): Balanced Accuracy 0,33 und
+dokumentiert (`docs/nicht_getragen/negativbefunde.md`): Balanced Accuracy 0,33 und
 0,42 gegen 0,50 trivial, 84 Prozent der Fenster mit Label-Leakage, bei
 n gleich 49 nur neun negative Faelle. Auch der Ground-Truth-Join auf
 die Begehungen trennt nicht, die Basisrate liegt bei rund 77 Prozent.

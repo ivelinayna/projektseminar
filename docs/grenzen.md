@@ -97,7 +97,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getr
 
 - Der Netzgraph ist logisch, nicht hydraulisch. Leitungslängen, Durchmesser und Drücke fehlen (NB 23).
 - 35 von 110 Kanten haben keinen Rohrweg (NB 39).
-- Die Pfeile in `Nodes_Edges.ods` passen zu keiner Quelle. Gegen die angenommene Einspeisung zeigen etwa gleich viele hin wie weg (NB 39).
+- Die Kantenrichtungen in `Nodes_Edges.ods` passen zu keiner Quelle. Gegen die angenommene Einspeisung zeigen etwa gleich viele hin wie weg (NB 39).
 - Ein Einfluss des Strangs auf die Fehler ist nicht nachweisbar (NB 23, NB 32, NB 34).
 
 ### Vergleichbarkeit und Übertragbarkeit
@@ -120,7 +120,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getr
     - Was steckt hinter den Stationen 72135442, 80912173 und 68956359, die nach der Begehung mehr Wasser brauchen?
     - Was ist bei Zähler 72167783 passiert? Der Rücklauf stieg nach der Begehung von 18,6 auf 71,0 °C.
     - Was erklärt die großen Sprünge im Herbst 2024 ohne Begehung (72167777, 69513891, 80956410, NB 06)?
-    - Kann das Protokoll künftig festhalten, ob etwas kaputt war, und nicht nur, was gemacht wurde? Sollwert und Filter wurden bei 62 % und 47 % der Begehungen gemacht, eine Spur im Zähler hinterlassen sie nicht (NB 36). Eine Vorlage für ein solches Protokoll liegt bereit (siehe [Betrieb bei der ÜZ](installation/betrieb.md#2-begehungsprotokoll)).
+    - Kann das Protokoll künftig festhalten, ob etwas kaputt war, und nicht nur, was gemacht wurde? Sollwert und Filter wurden bei 62 % und 47 % der Begehungen gemacht, eine Spur im Zähler hinterlassen sie nicht (NB 36).
 - Betrieb
     - Welche Alarmlast ist im Betrieb tragbar?
     - Soll die CUSUM-Schwelle bei h = 5 bleiben oder auf h = 8 steigen? h = 8 bringt etwa ein Drittel weniger Alarme.
@@ -136,7 +136,7 @@ Ansätze, die nicht funktioniert haben, stehen unter [Negativbefunde](nicht_getr
     - Was sind die Zähler 58202380 und 66761022? Sie fallen in allen Clusterverfahren als Ausreißer auf (NB 07, NB 08).
 - Netz und Hydraulik
     - Wo liegen die Heizzentrale und die Einspeisepunkte?
-    - Was bedeuten die Pfeile in `Nodes_Edges.ods`?
+    - Was bedeuten die Kantenrichtungen in `Nodes_Edges.ods`?
     - Gibt es ein hydraulisches Netzmodell, Rohrdaten (Nennweite, Länge) oder Differenzdrücke?
     - Gibt es die Vorlauftemperatur am Ausgang der Heizzentrale?
     - Wie sollen Übergabestationen ohne Kante im Netz behandelt werden?

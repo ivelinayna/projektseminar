@@ -55,7 +55,7 @@
 
 ## Teil 7 Netz
 
-- Das Netzmodell hat 110 Nodes und 110 Kanten, 89 Zähler sind zugeordnet. Die Pfeilrichtung der Kantendatei passt oft nicht zum Vorlaufgefälle (22 Kanten plausibel, 26 verdächtig) (Notebook 31).
+- Das Netzmodell hat 110 Nodes und 110 Kanten, 89 Zähler sind zugeordnet. Die Richtung der Kanten aud der Datei "Nodes_Edges" passt oft nicht zum Vorlaufgefälle (22 Kanten plausibel, 26 verdächtig) (Notebook 31).
 - Entlang des Rohrbaums ist das obere Haus bei 36 von 38 Paaren wärmer. Rohrbaum-Nachbarn schwanken aber nicht stärker gemeinsam als zufällige Häuser (0,231 gegen 0,223). Ein Effekt je Strang ist nicht nachweisbar (Notebook 32).
 - Nachbarn im Leitungsgraphen beginnen Verschlechterungen nicht häufiger gemeinsam als zufällige Paare (p 0,21 bis 0,48). Gemeinsame Verbesserungen passen zu gemeinsamen Begehungsterminen (Notebook 24).
 - Das GNN gewinnt durch das Netz nichts Messbares: Beitrag +0,010 und −0,009 (p = 0,172 und 0,423) (Notebook 39).

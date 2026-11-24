@@ -11,9 +11,11 @@ Die Arbeit folgt dem Weg des Projekts: von den Daten über die Verfahren bis zum
   und warum.
 - **Ergebnisse** fasst zusammen, welches Modell welches Ziel erfüllt, und stellt das Dashboard vor.
 - **Grenzen und Erkenntnisse** ordnet ein, wie belastbar die Ergebnisse sind und was sich aus dem Projekt lernen lässt.
-- **Ausblick** nennt die nächsten Schritte und die offenen Fragen an die ÜZ.
+  Dort stehen auch die offenen Fragen an die ÜZ.
+- **Ausblick** beschreibt einen Probebetrieb, eine Prüfung der Modelle nach vorn und die Weiterentwicklung.
 - **Aufteilung im Team** zeigt, wer woran gearbeitet hat.
-- **Der Anhang** enthält die Liste aller Notebooks und ein Verzeichnis der Fachbegriffe.
+- **Der Anhang** enthält ein Verzeichnis der Fachbegriffe. Die Liste aller Notebooks steht unter *Vorgehen →
+  Überblick der Notebooks*.
 
 ## Rahmen
 

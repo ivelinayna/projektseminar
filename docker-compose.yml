@@ -1,4 +1,4 @@
-#Start: docker compose up jupyter   (oder dashboard, docs, app)
+#Start: docker compose up jupyter   (oder dashboard, docs)
 #Die Rohdaten liegen nicht im Image. Sie müssen lokal unter data/raw/ liegen und werden eingehängt.
 x-projekt: &projekt
   build: .
