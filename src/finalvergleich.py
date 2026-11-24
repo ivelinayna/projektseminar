@@ -1057,8 +1057,8 @@ def zeichne_matrix(ax, tabelle: pd.DataFrame, titel: str, xlabel: str, ylabel: s
             ax.text(j, i, f"{int(z[i, j])}", ha="center", va="center", fontsize=13,
                     color="white" if z[i, j] > 0.6 * z.max() else "black", fontweight="bold")
     import textwrap
-    ax.set_xticks(range(z.shape[1]), [textwrap.fill(str(c), 13) for c in tabelle.columns], fontsize=8)
-    ax.set_yticks(range(z.shape[0]), [textwrap.fill(str(c), 16) for c in tabelle.index], fontsize=8)
+    ax.set_xticks(range(z.shape[1]), [textwrap.fill(str(c), 13, break_long_words=False) for c in tabelle.columns], fontsize=8)
+    ax.set_yticks(range(z.shape[0]), [textwrap.fill(str(c), 16, break_long_words=False) for c in tabelle.index], fontsize=8)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title(titel, fontsize=10)
@@ -1835,26 +1835,32 @@ def fallbild(meter: int, w: dict, e: dict, von, bis, titel: str = ""):
     import matplotlib.pyplot as plt
     von, bis = pd.Timestamp(von), pd.Timestamp(bis)
     fig, ax = plt.subplots(4, 1, figsize=(13, 10), sharex=True)
+    tage = pd.date_range(von.normalize(), bis.normalize(), freq="D")
+
+    def taeglich(df, datum, spalte):
+        #fehlende Tage als Lücke, damit keine Linie über Zeiten ohne Werte läuft
+        return df.groupby(datum)[spalte].mean().reindex(tage)
+
     v = w["verlauf"]
     v = v[(v["meter"] == meter) & (v["datum"] >= von) & (v["datum"] <= bis)]
     k = v[v["kanal"] == "kwh_pro_m3"]
     ax[0].plot(k["datum"], k["wert"], ".", ms=4, color="black", label="gemessen")
-    ax[0].plot(k["datum"], k["erwartung"], "-", color=FARBE_MONITORING, label="Erwartung Kennlinie (Monitoring-Modell)")
+    ax[0].plot(tage, taeglich(k, "datum", "erwartung"), "-", color=FARBE_MONITORING, label="Erwartung Kennlinie (Monitoring-Modell)")
     ax[0].set_ylabel("Abkühlung\n[kWh/m³]")
     ax[0].set_title(titel or f"Station {meter}", fontsize=11)
     for kanal, farbe in (("kwh_pro_m3", FARBE_MONITORING), ("log_volumen", "#60A5FA")):
         g = v[v["kanal"] == kanal]
-        ax[1].plot(g["datum"], np.maximum(g["s_plus"], g["s_minus"]), color=farbe,
+        ax[1].plot(tage, taeglich(g.assign(konto=np.maximum(g["s_plus"], g["s_minus"])), "datum", "konto"), color=farbe,
                    label=f"CUSUM-Konto {tm.KANAELE[kanal]}")
     ax[1].axhline(H_MONITORING, color=FARBE_MONITORING, ls="--", lw=1, label=f"Grenze h = {H_MONITORING:g}")
     ax[1].set_ylabel("Konto Monitoring-Modell")
     z = w["z"]
     z = z[(z["zaehler"] == meter) & (z["tag"] >= von) & (z["tag"] <= bis)]
     ax[2].plot(z["tag"], z["rl_gemessen"], ".", ms=4, color="black", label="Rücklauf gemessen")
-    ax[2].plot(z["tag"], z["rl_erwartet"], "-", color=FARBE_LSTM, label="Erwartung LSTM")
+    ax[2].plot(tage, taeglich(z, "tag", "rl_erwartet"), "-", color=FARBE_LSTM, label="Erwartung LSTM")
     ax[2].set_ylabel("Rücklauf\nTagesmittel [°C]")
-    ax[3].plot(z["tag"], z["z_rl"], color=FARBE_LSTM, label="z Rücklauf (LSTM)")
-    ax[3].plot(z["tag"], z["z_fluss"], color="#F59E0B", label="z Nachtdurchfluss (LSTM)")
+    ax[3].plot(tage, taeglich(z, "tag", "z_rl"), color=FARBE_LSTM, label="z Rücklauf (LSTM)")
+    ax[3].plot(tage, taeglich(z, "tag", "z_fluss"), color="#F59E0B", label="z Nachtdurchfluss (LSTM)")
     ax[3].set_ylabel("z-Wert LSTM")
     for key, a_ax, farbe in (("monitoring", ax[1], FARBE_MONITORING), ("lstm_c", ax[3], FARBE_LSTM)):
         a = w["alarme"][key]
@@ -1867,7 +1873,7 @@ def fallbild(meter: int, w: dict, e: dict, von, bis, titel: str = ""):
                 a_ax.axvline(pd.Timestamp(d), color="green", lw=2.5, alpha=0.5)
     ax[0].plot([], [], color="green", lw=2.5, alpha=0.5, label="Begehung")
     for a_ax in ax:
-        a_ax.legend(loc="upper left", fontsize=8, frameon=False, ncol=3)
+        a_ax.legend(loc="upper left", bbox_to_anchor=(1.0, 1.0), fontsize=8, frameon=False)
         a_ax.spines[["top", "right"]].set_visible(False)
     ax[3].set_xlabel("Datum (senkrechte Linien: Alarm, durchgezogen = schlechter, gepunktet = besser)")
     fig.tight_layout()
