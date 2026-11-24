@@ -115,6 +115,13 @@ An eingebauten Fehlern im Winter (Test B, höchstens 10 % Fehlalarme):
   ohne mehr Fehlalarme. An echten Begehungen meldet das Prognose-LSTM aber nicht öfter als an Vergleichsstationen. An
   Heiztagen bleibt es deshalb ein Hinweis.
 
+![Alarm im Winter: Monitoring-Modell, Prognose-LSTM und beide zusammen](assets/vergleich/35_waechter_zusammen.png)
+
+Das Bild zeigt die sechs eingebauten Fehler im Winter im Mittel, mit den gewählten Einstellungen der Wächter. Allein
+findet das Monitoring-Modell mehr, das Prognose-LSTM meldet dafür kaum Fehlalarme. Zusammen finden beide 60 % der Fehler
+bei denselben 12 % Fehlalarmen wie das Monitoring-Modell allein. Die Tabelle oben vergleicht dagegen bei gleicher
+Fehlalarmquote von höchstens 10 %.
+
 ## Fehler erkennen
 
 **Erster Prüfstand.**
@@ -128,27 +135,28 @@ An eingebauten Fehlern im Winter (Test B, höchstens 10 % Fehlalarme):
   Vergleichsgruppen, Potenzial und Rücklaufmaße zeigen in die umgekehrte Richtung (0,30 bis 0,39): Ein Dämmungsbefund
   kommt eher bei Stationen vor, die im Netz gut aussehen.
 
-**Strenger Vergleich (Test C).**
+**Strenger Vergleich (Test C).** Hier treten alle drei Ansätze gegeneinander an: das Monitoring-Modell mit seinem
+Netzvergleich, die beste Regel ohne Lernen und die KI, also die Regression auf den 16 LSTM-Zahlen, die im Dashboard
+läuft. Geprüft wird nur an Stationen, die das Modell beim Lernen nie gesehen hat.
 
-Bei den Regeln gibt es zwei Arten. Die **feste Regel** steht vorher fest und kommt aus der Physik, etwa die
-Sommernacht-Regel. Die **angepasste Regel** sucht sich in jedem Lernteil die eine Kennzahl aus, die dort die
-Befunde am besten trennt.
+![Test C: Monitoring-Modell, beste Regel und KI je Fehlerart](assets/vergleich/35_fehlerart_drei_ansaetze.png)
 
-| Fehlerart | KI | feste Regel | angepasste Regel | Ergebnis |
+| Fehlerart | Monitoring-Modell | beste Regel | KI | Ergebnis |
 |---|---|---|---|---|
-| Ventil | 0,84 | Sommernacht-Regel 0,85 | 0,79 | gegen die feste Regel gleichauf, −0,01 [−0,14; +0,12] |
-| Dämmung | 0,78 | – | 0,61 | KI vorn, +0,17 [−0,04; +0,38], knapp nicht gesichert |
-| Kapazität | höchstens 0,53 | Spitzenlast zum alten Vertrag 0,76 [0,58; 0,93] | – | die feste Regel gewinnt |
-| Filter, Durchfluss, Sollwert | 0,37 bis 0,39 | – | 0,38 bis 0,51 | nicht erkennbar |
+| offenes Ventil | 0,73 | 0,85 (Sommernacht-Regel) | 0,83 | KI und Regel gleichauf, das Monitoring-Modell dahinter |
+| Dämmung | 0,38 | 0,61 (beste Kennzahl) | 0,79 | nur die KI findet ein Muster, knapp nicht gesichert |
+| Anschluss zu groß | 0,60 | 0,76 (Spitzenlast zum alten Vertrag) | 0,49 | nur die Regel trägt |
+| Filter, Durchfluss, Sollwert | 0,51 bis 0,57 | 0,38 bis 0,51 | 0,30 bis 0,36 | niemand erkennt sie |
 
-Die Werte in eckigen Klammern sind 95-%-Intervalle über Stationen.
+„Beste Regel“ ist jeweils die stärkste Regel ohne Lernen. Beim Ventil ist das die Sommernacht-Regel und beim Anschluss
+die Spitzenlast zum alten Vertrag, beide standen vorher fest. Für die übrigen Fehlerarten gibt es keine feste Regel,
+dort ist es die eine Kennzahl, die die Befunde im Lernteil am besten trennt.
 
-![Test C: KI mit Modellwahl im Lernteil gegen die angepasste Regel](assets/vergleich/35_ki_gegen_regel.png)
-
-Das Bild zeigt die KI gegen die **angepasste** Regel, also die vorletzte Spalte. Beim Ventil ist diese Regel
-schwächer (0,79) als die feste Sommernacht-Regel (0,85). Sie sucht sich ihre Kennzahl nach rund 9 Ventilfällen je
-Lernteil aus und lässt sich dabei leicht vom Zufall leiten. Gegen die feste Regel liegt die KI beim Ventil
-gleichauf, bei der Dämmung gibt es keine feste Regel, die etwas findet.
+Die KI-Zahlen gehören zu dem Modell, das im Dashboard läuft. Wird auch die Wahl des Modells nur im Lernteil getroffen
+(Notebook 35, Abschnitt 15), kommt die KI auf 0,84 beim Ventil und 0,78 bei der Dämmung, also praktisch auf dieselben
+Werte. Gegen die Sommernacht-Regel liegt sie damit gleichauf (−0,01 [−0,14; +0,12]), bei der Dämmung gegen die beste
+Kennzahl vorn (+0,17 [−0,04; +0,38]), knapp nicht gesichert. Die Werte in eckigen Klammern sind 95-%-Intervalle über
+Stationen.
 
 ### Warum das so ausgeht
 
