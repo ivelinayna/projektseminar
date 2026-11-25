@@ -97,8 +97,8 @@ nav:
       - Was nicht getragen hat:
           - Überblick: nicht_getragen/index.md
           - Negativbefunde im Detail: nicht_getragen/negativbefunde.md
-          - "Bayes-Diagnose": nicht_getragen/bayes.md
-          - "GNN: Hilft das Netz?": nicht_getragen/gnn.md
+          - Bayes-Diagnose: nicht_getragen/bayes.md
+          - GNN: nicht_getragen/gnn.md
 
   - Ergebnisse:
       - Überblick: ergebnisse/index.md
