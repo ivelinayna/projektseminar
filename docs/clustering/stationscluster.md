@@ -82,14 +82,14 @@ K-Means bestimmt die Zahl der Cluster nicht selbst. Getestet werden k = 2 bis 8 
 - **Cluster 0 ist auffällig:** hoher Rücklauf, geringe Spreizung, Durchfluss auch im Sommer. Das Bild einer Station,
   die durchgehend umwälzt, ohne viel Wärme abzugeben. Das passt zu Zirkulationsverlusten, einem hydraulischen
   Kurzschluss oder einem Ventil, das nicht schließt. Für das Netz ist das teuer, weil ein hoher Rücklauf die
-  Temperatur der ganzen Leitung hochzieht.
+  Temperatur in der ganzen Rücklaufleitung hochzieht.
 - **Cluster 1 ist Normalbetrieb:** Die Station öffnet bei Bedarf und ist sonst zu.
 - Getrennt wird nach Rücklauf, Spreizung und Sommer-Durchfluss, nicht nach der Größe.
 - Der höhere `flow_short_cycle_power` in Cluster 1 (0,21 gegen 0,10) ist kein Widerspruch: Wer taktet, hat kurze
   Zyklen. Wer durchläuft, hat keine.
 - **Passt zur Label-Regel:** Cluster 0 zeigt genau das Muster der Regel aus
-  [Notebook 03](../begehungen/labels.md#die-regel). Drei der vier Stationen mit den meisten auffälligen Monaten dort
-  (68956351, 72167782, 80912182) liegen in Cluster 0.
+  [Notebook 03](../begehungen/labels.md#die-regel). Von den sechs Stationen mit den meisten auffälligen Monaten dort
+  (22 bis 27) liegen fünf in Cluster 0, nur 72167783 nicht.
 - **k = 2 ist keine klare Entscheidung.** k = 3 liegt dicht dahinter. Dort spaltet sich ein Kleinst-Cluster mit drei
   Stationen ab, darunter 58202380 und 66761022.
 
@@ -98,27 +98,44 @@ Werte würden die Unterschiede verwischen. Dafür schwankt die Fallzahl je Merkm
 
 ## Die Cluster im Bild
 
-Eine Hauptkomponentenanalyse (PCA) dreht die Punktwolke aus 10 Merkmalen so, dass die größte Streuung auf der x-Achse
-liegt (PC1) und die zweitgrößte auf der y-Achse (PC2).
+Jede Station hat 10 Merkmale, liegt also in einem Raum mit 10 Dimensionen. Um das zeichnen zu können, dreht eine
+Hauptkomponentenanalyse (PCA) die Punktwolke so, dass die größte Streuung auf der x-Achse liegt (PC1) und die
+zweitgrößte auf der y-Achse (PC2).
 
-- PC1 erklärt 29,8 %, PC2 18,7 %, zusammen 48,5 %. Rund die Hälfte der Streuung fehlt im Bild. Es ist eine
+![Die 93 Stationen in den ersten beiden PCA-Dimensionen, blau Cluster 0, orange Cluster 1](../assets/clustering/07_pca_cluster.png)
+
+**So liest man das Bild:**
+
+- Jeder Punkt ist eine Station. Blau ist Cluster 0 (31 HAST, auffällig), orange Cluster 1 (62 HAST, Normalbetrieb).
+- Nahe Punkte sind Stationen mit ähnlichem Betriebsverhalten. Die Achsen haben keine Einheit, sie mischen alle 10
+  Merkmale. Es zählen nur Abstände und Nachbarschaften.
+- **x-Achse (PC1, 29,8 %): Rücklauf-Durchfluss-Achse.** Rechts liegen Stationen mit hohem Winterrücklauf,
+  Durchfluss auch im Sommer, wenig Leerlauf und kleiner Spreizung, links das Gegenteil.
+- **y-Achse (PC2, 18,7 %): gemischt.** Oben liegen Stationen mit hoher Spitzenlast im Verhältnis zum Anschlusswert,
+  unten solche mit vielen Volllaststunden und großer Spreizung.
+- Beide Achsen zusammen zeigen 48,5 % der Streuung. Rund die Hälfte fehlt im Bild. Es ist eine
   Plausibilitätsprüfung, kein Beweis.
-- **PC1 ist die Rücklauf-Durchfluss-Achse:** hoher Winterrücklauf und Sommer-Durchfluss gegen Leerlaufanteil, kurze
-  Zyklen und große Spreizung. Nach genau dieser Achse trennt auch K-Means, deshalb ist die Trennung im Bild sichtbar.
-- PC2 ist gemischt, vor allem Spitzenlast gegen Volllaststunden und Spreizung.
+
+**Was man sieht:**
+
+- K-Means trennt entlang der x-Achse: Orange reicht von −3,4 bis 0,9, Blau von 0,4 bis 6,5.
+- Die orangen Stationen liegen enger beieinander. Normalbetrieb sieht bei den meisten Stationen ähnlich aus. Die
+  blauen streuen weiter, sie sind auf unterschiedliche Weise auffällig.
+- Zwischen 0 und 1 gehen beide Gruppen ohne Lücke ineinander über. Das ist die schwache Silhouette von 0,24 als Bild:
+  K-Means schneidet eine durchgehende Wolke, statt zwei getrennte Gruppen zu finden.
+- Ganz rechts liegen drei Stationen weit draußen: 81050517, 58202380 und 66761022. Das ist der Kleinst-Cluster, der
+  sich bei k = 3 abspaltet.
 
 ## Was offen bleibt
 
 - **Die Wahl von k:** k = 2 und k = 3 liegen dicht beieinander.
 - **Die Abdeckung nutzen:** Sie reicht je Station von 46 % bis 100 %. Derzeit zählen alle Stationen gleich.
-- **58202380 und 66761022:** Ihr Stationstyp ist unklar. Erst in die Rohzeitreihen schauen (echter Betrieb oder
-  defekter Zähler?), dann die ÜZ fragen. Beide fehlen in den Begehungsakten.
 - **Abgleich mit den Begehungen:** Er wurde für die alte 97/3-Aufteilung gerechnet und ist dort gegenstandslos, weil
   alle begangenen Stationen im großen Cluster lagen. [Notebook 08](benchmark.md) rechnet ihn für die aktuellen Daten.
 
 ## Was daraus folgte
 
-Das Notebook endet mit vier Wegen, wie es weitergehen kann. Drei davon hat das Projekt genommen:
+Die erste Fassung des Notebooks endete mit vier Wegen, wie es weitergehen kann. Drei davon hat das Projekt genommen:
 
 - **Die Zeitachse nutzen:** Eine Zeile je Station dampft bis zu 4,7 Jahre Stundendaten auf eine Zahl ein. Die
   [Stundencluster](validierung.md) und die [Tagescluster](tagescluster.md) nutzen die Zeit.

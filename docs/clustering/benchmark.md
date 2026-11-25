@@ -32,14 +32,14 @@ Ergebnis stabil ist.
 - **Keine belastbare Struktur.** Nur GMM mit k = 2 liegt knapp über 0,25, bei einer sehr ungleichen Aufteilung.
 - **K-Means ist am stabilsten**, aber deutlich unter dem Wert 0,90 aus dem früheren K-Means-Notebook. Der hatte K-Means
   als stabil ausgewiesen, obwohl die Struktur fachlich schwach war.
-- Mehr als drei Cluster zerlegen bei allen Verfahren nur die Masse weiter, ohne bessere Silhouette.
+- Mehr als drei Cluster zerlegen bei allen Verfahren nur die Masse weiter, ohne bessere Silhouette als bei k = 2.
 - **HDBSCAN trägt nicht:** Ab 5 Stationen Mindestgröße ist alles Rauschen, bei 3 bleibt rund die Hälfte unzugeordnet.
 
 ## Worin sich die Verfahren einig sind
 
-- **Nur über die Ausreißer.** 58202380 und 66761022 sind der robusteste Einzelbefund: K-Means und Ward trennen sie
-  bei k = 3 als Kleinst-Cluster ab (Winterrücklauf über 60 °C, Sommer-Durchfluss über 2.000 l/h, kaum Leerlauf). GMM
-  sieht sie nicht als eigene Gruppe.
+- **Nur über die Ausreißer, und auch das nur K-Means und Ward.** 58202380 und 66761022 sind der robusteste
+  Einzelbefund: K-Means und Ward trennen sie bei k = 3 als Kleinst-Cluster ab (Winterrücklauf über 60 °C,
+  Sommer-Durchfluss über 2.000 l/h, kaum Leerlauf). GMM sieht sie nicht als eigene Gruppe.
 - Paarweise stimmen die Verfahren nur mäßig überein (ARI 0,35 bis 0,48). Wie die Masse aufgeteilt wird, hängt vom
   Verfahren ab.
 - Die Trennachse ist fachlich richtig: Rücklauf, Leerlauf und Spreizung. Die schwach gespreizte Gruppe (30 Stationen,
@@ -48,16 +48,13 @@ Ergebnis stabil ist.
 ## Abgleich mit den Begehungen
 
 - Kein Cluster ist signifikant maßnahmenreicher als die anderen (Fisher-Test p ≥ 0,33, Mann-Whitney p ≥ 0,08).
-- Die Basisrate liegt bei 77 %: Fast jede begangene Station hat eine Maßnahme. Damit lässt sich nichts trennen (siehe
-  [Wirkung im 21-Tage-Fenster](../begehungen/wirkung.md#ereignis-statt-label)).
-- Der interessanteste Cluster, die beiden Ausreißer, fehlt in den Begehungsdaten ganz.
-
-## Offen
-
-- 58202380 und 66761022 fachlich prüfen. Beide lassen sich auch über `Zuordnung.xlsx` keiner Adresse zuordnen und
-  fehlen in den Begehungsdaten. Der dritte frühere Ausreißer, 86792512, ist laut ÜZ ein BHKW und fällt seit Notebook 00
-  heraus.
+- Die Basisrate liegt bei 77 % (56 Stationen im Abgleich): Fast jede begangene Station hat eine Maßnahme. Damit lässt
+  sich nichts trennen (siehe [Wirkung im 21-Tage-Fenster](../begehungen/wirkung.md#ereignis-statt-label)).
+- Der Ausreißer-Cluster fehlt in den Begehungsdaten ganz und lässt sich nicht testen.
 
 ## Ausgabe
 
-`data/processed/cluster_benchmark.csv` und `cluster_benchmark.json` mit den Ergebnissen je Verfahren und k.
+- `data/processed/cluster_benchmark.csv`: eine Zeile je HAST mit der Clusterzuordnung aller vier Verfahren.
+  HDBSCAN-Rauschen steht als −1 in der Datei.
+- `data/processed/cluster_benchmark.json`: Silhouette, Clustergrößen und Bootstrap-ARI je Verfahren und k, dazu Seed
+  und die in Notebook 00 entfernten Zähler.

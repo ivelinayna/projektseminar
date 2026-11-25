@@ -53,10 +53,11 @@ Deshalb:
 
 - **Anschlusswert:** Der vertraglich vereinbarte Höchstwert in kW, typisch 5 bis 17 kW bei Wohnhäusern. Er ist nur
   eine Größenangabe. Erst das Volumen je kW zeigt das Verhalten: Ein 8-kW-Haus mit guter Abkühlung braucht bei 0 bis
-  5 °C rund 1,8 m³ am Tag, mit Dauerdurchfluss 8 bis 10 m³. Er kommt über die Zählernummer aus `Nodes_Edges.ods`, bei
-  getauschten Zählern über die Adresse aus `Zuordnung.xlsx`. Zähler ohne Anschlusswert fallen aus dem Clustering.
-- Im Sommer ersetzt der **Nachtfluss** die beiden Streuungen: Nachts sollte kaum Wasser fließen, und an vielen
-  Sommertagen läuft die Station zu selten für eine Streuung.
+  5 °C rund 1,8 m³ am Tag, mit Dauerdurchfluss 8 bis 10 m³. Der Anschlusswert kommt über die Zählernummer aus
+  `Nodes_Edges.ods`, bei getauschten Zählern über die Adresse aus `Zuordnung.xlsx`. Zähler ohne Anschlusswert fallen
+  aus dem Clustering, das betrifft 5 von 93. Geclustert werden 88 HAST.
+- In Übergang und Sommer ersetzt der **Nachtfluss** die beiden Streuungen: Nachts sollte kaum Wasser fließen, und an
+  vielen warmen Tagen läuft die Station zu selten für eine Streuung.
 - Die Spreizung selbst wird mitgeführt, aber **nicht** geclustert. Sie ist kWh/m³ ÷ 1,15 und würde die Abkühlung
   doppelt zählen.
 
@@ -77,8 +78,10 @@ acht Probleme geprüft. Gelöscht wird nichts: Markierte Tage bleiben in der Tab
 | `ohne_wetter` | kein Tagesmittel vorhanden |
 
 - **Nutzbar sind 62.734 Tage (73 %).**
-- Am meisten kostet `wenig_stunden` mit 16.045 Tagen, die Ursache ist noch offen. Danach kommt `wenig_energie`, vor
-  allem im Sommer: Kleine Häuser brauchen dann wenig Warmwasser.
+- Am meisten kostet `wenig_stunden` mit 16.045 Tagen. 15.416 davon (96 %) stammen aus der Zeit vor November 2022,
+  als 45 Zähler nur einen Wert am Tag lieferten (siehe
+  [Zählerdaten](../datengrundlage/zaehlerdaten.md#zeitraum-und-abdeckung)). Ab November 2022 sind es nur 629 Tage.
+- An zweiter Stelle steht `wenig_energie`, vor allem im Sommer: Kleine Häuser brauchen dann wenig Warmwasser.
 - Die Zählerstände selbst sind fast immer in Ordnung, Rücksprünge, stehende Zähler und unplausible Werte gibt es nur
   vereinzelt.
 - Im Sommer sind nur 60 % der Tage nutzbar. Es bleiben eher größere, verbrauchsstarke Stationen übrig, die
@@ -93,12 +96,30 @@ acht Probleme geprüft. Gelöscht wird nichts: Markierte Tage bleiben in der Tab
 | Sommer | 0,743 | 0,503 | 0,540 |
 
 - K ist **fest gesetzt**, nicht automatisch nach der höchsten Silhouette: 4 an Heiztagen, 3 in Übergang und Sommer.
-  Kleine Unterschiede in der Silhouette sind Rauschen.
-- An Heiztagen ist die Struktur schwach, Übergang und Sommer trennen sich klar.
+  Kleine Unterschiede in der Silhouette sind Rauschen. In Übergang und Sommer läge K = 4 zwar etwas höher,
+  zerlegt aber den Dauerdurchfluss in zwei Cluster (siehe [Wie das Notebook gewachsen ist](#wie-das-notebook-gewachsen-ist)).
+- An Heiztagen ist die Struktur schwach, Übergang und Sommer trennen sich klar. Das zeigt auch das Bild unten.
 - **Einheitliche Buchstaben:** Jede Gruppe wird für sich geclustert. Danach bekommen die Cluster über die Gruppen hinweg
   dieselben Buchstaben, abgeglichen an der Gruppe mit den meisten Tagen. Die Heiztage teilen sich A bis D, Übergang und
   Sommer haben eigene Merkmale und A bis C. Ein A im Sommer ist also nicht dasselbe wie ein A an Heiztagen. Bei Frost
   passen die Typen schlechter zur Referenz (mittlerer Abstand 1,12, sonst 0,27 oder weniger).
+
+![Die geclusterten Tage je Temperaturgruppe in den ersten beiden PCA-Dimensionen, oben die drei kälteren Heizgruppen, unten die mildeste Heizgruppe, Übergang und Sommer](../assets/clustering/10_pca_gruppen.png)
+
+**So liest man das Bild:** Jedes der sechs Felder ist eine Temperaturgruppe. Jeder Punkt ist ein Tag einer HAST. Wie
+beim [Stationscluster](stationscluster.md#die-cluster-im-bild) dreht eine PCA die Merkmale so, dass die größten
+Unterschiede auf den beiden Achsen liegen. Die Achsen haben keine Einheit, es zählen nur Abstände. Die Farbe ist der
+Tagestyp: Blau für Heiztage, Orange für Übergang und Sommer, hell heißt gute Abkühlung, dunkel schlechte. Die Prozente
+in der Legende sind die Anteile der Tage.
+
+**Was man sieht:**
+
+- **Heiztage (blau):** eine zusammenhängende Wolke. A (hell) und B liegen links und gehen ineinander über, B etwas
+  höher, weil die y-Achse die Schwankung der Spreizung misst. C liegt in der Mitte. D (am dunkelsten) zieht als
+  Ausläufer weit nach rechts, das ist viel Wasser bei schlechter Abkühlung. Die Typen schneiden die Wolke, sie sind
+  keine getrennten Gruppen. Daher die schwache Silhouette.
+- **Übergang und Sommer (orange):** zwei klar getrennte Äste. Links liegen A und B auf einer gemeinsamen Linie, rechts
+  läuft C (Dauerdurchfluss) als eigener Ast davon. Dazwischen liegen kaum Tage. Daher die hohe Silhouette.
 
 ## Die Tagestypen
 
@@ -109,9 +130,9 @@ acht Probleme geprüft. Gelöscht wird nichts: Markierte Tage bleiben in der Tab
 | **A** gute Abkühlung | rund 40 % | rund 30 K Spreizung, Rücklauf rund 41 °C, rund 1,5 m³ am Tag, nachts kaum Durchfluss | so soll eine HAST laufen |
 | **B** stark schwankend | rund 33 % | wenig Wasser wie A, aber die Spreizung schwankt über den Tag um rund 23 K (A: rund 10 K), Rücklauf rund 49 °C | unruhige Regelung oder Wechsel zwischen Heizen und Warmwasser |
 | **C** gleichmäßig schwach | rund 20 % | doppelt so viel Wasser bei halber Abkühlung (rund 15 K), Rücklauf rund 57 °C, ruhiger Betrieb | zu hoher Durchfluss, fehlender Abgleich oder zu hohe Heizkurve |
-| **D** Dauerdurchfluss | rund 8 %, 16 HAST | über 10 m³ am Tag, rund 430 l/h ohne Pause, rund 3,5 K Spreizung, Rücklauf rund 72 °C, auch nachts | Ventil schließt nicht oder Bypass |
+| **D** Dauerdurchfluss | rund 8 %, 16 HAST | rund 9 m³ am Tag, rund 370 l/h ohne Pause, rund 3,5 K Spreizung, Rücklauf rund 72 °C, auch nachts | Ventil schließt nicht oder Bypass |
 
-**In Übergang und Sommer:**
+**In Übergang und Sommer** (Zahlen aus der Gruppe Sommer, die Übergangszeit sieht fast gleich aus):
 
 | Typ | Anteil der Tage | Bild |
 |---|---|---|
@@ -132,9 +153,9 @@ acht Probleme geprüft. Gelöscht wird nichts: Markierte Tage bleiben in der Tab
 - **Übergang und Sommer:** alle drei Merkmale stark, Nachtfluss 83 bis 85 %, Volumen 82 bis 84 %, Abkühlung 74 bis
   75 %.
 - Kein Merkmal ist überflüssig, jedes erklärt mindestens 40 % seiner Unterschiede.
-- Im Bild der PCA ist an Heiztagen die erste Achse die **Dauerdurchfluss-Achse** (viel Wasser, gleichmäßiger Fluss,
-  schlechte Abkühlung, Typ D liegt am Rand), die zweite die **Schwankungs-Achse** (fast nur die Streuung der
-  Spreizung). Deshalb entsteht Typ B als eigener Typ.
+- Im [Bild der PCA](#wie-viele-cluster) ist an Heiztagen die erste Achse die **Dauerdurchfluss-Achse** (viel
+  Wasser, gleichmäßiger Fluss, schlechte Abkühlung, Typ D liegt am Rand), die zweite die **Schwankungs-Achse** (fast
+  nur die Streuung der Spreizung). Deshalb entsteht Typ B als eigener Typ.
 
 ## Liegen die Tage einer HAST zusammen?
 
@@ -149,16 +170,40 @@ acht Probleme geprüft. Gelöscht wird nichts: Markierte Tage bleiben in der Tab
 
 - **Die Station prägt ihre Tage.** Die Typen beschreiben zu einem großen Teil die Station selbst, Stationsprofile sind
   deshalb sinnvoll.
-- An milden Heiztagen (10 bis 15 °C) wechseln die HAST am häufigsten, nur 30 % bleiben bei einem Typ.
+- An milden Heiztagen (10 bis 15 °C) wechseln die HAST am häufigsten. Dort haben nur 30 % mindestens 80 % ihrer Tage
+  in einem Typ.
 - Interessant sind die HAST, die zwischen Typen wechseln. Laut Aufgabenstellung der ÜZ deutet ein Wechseln eher auf ein
   Regelproblem, gleichbleibend schlechte Tage eher auf einen Defekt.
 
 ## Zeitverlauf
 
-Ein Farbband je HAST zeigt Tag für Tag ihren Typ, Heiztage in Blau, Übergang und Sommer in Orange, hell heißt gute
-Abkühlung. Durchgehend gleiche Farbe heißt: Die HAST bleibt in ihrem Typ. Ein Farbwechsel ab einem Datum heißt: Ihr
-Zustand ändert sich, etwa nach einer Reparatur. Solche Wechsel sind die Brücke zu den Begehungen. Ob sie zu bekannten
-Ereignissen passen, etwa zum Ventilfall 68956351 im September 2024, ist noch nicht geprüft.
+![Tagestyp je HAST und Tag von November 2022 bis Juli 2025, eine Zeile je HAST, sortiert von überwiegend guten zu überwiegend schlechten Typen](../assets/clustering/10_zeitverlauf.png)
+
+**So liest man das Bild:**
+
+- Jede **Zeile** ist eine der 88 HAST, jede **Spalte** ein Tag. Die Farbe ist der Tagestyp an diesem Tag.
+- **Farbton = Familie:** Blau für Heiztage (A bis D), Orange für Übergang und Sommer (A bis C). **Helligkeit = Typ:**
+  hell heißt gute Abkühlung, dunkel schlechte. Die Legende rechts ordnet jede Farbe einem Typ zu.
+- **Weiß** heißt: an diesem Tag nicht geclustert, weil Daten fehlen oder der Tag markiert ist.
+- Oben stehen die HAST mit überwiegend guten Tagen, unten die mit überwiegend schlechten. Zählernummern sind bewusst
+  nicht beschriftet.
+
+**Was man sieht:**
+
+- **Waagerechte Bänder:** Viele HAST behalten über Monate dieselbe Helligkeit. Das ist die Konzentration aus dem
+  Abschnitt oben als Bild: Die Station prägt ihre Tage.
+- **Dunkle Zeilen ganz unten:** HAST mit Dauerdurchfluss, im Winter dunkelblau (D), im Sommer dunkelbraun (C).
+- **Senkrechte Streifen** kommen vom Wetter, nicht von den Stationen. Ob ein Tag blau oder orange ist, hängt nur von
+  seiner Tagestemperatur ab und ist deshalb für alle HAST am selben Tag gleich. Ein kühler Tag unter 15 °C im
+  Sommerhalbjahr wird so zu einem blauen Streifen mitten im Orange.
+- **Weiße Flächen links:** Bei 50 der 88 HAST beginnt das Band erst ab August 2023, vor allem weil 43 Zähler erst im
+  Herbst 2023 dazukamen.
+- Das Bild reicht vom 13.11.2022 bis zum 10.07.2025. Davor liefern die Zähler nur einen Wert am Tag (zu wenige
+  Stunden), danach fehlen die Zählerstände.
+
+Ein Farbwechsel ab einem bestimmten Datum heißt: Der Zustand einer HAST ändert sich, etwa nach einer Reparatur. Solche
+Wechsel sind die Brücke zu den Begehungen. Ob sie zu bekannten Ereignissen passen, etwa zum Ventilfall 68956351 im
+September 2024, ist noch nicht geprüft.
 
 ## Wie das Notebook gewachsen ist
 
@@ -176,9 +221,7 @@ geändert, jeweils mit Grund aus dem ersten:
 
 ## Was offen bleibt
 
-- Warum so viele Tage weniger als 12 Messstunden haben.
 - **Zählertausch** ist nicht zusammengeführt. Eine HAST mit Tausch erscheint als zwei Zähler.
-- K und alle Schwellen sind Startwerte. Die Wetterdaten reichen nur bis Ende 2025.
 - Die Streuung stammt aus Momentaufnahmen und enthält auch zufällige Warmwasserzapfungen.
 - Kostet die Energieschwelle im Sommer zu viele Tage, wären Wochenwerte statt Tageswerte eine Option.
 
@@ -189,5 +232,5 @@ geändert, jeweils mit Grund aus dem ersten:
   Grundlage für Stationsprofile nach den drei Handlungsklassen der Aufgabenstellung.
 - `data/processed/hast_tage.json`: Parameter, K, Silhouette und Zeilenzahlen des Laufs.
 
-Die Tageszeilen nutzen später das Normalverhaltensmodell (Notebook 18) und die Notebooks 30, 34 und 39. Alle Dateien
-enthalten Zählernummern und bleiben lokal.
+Die Tageszeilen nutzen später das Normalverhaltensmodell (Notebook 18) und die Notebooks 30, 34 und 39. Die Dateien
+liegen wie alle Ausgaben unter `data/processed/` nicht im Repository.
