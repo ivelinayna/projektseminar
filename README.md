@@ -5,7 +5,8 @@ Projektseminar der Julius-Maximilians-Universität Würzburg mit der ÜZ Mainfra
 Ziel: Fehler an Hausanschlussstationen (HAST) aus den stündlichen Zählerdaten erkennen und eine Maßnahme vorschlagen.
 Grundlage sind etwa 100 Zähler eines Teilnetzes, 66 Begehungen durch Monteure und das Leitungsnetz.
 
-Ausführliche Doku: Ordner `docs/`, als Webseite mit Read the Docs (`mkdocs.yml`).
+Ausführliche Doku als Webseite: **[projektseminar.readthedocs.io](https://projektseminar.readthedocs.io/de/latest/)**.
+Die Quellen dafür liegen im Ordner `docs/`, gebaut wird mit Read the Docs (`mkdocs.yml`).
 
 ## Ergebnis in Kürze
 
