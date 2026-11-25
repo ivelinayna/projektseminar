@@ -154,7 +154,8 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Nach Holm bleibt nur Kennlinie mit CUSUM belegt (Tagesmonitor 33 von 43, Holm 0,017). „Ohne Netzereignisse“ ist dieselbe Kennlinie.
 - Normalverhaltensmodell 30 von 43, Holm 0,08. LSTM mit CUSUM Holm 0,20.
 - Prognose-LSTM mit Schwelle: 16 von 43 gegen 32 %, p = 0,26. Gegen das Normalverhaltensmodell McNemar 15 zu 1, p = 0,001.
-- Notebook 28: Der erste Blick in der vorigen Fassung war zu optimistisch, der Vorsprung ist nicht belegt.
+- Notebook 28 sieht schon auf den ersten Blick keinen Vorsprung: Alarm in den 14 Tagen nach der Begehung bei 11 bis 17 % der begangenen Stationen, bei nie begangenen 13 %.
+- An warmen Tagen bleibt das Prognose-LSTM im Dashboard trotzdem der Wächter, weil die Kennlinie dort nicht rechnet. Dort ist es nur an eingebauten Fehlern geprüft: Dauerdurchfluss 150 l/h zu 78 % bei höchstens 5 % Fehlalarmen, das Wochenmittel zu 45 % (Notebook 35, Test B).
 - Details in [Modellvergleich](../vergleich/modellvergleich.md).
 
 ## 19 Fehlerarten ohne Messspur
@@ -175,13 +176,13 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 
 ## Nicht mehr im Abgabestand
 
-Diese Versuche liegen nur im lokalen Archiv, nicht im Abgabestand. Ihre Zahlen sind hier nicht wiederholt, weil sie sich nicht an den Abgabe-Notebooks prüfen lassen.
+Diese Versuche liegen nur im lokalen Archiv, nicht im Abgabestand. Ihre Zahlen sind hier nicht wiederholt, weil sie sich nicht an den Abgabe-Notebooks prüfen lassen. Ausnahme ist die Gesamtpipeline, deren Notebook im Verlauf des Repositorys liegt.
 
 - Entscheidungsbaum als Vorhersagemodell: schlägt die Mehrheitsklasse nicht.
 - Erste Fassung der Stundencluster (früher Notebook 09): ersetzt durch Notebook 09, das dasselbe Clustering über `src/clustervalidierung.py` rechnet und zusätzlich prüft.
 - Gesamtpipeline (August, früher Notebook 12): Ein eigenständiges Notebook las die Rohdaten selbst, clusterte die
-  Stationen und verglich unüberwachte Anomaliescores mit Wartungen als Ersatzlabel. Ergebnis: AUC 0,51, höchstens
-  2 von 10 Ereignissen (Zahlen im [Modellvergleich](../vergleich/modellvergleich.md), Notebook 34). Das Notebook ist nicht mehr
+  Stationen und verglich unüberwachte Anomaliescores mit Wartungen als Ersatzlabel. Ergebnis: Die Rangfolgen
+  lagen beim Zufall (AUC 0,49 bis 0,53), die Scores fanden höchstens 2 von 10 Ereignissen. Das Notebook ist nicht mehr
   im Abgabestand: Es nutzte eine eigene Datenaufbereitung mit 78 statt 93 Stationen, seine Zahlen passen deshalb
   nicht zu den übrigen Notebooks, und kein anderes Notebook baut darauf auf. Es liegt im Verlauf des Repositorys
   (Commit `1b5798b`).
