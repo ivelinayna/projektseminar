@@ -34,7 +34,9 @@ Tagesmonitor; Teile von *Verworfene Ansätze*), dazu Projektaufbau, Abgabestand 
   `synth_data.py`, `dashboard_map.py`, `ml_classifier.py`, `snap_hast.py`, `network_graph.py`, `window_features.py`).
   Sie werden im Abgabestand nicht mehr genutzt.
 - **Abgabestand:** Zusammenführung der Stränge, Nummerierung der Notebooks 00 bis 39 in Teil-Ordnern, Docker,
-  Read-the-Docs-Konfiguration, *Installation und Ausführung* und `python -m src.aktualisieren` für neue Zählerdaten.
+  Read-the-Docs-Konfiguration, *Installation und Ausführung* und `python -m src.aktualisieren` für neue Zählerdaten. Dazu das
+  Dashboard als Streamlit-App (`dashboard_app.py`, `dashboard_app_logik.py`) als Ausblick
+  ([Dashboard als Streamlit-App](../ausblick/streamlit.md)).
 - **Code in `src/`:**
     - Monitoring: `kennlinien_monitor.py`, `netzvergleich.py`, `tagesmonitor.py`, `alarmbewertung.py`,
       `stationsblatt.py`, `vergleichsgruppen.py`, `nachbarschaft.py`, `netzereignisse.py`

@@ -1,0 +1,13 @@
+#Streamlit-Dashboard (src/dashboard_app.py)
+[client]
+toolbarMode = "minimal"
+
+#Hell oder dunkel folgt dem System wie in der HTML-Fassung; Farbe "Auswahl" wie dort (--sel)
+[theme.light]
+primaryColor = "#0a7d6b"
+
+[theme.dark]
+primaryColor = "#3ed1b8"
+
+[server]
+headless = true

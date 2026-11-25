@@ -119,6 +119,7 @@ nav:
       - Betrieb mit neuen Daten: ausblick/betrieb.md
       - Vorschlag für künftige Begehungen: ausblick/begehungen.md
       - Weiterentwicklung: ausblick/weiterentwicklung.md
+      - Dashboard als Streamlit-App: ausblick/streamlit.md
 
   - Aufteilung im Team: aufteilung/index.md
 
