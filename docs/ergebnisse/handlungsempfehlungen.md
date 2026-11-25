@@ -38,12 +38,17 @@ Unabhängig von der Klasse kommen zwei Hinweise dazu:
   außerhalb dessen, woraus das Modell gelernt hat, oder die Station hat mehr als 10 % des Wintervolumens im Netz und
   ist damit keine typische Hausstation. Für solche Werte ist der Score nicht geprüft.
 - Die Stufen sind festgelegt, nicht gelernt.
+- Die Dringlichkeit ist nicht die Priorität des Monitoring-Modells (siehe
+  [Alarme](../monitoring/alarme.md#prioritat-aus-netzvergleich-und-verschlechterungsalarm)). Priorität „hoch“ heißt:
+  im Netzvergleich auffällig und ein Verschlechterungsalarm in der Heizperiode, das trifft aktuell auf 8 Stationen zu.
+  Dringlichkeit „hoch“ verlangt einen Reparaturverdacht, den das Fehlerbild „ventil“ bestätigt, das sind aktuell 2.
 
 ## Stand der Empfehlungen
 
 Gerechnet mit den Paketen aus Notebook 35 auf den Messdaten bis 20.07.2026. Klasse und Empfehlung gelten für den
 letzten Winter mit genug Daten, das ist 2024/25, und den Sommer 2025. Für den Winter 2025/26 fehlen die Daten der
-meisten Zähler.
+meisten Zähler. Die Zahlen gibt `python -m src.dashboard_daten` am Ende aus, die Tabelle je Station steht danach in
+`outputs/dashboard/stationen.parquet` (Spalten `dringlichkeit` und `handlung`).
 
 | Dringlichkeit | Stationen |
 |---|---|

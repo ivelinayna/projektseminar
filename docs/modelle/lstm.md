@@ -106,7 +106,7 @@ kommen aber genauso weit (Ventil 0,85, Dämmung 0,71). Zum Wiedererkennen brauch
 Eigenheiten, wie bei einem Fingerabdruck. Ein offenes Ventil ist eine grobe Abweichung, da reichen klare
 Kennzahlen.
 
-![Befunde finden: Regel, Mittelwerte und Embedding im Vergleich](../assets/modelle/29_befunde_auc.png)
+![Befunde finden: Messlatte, Mittelwerte und Embedding im Vergleich](../assets/modelle/29_befunde_auc.png)
 
 ## Das endgültige Netz
 

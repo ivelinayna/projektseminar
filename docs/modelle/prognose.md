@@ -64,8 +64,10 @@ misst die Differenz zur Messung. Was „viel“ ist, hängt an der Station: Bei 
 derselben Station gemessen, das ist der z-Wert. Alarm gibt es ab |z| ≥ 5. Diese Grenze ist nur über die
 Fehlalarme festgelegt, etwa ein Alarm je Station und Jahr.
 
-Am einzigen Schaden mit bekanntem Anfang schlägt er genau einmal an, am Schadenstag. Bei Zähler 68956372
-ging am 8. August 2023 ein Ventil kaputt. Der Rücklauf liegt an diesem Tag 13 K über dem 7-Tage-Mittel,
+Geprüft wird er an dem einen Schaden, dessen Beginn sich klar in den Messdaten zeigt. Bei Zähler 68956372
+springen am 8. August 2023 Nachtdurchfluss und Rücklauf nach oben, ab dem 19. August fließen nachts dauerhaft
+rund 340 statt 25 l/h. Das Datum ist aus den Messdaten abgelesen, von der ÜZ gibt es dafür keins. Der Wächter
+schlägt genau einmal an, am Schadenstag. Der Rücklauf liegt an diesem Tag 13 K über dem 7-Tage-Mittel,
 eine Woche später ist die Differenz wieder 0. Dann besteht das Mittel nur noch aus Tagen mit kaputtem
 Ventil, und der Wächter hat sich an den Schaden gewöhnt.
 

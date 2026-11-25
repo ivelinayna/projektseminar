@@ -24,7 +24,7 @@ Verglichen wurden die beiden fertigen Ansätze des Projekts:
 | Regelungsoptimierung | keins | von keinem Modell getroffen | ungeeignet |
 | Durchfluss, Sollwert, Filter als Ursache | keins | AUC 0,26 bis 0,57 | nicht erkennbar |
 | Regelhysterese | keins | eine eingebaute 6-Stunden-Schwingung findet keiner der Wächter (höchstens 15 % bei höchstens 10 % Fehlalarmen), weil alle mit Tagesmitteln rechnen | nicht erkennbar |
-| Frühwarnung vor einem Fehler | keins | der Beginn ist bei keinem Befund bekannt | nicht prüfbar |
+| Frühwarnung vor einem Fehler | keins | bei keinem Befund ist dokumentiert, wann der Fehler begann | nicht prüfbar |
 
 Die Werte in eckigen Klammern sind 95-%-Intervalle über Stationen. „Pilot“ heißt: brauchbar für den Probebetrieb,
 nicht für eine Entscheidung ohne Prüfung vor Ort.

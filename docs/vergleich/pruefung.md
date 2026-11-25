@@ -71,7 +71,7 @@ zeitlich nach dem Lernen.
   festen Raster gewählt, beim Prognose-LSTM ergibt das h = 10.
 - **Einfache Gegner laufen mit:** das Mittel der letzten 7 Tage, die Sommernacht-Regel, die Auslastung
   zum alten Vertrag. Ein Modell muss sie schlagen, sonst lohnt es sich nicht.
-- **Eingerechnete Fehler:** Echte Fehler haben nie einen bekannten Beginn. Deshalb werden Fehler mit
+- **Eingerechnete Fehler:** Bei echten Fehlern ist der Beginn nicht dokumentiert. Deshalb werden Fehler mit
   bekanntem Beginn in echte Stundenwerte geschrieben, 30 Tage lang: Dauerdurchfluss von 50 oder
   150 l/h, Rücklauf plötzlich oder schleichend um 5 K höher, ein hängender Fühler. Alle Spalten bleiben
   stimmig, auch Energie- und Volumenzähler. So lässt sich auch das Monitoring-Modell prüfen, das aus

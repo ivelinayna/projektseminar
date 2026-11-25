@@ -151,6 +151,10 @@ nicht.
 
 ![Kennzahlen der Messlatte mit und ohne Befund](../assets/modelle/27_messlatte_boxplots.png)
 
+Beim Ventil ist die Messlatte der Median des Durchflusses in Sommernächten (0 bis 5 Uhr). Ab Notebook 34 läuft als
+einfachster Gegner die Sommernacht-Regel mit. Sie misst dasselbe Fehlerbild mit einer anderen Kennzahl, dem Anteil der
+Nachtstunden mit mindestens 5 l/h, und kommt auf 0,85.
+
 **Warum die Richtung vorher feststeht.** Beim Filter geht die Kennzahl in die Gegenrichtung (AUC 0,36).
 Sie wird trotzdem nicht umgedreht. Hätte man je Befund mehrere Kennzahlen probiert und die beste
 genommen oder die Richtung nach dem Ergebnis gewählt, wäre die Zahl zu gut, weil die Auswahl die

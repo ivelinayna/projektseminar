@@ -150,7 +150,9 @@ läuft](../ergebnisse/endmodell.md). Geprüft wird nur an Stationen, die das Mod
 
 „Beste Regel“ ist jeweils die stärkste Regel ohne Lernen. Beim Ventil ist das die Sommernacht-Regel und beim Anschluss
 die Spitzenlast zum alten Vertrag, beide standen vorher fest. Für die übrigen Fehlerarten gibt es keine feste Regel,
-dort ist es die eine Kennzahl, die die Befunde im Lernteil am besten trennt.
+dort ist es die eine Kennzahl, die die Befunde im Lernteil am besten trennt. Die Sommernacht-Regel zählt den Anteil
+der Nachtstunden im Sommer mit mindestens 5 l/h Durchfluss. Die Messlatte in Notebook 25 nimmt für dasselbe
+Fehlerbild den Median des Nachtdurchflusses und kommt auf 0,88, daher die zwei verschiedenen Werte.
 
 Die KI-Zahlen gehören zu dem Modell, das im Dashboard läuft. Wird auch die Wahl des Modells nur im Lernteil getroffen
 (Notebook 35, Abschnitt 15), kommt die KI auf 0,84 beim Ventil und 0,78 bei der Dämmung, also praktisch auf dieselben
