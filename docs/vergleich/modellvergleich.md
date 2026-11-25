@@ -183,7 +183,7 @@ Notebook 36 prüft, ob die Maßnahmen der Begehungen überhaupt eine Spur in den
   [Fehlerbild „ventil“](../monitoring/alarme.md#fehlerbild-aus-dem-muster-der-schlechten-kennzahlen) ist dafür sehr genau (4 von 4 richtig) und dient im Dashboard als Bestätigung.
 - **Regelparameter optimieren:** trifft keins der beiden Modelle, 24 bzw. 25 von 31 Fällen landen in
   „kein Handlungsbedarf“. K-Means „schlechter“ erkennt das Ventil mit 0,67 gesichert schlechter als die Regel (siehe
-  [Was nicht getragen hat](../nicht_getragen/index.md)).
+  [Was nicht getragen hat](../nicht_getragen/negativbefunde.md#4-stationsclustering)).
 - **Reihenfolge (Test E):** Unter den ersten 10 Stationen nach Ventil-Score hatten 7 einen Ventilbefund, nach der
   [Priorität des Monitoring-Modells](../monitoring/alarme.md#prioritat-aus-netzvergleich-und-verschlechterungsalarm) 5, Zufall wären etwa 2.
 - **Lage im Netz (Test D):** Netzvergleich und Potenzial beschreiben eine Station, sagen die Wirkung einer Begehung aber

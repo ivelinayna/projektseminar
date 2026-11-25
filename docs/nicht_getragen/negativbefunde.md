@@ -166,13 +166,30 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 - Regler und Einstellung ohne Spur: AUC 0,57, Top-1 0,46 gegen 0,64 für „immer Regler“. Befund ja/nein AUC 0,55, p = 0,34.
 - Dämmung ist ein Artefakt der Matrix: 12-mal Hauptursache, 2 Treffer. Den Bayes-Ansatz beschreibt [Bayes-Diagnose](bayes.md).
 - In Notebook 26 hält die Ventil-Gegenprobe nach Holm nicht (p = 0,021, Holm 0,13).
-- Notebook 36 prüft mit vorab festgelegter Richtung, ob die Maßnahmen überhaupt eine Spur hinterlassen. Nur der Ventiltausch tut es (Sommernacht-Durchfluss, AUC 0,81, nach Holm gesichert). Dämmung, Filter und Durchfluss ändern nichts Messbares, neue Kennzahlen finden nichts Gesichertes. Bessere Labels würden hier mehr helfen als bessere Modelle.
+- Notebook 36 prüft mit vorab festgelegter Richtung, ob die Maßnahmen überhaupt eine Spur hinterlassen. Nur der Ventiltausch tut es (Sommernacht-Durchfluss, AUC 0,81, nach Holm gesichert). Dämmung, Filter und Durchfluss ändern nichts Messbares, neue Kennzahlen finden nichts Gesichertes. Bessere Labels würden hier mehr helfen als bessere Modelle. Bei der Dämmung gibt es einen ersten physikalischen Hinweis, die Abkühlrate im Stillstand (AUC 0,69, nicht gesichert).
 
 ## 20 Bestwert und Lückenfüllung
 
 - Bestwert aus Notebook 22: sagt keine Befunde vorher und zeigt keine Verbesserung nach Begehungen.
 - Notebook 19: Streuung nur bedingt aussagekräftig, Regelhysterese nicht nachweisbar.
 - Notebook 01: Bei Lücken über einen Tag bleibt der Rücklauffehler der Füllung bei 5 bis 6 K.
+
+## 21 Varianten der lernenden Modelle
+
+- Probiert in Notebook 27: ein LSTM direkt auf die Befunde. Schon das kleine Netz der Vorversuche hat 283.856 Gewichte, beim Ventil gibt es 11 Fälle. Es würde jede Station auswendig lernen. Deshalb lernt das LSTM ohne Labels, und erst eine logistische Regression sieht die Befunde.
+- Nicht gewählt in Notebook 27: ein Autoencoder, der den Tag nur nachbildet (erkennt Stationen schlechter wieder), ein Engpass von 16 statt 8 Zahlen (bei den Befunden nicht besser, Ventil 0,79 gegen 0,83) und Lernen auf allen statt nur auf begangenen Stationen (Vorgabe der Betreuung, der Unterschied ist klein).
+- Nicht gewählt in Notebook 28: die Abweichung vom 7-Tage-Mittel vorherzusagen. Sie liegt nur im Test knapp vorn (4,21 gegen 4,28 K), und nach dem Test auszuwählen wäre zu optimistisch.
+- Einfacher Wächter ohne Netz (Notebook 28): das 7-Tage-Mittel als Erwartung, Alarm ab 5 Streuungen. 12 seiner 16 Treffer an Begehungen liegen am Begehungstag oder am Tag danach. Er bemerkt den Eingriff, nicht die bleibende Veränderung, und an einen echten Schaden gewöhnt er sich nach einer Woche.
+- Klasse „Regelparameter optimieren“ aus K-Means (Notebook 26): In Notebook 35 trifft sie keinen Befund, 24 bzw. 25 von 31 Fällen mit Regelungsoptimierung landen in „kein Handlungsbedarf“. Das Dashboard empfiehlt sie deshalb nicht.
+- Details unter [LSTM-Fingerabdruck](../modelle/lstm.md), [Prognose-LSTM als Wächter](../modelle/prognose.md) und [Fehlerart und Klasse je Station](../modelle/klassen.md).
+
+## 22 Erster Prüfstand
+
+- Probiert in Notebook 34: alle Wächter und Kandidaten unter denselben Bedingungen.
+- Der Vergleich war an mehreren Stellen zu großzügig: Der LSTM-Encoder kannte die Teststationen, das beste Modell und die Schwellen für das gleiche Alarmbudget wurden auf den Prüffällen gewählt, und die Auslastung war zum Anschlusswert statt zum alten Vertrag gerechnet.
+- Beim Ventil kam die Regression auf Kennzahlen und LSTM-Zahlen dort auf 0,89. Im strengen Vergleich in Notebook 35, mit jeder Wahl nur im Lernteil, sind es 0,84.
+- Die Rollen der Modelle haben sich dadurch nicht geändert, nur die Zahlen. Für Aussagen gelten die aus Notebook 35.
+- Details im [Modellvergleich](../vergleich/modellvergleich.md#was-zuerst-nicht-stimmte).
 
 ## Nicht mehr im Abgabestand
 
