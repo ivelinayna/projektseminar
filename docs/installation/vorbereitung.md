@@ -97,6 +97,11 @@ und [Netz und Zuordnung](../datengrundlage/netz_und_zuordnung.md).
   `data/manual/fehler_symptom_matrix_entwurf.xlsx` und `data/manual/pruefliste_begehungsnotizen.xlsx`.
 - Sie liegen nicht im Repository. Ohne sie bricht nur Notebook 38 ab, alle anderen laufen.
 
+### Kodierbogen für Notebook 03
+
+- Notebook 03 liest den von Hand gepflegten Kodierbogen `data/processed/kodierbogen_freitexte.xlsx` (Blatt `Kodierung`).
+- Er liegt nicht im Repository. Ohne ihn überspringt Notebook 03 nur den Abgleich mit der Handkodierung.
+
 ### Außentemperatur
 
 Die Außentemperatur der DWD-Station Kitzingen muss nicht abgelegt werden. `python -m src.weather` lädt sie beim ersten
