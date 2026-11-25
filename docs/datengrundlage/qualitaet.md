@@ -18,7 +18,7 @@ Ergebnisse bedeuten, steht unter [Grenzen und Erkenntnisse](../grenzen/index.md)
 **Was gut ist**
 
 - Nach den Korrekturen in Notebook 00 liegt keine einzige Messzelle außerhalb der Plausibilitätsgrenzen.
-- Die Zählerstände sind fast immer in Ordnung. Unter 89.142 Stationstagen findet Notebook 10 nur 3 Rücksprünge, 24
+- Die Zählerstände sind fast immer in Ordnung. Unter 85.983 Stationstagen findet Notebook 10 nur 3 Rücksprünge, 24
   Tage mit stehendem Zähler trotz Durchfluss und 19 unplausible Tage (über 70 kWh/m³).
 - Echte Lücken sind selten. 84 % der Stunden ohne Messung fallen in die Tageswert-Phase.
 
@@ -34,8 +34,8 @@ Ergebnisse bedeuten, steht unter [Grenzen und Erkenntnisse](../grenzen/index.md)
   Zählerstände. Für den Winter 2025/26 gibt es deshalb keinen Netzvergleich.
 - **Unterschiedlich lange Reihen:** 13 Zähler haben unter 70 % Abdeckung, 7 haben unter 10.000 Messstunden. Bei spät
   beginnenden Zählern hat der Ringspeicher die älteren Werte überschrieben.
-- **Nutzbare Tage:** Von 89.142 Stationstagen sind 61.408 nutzbar (69 %), im Sommer nur 56 %. Der größte Verlust
-  sind Tage mit weniger als 12 Messstunden (17.136), der zweitgrößte Tage unter 5 kWh (8.802, davon 4.460 im Sommer).
+- **Nutzbare Tage:** Von 85.983 Stationstagen sind 62.734 nutzbar (73 %), im Sommer nur 60 %. Der größte Verlust
+  sind Tage mit weniger als 12 Messstunden (16.045), der zweitgrößte Tage unter 5 kWh (6.721, davon 4.133 im Sommer).
   Im Sommer bleiben deshalb eher große, verbrauchsstarke Stationen übrig.
 - **Zählertausch:** Die Tauschdaten fehlen. Hat eine Adresse mehrere Zähler, wird der Zähler mit Tageswerten
   genommen.

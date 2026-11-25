@@ -75,4 +75,5 @@
 - Den Tagesmonitor als Alarm in der Heizperiode und zur Erfolgskontrolle nach einer Begehung. Ein Alarm heißt „Veränderung“, nicht „Fehler“.
 - Die Handlungsliste als Prüfreihenfolge: sortiert nach Dringlichkeit, innerhalb einer Stufe nach Ventil-Score. Oben stehen damit die Stationen mit Verdacht auf Ventil. Sie ersetzt keine Prüfung vor Ort.
 - Kandidaten für die nächsten Begehungen: 4 chronisch auffällige, nie begangene Stationen (Notebook 19) und 7 Vorschläge aus der Fallsammlung (Notebook 15).
+- Den [Vorschlag für künftige Begehungen](../ausblick/begehungen.md): ein festes Protokoll je Begehung und eine Planung der Termine, damit künftig festgehalten ist, was kaputt war und seit wann. Mit solchen Daten lassen sich die Modelle an neuen Fällen prüfen und verbessern.
 - Was nicht funktioniert hat, steht unter [Verworfene Ansätze](../grenzen/verworfene_ansaetze.md), Grenzen und offene Fragen unter [Grenzen und Erkenntnisse](../grenzen/index.md).

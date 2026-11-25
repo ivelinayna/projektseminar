@@ -12,11 +12,11 @@ Die Arbeit folgt dem Weg des Projekts: von den Daten über die Verfahren bis zum
   Liste aller Notebooks steht vorneweg unter *Überblick der Notebooks*. Zwei eigene Ansätze außerhalb der Hauptkette
   stehen unter *Weitere Versuche*.
 - **Ergebnisse** fasst die Befunde aller Teile zusammen und geht die vier Ziele durch: Datenanalyse, Endmodell,
-  Handlungsempfehlungen und Dashboard mit Bedienungsanleitung.
+  Handlungsempfehlungen und Dashboard, mit einer Anleitung zum Erzeugen und Starten des Dashboards.
 - **Grenzen und Erkenntnisse** ordnet ein, wie belastbar die Ergebnisse sind und was sich aus dem Projekt lernen lässt.
   Dort stehen auch die verworfenen Ansätze und die offenen Fragen an die ÜZ.
 - **Ausblick** beschreibt den Betrieb mit neuen Daten, einen Vorschlag, wie die ÜZ künftige Begehungen plant und
-  festhält, und die Weiterentwicklung.
+  festhält, und die Weiterentwicklung, dazu eine Fassung des Dashboards als Streamlit-App.
 - **Aufteilung im Team** zeigt, wer woran gearbeitet hat.
 - **Der Anhang** enthält ein Verzeichnis der Fachbegriffe.
 

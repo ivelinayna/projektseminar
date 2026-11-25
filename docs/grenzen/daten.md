@@ -33,7 +33,7 @@ Grenzen der Verfahren stehen unter [Grenzen der Methoden und Modelle](modelle.md
 - **Gefüllte Stunden sind gerechnet.** Gut ein Fünftel der Stunden im Raster hat keine Messung und wird für das
   Graphennetz gefüllt. Bei Lücken über einen Tag liegt der Rücklauf der Füllung um 5 bis 6 K daneben
   ([Verworfene Ansätze](verworfene_ansaetze.md#luckenfullung)).
-- **Wenige nutzbare Sommertage.** Von allen Stationstagen sind 69 % nutzbar, im Sommer nur 56 %. Im Sommer bleiben
+- **Wenige nutzbare Sommertage.** Von allen Stationstagen sind 73 % nutzbar, im Sommer nur 60 %. Im Sommer bleiben
   eher große, verbrauchsstarke Stationen übrig ([Qualität](../datengrundlage/qualitaet.md#zahlerdaten),
   [Tagescluster](../clustering/tagescluster.md#was-offen-bleibt)).
 - **Zählertausch.** Die Tauschdaten fehlen. Eine Station mit getauschtem Zähler erscheint als zwei Zähler, und ein
