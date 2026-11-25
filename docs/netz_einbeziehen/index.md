@@ -21,16 +21,16 @@ aussieht und wie die Zuordnung funktioniert, steht unter [Netz und Zuordnung](..
 - Der Rohrbaum aus dem Leitungsplan passt zum Vorlaufgefälle: Das obere Haus ist bei 36 von 38 Paaren wärmer.
 - Das Netz wirkt auf alle Häuser gemeinsam. Ein Effekt je Strang ist nicht nachweisbar, weder im Rohrbaum noch in der
   Kantendatei noch in einem aus den Daten gelernten Graphen.
-- Für die Fehlererkennung trägt der Sommernacht-Durchfluss bei Ventil (AUC 0,84 bis 0,87). Netz-Merkmale verbessern die
+- Für die Fehlererkennung trägt der Sommernacht-Durchfluss beim Ventil (AUC 0,84 bis 0,87). Netz-Merkmale verbessern die
   Basislinie nicht.
 - Ein GNN lohnt sich damit nicht. Das Ergebnis steht unter [GNN: Hilft das Netz?](../nicht_getragen/gnn.md).
 
 ## Der Weg
 
-1. **Netzmodell aus allen zur Verfügung stehenden Datein (Notebook 31):** Die Zähler und Adressen aus
-    Zuordnung werden mit denen der Kantendatei abgegelichen, anschließend wird geprüft welche davon über Zeitreihe verfügen. 
-    Über die Koordinatentabelle werden die konkreten Punkte auf der Karte gebracht und über den Leitungsplan mit den Rohren
-     (106 von 111 Kanten, mit der Kante zum Erzeuger, liegen auf Rohren) verknüpft.
+1. **Netzmodell aus allen zur Verfügung stehenden Dateien (Notebook 31):** Die Zähler und Adressen aus
+   Zuordnung werden mit denen der Kantendatei abgeglichen, anschließend wird geprüft, welche davon über eine Zeitreihe
+   verfügen. Über die Koordinatentabelle werden die konkreten Punkte auf die Karte gebracht und über den Leitungsplan
+   mit den Rohren (106 von 111 Kanten, mit der Kante zum Erzeuger, liegen auf Rohren) verknüpft.
    Der Erzeuger kommt mit der Lage dazu, die die ÜZ nachgeliefert hat.
 2. **Einspeisung gegenprüfen (Notebook 32):** Der Vorlauf kühlt entlang der Rohre ab. Für jeden Punkt im Rohrnetz wird
    geprüft, wie gut der Rohrweg zu ihm die Vorlaufunterschiede der Häuser erklärt. Das Ergebnis passt zur Lage, die die

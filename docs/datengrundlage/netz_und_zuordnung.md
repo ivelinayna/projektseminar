@@ -94,8 +94,8 @@ Herkunft des Anschlusswerts bei den 93 HAST (Notebook 00):
 - **Gerichtete Kanten:** Jede Kante hat eine Richtung. Es gibt aber 7 Nodes ohne Zufluss und 6 mit mehreren Zuflüssen, also
   keinen einzelnen Startpunkt. Etwa die Hälfte der gerichteten Kanten zeigt zum Erzeuger hin statt von ihm weg (Notebook 31 und
   32). Auch der Vorlauf sinkt in Kantenrichtung nicht häufiger, als er steigt: An 22 von 56 bewertbaren Kanten sinkt
-  er, an 26 steigt er, 8 sind unklar. Nur ein Blick auf die Karte gibt einen Hinweis zu Bedeutung der Richtung der Kanten.
-  Es sieht so aus, als geben die Kanten nur die Anschlussreihenfolge der Häuser entlang einer Straße an. Eine hunderprozentige Erklärung bleibt jedoch offen. 
+  er, an 26 steigt er, 8 sind unklar. Nur ein Blick auf die Karte gibt einen Hinweis zur Bedeutung der Richtung der Kanten.
+  Es sieht so aus, als geben die Kanten nur die Anschlussreihenfolge der Häuser entlang einer Straße an. Eine hundertprozentige Erklärung bleibt jedoch offen. 
 
 ## Leitungsplan
 

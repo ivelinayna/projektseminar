@@ -1,14 +1,14 @@
 # Vom Haus-Graph zum Rohrbaum
 
-Die Kantendatei der ÜZ war der erste Netzgraph des Projekts. Warum der Rohrbaum sie ersetzt hat wird auf
+Die Kantendatei der ÜZ war der erste Netzgraph des Projekts. Warum der Rohrbaum sie ersetzt hat, wird auf
 dieser Seite der Reihe nach begründet: was die Kantendatei kann, was die Messdaten dazu sagen, wie aus dem Leitungsplan ein
 Rohrnetz wird und wie der Baum geprüft wurde. Den Code enthalten die Notebooks 31 und 32.
 
 ## 1 Ausgangspunkt: die Kantendatei
 
 - `Nodes_Edges.ods` enthält 110 Kanten zwischen Adressen. Sie verbinden Häuser direkt miteinander.
-- In einem Fernwärmenetz fließt das Wasser aber von der Straßenleitung ins Haus und zurück, nicht von Haus zu Haus. Die Karte legt aber nahe, dass
-  Kanten die Anschlussreihenfolge der Häuser entlang einer Straße abbilden, nicht den Rohrverlauf.
+- In einem Fernwärmenetz fließt das Wasser von der Straßenleitung ins Haus und zurück, nicht von Haus zu Haus. Die
+  Karte legt aber nahe, dass Kanten die Anschlussreihenfolge der Häuser entlang einer Straße abbilden, nicht den Rohrverlauf.
 - Jede Kante hat eine Richtung (gerichtete Kante). Es gibt aber 7 Nodes ohne Zufluss und 6 mit mehreren Zuflüssen, also
   keinen einzelnen Startpunkt.
 
