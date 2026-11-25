@@ -102,7 +102,7 @@ nav:
 
   - Ergebnisse:
       - Überblick: ergebnisse/index.md
-      # - Datenanalyse:   # noch leer
+      - Datenanalyse: ergebnisse/datenanalyse.md
       - Endmodell: ergebnisse/endmodell.md
       - Handlungsempfehlungen: ergebnisse/handlungsempfehlungen.md
       - Dashboard: ergebnisse/dashboard.md
@@ -117,7 +117,6 @@ nav:
       - Probebetrieb: ausblick/probebetrieb.md
       - Prüfung nach vorn: ausblick/pruefung.md
       - Weiterentwicklung: ausblick/weiterentwicklung.md
-      # - Offene Fragen an die ÜZ:   # noch leer, bisher in grenzen.md
 
   - Aufteilung im Team: aufteilung/index.md
 
