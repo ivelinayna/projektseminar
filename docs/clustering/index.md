@@ -60,6 +60,12 @@ Alle Notebooks liegen unter `notebooks/3_clustering/` und laufen nach Notebook 0
 - **Die Begehungen trennen die Cluster nicht.** Kein Cluster ist signifikant maßnahmenreicher (08), der Abgleich der
   Stundenzustände bleibt ohne p < 0,05 (09). Das Problem ist das Label, nicht die Methode.
 
+## Wie es weitergeht
+
+Die Stationen teilen sich nicht in Typen, aber jede prägt ihre eigenen Tage. Der nächste Teil,
+[Stationsbilder und Befunde](../stationsbilder/index.md), zieht daraus die Konsequenz: Er sieht sich einzelne
+Stationen genauer an und vergleicht sie am Ende mit sich selbst.
+
 ## Ausgaben
 
 Alle Tabellen landen unter `data/processed/` und bleiben lokal.
