@@ -602,7 +602,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;backg
       <h3>Bewusst weggelassen, weil die Prüfung es nicht trägt</h3>
       <ul>
         <li><b>Regelungsoptimierung als Empfehlung:</b> K-Means „schlechter als die Optimum-Gruppe“ trifft die Stationen
-          nicht, an denen wirklich Regelung oder Durchfluss eingestellt wurde (Kappa 0,21).</li>
+          nicht, an denen wirklich Regelung oder Durchfluss eingestellt wurde (Kappa 0,16 und 0,19, Notebook 35).</li>
         <li><b>Reihenfolge nach Meldungen des Tagesmonitors:</b> Vor Begehungen mit Befund gab es nicht mehr Verschlechterungen
           als bei Kontrollen. Die Meldungen stehen im Hausfenster, ändern die Reihenfolge aber nicht.</li>
         <li><b>Reihenfolge nach Potenzial:</b> Das Potenzial sagt nicht vorher, wo eine Begehung am meisten bringt (rho = 0,16).
