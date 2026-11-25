@@ -71,7 +71,7 @@ der rohe Tagesmedian leistet dasselbe (siehe [Anomalieerkennung](../monitoring/a
 über die Luftlinie, und das GNN gewinnt durch das Netz nichts Messbares (siehe
 [Vergleichsgruppen und Nachbarn](../monitoring/nachbarn.md#einordnung),
 [Netzereignisse](../monitoring/netzereignisse.md#einordnung) und
-[GNN: Hilft das Netz?](../nicht_getragen/gnn.md#warum-das-netz-nichts-gebracht-hat)).
+[GNN: Hilft das Netz?](../weitere_versuche/gnn.md#warum-das-netz-nichts-gebracht-hat)).
 
 **2. Der Vorlauf bestätigt den Erzeuger.** Entlang des Rohrbaums ab dem Erzeuger hat das Haus weiter oben bei 36 von 38
 Paaren den wärmeren Vorlauf (siehe [Rohrbaum](../netz_einbeziehen/rohrbaum.md) und
@@ -82,7 +82,7 @@ Paaren den wärmeren Vorlauf (siehe [Rohrbaum](../netz_einbeziehen/rohrbaum.md) 
 **1. Ohne Erwartung findet ein Modell keinen Fehler, nur Seltenes.** Die erste Pipeline suchte ohne Labels nach
 ungewöhnlichen Stunden und kam gegen „Maßnahme ja oder nein“ auf eine AUC von 0,49 bis 0,53. Getragen hat erst der
 Vergleich jeder Station mit ihrem eigenen Normalverhalten: mit der Kennlinie im Monitoring-Modell und mit der
-Vorhersage im Prognose-LSTM (siehe [Was nicht getragen hat](../nicht_getragen/index.md)).
+Vorhersage im Prognose-LSTM (siehe [Verworfene Ansätze](verworfene_ansaetze.md#nicht-mehr-im-abgabestand)).
 
 **2. Erst ein strenger Prüfstand zeigt, was ein Modell kann.** Im ersten Prüfstand (Notebook 34) kam die Regression
 auf Kennzahlen und LSTM-Zahlen beim Ventil auf eine AUC von 0,89. Dort hatte der Encoder die Teststationen gesehen,

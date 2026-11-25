@@ -23,7 +23,7 @@ aussieht und wie die Zuordnung funktioniert, steht unter [Netz und Zuordnung](..
   Kantendatei noch in einem aus den Daten gelernten Graphen.
 - Für die Fehlererkennung trägt der Sommernacht-Durchfluss beim Ventil (AUC 0,84 bis 0,87). Netz-Merkmale verbessern die
   Basislinie nicht.
-- Ein GNN lohnt sich damit nicht. Das Ergebnis steht unter [GNN: Hilft das Netz?](../nicht_getragen/gnn.md).
+- Ein GNN lohnt sich damit nicht. Das Ergebnis steht unter [GNN: Hilft das Netz?](../weitere_versuche/gnn.md).
 
 ## Der Weg
 
@@ -45,7 +45,7 @@ aussieht und wie die Zuordnung funktioniert, steht unter [Netz und Zuordnung](..
 7. **Graph aus den Daten lernen:** Umgekehrte Frage: Welche Häuser hängen laut Stundenwerten zusammen, und passt das
    zum Rohrbaum?
 8. **GNN-Entwurf (Notebook 39):** Ein Graph-Modell, das die Messwerte der Nachbarn nutzt, gegen dasselbe Modell ohne
-   Netz. Die Seite dazu ist [GNN: Hilft das Netz?](../nicht_getragen/gnn.md).
+   Netz. Die Seite dazu ist [GNN: Hilft das Netz?](../weitere_versuche/gnn.md).
 
 ## Wie es zusammenläuft
 

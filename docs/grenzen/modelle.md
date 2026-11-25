@@ -45,7 +45,7 @@ Stelle, an der das aufgefallen ist. Grenzen, die schon in den Daten liegen, steh
   Handlungsbedarf“ ([Endmodell](../ergebnisse/endmodell.md#gewahltes-modell-je-frage)).
 - **Filter, Durchfluss und Sollwert als Ursache:** AUC 0,26 bis 0,57. Nach diesen Maßnahmen bleibt die Station in den
   Zählerdaten gleich ([Endmodell](../ergebnisse/endmodell.md#gewahltes-modell-je-frage),
-  [Negativbefunde](../nicht_getragen/negativbefunde.md#19-fehlerarten-ohne-messspur)).
+  [Verworfene Ansätze](verworfene_ansaetze.md#fehlerarten-ohne-messspur)).
 - **Dämmung:** Das LSTM-Modell findet ein Muster (AUC 0,78), die Ursache ist aber physikalisch nicht erklärt. Ein
   erster physikalischer Hinweis, die Abkühlrate im Stillstand, ist nicht gesichert (AUC 0,69)
   ([Endmodell](../ergebnisse/endmodell.md#warum-diese-wahl),

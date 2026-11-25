@@ -3,7 +3,7 @@
 Projektseminar der Julius-Maximilians-Universität Würzburg mit der ÜZ Mainfranken, Sommersemester 2026 und Wintersemester 2026/27.
 
 Ziel: Fehler an Hausanschlussstationen (HAST) aus den stündlichen Zählerdaten erkennen und eine Maßnahme vorschlagen.
-Grundlage sind etwa 100 Zähler eines Teilnetzes, 66 Begehungen durch Monteure und das Leitungsnetz.
+Grundlage sind etwa 100 Zähler eines Teilnetzes, 65 Begehungen durch Monteure und das Leitungsnetz.
 
 Ausführliche Doku als Webseite: **[projektseminar.readthedocs.io](https://projektseminar.readthedocs.io/de/latest/)**.
 Die Quellen dafür liegen im Ordner `docs/`, gebaut wird mit Read the Docs (`mkdocs.yml`).
@@ -14,7 +14,7 @@ Die Quellen dafür liegen im Ordner `docs/`, gebaut wird mit Read the Docs (`mkd
 - Stationen lassen sich nicht in klare Typen clustern. Betriebsstunden schon (5 Zustände).
 - Für die Überwachung trägt ein Tagesmonitor: wetterbereinigte Kennlinie je Station mit CUSUM-Alarm.
 - Für die Einstufung nach den Handlungsklassen der ÜZ dient eine logistische Regression auf einem LSTM-Embedding.
-- Viele Ansätze haben nicht getragen. Sie sind unter „Negativbefunde“ dokumentiert.
+- Viele Ansätze haben nicht getragen. Sie sind unter „Verworfene Ansätze“ dokumentiert.
 - Ergebnis für die ÜZ: ein Dashboard als HTML-Datei mit Karte und Handlungsliste.
 
 ## Ordner

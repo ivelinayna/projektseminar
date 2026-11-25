@@ -4,18 +4,20 @@ Die Arbeit folgt dem Weg des Projekts: von den Daten über die Verfahren bis zum
 
 - **Installation und Ausführung** erklärt, wo die Daten abgelegt werden, wie sich das Projekt mit Docker oder lokal
   starten lässt und in welcher Reihenfolge Notebooks und Befehle bis zum Dashboard laufen.
-- **Datengrundlage** beschreibt die Zählerdaten, die Begehungen, den Leitungsplan und die von Hand gepflegten Tabellen.
-- **Vorgehen** stellt die Arbeitsschritte vor: Daten aufbereiten, Begehungen auswerten, Merkmale und Stationsbilder
-  bilden, Fehler erkennen, das Netz einbeziehen und die Modelle vergleichen. Jeder Schritt nennt die beteiligten
-  Notebooks, was sie tun und wie ihre Ergebnisse zusammenlaufen. Dort steht auch, welche Ansätze nicht getragen haben
-  und warum.
-- **Ergebnisse** fasst zusammen, welches Modell welches Ziel erfüllt, und stellt das Dashboard vor.
+- **Datengrundlage** beschreibt die Zählerdaten, die Begehungen, das Netz mit der Zuordnung von Zählern und Adressen,
+  ergänzende Daten wie Außentemperatur und Handtabellen und wo die Daten Lücken und Fehler haben.
+- **Vorgehen** stellt die Arbeitsschritte vor: Daten aufbereiten, Begehungen auswerten, Merkmale und Clustering,
+  Stationsbilder und Befunde, Anomalien und Monitoring, lernende Modelle, das Netz einbeziehen und die Modelle
+  vergleichen. Jeder Schritt nennt die beteiligten Notebooks, was sie tun und wie ihre Ergebnisse zusammenlaufen. Die
+  Liste aller Notebooks steht vorneweg unter *Überblick der Notebooks*. Zwei eigene Ansätze außerhalb der Hauptkette
+  stehen unter *Weitere Versuche*.
+- **Ergebnisse** fasst die Befunde aller Teile zusammen und geht die vier Ziele durch: Datenanalyse, Endmodell,
+  Handlungsempfehlungen und Dashboard mit Bedienungsanleitung.
 - **Grenzen und Erkenntnisse** ordnet ein, wie belastbar die Ergebnisse sind und was sich aus dem Projekt lernen lässt.
-  Dort stehen auch die offenen Fragen an die ÜZ.
+  Dort stehen auch die verworfenen Ansätze und die offenen Fragen an die ÜZ.
 - **Ausblick** beschreibt einen Probebetrieb, eine Prüfung der Modelle nach vorn und die Weiterentwicklung.
 - **Aufteilung im Team** zeigt, wer woran gearbeitet hat.
-- **Der Anhang** enthält ein Verzeichnis der Fachbegriffe. Die Liste aller Notebooks steht unter *Vorgehen →
-  Überblick der Notebooks*.
+- **Der Anhang** enthält ein Verzeichnis der Fachbegriffe.
 
 ## Rahmen
 

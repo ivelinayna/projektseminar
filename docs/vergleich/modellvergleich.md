@@ -183,7 +183,7 @@ Notebook 36 prüft, ob die Maßnahmen der Begehungen überhaupt eine Spur in den
   [Fehlerbild „ventil“](../monitoring/alarme.md#fehlerbild-aus-dem-muster-der-schlechten-kennzahlen) ist dafür sehr genau (4 von 4 richtig) und dient im Dashboard als Bestätigung.
 - **Regelparameter optimieren:** trifft keins der beiden Modelle, 24 bzw. 25 von 31 Fällen landen in
   „kein Handlungsbedarf“. K-Means „schlechter“ erkennt das Ventil mit 0,67 gesichert schlechter als die Regel (siehe
-  [Was nicht getragen hat](../nicht_getragen/negativbefunde.md#4-stationsclustering)).
+  [Verworfene Ansätze](../grenzen/verworfene_ansaetze.md#stationsclustering)).
 - **Reihenfolge (Test E):** Unter den ersten 10 Stationen nach Ventil-Score hatten 7 einen Ventilbefund, nach der
   [Priorität des Monitoring-Modells](../monitoring/alarme.md#prioritat-aus-netzvergleich-und-verschlechterungsalarm) 5, Zufall wären etwa 2.
 - **Lage im Netz (Test D):** Netzvergleich und Potenzial beschreiben eine Station, sagen die Wirkung einer Begehung aber
@@ -202,8 +202,8 @@ fangen Kennlinie und Tagesmonitor schon ab. Dasselbe Bild zeigen die Notebooks 2
 
 | Ansatz | Warum nicht | Eigenes Ergebnis |
 |---|---|---|
-| [GNN (Notebook 39)](../nicht_getragen/gnn.md) | braucht die Kanten- und Positionsdateien aus Notebook 31 | kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft „Haus oder Netz“ |
-| [Bayes (Notebook 38)](../nicht_getragen/bayes.md) | braucht die Handtabellen unter `data/manual/` | Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
+| [GNN (Notebook 39)](../weitere_versuche/gnn.md) | braucht die Kanten- und Positionsdateien aus Notebook 31 | kleiner Gewinn, kein Strang-Effekt; dieselbe Frage prüft „Haus oder Netz“ |
+| [Bayes (Notebook 38)](../weitere_versuche/bayes.md) | braucht die Handtabellen unter `data/manual/` | Ventil im Zweikampf AUC 0,92, mit einer Matrix, die noch nicht mit der ÜZ abgestimmt ist |
 | Stationscluster (Notebooks 07 und 08) | Profile über die ganze Historie, also auch nach der Begehung | kein Cluster trennt die Begehungen; verglichen wird [K-Means aus Notebook 26](../modelle/klassen.md#optimum-oder-schlechter-k-means) |
 
 Die Notebooks 01 bis 05 messen die Wirkung der Begehungen oder bereiten Daten auf. Sie liefern den Prüfstein und sind

@@ -1,7 +1,7 @@
 site_name: Fehlererkennung im Fernwärmenetz
 site_description: >-
   Projektseminar JMU Würzburg mit der ÜZ Mainfranken: Fehler in
-  Hausübergabestationen aus Zählerdaten erkennen.
+  Hausanschlussstationen aus Zählerdaten erkennen.
 docs_dir: docs
 theme:
   name: material
@@ -94,11 +94,10 @@ nav:
       - Modelle vergleichen:
           - Prüfdesign und Statistik: vergleich/pruefung.md
           - Modellvergleich: vergleich/modellvergleich.md
-      - Was nicht getragen hat:
-          - Überblick: nicht_getragen/index.md
-          - Negativbefunde im Detail: nicht_getragen/negativbefunde.md
-          - Bayes-Diagnose: nicht_getragen/bayes.md
-          - GNN: nicht_getragen/gnn.md
+      - Weitere Versuche:
+          - Überblick: weitere_versuche/index.md
+          - Bayes-Diagnose: weitere_versuche/bayes.md
+          - GNN: weitere_versuche/gnn.md
 
   - Ergebnisse:
       - Überblick: ergebnisse/index.md
@@ -112,6 +111,7 @@ nav:
       - Überblick: grenzen/index.md
       - Grenzen der Daten: grenzen/daten.md
       - Grenzen der Methoden und Modelle: grenzen/modelle.md
+      - Verworfene Ansätze: grenzen/verworfene_ansaetze.md
       - Erkenntnisse: grenzen/erkenntnisse.md
       - Offene Fragen an die ÜZ: grenzen/offene_fragen.md
 

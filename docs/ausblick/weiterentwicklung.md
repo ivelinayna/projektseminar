@@ -35,7 +35,7 @@
 
 - **Fehler-Symptom-Matrix mit der ÜZ abstimmen.** Bisher ist keines der 132 Felder abgestimmt. Mit einer abgestimmten
   Matrix ließe sich die Bayes-Diagnose neu prüfen
-  ([Bayes-Diagnose](../nicht_getragen/bayes.md#was-es-zum-weitermachen-brauchte)).
+  ([Bayes-Diagnose](../weitere_versuche/bayes.md#was-es-zum-weitermachen-brauchte)).
 - **Neue Begehungen nach vorab festgelegten Regeln auswerten,** wie unter [Prüfung nach vorn](pruefung.md)
   beschrieben.
 

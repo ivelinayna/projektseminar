@@ -160,7 +160,7 @@ Notebook 31.
 - Nur der Vorlauf schwankt bei Nachbarn gemeinsam (r = 0,13 gegen 0,04 bei Zufall, p = 0,004).
 - Die Lage im Netz erklärt nicht, warum manche Stationen dauerhaft schlechter abkühlen.
 
-Was daraus für das GNN folgt, steht unter [GNN: Hilft das Netz?](../nicht_getragen/gnn.md).
+Was daraus für das GNN folgt, steht unter [GNN: Hilft das Netz?](../weitere_versuche/gnn.md).
 
 ## Einordnung
 

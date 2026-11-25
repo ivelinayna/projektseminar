@@ -15,7 +15,7 @@ Seite zeigt, wie weit das gelungen ist. Die Wege dorthin stehen unter [Vorgehen]
 
 ## Die Leistung jeder Station
 
-- **Datenbasis:** 93 Hausübergabestationen (HAST) mit Zählerdaten von November 2021 bis Juli 2025, fünf davon bis
+- **Datenbasis:** 93 Hausanschlussstationen (HAST) mit Zählerdaten von November 2021 bis Juli 2025, fünf davon bis
   Juli 2026. Bis Oktober 2022 gibt es bei 45 Zählern nur einen Wert am Tag, danach Stundenwerte. Wie die Exporte
   zusammengeführt und geprüft wurden, steht unter [Daten aufbereiten](../aufbereitung/index.md).
 - **Maß für die Leistung** ist die Abkühlung: wie viel Wärme die Station aus jedem m³ Heizwasser holt (kWh/m³). Hoch
@@ -80,7 +80,7 @@ Das ist die deutlichste Auffälligkeit in den Daten. Vier verschiedene Ansätze 
   schlug mit festen Schwellen bei 83 von 93 Stationen an und trennt damit nichts (Notebook 16).
 - **Was fehlt:** ein Befund, an dem sich das prüfen ließe. In den Begehungen gibt es keinen Befund „Regelung
   schwingt“. Ob eine Station, die so aussieht, wirklich falsch regelt, lässt sich deshalb nicht prüfen
-  ([Negativbefunde](../nicht_getragen/negativbefunde.md#3-regel-baseline-mit-festen-schwellen)). Auch das Label aus
+  ([Verworfene Ansätze](../grenzen/verworfene_ansaetze.md#regel-baseline-mit-festen-schwellen)). Auch das Label aus
   Messdaten erfasst sie nicht: Notizen zu Regelung und Konfiguration treffen keine dort auffällige Station
   (Notebook 03).
 - **Warum die Daten dafür nicht reichen:**

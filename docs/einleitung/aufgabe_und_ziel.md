@@ -12,13 +12,14 @@ will die ÜZ die Effizienz ihres Netzes systematisch verbessern.
 Die Aufgabenstellung nennt vier Ziele.
 
 1. **Datenanalyse:** Die Leistung jeder Station auswerten und Auffälligkeiten finden, etwa einen zu hohen Rücklauf,
-   dauerhaften Durchfluss oder eine schwingende Regelung.
+   dauerhaften Durchfluss oder eine schwingende Regelung. Ergebnis: [Datenanalyse](../ergebnisse/datenanalyse.md).
 2. **Modellentwicklung:** Ein Modell entwickeln, das Auffälligkeiten automatisch erkennt und die Fehlerart einer
-   Station bestimmt.
+   Station bestimmt. Ergebnis: [Endmodell](../ergebnisse/endmodell.md).
 3. **Visualisierung:** Ein Dashboard erstellen, das die Effizienz des Netzes, die Leistung der Stationen und das
-   Potenzial für Verbesserungen zeigt.
+   Potenzial für Verbesserungen zeigt. Ergebnis: [Dashboard](../ergebnisse/dashboard.md).
 4. **Handlungsempfehlungen:** Ein Werkzeug entwickeln, das für jede Station eine Maßnahme vorschlägt und die
    Vorschläge nach Dringlichkeit ordnet. Mögliche Maßnahmen sind eine Optimierung der Regelung, eine Reparatur oder
-   eine Anpassung der Anschlussleistung.
+   eine Anpassung der Anschlussleistung. Ergebnis: [Handlungsempfehlungen](../ergebnisse/handlungsempfehlungen.md).
 
-Die folgenden Kapitel zeigen, wie weit jedes dieser Ziele erreicht wurde.
+Wie weit jedes dieser Ziele erreicht wurde, steht auf der jeweils verlinkten Ergebnisseite. Einen Überblick über alle
+Teile gibt [Ergebnisse](../ergebnisse/index.md).

@@ -1,6 +1,6 @@
 # Zählerdaten
 
-Für jede Hausübergabestation (HAST) hat die ÜZ die Messwerte ihres Zählers als Export geliefert. Diese Zeitreihen
+Für jede Hausanschlussstation (HAST) hat die ÜZ die Messwerte ihres Zählers als Export geliefert. Diese Zeitreihen
 sind die Messgrundlage des Projekts. Notebook 00 lädt sie, prüft sie und führt sie je Zähler zu einer Stundenreihe
 zusammen.
 

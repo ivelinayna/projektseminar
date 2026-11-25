@@ -13,7 +13,7 @@ ob sie hält.
   hat, nicht wie schlecht die Station lief ([Notebook 02](wirkung.md)).
 - **`n_actions > 0` ist bei 76 % der Stationen wahr.** Ein Label, das fast immer zutrifft, trennt nichts.
 
-**Die Idee:** Eine Hausübergabestation soll dem heißen Wasser Wärme entziehen und es kalt zurückschicken. Fließt viel
+**Die Idee:** Eine Hausanschlussstation soll dem heißen Wasser Wärme entziehen und es kalt zurückschicken. Fließt viel
 Wasser, kommt es aber fast genauso heiß zurück, wurde keine Wärme übertragen. Das ist messbar und braucht keine
 Begehung.
 

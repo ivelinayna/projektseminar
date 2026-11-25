@@ -77,7 +77,7 @@ Aus dem Vergleich entsteht ein System aus mehreren Teilen, die sich ergänzen:
 - **Hinweise auf Dämmung und Kapazität** mit niedriger Dringlichkeit.
 - **Keine Aussage** zu Regelungsoptimierung, Regelhysterese, Filter, Durchfluss und Sollwert. Warum diese
   Fehlerarten in den Zählerdaten keine Spur hinterlassen, steht unter
-  [Was nicht getragen hat](../nicht_getragen/negativbefunde.md#19-fehlerarten-ohne-messspur). Warum Stundenwerte für die Regelhysterese zu grob sind, steht
+  [Verworfene Ansätze](../grenzen/verworfene_ansaetze.md#fehlerarten-ohne-messspur). Warum Stundenwerte für die Regelhysterese zu grob sind, steht
   unter [Datenanalyse](datenanalyse.md#schwingende-regelung).
 
 Wie daraus eine Empfehlung je Station wird, steht unter [Handlungsempfehlungen](handlungsempfehlungen.md),

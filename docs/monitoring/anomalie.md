@@ -4,7 +4,7 @@
 `src/anomalie.py`, `src/regelkalibrierung.py`, Tests in den gleichnamigen Dateien unter `tests/`
 
 Ein überwachter Klassifikator auf den Begehungen bleibt unter der Trivialrate (Balanced Accuracy 0,33 bzw. 0,42 gegen
-0,50, siehe [Negativbefunde](../nicht_getragen/negativbefunde.md)). Dieses Notebook benennt auffällige Stationen
+0,50, siehe [Verworfene Ansätze](../grenzen/verworfene_ansaetze.md)). Dieses Notebook benennt auffällige Stationen
 deshalb ohne Label. Eine **Anomalie** ist hier eine Abweichung vom physikalisch erwartbaren Verhalten, die über
 mehrere Tage anhält. Fünf Detektoren treten gegeneinander an. Ein brauchbarer Detektor muss nach einer Begehung
 sinken, bei Stationen ohne Begehung im selben Zeitraum nicht.

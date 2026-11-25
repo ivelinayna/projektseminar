@@ -20,10 +20,11 @@ verweist auf die Stelle, an der er aufgefallen ist.
 - **[Grenzen der Methoden und Modelle](modelle.md):** was die Fallzahl bedeutet, wie weit die Aussagen zur Wirkung der
   Begehungen reichen, was die Modelle nicht erkennen, wo Wächter und Empfehlungen aufhören und welche Schwellen gesetzt
   sind.
+- **[Verworfene Ansätze](verworfene_ansaetze.md):** welche Ansätze nicht funktioniert haben oder nicht weiterverfolgt
+  wurden, mit Ergebnis und Zahlen, geordnet nach den Teilen des Vorgehens.
 - **[Erkenntnisse](erkenntnisse.md):** was das Projekt über die Daten und die Verfahren gelernt hat, geordnet nach den
   Teilen.
 - **[Offene Fragen an die ÜZ](offene_fragen.md):** was sich aus den Daten nicht beantworten lässt.
 
-Probleme in den Rohdaten im Einzelnen stehen unter [Qualität und Einschränkungen](../datengrundlage/qualitaet.md),
-Ansätze, die nicht funktioniert haben, unter [Negativbefunde](../nicht_getragen/negativbefunde.md). Was als Nächstes
-kommen sollte, steht unter [Ausblick](../ausblick/weiterentwicklung.md).
+Probleme in den Rohdaten im Einzelnen stehen unter [Qualität und Einschränkungen](../datengrundlage/qualitaet.md).
+Was als Nächstes kommen sollte, steht unter [Ausblick](../ausblick/weiterentwicklung.md).

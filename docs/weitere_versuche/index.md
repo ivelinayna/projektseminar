@@ -1,10 +1,9 @@
-# Was nicht getragen hat
+# Weitere Versuche
 
-Nicht jeder Ansatz hat getragen. Diese Ergebnisse gehören zur Abgabe, weil sie zeigen, wo die Daten an Grenzen stoßen
-und welche Wege sich nicht lohnen. Alle Ansätze aus dem Projekt stehen mit Ergebnis und Zahlen unter
-[Negativbefunde im Detail](negativbefunde.md). Zwei Versuche aus dem Anhang haben eigene Seiten.
-
-## Eigene Versuche im Anhang
+Zwei eigene Ansätze liegen außerhalb der Hauptkette, im Ordner `notebooks/weitere_versuche`. Auf ihnen baut nichts
+auf, und das Dashboard nutzt sie nicht. Sie haben eigene Seiten, weil sie jeweils einen ganz anderen Weg prüfen:
+Fachwissen statt Lernen aus den Begehungen und das Leitungsnetz als Teil des Modells. Alle verworfenen Ansätze des
+Projekts stehen mit Ergebnis und Zahlen unter [Verworfene Ansätze](../grenzen/verworfene_ansaetze.md).
 
 **Bayes-Diagnose (Notebook 38).** Statt aus den Begehungen zu lernen, rechnet Naive Bayes mit einer
 Fehler-Symptom-Matrix, die von Hand aus der Physik gefüllt ist. Nur das Ventil hat eine klare Spur (AUC 0,92 gegen

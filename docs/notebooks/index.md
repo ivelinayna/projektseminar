@@ -27,7 +27,7 @@ Die Notebooks liegen in `notebooks/`, je Teil in einem eigenen Ordner (`1_daten/
 
 | Nr. | Notebook | Worum es geht | Ergebnis | vorher |
 |---|---|---|---|---|
-| 07 | Stationscluster mit K-Means<br>`07_stationscluster.ipynb` | Lassen sich die HAST (Hausübergabestationen) anhand ihrer Kennzahlen in Betriebsprofile gruppieren? | Keine klaren Stationstypen: Silhouette unter 0,25 für alle k. Die Stationen bilden ein Kontinuum mit zwei Ausreißern. |  |
+| 07 | Stationscluster mit K-Means<br>`07_stationscluster.ipynb` | Lassen sich die HAST (Hausanschlussstationen) anhand ihrer Kennzahlen in Betriebsprofile gruppieren? | Keine klaren Stationstypen: Silhouette unter 0,25 für alle k. Die Stationen bilden ein Kontinuum mit zwei Ausreißern. |  |
 | 08 | Clusterbenchmark: K-Means, Ward, GMM und HDBSCAN<br>`08_clusterbenchmark.ipynb` | Vier Clusterverfahren auf denselben Stationsmerkmalen und mit derselben Vorverarbeitung wie in Notebook 07 vergleichen. | K-Means am stabilsten, am meisten bei k = 2 (Bootstrap-ARI 0,67). HDBSCAN trägt nicht. Kein Cluster ist signifikant maßnahmenreicher (Fisher p ≥ 0,33). | `python -m src.main` |
 | 09 | Clustervalidierung: Betriebszustand oder Jahreszeit?<br>`09_clustervalidierung.ipynb` | Jede Betriebsstunde einer HAST wird einzeln geclustert (K-Means, k = 5, fünf Betriebszustände). Geprüft wird, ob das trägt: Stabilität, Jahreszeit und Abgleich mit den Begehungen. | Die Stundencluster sind stabil: k = 5, Silhouette 0,399, Bootstrap-ARI 0,851. |  |
 | 10 | Tagescluster: Tagestypen je HAST<br>`10_tagescluster.ipynb` | Jede HAST bekommt für jeden Tag eine Zeile mit wenigen, gut lesbaren Merkmalen. | Vier Tagestypen an Heiztagen, drei im Sommer. Die Tage einer HAST liegen meist im selben Cluster, die Cluster beschreiben also eher Stationen als Tageszustände. Schreibt `hast_tage` (62.734 nutzbare Tage). |  |
@@ -92,7 +92,7 @@ Die Notebooks liegen in `notebooks/`, je Teil in einem eigenen Ordner (`1_daten/
 
 ## Anhang: Weitere Versuche
 
-Eigene Ansätze, die sich nicht durchgesetzt haben und auf denen nichts aufbaut. Sie stehen hinter dem Dashboard, damit die Hauptkette 00 bis 37 durchgeht. Die Befunde aller Versuche fasst [Negativbefunde](../nicht_getragen/negativbefunde.md) zusammen.
+Eigene Ansätze, die sich nicht durchgesetzt haben und auf denen nichts aufbaut. Sie stehen hinter dem Dashboard, damit die Hauptkette 00 bis 37 durchgeht. Die Befunde aller Versuche fasst [Verworfene Ansätze](../grenzen/verworfene_ansaetze.md) zusammen.
 
 | Nr. | Notebook | Worum es geht | Ergebnis | vorher |
 |---|---|---|---|---|

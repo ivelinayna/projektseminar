@@ -103,4 +103,4 @@ Begehung nach der Liste (siehe [Prüfung nach vorn](../ausblick/pruefung.md)).
 - **Kein Sortieren nach Potenzial und keine Einspar-Schätzung in Euro.** Das Potenzial sagt nicht vorher, wo eine
   Begehung am meisten bringt (Notebook 35, Test D, Rangkorrelation 0,16).
 - **Keine Empfehlung zu Filter, Durchfluss und Sollwert.** Diese Maßnahmen hinterlassen in den Zählerdaten keine Spur
-  (Notebook 36, siehe [Was nicht getragen hat](../nicht_getragen/negativbefunde.md#19-fehlerarten-ohne-messspur)).
+  (Notebook 36, siehe [Verworfene Ansätze](../grenzen/verworfene_ansaetze.md#fehlerarten-ohne-messspur)).

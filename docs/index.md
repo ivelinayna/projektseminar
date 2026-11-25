@@ -17,9 +17,10 @@ Begehung kostet Zeit, und ohne Auswertung der Messdaten bleibt offen, welche Sta
 
 Für ein Teilnetz hat die ÜZ dem Projekt folgende Daten bereitgestellt:
 
-- Stundenwerte von 101 Zählern seit Ende 2021, davon 93 Hausanschlussstationen
-- Protokolle von 66 Begehungen mit den geänderten Einstellungen und dem Freitext des Monteurs
-- den Leitungsplan des Netzes
+- Stundenwerte von 101 Zählern, davon 93 Hausanschlussstationen. Die ältesten Reihen beginnen im November 2021, fast
+  alle enden im Juli 2025.
+- Protokolle von 65 Begehungen mit den geänderten Einstellungen und dem Freitext des Monteurs
+- den Leitungsplan des Netzes und Tabellen, die Zähler, Adressen und Anschlusswerte verbinden
 
 Daraus ergibt sich die Frage dieses Projekts: Lassen sich Fehler an einer Station schon aus den Zählerdaten erkennen,
 bevor ein Monteur ausrückt?

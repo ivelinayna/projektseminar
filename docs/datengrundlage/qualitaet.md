@@ -90,7 +90,7 @@ Ergebnisse bedeuten, steht unter [Grenzen und Erkenntnisse](../grenzen/index.md)
 - **Rohrdaten:** Nennweite, Länge und Baujahr je Kante gibt es nur teilweise. Das Netz ist damit ein logisches
   Modell, kein hydraulisches.
 - **GNN:** Notebook 39 ist vor der Bestätigung des Erzeugers entstanden und rechnet noch mit einem eigenen Punkt rund
-  50 m daneben (siehe [GNN: Hilft das Netz?](../nicht_getragen/gnn.md)).
+  50 m daneben (siehe [GNN: Hilft das Netz?](../weitere_versuche/gnn.md)).
 
 ## Außentemperatur
 

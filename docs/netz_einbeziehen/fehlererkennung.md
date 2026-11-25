@@ -39,7 +39,7 @@ für ein echtes Signal, dass mehrere unabhängige Größen in dieselbe Richtung 
 
 Ein Graph-Modell (GNN) auf dem Rohrbaum soll zeigen, ob das Netz das Normalverhaltensmodell aus Notebook 18 verbessert.
 Das Ergebnis passt zu den Tests unter [Haus oder Netz](haus_oder_netz.md): Der Beitrag des Netzes ist
-je Station nicht signifikant. Aufbau, Zahlen und Gründe stehen unter [GNN: Hilft das Netz?](../nicht_getragen/gnn.md).
+je Station nicht signifikant. Aufbau, Zahlen und Gründe stehen unter [GNN: Hilft das Netz?](../weitere_versuche/gnn.md).
 
 Der Export `daten_cache/gnn_daten.npz` aus Notebook 32 enthält 79 Häuser und 152 Streckenknoten, zusammen 231 Knoten und
 460 gerichtete Kanten, dazu stündliche Messreihen und feste Merkmale je Haus (Rohrweg zum Erzeuger, Abzweige bis zum

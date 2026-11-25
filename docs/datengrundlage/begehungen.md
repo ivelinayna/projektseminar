@@ -1,6 +1,6 @@
 # Begehungen
 
-Die ÜZ hat zwischen August 2024 und September 2025 Hausübergabestationen vor Ort begangen. Dabei wurde die Station
+Die ÜZ hat zwischen August 2024 und September 2025 Hausanschlussstationen vor Ort begangen. Dabei wurde die Station
 aufgenommen, die Regelung neu eingestellt und bei Bedarf repariert. Jede Begehung steht als Zeile in der
 Begehungstabelle `*Ergebnis_Optimierung_FW*.xlsx`.
 

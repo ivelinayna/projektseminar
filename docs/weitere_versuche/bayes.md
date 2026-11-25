@@ -4,7 +4,7 @@
 [Prüfliste und Fehler-Symptom-Matrix](../datengrundlage/ergaenzend.md#handtabellen)
 
 Die lernenden Modelle brauchen Labels, und die Labels aus den Begehungen tragen kaum (siehe
-[Negativbefunde](negativbefunde.md#1-uberwachtes-lernen-auf-begehungslabels)). Dieses Notebook geht den umgekehrten
+[Verworfene Ansätze](../grenzen/verworfene_ansaetze.md#uberwachtes-lernen-auf-begehungslabels)). Dieses Notebook geht den umgekehrten
 Weg: Es lernt nichts aus den Begehungen, sondern rechnet mit Fachwissen, das von Hand in einer Tabelle steht. Die
 Frage:
 
@@ -142,7 +142,7 @@ Gerechnet für das Jahr 10.07.2024 bis 10.07.2025, 83 Stationen mit genug Daten 
 
 - Für alle Fehlerarten außer dem Ventil ist das Modell mit den zwölf Symptomen nicht belastbar, vor allem nicht für
   Einstellungsfehler. Das passt zu Notebook 36: Nur der Ventiltausch hinterlässt eine messbare Spur (siehe
-  [Überblick](index.md)).
+  [Verworfene Ansätze](../grenzen/verworfene_ansaetze.md#fehlerarten-ohne-messspur)).
 - Für das Ventil gibt es im Endmodell schon Erkenner, die ohne Handtabelle auskommen. Mit ihnen verglichen wurde die
   Bayes-Diagnose nicht, weil der [Modellvergleich](../vergleich/modellvergleich.md#was-sich-nicht-vergleichen-lasst) die
   Handtabellen nicht hat.

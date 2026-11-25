@@ -30,7 +30,7 @@ Stelle, an der sie aufgekommen ist.
   ([ARIMA](../begehungen/arima.md#einordnung))?
 - Kann das Protokoll künftig festhalten, ob etwas kaputt war, und nicht nur, was gemacht wurde? Sollwert und Filter
   wurden bei 62 % und 47 % der Begehungen gemacht, eine Spur im Zähler hinterlassen sie nicht
-  ([Negativbefunde](../nicht_getragen/negativbefunde.md#19-fehlerarten-ohne-messspur),
+  ([Verworfene Ansätze](verworfene_ansaetze.md#fehlerarten-ohne-messspur),
   [Datenanalyse](../ergebnisse/datenanalyse.md#fazit-zu-den-daten)).
 
 ## Betrieb
@@ -46,10 +46,10 @@ Stelle, an der sie aufgekommen ist.
 
 - Passen die neun Fehlerkategorien, nach denen die Notizen kodiert sind? Sollen Zirkulation und Pumpe getrennt geführt
   werden ([Stationsbilder](../stationsbilder/index.md#4-liegt-es-an-den-labels-notebook-14))?
-- Ist Dämmung ein Befund an der Übergabestation? Sie ist bei 41 % der begangenen Stationen eingetragen
+- Ist Dämmung ein Befund an der Hausanschlussstation? Sie ist bei 41 % der begangenen Stationen eingetragen
   ([Dashboard](../ergebnisse/dashboard.md#grenzen)).
 - Kann die ÜZ die Fehler-Symptom-Matrix und den Anteil gesunder Stationen abstimmen? Bisher sind 0 von 132 Feldern
-  abgestimmt ([Bayes-Diagnose](../nicht_getragen/bayes.md#matrix-und-vorwissen)).
+  abgestimmt ([Bayes-Diagnose](../weitere_versuche/bayes.md#matrix-und-vorwissen)).
 
 ## Sonderzähler
 
@@ -70,7 +70,7 @@ Stelle, an der sie aufgekommen ist.
   ([Qualität](../datengrundlage/qualitaet.md#was-an-daten-fehlt))?
 - Gibt es Koordinaten für die 18 Adressen ohne Position? Für 35 Kanten fehlt deshalb der Rohrweg
   ([Qualität](../datengrundlage/qualitaet.md#netz-und-zuordnung)).
-- Wie sollen Übergabestationen ohne Kante im Netz behandelt werden? 5 Adressen mit Zähler hängen an keiner Kante
+- Wie sollen Hausanschlussstationen ohne Kante im Netz behandelt werden? 5 Adressen mit Zähler hängen an keiner Kante
   ([Qualität](../datengrundlage/qualitaet.md#netz-und-zuordnung)).
 
 ## Weitere Daten

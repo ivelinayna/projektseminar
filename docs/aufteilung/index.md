@@ -3,7 +3,7 @@
 ## Dominik
 
 **Bereich:** lernende Modelle und Modellvergleich (*Vorgehen → Lernende Modelle*; *Modelle vergleichen* mit
-Prüfdesign und Modellvergleich; Teile von *Was nicht getragen hat*).
+Prüfdesign und Modellvergleich; Teile von *Verworfene Ansätze*).
 
 - **Notebooks:** 25 (Daten, Labels und Messlatte), 26 (Einstufung mit K-Means), 27 (LSTM-Fingerabdruck),
   28 (Prognose-LSTM), 29 (XGBoost und Klassen), 30 (Wächtervergleich), 34 (Modellvergleich),
@@ -17,7 +17,7 @@ Prüfdesign und Modellvergleich; Teile von *Was nicht getragen hat*).
 ## Ivelina
 
 **Bereich:** Monitoring-Modell ohne Labels (*Vorgehen → Stationsbilder und Befunde*; Anomalien, Netzvergleich und
-Tagesmonitor; Teile von *Was nicht getragen hat*), dazu Projektaufbau, Abgabestand und *Installation und Ausführung*.
+Tagesmonitor; Teile von *Verworfene Ansätze*), dazu Projektaufbau, Abgabestand und *Installation und Ausführung*.
 
 - **Notebooks:** 01 (Lücken füllen), 04 (Wintervergleich), 05 (Performance), 06 (ARIMA und SARIMAX),
   08 (Clusterbenchmark), 09 (Clustervalidierung), 11 (Ternärdiagramme), 12 (Stationsbilder), 13 (Kennlinienmonitor),
