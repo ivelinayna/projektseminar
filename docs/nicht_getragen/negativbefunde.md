@@ -193,16 +193,11 @@ Hier stehen die Ansätze, die nicht getragen haben. Sie sind methodische Ergebni
 
 ## Nicht mehr im Abgabestand
 
-Diese Versuche liegen nur im lokalen Archiv, nicht im Abgabestand. Ihre Zahlen sind hier nicht wiederholt, weil sie sich nicht an den Abgabe-Notebooks prüfen lassen. Ausnahme ist die Gesamtpipeline, deren Notebook im Verlauf des Repositorys liegt.
+Diese Versuche liegen nur im lokalen Archiv, nicht im Abgabestand. Ihre Zahlen sind hier nicht wiederholt, weil sie sich nicht an den Abgabe-Notebooks prüfen lassen.
 
 - Entscheidungsbaum als Vorhersagemodell: schlägt die Mehrheitsklasse nicht.
 - Erste Fassung der Stundencluster (früher Notebook 09): ersetzt durch Notebook 09, das dasselbe Clustering über `src/clustervalidierung.py` rechnet und zusätzlich prüft.
-- Gesamtpipeline (August, früher Notebook 12): Ein eigenständiges Notebook las die Rohdaten selbst, clusterte die
-  Stationen und verglich unüberwachte Anomaliescores mit Wartungen als Ersatzlabel. Ergebnis: Die Rangfolgen
-  lagen beim Zufall (AUC 0,49 bis 0,53), die Scores fanden höchstens 2 von 10 Ereignissen. Das Notebook ist nicht mehr
-  im Abgabestand: Es nutzte eine eigene Datenaufbereitung mit 78 statt 93 Stationen, seine Zahlen passen deshalb
-  nicht zu den übrigen Notebooks, und kein anderes Notebook baut darauf auf. Es liegt im Verlauf des Repositorys
-  (Commit `1b5798b`).
+- Gesamtpipeline mit unüberwachten Anomaliescores (früher Notebook 12): „ungewöhnlich“ ist nicht „defekt“, die Scores fanden die Wartungen nicht besser als Zufall.
 - Graph Neural Network auf dem Leitungsnetz: nicht besser als dasselbe Netz ohne Kanten oder eine logistische Regression.
 - Netzeffekt und gedämpfte Temperatur im Tagesmonitor: weniger Wellenalarme, aber mehr Alarme insgesamt und ein schwächerer Hebel.
 - Treffer je Fehlerart aus den Freitexten: zu wenige Fälle je Fehlerart, kein Unterschied belegbar.
