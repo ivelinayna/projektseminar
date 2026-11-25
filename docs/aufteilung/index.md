@@ -51,6 +51,24 @@ Tagesmonitor; Teile von *Verworfene Ansätze*), dazu Projektaufbau, Abgabestand 
       `detect_real.py` und `profile_timeseries.py` (Tabellen für Notebook 17)
     - Betrieb: `aktualisieren.py`
 
+## Pauline
+
+**Bereich:** Netz und Zuordnung (*Vorgehen → Netz einbeziehen* mit Rohrbaum, Haus oder Netz und Fehlererkennung mit
+Netz-Merkmalen; *Datengrundlage → Netz und Zuordnung*), dazu die Handtabelle der Koordinaten und die Docker-Ausführung.
+
+- **Notebooks:** 31 (Netzmodell aus Kantendatei, Leitungsplan und Zuordnung), 32 (Einspeisung, Rohrbaum,
+  Nachbarvergleich, Basislinie mit Netz-Merkmalen, gelernter Graph). Notebook 32 schreibt den Export
+  `gnn_daten.npz`, auf dem Notebook 39 aufbaut. Notebook 33 und Notebook 37 bauen auf dem Netz aus Notebook 31
+  und dem Rohrbaum aus Notebook 32 auf.
+- **Dashboard:** `dashboard_export.py` ist die erste Fassung des Dashboards auf dem Netz. Daraus sind
+  `dashboard_final.py` (Notebook 37, in der Rohrbaum-Fassung) und die Streamlit-App `dashboard_app.py` entstanden.
+- **Vorarbeit:** HAST-Analyse im August(nicht mehr im Abgabestand), stundenweises k-Means (k = 5) für Betriebszustände im September (heute
+  Notebook 09), Netz-Notebook mit ersten Karten und Experimenten auch im September (Vorläufer von 31 und 32).
+- **Handtabellen:** Koordinatentabelle `data/manual/adressen_koordinaten.ods`, eine Koordinate je Adresse aus
+  Google Maps, mit Korrekturen und Ergänzungen.
+- **Docker:** Der Ablauf mit Docker wurde auf Windows ausführlich getestet: Image bauen, Wetter und Modellpakete,
+  `dashboard_daten`, Notebooks im Container, Dashboard auf Port 8000.
+
 ## Sebastian
 
 **Bereich:** Datenbasis und Begehungen (*Datengrundlage*; *Vorgehen → Daten aufbereiten*; Wirkung und Labels unter
@@ -74,3 +92,4 @@ Mitarbeit am Monitoring, die *Weiteren Versuche* Bayes-Diagnose und GNN, dazu Gl
   Ergebnisse (Überblick und Datenanalyse), Grenzen und Erkenntnisse, Ausblick und Anhang.
 - **Code in `src/`:** `load_begehungen.py` (Begehungstabelle laden und über die Zählernummer zuordnen), genutzt von den
   Notebooks 00, 02 und 03. Die übrigen eigenen Notebooks rechnen ohne `src/`, ihr Code steht im Notebook.
+

@@ -105,7 +105,7 @@ nav:
       - Endmodell: ergebnisse/endmodell.md
       - Handlungsempfehlungen: ergebnisse/handlungsempfehlungen.md
       - Dashboard: ergebnisse/dashboard.md
-      - Dashboard bedienen: ergebnisse/dashboard_bedienen.md
+      - Dashboard erzeugen und starten: ergebnisse/dashboard_bedienen.md
 
   - Grenzen und Erkenntnisse:
       - Überblick: grenzen/index.md

@@ -1,4 +1,4 @@
-# Dashboard
+# Dashboard erzeugen und starten
 
 Das Dashboard zeigt für jede Station, ob Handlungsbedarf besteht und welche Maßnahme die Modelle vorschlagen.
 
