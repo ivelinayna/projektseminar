@@ -48,3 +48,27 @@ Tagesmonitor; Teile von *Verworfene Ansätze*), dazu Projektaufbau, Abgabestand 
     - Vorbereitende Befehle: `main.py` mit `visualize.py` (Begehungstabelle für Notebook 08), `meter_quality.py`,
       `detect_real.py` und `profile_timeseries.py` (Tabellen für Notebook 17)
     - Betrieb: `aktualisieren.py`
+
+## Sebastian
+
+**Bereich:** Datenbasis und Begehungen (*Datengrundlage*; *Vorgehen → Daten aufbereiten*; Wirkung und Labels unter
+*Begehungen auswerten*; Stations- und Tagescluster unter *Merkmale und Clustering*), Normalverhaltensmodell und
+Mitarbeit am Monitoring, die *Weiteren Versuche* Bayes-Diagnose und GNN, dazu Gliederung und Texte der Doku.
+
+- **Notebooks:** 00 (Daten aufbereiten), 02 (Wirkung im 21-Tage-Fenster), 03 (Label aus Messdaten),
+  07 (Stationscluster), 10 (Tagescluster), 18 (Normalverhaltensmodell), 38 (Bayes-Diagnose), 39 (GNN). Notebook 00
+  ist die Datenbasis aller anderen Notebooks. Notebook 10 liefert die Tageswerte für die Notebooks 18, 30, 34 und 39.
+  Aus Notebook 18 stammt die Idee des Tagesmonitors, eine Kennlinie je Station mit CUSUM.
+- **Mitarbeit am Monitoring:** Netzvergleich (Notebook 19) und Tagesmonitor (Notebook 20) größtenteils dokumentiert
+  und erklärt, mit Erklärnotizen zu den Abschnitten beider Notebooks und den Seiten
+  [Netzvergleich und Wintervergleich](../monitoring/netzvergleich.md) und [Tagesmonitor](../monitoring/tagesmonitor.md).
+- **Weitere Mitarbeit:** Notebook 05, Abschnitt 10 (Performance vor und nach der Begehung auf der Datenbasis von
+  Notebook 00).
+- **Handtabellen:** Prüfliste der Begehungsnotizen (alle 65 Begehungen von Hand gelesen und kodiert),
+  Fehler-Symptom-Matrix (Entwurf) und Kodierbogen der Freitexte (siehe
+  [Ergänzende Daten](../datengrundlage/ergaenzend.md#handtabellen)).
+- **Doku:** Gliederung der Read-the-Docs-Doku in Kapitel mit Unterseiten und Abgleich der Seiten mit den Notebooks.
+  Texte der Kapitel Einleitung, Datengrundlage, Daten aufbereiten, Begehungen auswerten, Merkmale und Clustering,
+  Ergebnisse (Überblick und Datenanalyse), Grenzen und Erkenntnisse, Ausblick und Anhang.
+- **Code in `src/`:** `load_begehungen.py` (Begehungstabelle laden und über die Zählernummer zuordnen), genutzt von den
+  Notebooks 00, 02 und 03. Die übrigen eigenen Notebooks rechnen ohne `src/`, ihr Code steht im Notebook.
