@@ -35,3 +35,9 @@ beantworten kann, stehen unter [Offene Fragen an die ÜZ](../grenzen/offene_frag
 - **Minutenwerte für die Regelhysterese.** Für einzelne Stationen Minutenwerte oder Reglerdaten mit Stellsignal
   erheben. Mit Stundenwerten und Tagesmitteln bleibt eine Regelhysterese unsichtbar
   ([Datenanalyse](../ergebnisse/datenanalyse.md#schwingende-regelung)).
+
+## Dashboard
+
+- **Streamlit-App als Alternative zur HTML-Datei.** Eine Fassung mit denselben Inhalten liegt schon im Repository. Sie
+  könnte auf einem Server der ÜZ laufen und um eine Rückmeldung nach Begehungen erweitert werden
+  ([Dashboard als Streamlit-App](streamlit.md)).

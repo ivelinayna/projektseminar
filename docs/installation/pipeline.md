@@ -148,6 +148,7 @@ Die Spalte „Notebooks“ nennt, wo das Modul benutzt wird.
 | `dashboard_daten` | Modellergebnisse für das Dashboard | 37 |
 | `dashboard_karte` | Modellergebnisse in die Netzkarte | 37 |
 | `dashboard_map` | einfache Folium-Karte | nur Befehlszeile |
+| `dashboard_app`, `dashboard_app_logik` | Dashboard als Streamlit-App, optional ([Ausblick](../ausblick/streamlit.md)) | liest die HTML-Datei aus 37 |
 | `aktualisieren` | neue Daten in einem Schritt einspielen | nur Befehlszeile |
 | `main` | Gesamtablauf Netz, Karten, Begehungstabelle | nur Befehlszeile |
 

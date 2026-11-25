@@ -8,7 +8,9 @@ Das Dashboard zeigt für jede Station, ob Handlungsbedarf besteht und welche Ma�
 - Sie läuft in jedem Browser, ohne Python und ohne Server. Man kann sie per Doppelklick öffnen oder weitergeben.
 - Die Modelle rechnen vorher. Das Dashboard liest nur fertige Tabellen. Deshalb ist es schnell und braucht kein `torch`.
 - Streamlit hätte einen laufenden Python-Server gebraucht. Für eine Abgabe und für die ÜZ ist die Datei einfacher.
-- Die erste Fassung als Streamlit-App (Rücklauf-Ampel, Juli 2026) ist archiviert und nicht mehr im Repo.
+- Zusätzlich gibt es eine Fassung als Streamlit-App mit denselben Inhalten, als möglichen nächsten Schritt
+  ([Dashboard als Streamlit-App](../ausblick/streamlit.md)). Die erste Streamlit-App vom Juli 2026 (Rücklauf-Ampel) ist
+  archiviert.
 
 ## Inhalt
 

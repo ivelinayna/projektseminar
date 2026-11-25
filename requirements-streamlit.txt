@@ -1,0 +1,5 @@
+#Optional: Dashboard als Streamlit-App (src/dashboard_app.py), siehe Ausblick in der Doku
+#Installation zusätzlich zu requirements.txt: pip install -r requirements-streamlit.txt
+streamlit>=1.50
+streamlit-folium>=0.25
+plotly>=5.20
