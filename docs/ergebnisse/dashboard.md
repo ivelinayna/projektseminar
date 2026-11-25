@@ -23,7 +23,7 @@ Notebook 00        Zählerexporte  ──►  Stundenreihen je Zähler
      │
 Notebook 35        lernt alle Modelle auf einer gemeinsamen Zeitachse neu, prüft sie, speichert drei Pakete
      │
-Programm dashboard_daten     wendet die Pakete auf die aktuellen Stundenreihen an
+python -m src.dashboard_daten     wendet die Pakete auf die aktuellen Stundenreihen an
      │
      │        Notebook 31, 32     Leitungsnetz, Lage der Häuser, Rohrbaum vom Erzeuger
      │              │
@@ -38,13 +38,13 @@ Programm dashboard_daten     wendet die Pakete auf die aktuellen Stundenreihen a
 | Daten, Labels, Fingerabdruck, Klassen | 25 bis 27, 29 | Labels aus den Begehungen, Kennzahlen, LSTM-Fingerabdruck, Einstufung mit K-Means, drei Klassen (siehe [Lernende Modelle](../modelle/index.md)) |
 | Wächter für warme Tage | 28 | Prognose-LSTM, das jeden Tag Rücklauf und Durchfluss vorhersagt |
 | Endmodell | 35 | lernt die gewählten Modelle neu, prüft sie streng und speichert sie als Pakete (siehe [Modellvergleich](../vergleich/modellvergleich.md)) |
-| Anwendung | Programm dashboard_daten | wendet die Pakete auf die aktuellen Daten an, ohne neu zu lernen. Die Ergebnistabellen enthalten nur Zählernummern. |
-| Netz und Rohrbaum | 31, 32 | Leitungsnetz und Lage der Häuser aus einer von Hand gepflegten Koordinatentabelle (siehe *Datengrundlage → Netz und Zuordnung*), dazu der Rohrbaum vom Erzeuger zu jedem Haus |
+| Anwendung | python -m src.dashboard_daten | wendet die Pakete auf die aktuellen Daten an, ohne neu zu lernen. Die Ergebnistabellen enthalten nur Zählernummern. |
+| Netz und Rohrbaum | 31, 32 | Leitungsnetz und Lage der Häuser aus einer von Hand gepflegten Koordinatentabelle (siehe [Netz und Zuordnung](../datengrundlage/netz_und_zuordnung.md)), dazu der Rohrbaum vom Erzeuger zu jedem Haus (siehe [Vom Haus-Graph zum Rohrbaum](../netz_einbeziehen/rohrbaum.md)) |
 | Dashboard | 37 | verbindet die Ergebnistabellen mit dem Rohrbaum und schreibt die HTML-Datei |
 
 Das Dashboard rechnet selbst nichts und lernt nichts neu. Es zeigt genau das, was mit einer bestimmten Version der
-Pakete gerechnet wurde. Deshalb ist es schnell und braucht keine Grafikkarte. Wie die Schritte ausgeführt werden,
-steht unter *Installation und Ausführung → Ausführung bis zum Dashboard*.
+Pakete gerechnet wurde. Deshalb ist es schnell und braucht keine Grafikkarte. Wie die Schritte ausgeführt werden, steht unter [Ausführung bis zum Dashboard](../installation/ausfuehrung.md) und
+[Dashboard erzeugen und starten](dashboard_bedienen.md).
 
 ### Die drei Modellpakete
 
@@ -102,10 +102,9 @@ und Dringlichkeit entstehen, was beim aktuellen Datenstand herauskommt und was b
 
 ## Keine Meldung heißt nicht „in Ordnung“
 
-Das Dashboard zeigt nie „in Ordnung“. Stationen, für die ein Wächter noch keine Referenz hat, stehen als „noch nicht
-bewertbar“ im Dashboard, nicht als „kein Alarm“. Im aktuellen Stand sind das 7 Stationen, bei beiden Wächtern
-dieselben. Das Monitoring-Modell braucht dafür 60 Heiztage, das Prognose-LSTM rund vier Wochen volle Stundenwerte
-(Notebook 35).
+„Kein Handlungsbedarf" heißt, dass die Modelle bei dieser Station nichts gefunden haben, nicht dass sie geprüft und in
+Ordnung ist. „Noch nicht bewertbar" (7 Stationen) bezieht sich auf die Wächter, „nicht einstufbar" und „Sonderfall" auf
+die Fehlerklassen (siehe [Handlungsempfehlungen](handlungsempfehlungen.md)).
 
 ## Datenschutz
 

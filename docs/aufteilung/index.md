@@ -62,7 +62,7 @@ Netz-Merkmalen; *Datengrundlage → Netz und Zuordnung*), dazu die Handtabelle d
   und dem Rohrbaum aus Notebook 32 auf.
 - **Dashboard:** `dashboard_export.py` ist die erste Fassung des Dashboards auf dem Netz. Daraus sind
   `dashboard_final.py` (Notebook 37, in der Rohrbaum-Fassung) und die Streamlit-App `dashboard_app.py` entstanden.
-- **Vorarbeit:** HAST-Analyse im August(nicht mehr im Abgabestand), stundenweises k-Means (k = 5) für Betriebszustände im September (heute
+- **Vorarbeit:** HAST-Analyse im August (nicht mehr im Abgabestand), stundenweises k-Means (k = 5) für Betriebszustände im September (heute
   Notebook 09), Netz-Notebook mit ersten Karten und Experimenten auch im September (Vorläufer von 31 und 32).
 - **Handtabellen:** Koordinatentabelle `data/manual/adressen_koordinaten.ods`, eine Koordinate je Adresse aus
   Google Maps, mit Korrekturen und Ergänzungen.
