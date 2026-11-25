@@ -50,7 +50,10 @@ wenn er von Hand auf `True` gesetzt wird.
 - Fehlt eine Gewichtsdatei, halten 27 und 28 mit einem Hinweis an. Dann die Gewichte einspielen oder den Schalter auf
   `True` setzen.
 - **Kürzester Weg zum Dashboard:** Liegen die drei Modellpakete in `models/`, reichen `python -m src.weather`,
-  Notebook 00 und die Schritte 6 bis 8. Die Schritte 3 bis 5 braucht es nur, wenn die Modelle neu gelernt werden.
+  die Notebooks 00 und 25 und die Schritte 6 bis 8. Notebook 25 lernt nichts, legt aber die Labels der Begehungen an
+  (`modell_labels.csv`). Das Dashboard braucht sie für den Stand vor den Begehungen, und eine Tabelle aus einem älteren
+  Lauf reicht nicht, weil ihr Spalten fehlen. Die Notebooks 26 bis 29 und die Schritte 4 und 5 braucht es nur, wenn
+  die Modelle neu gelernt werden.
 - **Laufzeit beim Neulernen:** Mit Grafikkarte dauert Notebook 27 rund 7 Minuten, 28 rund 2, 29 und 34 je gut 10 und
   35 gut 20 Minuten. Ohne Grafikkarte, etwa in Docker, brauchen 27 und 28 rund 4,5 bzw. 3,5 Stunden und 35 rund
   5 Stunden.
