@@ -151,7 +151,7 @@ abgelesen. So werden alle Stationen bei derselben Temperatur verglichen.
   8 K Spanne, Heizgrenze 15 °C, Toleranz ±2 Stunden um Mitternacht, Treffer-Fenster, 30 Heiztage, Normtemperatur 5 °C.
 - **Offen:** Temperatur über mehrere Tage mitteln oder verzögern, die Wassermenge über die kälteste gelernte Temperatur
   hinaus fortschreiben, das Lernjahr nach einem bekannten Eingriff neu starten (siehe
-  [Probebetrieb](../ausblick/probebetrieb.md)).
+  [Betrieb mit neuen Daten](../ausblick/betrieb.md#regeln-fur-den-betrieb)).
 
 ## Ausgaben
 

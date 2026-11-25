@@ -92,7 +92,8 @@ Geprüft ist das in Notebook 35 an den begangenen Stationen, mit Kreuzvalidierun
 - **Kapazität:** Die Regel findet 5 von 9 Fällen bei 1 Fehlalarm (AUC 0,76).
 
 Alle Zahlen sind rückblickend an vorhandenen Begehungen geprüft. Ob die Reihenfolge im Betrieb trägt, zeigt erst eine
-Begehung nach der Liste (siehe [Prüfung nach vorn](../ausblick/pruefung.md)).
+Begehung nach der Liste (siehe
+[Vorschlag für künftige Begehungen](../ausblick/begehungen.md#2-begehungen-planen)).
 
 ## Was bewusst nicht empfohlen wird
 

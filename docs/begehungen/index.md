@@ -60,7 +60,8 @@ Alle Notebooks liegen unter `notebooks/2_begehungen/` und laufen nach Notebook 0
 
 Was die Monteure in den Freitexten notiert haben, wertet Notebook 14 aus (siehe
 [Stationsbilder und Befunde](../stationsbilder/index.md)). Wie künftige Begehungen so festgehalten werden, dass sich diese
-Fragen besser beantworten lassen, steht unter [Rückmeldung aus dem Probebetrieb](../ausblick/probebetrieb.md#ruckmeldung-aus-dem-probebetrieb).
+Fragen besser beantworten lassen, steht unter
+[Vorschlag für künftige Begehungen](../ausblick/begehungen.md#1-ein-festes-protokoll-je-begehung).
 
 ## Ausgaben
 

@@ -15,7 +15,8 @@ Die Arbeit folgt dem Weg des Projekts: von den Daten über die Verfahren bis zum
   Handlungsempfehlungen und Dashboard mit Bedienungsanleitung.
 - **Grenzen und Erkenntnisse** ordnet ein, wie belastbar die Ergebnisse sind und was sich aus dem Projekt lernen lässt.
   Dort stehen auch die verworfenen Ansätze und die offenen Fragen an die ÜZ.
-- **Ausblick** beschreibt einen Probebetrieb, eine Prüfung der Modelle nach vorn und die Weiterentwicklung.
+- **Ausblick** beschreibt den Betrieb mit neuen Daten, einen Vorschlag, wie die ÜZ künftige Begehungen plant und
+  festhält, und die Weiterentwicklung.
 - **Aufteilung im Team** zeigt, wer woran gearbeitet hat.
 - **Der Anhang** enthält ein Verzeichnis der Fachbegriffe.
 

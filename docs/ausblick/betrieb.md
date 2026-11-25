@@ -1,8 +1,10 @@
-# Probebetrieb
+# Betrieb mit neuen Daten
 
-Das [Endmodell](../ergebnisse/endmodell.md) ist für einen Probebetrieb gedacht: Die Modelle laufen auf neuen Zählerdaten,
-die ÜZ nutzt die Handlungsliste für Begehungen und meldet zurück, was vor Ort war. Damit die Zahlen dabei vergleichbar
-bleiben, gelten ein paar Regeln.
+Das [Endmodell](../ergebnisse/endmodell.md) ist für einen Probebetrieb gedacht, also für einen ersten Einsatz auf
+Probe: Die ÜZ spielt regelmäßig neue Zählerdaten ein, die Modelle bewerten damit die Stationen neu, und das Dashboard
+zeigt die aktuelle Handlungsliste. Die ÜZ begeht Stationen nach dieser Liste und hält fest, was vor Ort war. Diese
+Seite beschreibt, was beim Einspielen neuer Daten passiert und welche Regeln dabei gelten, damit die Zahlen
+vergleichbar bleiben.
 
 ## Ablauf mit neuen Daten
 
@@ -40,14 +42,10 @@ gerechnet wurde. Wie der Befehl ausgeführt wird, steht unter
    `SELBST_TRAINIEREN = True`. Erst wenn die Zahlen aus Notebook 35 mit dem bisherigen Stand verglichen sind, kommen
    die neuen Pakete ins Dashboard.
 
-## Rückmeldung aus dem Probebetrieb
+## Rückmeldung nach jeder Begehung
 
 Der Probebetrieb bringt das, was dem Projekt am meisten gefehlt hat: Begehungen, deren Ergebnis vorher vorhergesagt
-wurde. Dafür sollte jede Begehung festhalten:
-
-- Datum der Begehung,
-- ob etwas kaputt war und was, nicht nur, was gemacht wurde,
-- was getauscht oder eingestellt wurde,
-- ob die Station vorher auf der Handlungsliste stand und mit welcher Dringlichkeit.
-
-Wie daraus eine Prüfung der Modelle wird, steht unter [Prüfung nach vorn](pruefung.md).
+wurde. Damit sie sich auswerten lassen, braucht jede Begehung ein festes Protokoll: was kaputt war, nicht nur, was
+gemacht wurde, seit wann, und ob die Station vorher auf der Handlungsliste stand. Wie dieses Protokoll aussehen kann
+und wie die Stationen ausgewählt werden, steht unter [Vorschlag für künftige Begehungen](begehungen.md). Nach jeder
+Begehung gilt außerdem Regel 4: Die Referenz der Station wird neu gelernt.

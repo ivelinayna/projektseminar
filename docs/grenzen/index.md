@@ -11,7 +11,7 @@ verweist auf die Stelle, an der er aufgefallen ist.
 | Wenige Fälle: 43 Begehungen im Test, 11 Ventilfälle | Unterschiede unter etwa 0,1 AUC sind nicht sichtbar, viele Vorsprünge bleiben ungesichert | [Modellvergleich](../vergleich/modellvergleich.md#grenzen) |
 | Stundenwerte sind Momentaufnahmen | Tageswerte müssen aus den Zählerständen kommen, eine Regelhysterese ist nicht nachweisbar | [Zählerdaten](../datengrundlage/zaehlerdaten.md#stundenwerte-sind-momentaufnahmen), [Datenanalyse](../ergebnisse/datenanalyse.md#schwingende-regelung) |
 | Die Daten enden im Juli 2025 | Kein Netzvergleich für den Winter 2025/26, keine Prüfung an einem weiteren Winter | [Wintervergleich](../begehungen/wintervergleich.md#einordnung), [Bestes Viertel](../monitoring/bestwert.md#einordnung) |
-| Ein Teilnetz, rückblickend geprüft | Ob die Modelle im Betrieb und in anderen Teilnetzen tragen, ist offen | [Prüfung nach vorn](../ausblick/pruefung.md), [Weiterentwicklung](../ausblick/weiterentwicklung.md) |
+| Ein Teilnetz, rückblickend geprüft | Ob die Modelle im Betrieb und in anderen Teilnetzen tragen, ist offen | [Vorschlag für künftige Begehungen](../ausblick/begehungen.md), [Weiterentwicklung](../ausblick/weiterentwicklung.md) |
 
 ## Was auf den Unterseiten steht
 

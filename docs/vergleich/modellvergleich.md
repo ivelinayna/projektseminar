@@ -214,6 +214,6 @@ selbst keine Kandidaten.
 - 43 Begehungen und 11 Ventilfälle: Unterschiede unter etwa 0,1 AUC oder unter etwa 5 Fällen sind nicht zu sehen.
 - Das Prognose-LSTM ist nur an eingebauten Fehlern belegt, an echten Begehungen nicht.
 - Die Dringlichkeitsstufen sind gesetzt, nicht getestet. Dafür braucht es einen Test nach vorn (siehe
-  [Prüfung nach vorn](../ausblick/pruefung.md)).
+  [Vorschlag für künftige Begehungen](../ausblick/begehungen.md#2-begehungen-planen)).
 
 Weitere Grenzen stehen unter [Grenzen der Methoden und Modelle](../grenzen/modelle.md).

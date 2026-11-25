@@ -78,7 +78,7 @@ Stelle, an der das aufgefallen ist. Grenzen, die schon in den Daten liegen, steh
   Veränderung wird so schnell Teil seiner Erwartung ([Prognose-LSTM](../modelle/prognose.md#der-endgultige-wachter)).
 - **Nach einem Eingriff** kennt das Prognose-LSTM die Station nur von vorher. Beim Ventiltausch in Notebook 30 meldet
   es die Station nach 7 Tagen und danach noch zweimal, nach 22 und 33 Tagen. Nach einem bekannten Eingriff muss es neu
-  kalibriert werden ([Probebetrieb](../ausblick/probebetrieb.md#regeln-fur-den-betrieb)).
+  kalibriert werden ([Betrieb mit neuen Daten](../ausblick/betrieb.md#regeln-fur-den-betrieb)).
 - **Die Referenz des Monitoring-Modells veraltet:** An 43 % der Testtage steht eines seiner Konten am Deckel, bei 31
   von 81 Stationen mehr als die Hälfte der Zeit. Dann kann es nicht neu melden (Notebook 35,
   [Dashboard](../ergebnisse/dashboard.md#grenzen)).
@@ -138,7 +138,7 @@ Viele Schwellen sind gesetzt, nicht aus den Daten hergeleitet. Wo sie stehen:
 ## Wie geprüft wurde
 
 - **Rückblickend geprüft:** Alle Zahlen stammen aus vorhandenen Daten. Ob die Liste im Betrieb trägt, zeigt erst ein
-  Test nach vorn ([Prüfung nach vorn](../ausblick/pruefung.md)).
+  Test nach vorn ([Vorschlag für künftige Begehungen](../ausblick/begehungen.md#2-begehungen-planen)).
 - **Erst der strenge Prüfstand zählt.** Im ersten Prüfstand waren Schwellen in den Testfällen eingestellt, und der
   Encoder hatte die Teststationen gesehen. Notebook 35 rechnet deshalb strenger, die Ventil-AUC sinkt dort von 0,89 auf
   0,84 ([Modellvergleich](../vergleich/modellvergleich.md#was-zuerst-nicht-stimmte)). Im Normalverhaltensmodell sind die
