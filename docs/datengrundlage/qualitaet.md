@@ -111,4 +111,4 @@ Ergebnisse bedeuten, steht unter [Grenzen und Erkenntnisse](../grenzen/index.md)
 | Begehungen nach Juli 2025 mit Zählerständen | neue Prüffälle für die Alarme |
 | Minutenwerte oder Reglerdaten mit Stellsignal | Regelhysterese sichtbar machen |
 
-Die Fragen an die ÜZ dazu stehen unter [Offene Fragen an die ÜZ](../grenzen/index.md#offene-fragen-an-die-uz).
+Die Fragen an die ÜZ dazu stehen unter [Offene Fragen an die ÜZ](../grenzen/offene_fragen.md).

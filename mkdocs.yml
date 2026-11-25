@@ -109,9 +109,11 @@ nav:
       - Dashboard bedienen: ergebnisse/dashboard_bedienen.md
 
   - Grenzen und Erkenntnisse:
-      - Annahmen, Grenzen und offene Fragen: grenzen/index.md
-      - Grenzen der Modelle: grenzen/modelle.md
+      - Überblick: grenzen/index.md
+      - Grenzen der Daten: grenzen/daten.md
+      - Grenzen der Methoden und Modelle: grenzen/modelle.md
       - Erkenntnisse: grenzen/erkenntnisse.md
+      - Offene Fragen an die ÜZ: grenzen/offene_fragen.md
 
   - Ausblick:
       - Probebetrieb: ausblick/probebetrieb.md

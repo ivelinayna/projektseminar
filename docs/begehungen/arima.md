@@ -70,7 +70,7 @@ Begehungen (z = −19,7), gefunden ohne Wissen über die Reparatur. Was bei der 
   unabhängig.
 - **Offen:** Große Sprünge im Herbst 2024 ohne Begehung (69513891 rund −21 °C, 72167777 −14 °C, 80956410 +19 °C)
   lassen sich nur über eine Rückfrage bei der ÜZ klären (siehe
-  [Offene Fragen an die ÜZ](../grenzen/index.md#offene-fragen-an-die-uz)). Die Außentemperatur stammt aus Kitzingen
+  [Offene Fragen an die ÜZ](../grenzen/offene_fragen.md)). Die Außentemperatur stammt aus Kitzingen
   statt aus Wiesentheid (siehe [Ergänzende Daten](../datengrundlage/ergaenzend.md#auentemperatur)).
 
 ## Ausgaben

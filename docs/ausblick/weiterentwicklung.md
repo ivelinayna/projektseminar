@@ -16,3 +16,28 @@
 - **Weitere Teilnetze.** Die Pakete enthalten alles, was zum Anwenden gehört. Das Prognose-LSTM muss neue Stationen
   aber erst kalibrieren, und die Fehlerklassen müssten mit Begehungen aus dem neuen Netz geprüft werden, bevor die
   Empfehlungen dort gelten.
+
+## Monitoring
+
+- **Referenz neu lernen,** nach jeder Begehung und zu jeder Heizperiode. Sonst stehen die Konten des Monitoring-Modells
+  am Deckel und können nicht neu melden (siehe [Probebetrieb](probebetrieb.md#regeln-fur-den-betrieb)).
+- **Außentemperatur glätten.** Die Temperatur über 2 bis 3 Tage mitteln oder um einen Tag verzögern und prüfen, ob die
+  Wellen von Alarmen nach Kälteeinbrüchen kleiner werden
+  ([Netzereignisse](../monitoring/netzereignisse.md#einordnung),
+  [Tagesmonitor](../monitoring/tagesmonitor.md#einordnung)).
+- **Sommerkennzahl im Netzvergleich.** Der Netzvergleich zählt nur den Kernwinter. Ihm fehlt damit der Nachtdurchfluss
+  im Sommer, das stärkste Merkmal für ein offenes Ventil ([Netzvergleich](../monitoring/netzvergleich.md#einordnung)).
+- **Minutenwerte für die Regelhysterese.** Für einzelne Stationen Minutenwerte oder Reglerdaten mit Stellsignal
+  erheben. Mit Stundenwerten und Tagesmitteln bleibt eine Regelhysterese unsichtbar
+  ([Datenanalyse](../ergebnisse/datenanalyse.md#schwingende-regelung)).
+
+## Labels
+
+- **Fehler-Symptom-Matrix mit der ÜZ abstimmen.** Bisher ist keines der 132 Felder abgestimmt. Mit einer abgestimmten
+  Matrix ließe sich die Bayes-Diagnose neu prüfen
+  ([Bayes-Diagnose](../nicht_getragen/bayes.md#was-es-zum-weitermachen-brauchte)).
+- **Neue Begehungen nach vorab festgelegten Regeln auswerten,** wie unter [Prüfung nach vorn](pruefung.md)
+  beschrieben.
+
+Die offenen Fragen, die nur die ÜZ beantworten kann, stehen unter
+[Offene Fragen an die ÜZ](../grenzen/offene_fragen.md).

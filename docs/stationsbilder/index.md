@@ -218,4 +218,4 @@ Daraus ist das [Monitoring](../monitoring/index.md) geworden:
 - **Drei Notizen** lassen sich nicht einordnen: ein Defekt ohne klare Zuordnung und zwei Messwerte ohne Bewertung.
 
 Die Fragen an die ÜZ, etwa nach Tauschdaten und nach dem Zuschnitt der Fehlerkategorien, stehen gesammelt unter
-[Offene Fragen an die ÜZ](../grenzen/index.md#offene-fragen-an-die-uz).
+[Offene Fragen an die ÜZ](../grenzen/offene_fragen.md).
