@@ -91,7 +91,7 @@ gegenseitig. Welche Notebooks für das Dashboard nötig sind, steht unter [Ausf�
 
 ## 5 Dashboard erzeugen
 
-Voraussetzung: Die Notebooks 00 und 25 bis 29 sind ausgeführt. Liegen die Modellpakete vom Projektteam schon in
+Voraussetzung: Die Notebooks 00 und 25 bis 29 sind ausgeführt. Liegen die bereitgestellten Modellpakete schon in
 `models/`, reichen die Notebooks 00 und 25, und die Schritte 1 und 2 entfallen. Läuft JupyterLab noch, die folgenden Befehle in einem
 zweiten Terminalfenster ausführen. Dort zuerst mit `cd` in den Projektordner wechseln.
 

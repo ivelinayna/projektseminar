@@ -45,10 +45,8 @@ wenn er von Hand auf `True` gesetzt wird.
 | 27 LSTM-Fingerabdruck, 28 Prognose-LSTM | lädt alle Netze aus `notebooks/models/`, auch die der Vorversuche | lernt alle Netze neu und speichert sie dort |
 | 29 XGBoost, 34 Modellvergleich, 35 Endmodell | hält vor der ersten langen Rechnung an, die Ergebnisse stehen in den gespeicherten Ausgaben | rechnet alles neu |
 
-- Gewichte und Modellpakete liegen nicht im Repository, weil sie aus den Zählerdaten der ÜZ gelernt sind. Das
-  Projektteam gibt sie zusammen mit den Daten weiter. Sie gehören nach `notebooks/models/` und `models/`.
 - Fehlt eine Gewichtsdatei, halten 27 und 28 mit einem Hinweis an. Dann die Gewichte einspielen oder den Schalter auf
-  `True` setzen.
+  `True` setzen. Mit `True` werden die bereitgestellten Gewichte und Pakete durch neu gelernte ersetzt.
 - **Kürzester Weg zum Dashboard:** Liegen die drei Modellpakete in `models/`, reichen `python -m src.weather`,
   die Notebooks 00 und 25 und die Schritte 6 bis 8. Notebook 25 lernt nichts, legt aber die Labels der Begehungen an
   (`modell_labels.csv`). Das Dashboard braucht sie für den Stand vor den Begehungen, und eine Tabelle aus einem älteren
@@ -59,6 +57,34 @@ wenn er von Hand auf `True` gesetzt wird.
   5 Stunden.
 - Da alle Startwerte fest gesetzt sind, liefern neu gelernte Netze auf demselben Rechner dieselben Zahlen. Auf anderer
   Hardware können die letzten Stellen abweichen, die Aussagen bleiben gleich.
+
+### Bereitgestellte Gewichte und Modellpakete ablegen
+
+Gewichte und Modellpakete liegen nicht im Repository, weil sie aus den Zählerdaten der ÜZ gelernt sind. Sie werden
+zusammen mit den Daten als ZIP-Datei `modellpakete.zip` bereitgestellt (Stand 24.11.2026, Version
+`nb34_2026-11-24_164233` aus Notebook 35). Sie enthält drei Ordner. In der Tabelle steht `projektseminar/` für den
+Projektordner.
+
+| Inhalt | liegt in der ZIP-Datei in | gehört in |
+|---|---|---|
+| drei Modellpakete, mit denen das Dashboard rechnet | `modellpakete/models/` | `projektseminar/models/` |
+| Gewichte der LSTM-Netze für die Notebooks 27 und 28 | `modellpakete/notebooks/models/` | `projektseminar/notebooks/models/` |
+| Ergebnistabellen aus Notebook 35 für Notebook 36 | `modellpakete/outputs/finalvergleich/` | `projektseminar/outputs/finalvergleich/` |
+
+So werden die Dateien abgelegt:
+
+1. `modellpakete.zip` entpacken, z. B. im Ordner Downloads.
+2. Für jede Zeile der Tabelle den Ordner aus der rechten Spalte im Projektordner öffnen. Gibt es ihn noch nicht, wird
+   er mit genau diesem Namen angelegt. `projektseminar/models/` ist immer vorhanden. `projektseminar/notebooks/models/`
+   und `projektseminar/outputs/finalvergleich/` fehlen, solange die Notebooks 27 und 28 bzw. 35 noch nicht gelaufen
+   sind.
+3. Den Inhalt des Ordners aus der mittleren Spalte in den Ordner aus der rechten Spalte kopieren. Fragt das System, ob
+   vorhandene Dateien ersetzt werden sollen, mit „Ersetzen“ bestätigen.
+4. Zur Kontrolle `python -m src.modellpaket` ausführen. Alle drei Pakete müssen die Version `nb34_2026-11-24_164233`
+   mit `aktuell = True` zeigen.
+
+Kopiert wird nur, was in den Ordnern liegt, nicht die Ordner selbst. So entsteht kein zweiter Ordner gleichen Namens,
+und nichts im Projekt wird gelöscht.
 
 ## 1 Vorbereitende Befehle
 

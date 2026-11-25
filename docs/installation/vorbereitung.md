@@ -102,6 +102,14 @@ und [Netz und Zuordnung](../datengrundlage/netz_und_zuordnung.md).
 - Notebook 03 liest den von Hand gepflegten Kodierbogen `data/processed/kodierbogen_freitexte.xlsx` (Blatt `Kodierung`).
 - Er liegt nicht im Repository. Ohne ihn überspringt Notebook 03 nur den Abgleich mit der Handkodierung.
 
+### Gewichte und Modellpakete
+
+- Die gelernten Modelle liegen ebenfalls nicht im Repository. Sie werden zusammen mit den Daten als ZIP-Datei
+  `modellpakete.zip` bereitgestellt.
+- Sind die Inhalte in den Projektordner kopiert, muss nichts neu gelernt werden.
+- Wohin welcher Teil kopiert wird, steht unter
+  [Bereitgestellte Gewichte und Modellpakete ablegen](ausfuehrung.md#bereitgestellte-gewichte-und-modellpakete-ablegen).
+
 ### Außentemperatur
 
 Die Außentemperatur der DWD-Station Kitzingen muss nicht abgelegt werden. `python -m src.weather` lädt sie beim ersten
